@@ -361,11 +361,22 @@ todo
 
 
 </p>
+<h3><a name="190609">190609</a></h3> 
+<h4>Git改变和变更远程仓库地址</h4>
+<p>
+一、改变本地仓库地址
+1，原来的目录 ..\temp\ 需要改成 ..\temp\ciss_web\
+如果只是 cd ciss_web,在上传到新的(即便远程改了也没用)远程仓库地址时还是会把整个“temp”目录传过去
+2，cd ciss_web ; git init 在新的子目录下新建本地仓库; 
+    git add . ; git commit -m 190609 ; 
+3, ls -al 可以看本地目录下是否有 .git 文件
+4，添加远程目录的地址 git remote add origin https://gitee.com/Richard_18/ciss_web/
+5,设置远程分支名称 git push --set-upstream origin master
 
 
 
 
-
+</p>
 
 
 
