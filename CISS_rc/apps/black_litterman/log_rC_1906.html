@@ -364,8 +364,7 @@ todo
 <h3><a name="190609">190609</a></h3> 
 <h4>Git改变和变更远程仓库地址</h4>
 <p>
-一、改变本地仓库地址
-1，原来的目录 ..\temp\ 需要改成 ..\temp\ciss_web\
+1，改变本地仓库地址，原来的目录 ..\temp\ 需要改成 ..\temp\ciss_web\
 如果只是 cd ciss_web,在上传到新的(即便远程改了也没用)远程仓库地址时还是会把整个“temp”目录传过去
 2，cd ciss_web ; git init 在新的子目录下新建本地仓库; 
     git add . ; git commit -m 190609 ; 
@@ -374,10 +373,22 @@ todo
 5,设置远程分支名称 git push --set-upstream origin master
 
 
-
-
 </p>
+<P>查看远程仓库地址：git remote show origin
+切换远程仓库地址：git remote set-url origin xxx(新的仓库地址)
+获取最新代码：git pull
+如果不能获取代码并且提示：
 
+There is no tracking information for the current branch.
+Please specify which branch you want to merge with.
+See git-pull(1) for details.
+
+git pull <remote> <branch>
+
+If you wish to set tracking information for this branch you can do so with:
+
+git branch --set-upstream-to=origin/<branch> master
+</P>
 
 
 
