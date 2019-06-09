@@ -1,0 +1,215 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Stict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang = "zh-CN">
+
+<html>
+<!-- The block items for this base html file is: {nav_sub, left_frame,menu,content } -->
+
+
+    <head>
+    <!-- 头部，内容的介绍展示区域 -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/echarts/4.2.0-rc.2/echarts.js"></script> 
+
+    <title>Index of CISS module</title>
+    <!--
+    <style type="text/css">
+        tr > th{ text-align: left;background:black;color:yellow; }
+        tr > th:only-of-type {text-align: right;background:lightgrey;color:grey}
+    </style>*/
+    -->
+    <style type="text/css">
+        /* h3 {color:steelblue;}  */
+        #menu_float{color:steelblue;
+            position:fixed;
+            bottom: 10%;
+            right:40px;
+            margin-left: 70% ; /*为左侧留出70\%的空间*/
+            font-size:12px;  /*字体设置小点*/ 
+            border: 1px solid black; /*  实线，dotted */
+            /* text-align:center;文字居中*/ 
+            border-radius:5px; /*倒角  */ 
+            background: white; /* #dddddd */
+            padding:3px 3px 3px 3px;/*元素所有内边距的宽度，上右，下左  */ 
+        } 
+        #left_frame{float: left;width: 70%; }
+        #sub_left{
+            width: 50%;
+            height: 350px;
+            background-color: #C5E9F3;
+            /*定义浮动，不定义的话，界面会乱*/
+            float: left;
+        }
+        #sub_right{
+            width: 50%;
+            height: 350px;
+            background-color: #F7575d;
+            float: right;
+        }
+
+        #a_nav{color:#FFF}
+        nav{background:black; color:#FFF}
+    </style>
+
+    </head>
+
+<body>
+<nav  > 
+<!-- 导航链接 -->
+    <a id="a_nav" href="/weights/index.html">首页|INDEX</a> |
+    <a id="a_nav" href="/weights/strategy/index_stra.html">交易数据</a> |
+    <a id="a_nav" href="/weights/portfolio/index_port.html">交易分析</a> |
+    <a id="a_nav" href="/weights/docs/index_ciss.html">交易策略</a> | 
+    --- | <br><br>
+
+    {% block nav_sub %}
+    {% endblock nav_sub %}
+    --- | <br>
+
+</nav> 
+
+<div id="left_frame" > 
+
+
+{% block left_frame %}
+{% endblock left_frame %}
+
+<section>
+<h3><a name="etf_50">被匹配产品与目标产品持仓匹配：</a></h3>  
+<hr>
+    <form action="{% url "holdings_match_1to1" %}" method="post" accept-charset="utf-8">
+    {% csrf_token %}
+    <table border="0">
+    <tr><td>交易日期，如190124:  <br></td>
+        <td><input type="text" name="date_adj" value="190124"></td></tr>
+
+    <tr><td>被匹配产品,如 社保413：</td>
+        <td><select type="text" name="fund_1" value ="413">
+              <option value ="413">社保413</option>
+              <option value ="798">工银上证50ETF</option>
+              <option value ="15">工行年金(新)</option>
+              <option value ="505">澳门金管局QFII</option>
+              <option value ="533">互联网加</option>
+            </select></td> 
+        <td>目标基金产品,如 工银上证50ETF:</td>
+        <td><select type="text" name="fund_2" value ="798">
+              <option value ="798">工银上证50ETF</option>
+              <option value ="413">社保413</option>
+              <option value ="15">工行年金(新)</option>
+              <option value ="505">澳门金管局QFII</option>
+              <option value ="533">互联网加</option>
+            </select></td> 
+        </tr>
+
+    </table>
+         
+    <input type="submit" value="提交">
+    </form>
+</section>
+
+<br>
+
+<style type="text/css">
+.table{ font-size:12px; }
+
+#td01{ width: 60px; }
+</style>
+
+<section>
+
+<table border="1"  class="table">
+    <caption>{{ name_fund_1 }} 和 {{ name_fund_2 }}持仓金额超过1000万的股票匹配</caption>
+
+    <!-- ["code","profit_q4_es","profit_sum_ind1","ind1_pct_profit_q4_es","para_value",
+    "w_allo_value_ind1","revenue_q4_es","revenue_sum_ind1","cf_oper_q4_es",
+    "w_allo_value_ind1_ind2","w_allo_value_ind2_ind3 ","code_anchor_value",
+    "profit_anchor_value","profit_dif_anchor_value"]   
+    -->
+    <tr>
+        <td>序号|万元,%</td><td>证券名称</td><td>代码</td><td>持仓市值|万</td>
+        <td>持仓超过1千万金额产品|万</td>
+    </tr>
+    {% for temp_index,temp_row in dif_weights.items %}
+    <tr>
+        <td>{{ temp_index }}</td>
+        <td id="td01">{{ temp_row.name }}</td>
+        <td>{{ temp_row.code_o32 }}</td>
+        <td>{{ temp_row.amt_diff_mv }}</td>
+        <td>{{ temp_row.list_funds }}</td>
+        
+        
+    </tr>
+    {% endfor %}
+
+
+
+</table> 
+    
+
+    
+
+
+
+
+
+
+</section>
+
+
+<section id="menu"> 
+
+
+{% block menu %}
+{% endblock menu %}
+
+</section> 
+
+
+
+<section id="s1"> 
+    
+{% block content %}
+{% endblock content %}
+
+
+
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+<hr> 
+<blockquote cite="www.bsstrde.top:8089\index.html">
+    <!--引用内容 -->
+</blockquote>
+ 
+
+<footer> 
+    
+    <!--尾部，页脚通常包含文档的作者，著作权信息，链接的使用条款，联系信息等 -->
+</footer> 
+<hr>
+
+</div> 
+
+</body>
+
+</html>

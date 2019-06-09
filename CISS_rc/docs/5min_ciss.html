@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+    <!-- 头部，内容的介绍展示区域 -->
+    <meta charset="utf-8">
+    <title>Index of CISS module</title>
+    <style type="text/css">
+        tr > th{ text-align: left;background:black;color:yellow; }
+        tr > th:only-of-type {text-align: right;background:lightgrey;color:grey}
+    </style>
+
+    <style type="text/css">
+        /* h3 {color:steelblue;}  */
+        #menu_float{color:steelblue;
+            position:fixed;
+            bottom: 10%;
+            right:40px;
+            margin-left: 70% ; /*为左侧留出70\%的空间*/
+            font-size:12px;  /*字体设置小点*/ 
+            border: 1px solid black; /*  实线，dotted */
+            /* text-align:center;文字居中*/ 
+            border-radius:5px; /*倒角  */ 
+            background: white; /* #dddddd */
+            padding:3px 3px 3px 3px;/*元素所有内边距的宽度，上右，下左  */ 
+        } 
+        #left_frame{float: left;width: 70%; }
+        #sub_left{
+            width: 50%;
+            height: 350px;
+            background-color: #C5E9F3;
+            /*定义浮动，不定义的话，界面会乱*/
+            float: left;
+        }
+        #sub_right{
+            width: 50%;
+            height: 350px;
+            background-color: #F7575d;
+            float: right;
+        }
+    </style>
+
+    </head>
+
+    <body>
+    <nav> 
+    <!-- 导航链接 -->
+        <a href="/temp/keti_sys_stra_24h/index.html">首页|INDEX</a> |
+        <a href="/temp/keti_sys_stra_24h/index_keti.html">课题|PROJECT</a> |
+        <a href="/temp/keti_sys_stra_24h/index_sys.html">系统模块|SYS</a> |
+        <a href="/temp/keti_sys_stra_24h/index_papers.html">论文|PAPER</a> | 
+        --- | <br><br>
+        <a href="./5min_ciss.html">5分钟入手 |5 Minutes to CISS</a> >>
+        <a href="./esse_func.html">核心功能 |Essential Functions</a> >> 
+        <a href="./data_manage.html">数据管理 |Data Management</a> >> 
+        <a href="./stra_ana.html">策略分析 |Strategy Analysis</a> >> 
+        <a href="./port_simu.html">模拟组合 |Portfolio Simulation</a> >> 
+        <a href="./multi_asset.html">多资产管理 |Multi-Asset Investment</a> >> 
+        <a href="./stra_eval.html">策略评估及可视化 |Strategy Evaluation and Visualization</a> >> 
+        <a href="./update_coop_opensource.html">更新，协作，和开源 |update,cooperation and open source</a> >> 
+        --- | <br>
+
+    </nav> 
+
+    <div id="left_frame"> 
+
+    <h1 >中式投资策略系统模块 |CISS </h1> 
+    <p>A strategy platform supportting 24 hours strategy development for professional investment</p>
+    <hr>       
+    <div id="menu_float">
+    <ul>
+    <li><a href="#5min_ciss">5分钟入手 |5 Minutes to CISS</a></li> 
+    <li><a href="#esse_func">核心功能 |Essential Functions</a></li>  
+    <li><a href="#data_manage">数据管理 |Data Management</a></li>  
+    <li><a href="#stra_ana">策略分析 |Strategy Analysis</a></li>  
+    <li><a href="#port_simu">模拟组合 |Portfolio Simulation</a></li>  
+    <li><a href="#multi_asset">多资产管理 |Multi-Asset Investment</a></li>  
+    <li><a href="#stra_eval">策略评估及可视化 |Strategy Evaluation and Visualization</a></li>  
+    <li><a href="#update_coop_opensource">更新，协作，和开源 |Update,Cooperation and Open source</a></li>  
+    </ul>
+
+
+    </div>
+
+
+    <section id="menu"> 
+
+    <h3>目录</h3>
+    <ol>
+    <li><a href="#5min_ciss">5分钟入手 |5 Minutes to CISS</a></li> 
+    <li><a href="#esse_func">核心功能 |Essential Functions</a></li>  
+    <li><a href="#data_manage">数据管理 |Data Management</a></li>  
+    <li><a href="#stra_ana">策略分析 |Strategy Analysis</a></li>  
+    <li><a href="#port_simu">模拟组合 |Portfolio Simulation</a></li>  
+    <li><a href="#multi_asset">多资产管理 |Multi-Asset Investment</a></li>  
+    <li><a href="#stra_eval">策略评估及可视化 |Strategy Evaluation and Visualization</a></li>  
+    <li><a href="#update_coop_opensource">更新，协作，和开源 |Update,Cooperation and Open source</a></li>  
+
+    </ol> 
+    </section> 
+
+    <section id="s1"> 
+    <h3><a name="5min_ciss">5分钟入手 |5 Minutes to CISS</a></h3>  
+    <hr>
+    <p>{todo；1，安装\软硬件环境dependent}</p>
+
+    <p>本模块基于Python 3.6.3版本，且需要依赖于一系列的开源模块包，大部分通用的模块包可以通过安装Python开源模块包集合的Anaconda套件实现。Anaconda包括了180多个Python包及依赖程序项目。除了默认已有的A股行情和基本面财务数据，Wind-API，Choice-API都具备相对丰富完善的数据和支持文档，是机构用户低成本的获取小规模数据的方式。虽然本模块绝大部分功能不限平台，但假设典型的用户使用Windows个人操作系统进行策略研究，特别是相关的数据接口和输出的csv格式文件需要基于Windows系统，也是绝大部分理论用户使用的系统。
+    </p>
+    <p>用户可以通过在测试脚本“CISS_out\apps\test_all_ind-X_v_g.py”中进行参数测试，实现一键式回测和计算模拟组合。通过导入时间数据模块，用户可以设置所在国家或地区的交易所时间、模拟组合匹配的交易日和模拟组合的开始和结束时间。本例中我们使用中国区上海交易所时间，使用中证沪深300指数的交易日作为模拟组合的构建时间。本例中我们设置开始和截止日期分别为"2014-05-31"，"2018-11-05"。导入函数“get_port_rebalance_dates”后返回一系列组合定期调整时间区间及基本面信息参考时间。</p>
+    <p>从“db\db_assets\”目录可以导入A股市场所有个股对应的GICS一级至四级行业分类归属。模拟组合的初始资产规模本例中设定为3亿元。从目录“bin\abm_engine”主动基准引擎中导入主动基准模型Abm_model，首先导入所有相关股票的样本空间。样本空间主要包括基于季度的财务、股东变动数据及不定期调整的权息变动数据。脚本中给定3种简便的模拟组合股票池设定方式：单个特定行业或细分行业、1至3级行业分类下所有行业组合、不分行业的全市场组合。风格角度可以选择价值“value”或成长“growth”。最后一步是设置组合的名称“port_name”。</p>
+    <p>以上数据导入及参数初始化步骤完成后，使用组合引擎“engine_portfolio”内的测试脚本函数“test_abm_1port_Nperiods_ind_x”可以获得给定行业和风格的主动基准模拟组合。默认的输出文件位置是“D:\CISS_db”，若设置的组合名称为“port_rc_w_allo_growth_999”，则可以在目录“D:\CISS_db\ port_rc_w_allo_growth_999”内查阅从策略应用到账户明细变动等数据文件目录。另外，用户还可以通过在测试脚本“CISS_out\apps\test_ushk.py”进行类似设定，实现对港股或美股的全市场主动基准组合一键式计算。</p>
+
+
+
+
+
+
+
+
+
+
+    </section> 
+ 
+
+
+
+
+
+    
+
+
+
+
+<hr> 
+<blockquote cite="www.bsstrde.top:8089\index.html">
+    <!--引用内容 -->
+</blockquote>
+ 
+
+<footer> 
+    by rC, sse, icbccs
+    <!--尾部，页脚通常包含文档的作者，著作权信息，链接的使用条款，联系信息等 -->
+</footer> 
+<hr>
+
+</div> 
+
+</body>
+
+</html>

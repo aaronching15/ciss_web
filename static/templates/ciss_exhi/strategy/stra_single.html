@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+<meta charset="UTF-8"> <!-- for HTML5 -->
+<!-- The block items for this base html file is: {nav_sub, left_frame,menu,content } -->
+
+
+{% block nav_sub %}
+
+    <a id="a_nav" href="./core_stra.html">核心策略 |Core strategy</a> >>
+    <a id="a_nav" href="./last_stra.html">最新策略 |Lastest strategy</a> >>
+
+{% endblock nav_sub %}
+
+{% block left_frame %}
+    <!-- Menu in left frame -->
+    <h1 >投资策略实例 |CISS applications</h1> 
+    <p>explore details of strategy developing process</p>
+    <hr>       
+    <h3>目录</h3>
+    <ul>
+    <li><a href="#stra_intro">绪论| Introduction </a></li> 
+    <li><a href="#stra_theory">经典理论和模型| Theory and model</a></li> 
+    <li><a href="#stra_empirical">策略实证| Empirical </a></li> 
+    <li><a href="#stra_conclusion">策略结论| Conclusion</a></li> 
+    </ul>
+    <hr><hr>
+
+{% endblock left_frame %}
+
+
+{% block menu %}
+
+    <div id="menu_float">
+    <ul>
+    <li><a href="#stra_intro">绪论| Introduction </a></li> 
+    <li><a href="#stra_theory">经典理论和模型| Theory and model</a></li> 
+    <li><a href="#stra_empirical">策略实证| Empirical </a></li> 
+    <li><a href="#stra_conclusion">策略结论| Conclusion</a></li> 
+    </ul>
+    </div>
+
+{% endblock menu %}
+
+
+{% block content %}
+    <h4>查询CISS策略信息：</h4>
+    <!--  网页的值传到服务器是通过 <input> 或 <textarea>标签中的 name 属性来传递的
+    source  https://code.ziqiangxuetang.com/django/django-forms.html    
+    wrong version : <form action="/port_single/" method="post">   -->
+    <!--Stra name   Stra code   Stra hier 1 Stra hier 2 Stra hier 3 Stra hier 4 -->
+    <form action="{% url "stra_single" %}" method="post" accept-charset="utf-8">
+    {% csrf_token %}
+
+    策略名称|Strategy Name: <input type="text" name="port_name"> <br>
+    策略特征值|Strategy I.D.: <input type="text" name="port_id"> <br>
+    最新更新日期|Lastest Update Date.: <input type="text" name="date_last"   value="20181105"> <br>
+    策略分类：一级|Strategy Hierachy:1.: <input type="text" name="hier_1"   value="hier_1"> <br>
+    策略分类：二级|Strategy Hierachy:2.: <input type="text" name="hier_2"   value="hier_2"> <br>
+    策略分类：三级|Strategy Hierachy:3.: <input type="text" name="hier_3"   value="hier_3"> <br>
+    策略分类：四级|Strategy Hierachy:4.: <input type="text" name="hier_4"   value="hier_4"> <br>
+         
+    <input type="submit" value="提交">
+    
+    </form>
+
+    <style type="text/css">
+    .table{ font-size:12px; }
+
+    </style>
+
+    <section id="s1">  
+    <h3><a name="stra_intro">绪论| Introduction </a></h3>  
+    <hr>
+    <p>在中国市场证券的主动投资管理实践中，以被动指数中的市场类沪深300指数或被动行业指数仍然是应用比例和范围最高的业绩评估基准。随着中国市场投资者，出资方和监管机构对主动投资管理的理解不断加深，应该存在一种能逐渐改进的投资基准模型，能将一系列虚拟化的因子或投资策略的主观预测落实到非常具体的股票，方便专业市场参与者进行收益和风险的精细测算，使得投资组合调整和风险管理更具备可操作性。
+</p>
+
+    <p>
+    长期以来的二级市场投资实践中，中国证券市场投资者往往认为投资收益的实现主要应归结于基金经理的主观投资经验，从公募基金基金经理的高薪酬也可以反映该假设。随着主动管理基金的业绩长期普遍低于被动市场指数，市场基准指数作为业绩评估基准是否合理，和主动投资过程是否缺乏标准化的流程都成为了管理角度的两大问题。本文计划通过精细化管理主动投资过程的决定投资决策的信息，基于证券基本面的数据探索一个主动管理基准。现有的市场或规模类型指数重点关注6个月至12个月内交易流动性，虽然选出的股票会有较好的交易流动性，但也会导致资产配置中高权重股票不是本行业最具价值，或最有成长性的个股。以2018年三季度财务数据看，沪深300指数内权重最大的银行股招商银行，净利润绝对值显著低于工商银行。
+    </p>
+
+    </section> 
+
+
+    <section id="s2">  
+    <h3><a name="stra_theory">经典理论和模型| Theory and model</a></h3>  
+    <hr>
+    <p>  </p>
+    
+
+    </section> 
+
+    <section id="s3">  
+    <h3><a name="stra_empirical">策略实证| Empirical </a></h3>  
+    <hr>
+    <p>  </p>
+    
+
+    </section> 
+
+    <section id="s4">  
+    <h3><a name="stra_conclusion">策略结论| Conclusion</a></h3>  
+    <hr>
+    <p>  </p>
+    
+
+    </section> 
+
+
+<p>  </p>
+<p>  </p>
+<p>  </p>
+{% endblock content %}
+

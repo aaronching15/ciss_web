@@ -1,0 +1,176 @@
+{% extends "base_docs.html" %}
+<meta charset="UTF-8"> <!-- for HTML5 -->
+<!-- The block items for this base html file is: {nav_sub, left_frame,menu,content } -->
+
+
+
+{% block left_frame %}
+
+    <h1 >中式投资策略系统模块 |CISS </h1> 
+    <p>A strategy platform supportting 24 hours strategy development for professional investment</p>
+    <hr>       
+    <div id="menu_float">
+    <ul>
+    <li><a href="#5min_ciss">5分钟入手 |5 Minutes to CISS</a></li> 
+    <li><a href="#esse_func">核心功能 |Essential Functions</a></li>  
+    <li><a href="#data_manage">数据管理 |Data Management</a></li>  
+    <li><a href="#stra_ana">策略分析 |Strategy Analysis</a></li>  
+    <li><a href="#port_simu">模拟组合 |Portfolio Simulation</a></li>  
+    <li><a href="#multi_asset">多资产管理 |Multi-Asset Investment</a></li>  
+    <li><a href="#stra_eval">策略评估及可视化 |Strategy Evaluation and Visualization</a></li>  
+    <li><a href="#web_platform.html">策略平台网站 |Strategy Platform as Website</a></li>  
+    <li><a href="#update_coop_opensource">更新，协作，和开源 |Update,Cooperation and Open source</a></li>  
+    </ul>
+    </div>
+
+
+{% endblock left_frame %}
+
+{% block menu %}
+
+{% endblock menu %}
+
+
+{% block content %}
+
+
+
+
+    <section id="menu"> 
+
+    <h3>目录</h3>
+    <ol>
+    <li><a href="#dm1">数据格式，类型和结构</a></li> 
+    <li><a href="#dm2">时间序列</a></li>  
+    <li><a href="#dm3">数据存储，输入输出（In/Out,简称I/O）数据</a></li>  
+    <li><a href="#dm4">时间数据</a></li>
+    <li><a href="#dm5">资产数据</a></li>
+    <li><a href="#dm6">投资相关基础信息数据</a></li>
+    <li><a href="#dm7">股票池数据</a></li>
+    <li><a href="#dm8">分析指标数据</a></li>
+    <li><a href="#dm9">方程和策略数据</a></li>
+    <li><a href="#dm10">交易信号数据</a></li>
+    <li><a href="#dm11">算法和最优化数据</a></li>
+    <li><a href="#dm12">交易数据</a></li>
+    <li><a href="#dm13">账户数据</a></li>
+    <li><a href="#dm14">组合数据</a></li>
+    <li><a href="#dm15">基金数据</a></li>
+    <li><a href="#dm16">团队数据</a></li>
+    <li><a href="#dm17">机构数据</a></li>
+    <li><a href="#dm18">市场数据</a></li>
+    <li><a href="#dm19">日志数据</a></li>
+    <li><a href="#dm20">用户数据</a></li>
+
+    </ol> 
+    </section> 
+
+
+
+    <section id="s3">  
+    <h3><a name="data_manage">数据管理 |Data Management</a></h3>  
+    <hr>
+    <p>
+    {todo}
+    数据管理的功能主要通过“数据管理”目录实现。
+
+    根据业务类型划分，主要包括以下几类数据：时间数据、资产数据、投资相关基础信息数据、股票池数据、分析指标数据、方程和策略数据、交易信号数据、算法和最优化数据、交易数据、账户数据、组合数据、基金数据、团队数据、机构数据、市场数据、日志数据、用户数据、数据输入输出（In/Out,简称I/O）数据。
+
+    时间数据子目录下可以对中国、香港和美国等不同国家不同市场的交易日、交易时间区别对待。
+
+    多资产类别子目录内包含了数据脚本用于从信息服务商的数据接口（如Wind-API，Choice-API）抓取数据、初步分析后保存至本地。其他常用的数据服务商还有恒生，钱龙，恒泰，朝阳永续，各市场交易所等。以数据质量相对较高的某数据API为例，截止2018年12月，在获取香港、美国市场行情或财务基本面数据时仍然有很多诸如日成交金额、企业价值倍数等指标无法通过数据接口获得。
+
+    因此在当前的策略开发过程中，人工复核和整理数据接口获取的数据还是不可或缺的。</p>
+
+
+    <h4><a name="dm1">数据格式，类型和结构</a></li> 
+
+
+    <p>当前策略开发过程中，最常用的数据存储格式是基于Excel的csv、xls、xlsx等。Excel的主要优势在于可以快速地导入txt或csv格式的小规模数据进行快速分析和画图，但面对大规模的数据文件、需要重复设置格式样式等情况效率弱于Python等编程工具。
+
+    另外，对于非结构化的原始数据如html或txt等格式的文件，即便是两种分隔符都可能给Excel的数据导入带来较大的问题。
+
+    由于以上原因，我们计划保持csv格式的数据文件对策略开发和组合管理过程，这样可以方便传统的投研人员也可以用Excel或txt工具检查各个环节的数据。
+
+    对于策略平台展示网页，Json格式不但比csv能更好地适应网站前端和后端交互，还是一种更搞笑的数据格式，和Python语言中的字典格式和数据分析模块包Pandas中的DataFrame无缝衔接。
+
+
+    </p>
+
+
+
+
+    <h4><a name="dm2">时间序列</a></li>  
+
+    <p> {todo,简要介绍 Python， 根据python数据分析的书。
+    1，数据载入，存储及文件格式
+    2，数据清洗及准备，字符串
+
+
+    4，聚合与分组
+    5，时间序列
+    6，数据统计statsmodels及机器学习训练准备by scikit-learn
+
+    3，绘图与可视化
+    7，数据开放
+        上交所XBRL专栏不好用。交易所优势是权威的数据，但缺乏大规模空间提供数据服务，可以考虑和阿里云或者会员单位券商，金融网站合作提供数据服务。
+        http://listxbrl.sse.com.cn/companyInfo/toCompanyInfo.do?stock_id=600702.SS&report_year=2018&report_period_id=5000
+
+
+    } 
+    </p>
+
+        
+    <h4><a name="dm3">数据存储，输入输出（In/Out,简称I/O）数据</a></li> 
+
+    <p> config\config_IO.py </p>
+
+
+
+
+    <h4><a name="dm4">时间数据</a></li>
+
+    <p>
+        
+    </p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+    </section> 
+ 
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock content %}

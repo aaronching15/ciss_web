@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>vue_rc</title>
+
+<style> 
+
+@import url("//unpkg.com/element-ui@2.7.0/lib/theme-chalk/index.css");
+
+.avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
+
+  .transfer-footer {
+    margin-left: 20px;
+    padding: 6px 5px;
+  }
+
+
+</style>
+
+<script src="//unpkg.com/vue/dist/vue.js"></script>
+<script src="//unpkg.com/element-ui@2.7.0/lib/index.js"></script>
+
+</head>
+<body>
+    <!-- test of vue cases 190408  -->
+
+<hr>
+
+<hr>
+<h5>Upload 上传 通过点击或者拖拽上传文件</h5>
+<p>  </p>
+<p> http://element-cn.eleme.io/#/zh-CN/component/upload </p>
+
+<div id="app_up_file">
+<el-upload
+  class="upload-demo"
+  action="https://jsonplaceholder.typicode.com/posts/"
+  :on-preview="handlePreview"
+  :on-remove="handleRemove"
+  :before-remove="beforeRemove"
+  multiple
+  :limit="3"
+  :on-exceed="handleExceed"
+  :file-list="fileList">
+  <el-button size="small" type="primary">点击上传</el-button>
+  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+</el-upload>
+</div>
+
+<hr>
+<h5>用户头像上传
+</h5>
+<p>使用 before-upload 限制用户上传的图片格式和大小 </p>
+<p>http://element-cn.eleme.io/#/zh-CN/component/upload</p>
+<div id="app_up_photo">
+   <span class="demonstration"></span>
+   <el-upload
+      class="avatar-uploader"
+      action="https://jsonplaceholder.typicode.com/posts/"
+      :show-file-list="false"
+      :on-success="handleAvatarSuccess"
+      :before-upload="beforeAvatarUpload">
+      <img v-if="imageUrl" :src="imageUrl" class="avatar">
+      <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+    </el-upload>
+    </div>
+  </div>
+
+<div id="app_up_list">
+    <el-upload
+      action="https://jsonplaceholder.typicode.com/posts/"
+      list-type="picture-card"
+      :on-preview="handlePictureCardPreview"
+      :on-remove="handleRemove">
+      <i class="el-icon-plus"></i>
+    </el-upload>
+    <el-dialog :visible.sync="dialogVisible">
+      <img width="100%" :src="dialogImageUrl" alt="">
+    </el-dialog>
+</div>
+
+<hr>
+<h5>图片列表缩略图 </h5>
+<p>  </p>
+<div id="app_up_pre">
+<el-upload
+  class="upload-demo"
+  action="https://jsonplaceholder.typicode.com/posts/"
+  :on-preview="handlePreview"
+  :on-remove="handleRemove"
+  :file-list="fileList"
+  list-type="picture">
+  <el-button size="small" type="primary">点击上传</el-button>
+  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+</el-upload>
+</div>
+
+<hr>
+<h5>上传文件列表控制</h5>
+<p> 
+通过 on-change 钩子函数来对列表进行控制</p>
+<p>  </p>
+<div id="app_up_handle">
+<span class="demonstration"></span>
+ 
+<el-upload
+  class="upload-demo"
+  action="https://jsonplaceholder.typicode.com/posts/"
+  :on-change="handleChange"
+  :file-list="fileList">
+  <el-button size="small" type="primary">点击上传</el-button>
+  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+</el-upload>
+</div>
+ 
+<hr>
+<h5>拖拽上传</h5>
+<p>  </p>
+<div id="app_drag">
+<el-upload
+  class="upload-demo"
+  drag
+  action="https://jsonplaceholder.typicode.com/posts/"
+  multiple>
+  <i class="el-icon-upload"></i>
+  <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+  <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+</el-upload>
+</div>
+
+<hr>
+<h5>手动上传</h5>
+<p>  </p>
+<div id="app_up_hand">
+<el-upload
+  class="upload-demo"
+  ref="upload"
+  action="https://jsonplaceholder.typicode.com/posts/"
+  :on-preview="handlePreview"
+  :on-remove="handleRemove"
+  :file-list="fileList"
+  :auto-upload="false">
+  <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+  <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
+  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+</el-upload>
+</div>
+
+<hr>
+<h5>Rate 评分 评分组件</h5>
+<p> </p>
+<p>  </p>
+<div id="app_rate">
+    <div class="block">
+      <span class="demonstration">默认不区分颜色</span>
+      <el-rate v-model="value1"></el-rate>
+    </div>
+    <div class="block">
+      <span class="demonstration">区分颜色</span>
+      <el-rate
+        v-model="value2"
+        :colors="['#99A9BF', '#F7BA2A', '#FF9900']">
+      </el-rate>
+    </div>
+
+    <div class="block">
+    <el-rate
+      v-model="value3"
+      show-text>
+    </el-rate>
+
+    <el-rate
+      v-model="value4"
+      :icon-classes="['icon-rate-face-1', 'icon-rate-face-2', 'icon-rate-face-3']"
+      void-icon-class="icon-rate-face-off"
+      :colors="['#99A9BF', '#F7BA2A', '#FF9900']">
+    </el-rate>
+    
+    <el-rate
+      v-model="value5"
+      disabled
+      show-score
+      text-color="#ff9900"
+      score-template="{value}">
+    </el-rate>
+    </div>
+
+
+</div>
+
+<hr>
+<h5>ColorPicker 颜色选择器</h5>
+<p>用于颜色选择，支持多种格式。</p>
+<p>  </p>
+<div id="app_color">
+    <div class="block">
+      <span class="demonstration">有默认值</span>
+      <el-color-picker v-model="color1"></el-color-picker>
+    </div>
+    <div class="block">
+      <span class="demonstration">无默认值</span>
+      <el-color-picker v-model="color2"></el-color-picker>
+    </div>
+    <div class="block">
+      <span class="demonstration">选择透明度</span>
+    <el-color-picker v-model="color3" show-alpha></el-color-picker>
+    </div>
+
+    <div class="block">
+      <span class="demonstration">预定义颜色</span>
+    <el-color-picker
+      v-model="color5"
+      show-alpha
+      :predefine="predefineColors">
+    </el-color-picker>
+    </div>
+
+    <div id="block">
+    <el-color-picker v-model="color4"></el-color-picker>
+    <el-color-picker v-model="color4" size="medium"></el-color-picker>
+    <el-color-picker v-model="color4" size="small"></el-color-picker>
+    <el-color-picker v-model="color4" size="mini"></el-color-picker>
+    </div>
+
+</div>
+
+<hr>
+<h5>Transfer 穿梭框</h5>
+<p>http://element-cn.eleme.io/#/zh-CN/component/transfer </p>
+<div id="app_tran">
+<template>
+  <el-transfer v-model="value1" :data="data"></el-transfer>
+</template>
+</div>
+
+<br>
+<div id="app_tran2">
+<template>
+  <el-transfer
+    filterable
+    :filter-method="filterMethod"
+    filter-placeholder="请输入城市拼音"
+    v-model="value2"
+    :data="data2">
+
+    <el-button class="transfer-footer" slot="left-footer" size="small">操作</el-button>
+      <el-button class="transfer-footer" slot="right-footer" size="small">操作</el-button>
+  </el-transfer>
+</template>
+</div>
+
+<h5>Transfer 穿梭框|自定义</h5>
+<p>使用 scoped-slot 自定义数据项 </p>
+<div id="app_tran3">
+<template>
+  <el-transfer
+    v-model="value5"
+    :props="{
+      key: 'value',
+      label: 'desc'
+    }"
+    :data="data3">
+  </el-transfer>
+</template>
+</div>
+
+<hr>
+<h5>Form 表单</h5>
+<p>由输入框、选择器、单选框、多选框等控件组成，用以收集、校验、提交数据 </p>
+<p>  </p>
+<div id="app_form">
+<el-form ref="form" :model="form" label-width="80px">
+
+  <el-form-item label="活动名称">
+    <el-input v-model="form.name"></el-input>
+  </el-form-item>
+
+  <el-form-item label="活动区域">
+    <el-select v-model="form.region" placeholder="请选择活动区域">
+      <el-option label="区域一" value="shanghai"></el-option>
+      <el-option label="区域二" value="beijing"></el-option>
+    </el-select>
+  </el-form-item>
+
+  <el-form-item label="活动时间">
+    <el-col :span="11">
+      <el-date-picker type="date" placeholder="选择日期" v-model="form.date1" style="width: 100%;"></el-date-picker>
+    </el-col>
+    <el-col class="line" :span="2">-</el-col>
+    <el-col :span="11">
+      <el-time-picker placeholder="选择时间" v-model="form.date2" style="width: 100%;"></el-time-picker>
+    </el-col>
+  </el-form-item>
+
+  <el-form-item label="即时配送">
+    <el-switch v-model="form.delivery"></el-switch>
+  </el-form-item>
+  <el-form-item label="活动性质">
+    <el-checkbox-group v-model="form.type">
+      <el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox>
+      <el-checkbox label="地推活动" name="type"></el-checkbox>
+      <el-checkbox label="线下主题活动" name="type"></el-checkbox>
+      <el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
+    </el-checkbox-group>
+  </el-form-item>
+
+  <el-form-item label="特殊资源">
+    <el-radio-group v-model="form.resource">
+      <el-radio label="线上品牌商赞助"></el-radio>
+      <el-radio label="线下场地免费"></el-radio>
+    </el-radio-group>
+  </el-form-item>
+
+  <el-form-item label="活动形式">
+    <el-input type="textarea" v-model="form.desc"></el-input>
+  </el-form-item>
+
+  <el-form-item>
+    <el-button type="primary" @click="onSubmit">立即创建</el-button>
+    <el-button>取消</el-button>
+  </el-form-item>
+
+</el-form>
+</div>
+
+<hr>
+<h5>Form 表单| single line </h5>
+<p>  </p>
+<div id="app_f2">
+
+<el-form :inline="true" :model="formInline" class="demo-form-inline">
+  <el-form-item label="审批人">
+    <el-input v-model="formInline.user" placeholder="审批人"></el-input>
+  </el-form-item>
+  <el-form-item label="活动区域">
+    <el-select v-model="formInline.region" placeholder="活动区域">
+      <el-option label="区域一" value="shanghai"></el-option>
+      <el-option label="区域二" value="beijing"></el-option>
+    </el-select>
+  </el-form-item>
+  <el-form-item>
+    <el-button type="primary" @click="onSubmit">查询</el-button>
+  </el-form-item>
+</el-form>
+</div>
+
+<h5>对齐方式 根据具体目标和制约因素，选择最佳的标签对齐方式。 </h5>
+<div id="app_f3">
+<el-radio-group v-model="labelPosition" size="small">
+  <el-radio-button label="left">左对齐</el-radio-button>
+  <el-radio-button label="right">右对齐</el-radio-button>
+  <el-radio-button label="top">顶部对齐</el-radio-button>
+</el-radio-group>
+<div style="margin: 20px;"></div>
+<el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign">
+  <el-form-item label="名称">
+    <el-input v-model="formLabelAlign.name"></el-input>
+  </el-form-item>
+  <el-form-item label="活动区域">
+    <el-input v-model="formLabelAlign.region"></el-input>
+  </el-form-item>
+  <el-form-item label="活动形式">
+    <el-input v-model="formLabelAlign.type"></el-input>
+  </el-form-item>
+</el-form>
+</div>
+
+<h5>表单验证</h5>
+<p>在防止用户犯错的前提下，尽可能让用户更早地发现并纠正错误。</p>
+<div id="app_f4">
+<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+  <el-form-item label="活动名称" prop="name">
+    <el-input v-model="ruleForm.name"></el-input>
+  </el-form-item>
+  <el-form-item label="活动区域" prop="region">
+    <el-select v-model="ruleForm.region" placeholder="请选择活动区域">
+      <el-option label="区域一" value="shanghai"></el-option>
+      <el-option label="区域二" value="beijing"></el-option>
+    </el-select>
+  </el-form-item>
+  <el-form-item label="活动时间" required>
+    <el-col :span="11">
+      <el-form-item prop="date1">
+        <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.date1" style="width: 100%;"></el-date-picker>
+      </el-form-item>
+    </el-col>
+    <el-col class="line" :span="2">-</el-col>
+    <el-col :span="11">
+      <el-form-item prop="date2">
+        <el-time-picker placeholder="选择时间" v-model="ruleForm.date2" style="width: 100%;"></el-time-picker>
+      </el-form-item>
+    </el-col>
+  </el-form-item>
+  <el-form-item label="即时配送" prop="delivery">
+    <el-switch v-model="ruleForm.delivery"></el-switch>
+  </el-form-item>
+  <el-form-item label="活动性质" prop="type">
+    <el-checkbox-group v-model="ruleForm.type">
+      <el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox>
+      <el-checkbox label="地推活动" name="type"></el-checkbox>
+      <el-checkbox label="线下主题活动" name="type"></el-checkbox>
+      <el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
+    </el-checkbox-group>
+  </el-form-item>
+  <el-form-item label="特殊资源" prop="resource">
+    <el-radio-group v-model="ruleForm.resource">
+      <el-radio label="线上品牌商赞助"></el-radio>
+      <el-radio label="线下场地免费"></el-radio>
+    </el-radio-group>
+  </el-form-item>
+  <el-form-item label="活动形式" prop="desc">
+    <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+  </el-form-item>
+  <el-form-item>
+    <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
+    <el-button @click="resetForm('ruleForm')">重置</el-button>
+  </el-form-item>
+</el-form>
+</div>
+
+<hr>
+<h5>自定义校验规则
+这个例子中展示了如何使用自定义验证规则来完成密码的二次验证。</h5>
+<div id="app_f5">
+<el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px" class="demo-ruleForm">
+  <el-form-item label="密码" prop="pass">
+    <el-input type="password" v-model="ruleForm2.pass" autocomplete="off"></el-input>
+  </el-form-item>
+  <el-form-item label="确认密码" prop="checkPass">
+    <el-input type="password" v-model="ruleForm2.checkPass" autocomplete="off"></el-input>
+  </el-form-item>
+  <el-form-item label="年龄" prop="age">
+    <el-input v-model.number="ruleForm2.age"></el-input>
+  </el-form-item>
+  <el-form-item>
+    <el-button type="primary" @click="submitForm('ruleForm2')">提交</el-button>
+    <el-button @click="resetForm('ruleForm2')">重置</el-button>
+  </el-form-item>
+</el-form>
+</div>
+
+<hr>
+<h5>动态增减表单项</h5>
+<div id="app_f6">
+<el-form :model="dynamicValidateForm" ref="dynamicValidateForm" label-width="100px" class="demo-dynamic">
+  <el-form-item
+    prop="email"
+    label="邮箱"
+    :rules="[
+      { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+      { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
+    ]"
+  >
+    <el-input v-model="dynamicValidateForm.email"></el-input>
+  </el-form-item>
+  <el-form-item
+    v-for="(domain, index) in dynamicValidateForm.domains"
+    :label="'域名' + index"
+    :key="domain.key"
+    :prop="'domains.' + index + '.value'"
+    :rules="{
+      required: true, message: '域名不能为空', trigger: 'blur'
+    }"
+  >
+    <el-input v-model="domain.value"></el-input><el-button @click.prevent="removeDomain(domain)">删除</el-button>
+  </el-form-item>
+  <el-form-item>
+    <el-button type="primary" @click="submitForm('dynamicValidateForm')">提交</el-button>
+    <el-button @click="addDomain">新增域名</el-button>
+    <el-button @click="resetForm('dynamicValidateForm')">重置</el-button>
+  </el-form-item>
+
+
+</el-form>
+</div>
+
+<h5>数字类型验证</h5>
+<div id="app_f7">
+<el-form :model="numberValidateForm" ref="numberValidateForm" label-width="100px" class="demo-ruleForm">
+  <el-form-item
+    label="年龄"
+    prop="age"
+    :rules="[
+      { required: true, message: '年龄不能为空'},
+      { type: 'number', message: '年龄必须为数字值'}
+    ]"
+  >
+    <el-input type="age" v-model.number="numberValidateForm.age" autocomplete="off"></el-input>
+  </el-form-item>
+  <el-form-item>
+    <el-button type="primary" @click="submitForm('numberValidateForm')">提交</el-button>
+    <el-button @click="resetForm('numberValidateForm')">重置</el-button>
+  </el-form-item>
+</el-form>
+</div>
+
+<h5>表单内组件尺寸控制</h5>
+<p>通过设置 Form 上的 size 属性可以使该表单内所有可调节大小的组件继承该尺寸。Form-Item 也具有该属性。</p>
+<div id="app_f8">
+<el-form ref="form" :model="sizeForm" label-width="80px" size="mini">
+  <el-form-item label="活动名称">
+    <el-input v-model="sizeForm.name"></el-input>
+  </el-form-item>
+  <el-form-item label="活动区域">
+    <el-select v-model="sizeForm.region" placeholder="请选择活动区域">
+      <el-option label="区域一" value="shanghai"></el-option>
+      <el-option label="区域二" value="beijing"></el-option>
+    </el-select>
+  </el-form-item>
+  <el-form-item label="活动时间">
+    <el-col :span="11">
+      <el-date-picker type="date" placeholder="选择日期" v-model="sizeForm.date1" style="width: 100%;"></el-date-picker>
+    </el-col>
+    <el-col class="line" :span="2">-</el-col>
+    <el-col :span="11">
+      <el-time-picker placeholder="选择时间" v-model="sizeForm.date2" style="width: 100%;"></el-time-picker>
+    </el-col>
+  </el-form-item>
+  <el-form-item label="活动性质">
+    <el-checkbox-group v-model="sizeForm.type">
+      <el-checkbox-button label="美食/餐厅线上活动" name="type"></el-checkbox-button>
+      <el-checkbox-button label="地推活动" name="type"></el-checkbox-button>
+      <el-checkbox-button label="线下主题活动" name="type"></el-checkbox-button>
+    </el-checkbox-group>
+  </el-form-item>
+  <el-form-item label="特殊资源">
+    <el-radio-group v-model="sizeForm.resource" size="medium">
+      <el-radio border label="线上品牌商赞助"></el-radio>
+      <el-radio border label="线下场地免费"></el-radio>
+    </el-radio-group>
+  </el-form-item>
+  <el-form-item size="large">
+    <el-button type="primary" @click="onSubmit">立即创建</el-button>
+    <el-button>取消</el-button>
+  </el-form-item>
+</el-form>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<hr>
+<h5></h5>
+<p> </p>
+<p>  </p>
+<div id="app">
+<span class="demonstration"></span>
+</div>
+
+
+</body>
+ 
+
+<script type="text/javascript">
+
+var Main = {
+    data() {
+      return {
+        fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}, {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}]
+      };
+    },
+    methods: {
+      handleRemove(file, fileList) {
+        console.log(file, fileList);
+      },
+      handlePreview(file) {
+        console.log(file);
+      },
+      handleExceed(files, fileList) {
+        this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+      },
+      beforeRemove(file, fileList) {
+        return this.$confirm(`确定移除 ${ file.name }？`);
+      }
+    }
+  }
+var Ctor = Vue.extend(Main)
+new Ctor().$mount('#app_up_file');
+
+var Main_up2 = {
+    data() {
+      return {
+        imageUrl: ''
+      };
+    },
+    methods: {
+      handleAvatarSuccess(res, file) {
+        this.imageUrl = URL.createObjectURL(file.raw);
+      },
+      beforeAvatarUpload(file) {
+        const isJPG = file.type === 'image/jpeg';
+        const isLt2M = file.size / 1024 / 1024 < 2;
+
+        if (!isJPG) {
+          this.$message.error('上传头像图片只能是 JPG 格式!');
+        }
+        if (!isLt2M) {
+          this.$message.error('上传头像图片大小不能超过 2MB!');
+        }
+        return isJPG && isLt2M;
+      }
+    }
+  }
+var Ctor_up2 = Vue.extend(Main_up2)
+new Ctor_up2().$mount('#app_up_photo');
+
+var Main_up3 = {
+    data() {
+      return {
+        dialogImageUrl: '',
+        dialogVisible: false
+      };
+    },
+    methods: {
+      handleRemove(file, fileList) {
+        console.log(file, fileList);
+      },
+      handlePictureCardPreview(file) {
+        this.dialogImageUrl = file.url;
+        this.dialogVisible = true;
+      }
+    }
+  }
+var Ctor_up3 = Vue.extend(Main_up3)
+new Ctor_up3().$mount('#app_up_list');
+
+
+var Main_up4 = {
+    data() {
+      return {
+        fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}, {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}]
+      };
+    },
+    methods: {
+      handleRemove(file, fileList) {
+        console.log(file, fileList);
+      },
+      handlePreview(file) {
+        console.log(file);
+      }
+    }
+  }
+var Ctor_up4 = Vue.extend(Main_up4)
+new Ctor_up4().$mount('#app_up_pre');
+
+// _up_handle
+var Main_up_h = {
+    data() {
+      return {
+        fileList: [{
+          name: 'food.jpeg',
+          url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+        }, {
+          name: 'food2.jpeg',
+          url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+        }]
+      };
+    },
+    methods: {
+      handleChange(file, fileList) {
+        this.fileList = fileList.slice(-3);
+      }
+    }
+  }
+var Ctor_up_h = Vue.extend(Main_up_h)
+new Ctor_up_h().$mount('#app_up_handle')
+
+new Vue().$mount('#app_drag');
+
+// <div id="app_up_hand">
+var Main_up_h2 = {
+    data() {
+      return {
+        fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}, {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}]
+      };
+    },
+    methods: {
+      submitUpload() {
+        this.$refs.upload.submit();
+      },
+      handleRemove(file, fileList) {
+        console.log(file, fileList);
+      },
+      handlePreview(file) {
+        console.log(file);
+      }
+    }
+  }
+var Ctor_up_h2 = Vue.extend(Main_up_h2)
+new Ctor_up_h2().$mount('#app_up_hand');
+
+//rating 评分
+var Main_r = {
+    data() {
+      return {
+        value1: null,
+        value2: null,
+        value3: null,
+        value4: null,
+        value5: 3.7
+      }
+    }
+  }
+var Ctor_r = Vue.extend(Main_r)
+new Ctor_r().$mount('#app_rate');
+
+//color
+var Main_c = {
+    data() {
+      return {
+        color1: '#409EFF',
+        color2: null,
+        color3: 'rgba(19, 206, 102, 0.8)',
+        color5: 'rgba(255, 69, 0, 0.68)',
+        predefineColors: [
+          '#ff4500',
+          '#ff8c00',
+          '#ffd700',
+          '#90ee90',
+          '#00ced1',
+          '#1e90ff',
+          '#c71585',
+          'rgba(255, 69, 0, 0.68)',
+          'rgb(255, 120, 0)',
+          'hsv(51, 100, 98)',
+          'hsva(120, 40, 94, 0.5)',
+          'hsl(181, 100%, 37%)',
+          'hsla(209, 100%, 56%, 0.73)',
+          '#c7158577'
+        ],
+        color4: '#409EFF'
+      }
+    }
+  };
+var Ctor_c = Vue.extend(Main_c)
+new Ctor_c().$mount('#app_color');
+
+// Transfer 穿梭框
+var Main_tran = {
+    data() {
+      const generateData = _ => {
+        const data = [];
+        for (let i = 1; i <= 15; i++) {
+          data.push({
+            key: i,
+            label: `备选项 ${ i }`,
+            disabled: i % 4 === 0
+          });
+        }
+        return data;
+      };
+      return {
+        data: generateData(),
+        value1: [1, 4]
+      };
+    }
+  };
+var Ctor_tran = Vue.extend(Main_tran)
+new Ctor_tran().$mount('#app_tran');
+
+var Main_tran2 = {
+    data() {
+      const generateData2 = _ => {
+        const data = [];
+        const cities = ['上海', '北京', '广州', '深圳', '南京', '西安', '成都'];
+        const pinyin = ['shanghai', 'beijing', 'guangzhou', 'shenzhen', 'nanjing', 'xian', 'chengdu'];
+        cities.forEach((city, index) => {
+          data.push({
+            label: city,
+            key: index,
+            pinyin: pinyin[index]
+          });
+        });
+        return data;
+      };
+      return {
+        data2: generateData2(),
+        value2: [],
+        filterMethod(query, item) {
+          return item.pinyin.indexOf(query) > -1;
+        }
+      };
+    }
+  };
+var Ctor_tran2 = Vue.extend(Main_tran2)
+new Ctor_tran2().$mount('#app_tran2');
+
+//<p>使用 scoped-slot 
+var Main_tran3 = {
+
+    data() {
+      const generateData3 = _ => {
+        const data = [];
+        for (let i = 1; i <= 15; i++) {
+          data.push({
+            value: i,
+            desc: `备选项 ${ i }`,
+            disabled: i % 4 === 0
+          });
+        }
+        return data;
+      };
+      return {
+        data3: generateData3(),
+        value5: []
+      };
+    }
+  };
+
+var Ctor_tran3 = Vue.extend(Main_tran3)
+new Ctor_tran3().$mount('#app_tran3');
+
+//Form
+var Main_form = {
+    data() {
+      return {
+        form: {
+          name: '',
+          region: '',
+          date1: '',
+          date2: '',
+          delivery: false,
+          type: [],
+          resource: '',
+          desc: ''
+        }
+      }
+    },
+    methods: {
+      onSubmit() {
+        console.log('submit!');
+      }
+    }
+  }
+var Ctor_form = Vue.extend(Main_form)
+new Ctor_form().$mount('#app_form');
+
+var Main_f2 = {
+    data() {
+      return {
+        formInline: {
+          user: '',
+          region: ''
+        }
+      }
+    },
+    methods: {
+      onSubmit() {
+        console.log('submit!');
+      }
+    }
+  }
+var Ctor_f2 = Vue.extend(Main_f2)
+new Ctor_f2().$mount('#app_f2');
+
+var Main_f3 = {
+    data() {
+      return {
+        labelPosition: 'right',
+        formLabelAlign: {
+          name: '',
+          region: '',
+          type: ''
+        }
+      };
+    }
+  }
+var Ctor_f3 = Vue.extend(Main_f3)
+new Ctor_f3().$mount('#app_f3');
+
+//表单验证
+var Main_f4 = {
+    data() {
+      return {
+        ruleForm: {
+          name: '',
+          region: '',
+          date1: '',
+          date2: '',
+          delivery: false,
+          type: [],
+          resource: '',
+          desc: ''
+        },
+        rules: {
+          name: [
+            { required: true, message: '请输入活动名称', trigger: 'blur' },
+            { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+          ],
+          region: [
+            { required: true, message: '请选择活动区域', trigger: 'change' }
+          ],
+          date1: [
+            { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
+          ],
+          date2: [
+            { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
+          ],
+          type: [
+            { type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }
+          ],
+          resource: [
+            { required: true, message: '请选择活动资源', trigger: 'change' }
+          ],
+          desc: [
+            { required: true, message: '请填写活动形式', trigger: 'blur' }
+          ]
+        }
+      };
+    },
+    methods: {
+      submitForm(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            alert('submit!');
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+      },
+      resetForm(formName) {
+        this.$refs[formName].resetFields();
+      }
+    }
+  }
+var Ctor_f4 = Vue.extend(Main_f4)
+new Ctor_f4().$mount('#app_f4');
+
+//验证密码
+
+var Main_f5 = {
+    data() {
+      var checkAge = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('年龄不能为空'));
+        }
+        setTimeout(() => {
+          if (!Number.isInteger(value)) {
+            callback(new Error('请输入数字值'));
+          } else {
+            if (value < 18) {
+              callback(new Error('必须年满18岁'));
+            } else {
+              callback();
+            }
+          }
+        }, 1000);
+      };
+      var validatePass = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入密码'));
+        } else {
+          if (this.ruleForm2.checkPass !== '') {
+            this.$refs.ruleForm2.validateField('checkPass');
+          }
+          callback();
+        }
+      };
+      var validatePass2 = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请再次输入密码'));
+        } else if (value !== this.ruleForm2.pass) {
+          callback(new Error('两次输入密码不一致!'));
+        } else {
+          callback();
+        }
+      };
+      return {
+        ruleForm2: {
+          pass: '',
+          checkPass: '',
+          age: ''
+        },
+        rules2: {
+          pass: [
+            { validator: validatePass, trigger: 'blur' }
+          ],
+          checkPass: [
+            { validator: validatePass2, trigger: 'blur' }
+          ],
+          age: [
+            { validator: checkAge, trigger: 'blur' }
+          ]
+        }
+      };
+    },
+    methods: {
+      submitForm(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            alert('submit!');
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+      },
+      resetForm(formName) {
+        this.$refs[formName].resetFields();
+      }
+    }
+  }
+var Ctor_f5 = Vue.extend(Main_f5)
+new Ctor_f5().$mount('#app_f5');
+
+//动态增减表单项
+var Main_f6 = {
+    data() {
+      return {
+        dynamicValidateForm: {
+          domains: [{
+            value: ''
+          }],
+          email: ''
+        }
+      };
+    },
+    methods: {
+      submitForm(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            alert('submit!');
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+      },
+      resetForm(formName) {
+        this.$refs[formName].resetFields();
+      },
+      removeDomain(item) {
+        var index = this.dynamicValidateForm.domains.indexOf(item)
+        if (index !== -1) {
+          this.dynamicValidateForm.domains.splice(index, 1)
+        }
+      },
+      addDomain() {
+        this.dynamicValidateForm.domains.push({
+          value: '',
+          key: Date.now()
+        });
+      }
+    }
+  }
+var Ctor_f6 = Vue.extend(Main_f6)
+new Ctor_f6().$mount('#app_f6');
+
+// 验证数字
+var Main_f7 = {
+    data() {
+      return {
+        numberValidateForm: {
+          age: ''
+        }
+      };
+    },
+    methods: {
+      submitForm(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            alert('submit!');
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+      },
+      resetForm(formName) {
+        this.$refs[formName].resetFields();
+      }
+    }
+  }
+var Ctor_f7 = Vue.extend(Main_f7)
+new Ctor_f7().$mount('#app_f7');
+
+//form 尺寸 size
+var Main_f8 = {
+    data() {
+      return {
+        sizeForm: {
+          name: '',
+          region: '',
+          date1: '',
+          date2: '',
+          delivery: false,
+          type: [],
+          resource: '',
+          desc: ''
+        }
+      };
+    },
+    methods: {
+      onSubmit() {
+        console.log('submit!');
+      }
+    }
+  };
+var Ctor_f8 = Vue.extend(Main_f8)
+new Ctor_f8().$mount('#app_f8');
+
+
+
+
+</script>
+</html>
+
+
+

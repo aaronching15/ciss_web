@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>vue_rc</title>
+
+
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+  <!-- import JavaScript -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+
+<style> 
+
+@import url("//unpkg.com/element-ui@2.7.0/lib/theme-chalk/index.css");
+
+</style>
+
+<script src="//unpkg.com/vue/dist/vue.js"></script>
+<script src="//unpkg.com/element-ui@2.7.0/lib/index.js"></script>
+
+</head>
+<body>
+    <!-- test of vue cases 190408  -->
+
+<hr>
+
+<h5>Radio 单选框 在一组备选项中进行单选</h5>
+<p>source http://element-cn.eleme.io/#/zh-CN/component/radio</p>
+<div id="app_radio">
+<template>
+  <el-radio v-model="radio" label="1">备选项</el-radio>
+  <el-radio v-model="radio" label="2">备选项</el-radio>
+</template>
+</div>
+
+<div id="app_radio2">
+<template>
+  <el-radio-group v-model="radio2">
+    <el-radio :label="3">备选项</el-radio>
+    <el-radio :label="6">备选项</el-radio>
+    <el-radio :label="9">备选项</el-radio>
+  </el-radio-group>
+</template>
+
+</div>
+
+<div id="app_radio3">
+<template>
+  <div>
+    <el-radio-group v-model="radio3">
+      <el-radio-button label="上海"></el-radio-button>
+      <el-radio-button label="北京"></el-radio-button>
+      <el-radio-button label="广州"></el-radio-button>
+      <el-radio-button label="深圳"></el-radio-button>
+    </el-radio-group>
+  </div>
+  <div style="margin-top: 20px">
+    <el-radio-group v-model="radio4" size="medium">
+      <el-radio-button label="上海" ></el-radio-button>
+      <el-radio-button label="北京"></el-radio-button>
+      <el-radio-button label="广州"></el-radio-button>
+      <el-radio-button label="深圳"></el-radio-button>
+    </el-radio-group>
+  </div>
+  <div style="margin-top: 20px">
+    <el-radio-group v-model="radio5" size="small">
+      <el-radio-button label="上海"></el-radio-button>
+      <el-radio-button label="北京" disabled ></el-radio-button>
+      <el-radio-button label="广州"></el-radio-button>
+      <el-radio-button label="深圳"></el-radio-button>
+    </el-radio-group>
+  </div>
+  <div style="margin-top: 20px">
+    <el-radio-group v-model="radio6" disabled size="mini">
+      <el-radio-button label="上海"></el-radio-button>
+      <el-radio-button label="北京"></el-radio-button>
+      <el-radio-button label="广州"></el-radio-button>
+      <el-radio-button label="深圳"></el-radio-button>
+    </el-radio-group>
+  </div>
+</template>
+</div>
+
+<div id="app_radioX">
+<template>
+  <div>
+    <el-radio v-model="radio7" label="1" border>备选项1</el-radio>
+    <el-radio v-model="radio7" label="2" border>备选项2</el-radio>
+  </div>
+  <div style="margin-top: 20px">
+    <el-radio v-model="radio8" label="1" border size="medium">备选项1</el-radio>
+    <el-radio v-model="radio8" label="2" border size="medium">备选项2</el-radio>
+  </div>
+  <div style="margin-top: 20px">
+    <el-radio-group v-model="radio9" size="small">
+      <el-radio label="1" border>备选项1</el-radio>
+      <el-radio label="2" border disabled>备选项2</el-radio>
+    </el-radio-group>
+  </div>
+  <div style="margin-top: 20px">
+    <el-radio-group v-model="radio10" size="mini" disabled>
+      <el-radio label="1" border>备选项1</el-radio>
+      <el-radio label="2" border>备选项2</el-radio>
+    </el-radio-group>
+  </div>
+</template>
+</div>
+
+<hr>
+<h5>Checkbox 多选框 一组备选项中进行多选</h5>
+<p>source http://element-cn.eleme.io/#/zh-CN/component/checkbox </p>
+<div id="app_c1">
+<template>
+  <!-- `checked` 为 true 或 false -->
+  <el-checkbox v-model="checked">备选项</el-checkbox>
+</template>
+</div>
+<br>
+<div id="app_c2">
+<template>
+  <el-checkbox-group v-model="checkList">
+    <el-checkbox label="复选框 A"></el-checkbox>
+    <el-checkbox label="复选框 B"></el-checkbox>
+    <el-checkbox label="复选框 C"></el-checkbox>
+    <el-checkbox label="禁用" disabled></el-checkbox>
+    <el-checkbox label="选中且禁用" disabled></el-checkbox>
+  </el-checkbox-group>
+</template>
+</div>
+<br>
+<div id="app_cm">
+<template>
+  <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
+  <div style="margin: 15px 0;"></div>
+  <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
+    <el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
+  </el-checkbox-group>
+</template>
+</div>
+<br>
+
+<hr>
+<h5>Input 输入框 通过鼠标或键盘输入字符</h5>
+<p>source http://element-cn.eleme.io/#/zh-CN/component/input </p>
+<div id="app_input">
+<el-input v-model="input" placeholder="请输入内容"></el-input>
+</div>
+<br>
+<div id="app_input2">
+<el-input placeholder="请输入密码" v-model="input11" show-password></el-input>
+</div>
+
+<div id="app_input3">
+    <div class="demo-input-suffix">
+      属性方式：
+      <el-input
+        placeholder="请选择日期"
+        suffix-icon="el-icon-date"
+        v-model="input2">
+      </el-input>
+      <el-input
+        placeholder="请输入内容"
+        prefix-icon="el-icon-search"
+        v-model="input21">
+      </el-input>
+    </div>
+
+    <div class="demo-input-suffix">
+      slot 方式：
+      <el-input
+        placeholder="请选择日期"
+        v-model="input22">
+        <i slot="suffix" class="el-input__icon el-icon-date"></i>
+      </el-input>
+      <el-input
+        placeholder="请输入内容"
+        v-model="input23">
+        <i slot="prefix" class="el-input__icon el-icon-search"></i>
+      </el-input>
+
+        <el-input
+            type="textarea"
+            :rows="2"
+            placeholder="请输入内容"
+            v-model="textarea">
+        </el-input>
+        <el-input
+          type="textarea"
+          autosize
+          placeholder="请输入内容"
+          v-model="textarea2">
+        </el-input>
+        <div style="margin: 20px 0;"></div>
+        <el-input
+          type="textarea"
+          :autosize="{ minRows: 2, maxRows: 4}"
+          placeholder="请输入内容"
+          v-model="textarea3">
+        </el-input>
+
+    </div>
+</div>
+<hr>
+
+<div id="app_input4">
+<div>
+  <el-input placeholder="请输入内容" v-model="input3">
+    <template slot="prepend">Http://</template>
+  </el-input>
+</div>
+<div style="margin-top: 15px;">
+  <el-input placeholder="请输入内容" v-model="input4">
+    <template slot="append">.com</template>
+  </el-input>
+</div>
+<div style="margin-top: 15px;">
+  <el-input placeholder="请输入内容" v-model="input5" class="input-with-select">
+    <el-select v-model="select" slot="prepend" placeholder="请选择">
+      <el-option label="餐厅名" value="1"></el-option>
+      <el-option label="订单号" value="2"></el-option>
+      <el-option label="用户电话" value="3"></el-option>
+    </el-select>
+    <el-button slot="append" icon="el-icon-search"></el-button>
+  </el-input>
+</div>
+</div>
+
+<hr>
+<h5>Input 带输入建议 根据输入内容提供对应的输入建议</h5>
+<p>source http://element-cn.eleme.io/#/zh-CN/component/input </p>
+<p>1,直接选下拉框 ;
+2,根据输入弹出下拉框 </p>
+
+<div id="app_input_sugg">
+<el-row class="demo-autocomplete">
+  <el-col :span="12">
+    <div class="sub-title">激活即列出输入建议</div>
+    <el-autocomplete
+      class="inline-input"
+      v-model="state1"
+      :fetch-suggestions="querySearch"
+      placeholder="请输入内容"
+      @select="handleSelect"
+    ></el-autocomplete>
+  </el-col>
+  <el-col :span="12">
+    <div class="sub-title">输入后匹配输入建议</div>
+    <el-autocomplete
+      class="inline-input"
+      v-model="state2"
+      :fetch-suggestions="querySearch"
+      placeholder="请输入内容"
+      :trigger-on-focus="false"
+      @select="handleSelect"
+    ></el-autocomplete>
+  </el-col>
+</el-row>
+</div>
+
+<hr>
+<h5>Input 计数器</h5>
+<p>source http://element-cn.eleme.io/#/zh-CN/component/input-number </p>
+<div id="app_in_no">
+<template>
+  <el-input-number v-model="num1" @change="handleChange" :min="1" :max="10"
+  :step="2" label="描述文字"></el-input-number>
+</template>
+<template>
+  <el-input-number v-model="num9" :precision="2" :step="0.1" :max="10"></el-input-number>
+</template>
+<template>
+  <el-input-number v-model="num8" controls-position="right" @change="handleChange" :min="1" :max="10"></el-input-number>
+</template>
+</div>
+
+
+<h5>Select 选择器</h5>
+<p>source http://element-cn.eleme.io/#/zh-CN/component/select </p>
+<p>为el-select设置clearable属性，则可将选择器清空。需要注意的是，clearable属性仅适用于单选。 </p>
+
+<div id="app_select">
+<template>
+  <el-select v-model="value4" clearable placeholder="请选择">
+    <el-option
+      v-for="item in options"
+      :key="item.value"
+      :label="item.label"
+      :value="item.value">
+    </el-option>
+  </el-select>
+</template>
+
+</div>
+
+<br>
+
+<div id="app_select2">
+<template>
+  <el-select v-model="value5" multiple placeholder="请选择">
+    <el-option
+      v-for="item in options"
+      :key="item.value"
+      :label="item.label"
+      :value="item.value">
+    </el-option>
+  </el-select>
+
+  <el-select
+    v-model="value11"
+    multiple
+    collapse-tags
+    style="margin-left: 20px;"
+    placeholder="请选择">
+    <el-option
+      v-for="item in options"
+      :key="item.value"
+      :label="item.label"
+      :value="item.value">
+    </el-option>
+  </el-select>
+</template>
+</div>
+
+<div id="app_se3">
+<template>
+  <el-select v-model="value6" placeholder="请选择">
+    <el-option
+      v-for="item in cities"
+      :key="item.value"
+      :label="item.label"
+      :value="item.value">
+      <span style="float: left">{{ item.label }}</span>
+      <span style="float: right; color: #8492a6; font-size: 13px">{{ item.value }}</span>
+    </el-option>
+  </el-select>
+</template>
+</div>
+
+<p>备选项进行分组展示</p>
+<div id="app_se4">
+<template>
+  <el-select v-model="value7" placeholder="请选择">
+    <el-option-group
+      v-for="group in options3"
+      :key="group.label"
+      :label="group.label">
+      <el-option
+        v-for="item in group.options"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value">
+      </el-option>
+    </el-option-group>
+  </el-select>
+</template>
+</div>
+
+<p>可搜索</p>
+<div id="app_se5">
+<template>
+  <el-select v-model="value8" filterable placeholder="请选择">
+    <el-option
+      v-for="item in options"
+      :key="item.value"
+      :label="item.label"
+      :value="item.value">
+    </el-option>
+  </el-select>
+</template>
+</div>
+
+<p>创建条目 可以创建并选中选项中不存在的条目</p>
+<div id="app_se6">
+<template>
+  <el-select
+    v-model="value10"
+    multiple
+    filterable
+    allow-create
+    default-first-option
+    placeholder="请选择文章标签">
+    <el-option
+      v-for="item in options5"
+      :key="item.value"
+      :label="item.label"
+      :value="item.value">
+    </el-option>
+  </el-select>
+</template>
+</div>
+
+
+
+</body>
+ 
+
+
+<script>
+// radio
+var Main = {
+    data () {
+      return {
+        radio: '1'
+      };
+    }
+  }
+var Ctor = Vue.extend(Main)
+new Ctor().$mount('#app_radio');
+
+// radio2 
+var Main2 = {
+    data () {
+      return {
+        //setting default choice 
+        radio2: 9
+      };
+    }
+  }
+var Ctor2 = Vue.extend(Main2)
+new Ctor2().$mount('#app_radio2')
+
+// radio3
+var Main3 = {
+    data () {
+      return {
+        radio3: '上海',
+        radio4: '上海',
+        radio5: '上海',
+        radio6: '上海'
+      };
+    }
+  }
+var Ctor3 = Vue.extend(Main3)
+new Ctor3().$mount('#app_radio3')
+
+// radioX
+var MainX = {
+    data () {
+      return {
+        radio7: '1',
+        radio8: '1',
+        radio9: '1',
+        radio10: '1'
+      };
+    }
+  }
+var CtorX = Vue.extend(MainX)
+new CtorX().$mount('#app_radioX')
+
+//Checkbox 
+var Main_c1 = {
+    data() {
+      return {
+        checked: true
+      };
+    }
+  };
+var Ctor_c1 = Vue.extend(Main_c1)
+new Ctor_c1().$mount('#app_c1')
+
+var Main_c2 = {
+    data () {
+      return {
+        checkList: ['选中且禁用','复选框 A']
+      };
+    }
+  };
+var Ctor_c2 = Vue.extend(Main_c2)
+new Ctor_c2().$mount('#app_c2')
+
+//Intermediate and Multiple choice 
+const cityOptions = ['上海', '北京', '广州', '深圳'];
+var Main_cm = {
+data() {
+  return {
+    checkAll: false,
+    checkedCities: ['上海', '北京'],
+    cities: cityOptions,
+    isIndeterminate: true
+  };
+},
+methods: {
+  handleCheckAllChange(val) {
+    this.checkedCities = val ? cityOptions : [];
+    this.isIndeterminate = false;
+  },
+  handleCheckedCitiesChange(value) {
+    let checkedCount = value.length;
+    this.checkAll = checkedCount === this.cities.length;
+    this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
+  }
+}
+};
+var Ctor_cm = Vue.extend(Main_cm)
+new Ctor_cm().$mount('#app_cm')
+
+//Input
+var Main_in = {
+  data() {
+    return {
+      input: ''
+    }
+  }
+}
+var Ctor_in = Vue.extend(Main_in)
+new Ctor_in().$mount('#app_input')
+
+var Main_in2 = {
+    data() {
+      return {
+        input11: ''
+      }
+    }
+  }
+var Ctor_in2 = Vue.extend(Main_in2)
+new Ctor_in2().$mount('#app_input2')
+
+// input3
+
+var Main_input3 = {
+  data() {
+    return {
+      input2: '',
+      input21: '',
+      input22: '',
+      input23: '',
+
+      textarea: '',
+      textarea2: '',
+      textarea3: ''
+    }
+  }
+}
+var Ctor_input3 = Vue.extend(Main_input3)
+new Ctor_input3().$mount('#app_input3')
+
+//input4
+var Main_input4 = {
+  data() {
+    return {
+      input3: '',
+      input4: '',
+      input5: '',
+      select: ''
+    }
+  }
+}
+var Ctor_input4 = Vue.extend(Main_input4)
+new Ctor_input4().$mount('#app_input4')
+
+// input suggestion
+var Main_input_sugg = {
+    data() {
+      return {
+        restaurants: [],
+        state1: '',
+        state2: ''
+      };
+    },
+    methods: {
+      querySearch(queryString, cb) {
+        var restaurants = this.restaurants;
+        var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+        //rc: 在 restaurants 中筛选 queryString
+        // 调用 callback 返回建议列表的数据
+        cb(results);
+      },
+      createFilter(queryString) {
+        return (restaurant) => {
+          return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+        };
+      },
+      loadAll() {
+        return [
+          { "value": "三全鲜食（北新泾店）", "address": "长宁区新渔路144号" },
+          { "value": "Hot honey 首尔炸鸡（仙霞路）", "address": "上海市长宁区淞虹路661号" },
+          { "value": "新旺角茶餐厅", "address": "上海市普陀区真北路988号创邑金沙谷6号楼113" },
+          { "value": "泷千家(天山西路店)", "address": "天山西路438号" },
+          { "value": "胖仙女纸杯蛋糕（上海凌空店）", "address": "上海市长宁区金钟路968号1幢18号楼一层商铺18-101" },
+          { "value": "贡茶", "address": "上海市长宁区金钟路633号" },
+          { "value": "豪大大香鸡排超级奶爸", "address": "上海市嘉定区曹安公路曹安路1685号" },
+          { "value": "茶芝兰（奶茶，手抓饼）", "address": "上海市普陀区同普路1435号" },
+          { "value": "十二泷町", "address": "上海市北翟路1444弄81号B幢-107" },
+          { "value": "星移浓缩咖啡", "address": "上海市嘉定区新郁路817号" },
+          { "value": "阿姨奶茶/豪大大", "address": "嘉定区曹安路1611号" },
+          { "value": "新麦甜四季甜品炸鸡", "address": "嘉定区曹安公路2383弄55号" },
+          { "value": "Monica摩托主题咖啡店", "address": "嘉定区江桥镇曹安公路2409号1F，2383弄62号1F" },
+          { "value": "浮生若茶（凌空soho店）", "address": "上海长宁区金钟路968号9号楼地下一层" },
+          { "value": "NONO JUICE  鲜榨果汁", "address": "上海市长宁区天山西路119号" },
+          { "value": "CoCo都可(北新泾店）", "address": "上海市长宁区仙霞西路" },
+          { "value": "快乐柠檬（神州智慧店）", "address": "上海市长宁区天山西路567号1层R117号店铺" },
+          { "value": "Merci Paul cafe", "address": "上海市普陀区光复西路丹巴路28弄6号楼819" },
+          { "value": "猫山王（西郊百联店）", "address": "上海市长宁区仙霞西路88号第一层G05-F01-1-306" }
+        ];
+      },
+      handleSelect(item) {
+        console.log(item);
+      }
+    },
+    mounted() {
+      //rc: 把load.All的值传给restaurants
+      this.restaurants = this.loadAll();
+    }
+  }
+var Ctor_input_sugg = Vue.extend(Main_input_sugg)
+new Ctor_input_sugg().$mount('#app_input_sugg')
+
+//计数器 input-number
+
+var Main_in_no = {
+    data() {
+      return {
+        num1: 1,
+        num8: 1,
+        num9: 1
+      };
+    },
+    methods: {
+      handleChange(value) {
+        console.log(value);
+      }
+    }
+  };
+var Ctor_in_no = Vue.extend(Main_in_no)
+new Ctor_in_no().$mount('#app_in_no')
+
+//select 
+var Main_se = {
+    data() {
+      return {
+        options: [{
+          value: '选项1',
+          label: '黄金糕'
+        }, {
+          value: '选项2',
+          label: '双皮奶'
+        }, {
+          value: '选项3',
+          label: '蚵仔煎'
+        }, {
+          value: '选项4',
+          label: '龙须面'
+        }, {
+          value: '选项5',
+          label: '北京烤鸭'
+        }],
+        value4: ''
+      }
+    }
+  }
+var Ctor_se = Vue.extend(Main_se)
+new Ctor_se().$mount('#app_select')
+
+// multiple select 
+var Main_se2 = {
+    data() {
+      return {
+        options: [{
+          value: '选项1',
+          label: '黄金糕'
+        }, {
+          value: '选项2',
+          label: '双皮奶'
+        }, {
+          value: '选项3',
+          label: '蚵仔煎'
+        }, {
+          value: '选项4',
+          label: '龙须面'
+        }, {
+          value: '选项5',
+          label: '北京烤鸭'
+        }],
+        value5: '',
+        value11: ''
+      }
+    }
+  }
+var Ctor_se2 = Vue.extend(Main_se2)
+new Ctor_se2().$mount('#app_select2')
+
+// 自定义分组？ _se3
+var Main_se3 = {
+    data() {
+      return {
+        cities: [{
+          value: 'Beijing',
+          label: '北京'
+        }, {
+          value: 'Shanghai',
+          label: '上海'
+        }, {
+          value: 'Nanjing',
+          label: '南京'
+        }, {
+          value: 'Chengdu',
+          label: '成都'
+        }, {
+          value: 'Shenzhen',
+          label: '深圳'
+        }, {
+          value: 'Guangzhou',
+          label: '广州'
+        }],
+        value6: ''
+      }
+    }
+  }
+var Ctor_se3 = Vue.extend(Main_se3)
+new Ctor_se3().$mount('#app_se3')
+
+/// 备选项进行分组展示
+var Main_se4 = {
+    data() {
+      return {
+        options3: [{
+          label: '热门城市',
+          options: [{
+            value: 'Shanghai',
+            label: '上海'
+          }, {
+            value: 'Beijing',
+            label: '北京'
+          }]
+        }, {
+          label: '城市名',
+          options: [{
+            value: 'Chengdu',
+            label: '成都'
+          }, {
+            value: 'Shenzhen',
+            label: '深圳'
+          }, {
+            value: 'Guangzhou',
+            label: '广州'
+          }, {
+            value: 'Dalian',
+            label: '大连'
+          }]
+        }],
+        value7: ''
+      }
+    }
+  }
+var Ctor_se4 = Vue.extend(Main_se4)
+new Ctor_se4().$mount('#app_se4')
+
+// se5
+var Main_se5 = {
+    data() {
+      return {
+        options: [{
+          value: '选项1',
+          label: '黄金糕'
+        }, {
+          value: '选项2',
+          label: '双皮奶'
+        }, {
+          value: '选项3',
+          label: '蚵仔煎'
+        }, {
+          value: '选项4',
+          label: '龙须面'
+        }, {
+          value: '选项5',
+          label: '北京烤鸭'
+        }],
+        value8: ''
+      }
+    }
+  }
+var Ctor_se5 = Vue.extend(Main_se5)
+new Ctor_se5().$mount('#app_se5')
+
+//创建条目 可以创建并选中选项中不存在的条目
+var Main_se6 = {
+    data() {
+      return {
+        options5: [{
+          value: 'HTML',
+          label: 'HTML'
+        }, {
+          value: 'CSS',
+          label: 'CSS'
+        }, {
+          value: 'JavaScript',
+          label: 'JavaScript'
+        }],
+        value10: []
+      }
+    }
+  }
+var Ctor_se6 = Vue.extend(Main_se6)
+new Ctor_se6().$mount('#app_se6')
+
+
+</script>
+</html>

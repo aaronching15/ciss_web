@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<html>
+
+    <head>
+    <!-- 头部，内容的介绍展示区域 -->
+    <meta charset="utf-8">
+    <title>log</title>
+    
+    <style type="text/css">
+        /* h3 {color:steelblue;}  */
+        #menu_float{color:steelblue;
+            position:fixed;
+            bottom: 50%;
+            right:40px;
+            margin-left: 70% ; /*为左侧留出70\%的空间*/
+            font-size:12px;  /*字体设置小点*/ 
+            border: 1px solid steelblue; /*  实线，dotted */
+            /* text-align:center;文字居中*/ 
+            border-radius:5px; /*倒角  */ 
+            background:#dddddd;
+            padding:3px 3px 3px 3px;/*元素所有内边距的宽度，上右，下左  */ 
+        } 
+        #left_frame{float: left;width: 70%; }
+        #sub_left{
+            width: 50%;
+            height: 350px;
+            background-color: #C5E9F3;
+            /*定义浮动，不定义的话，界面会乱*/
+            float: left;
+        }
+        #sub_right{
+            width: 50%;
+            height: 350px;
+            background-color: #F7575d;
+            float: right;
+        }
+    </style>
+    </head>
+
+    <body>
+    <nav> 
+    <!-- 导航链接 -->
+        <a href="./keti_admin_tash4paper">KETI</a> |
+        <a href="./keti_admin_demand">SYS</a> |
+        <a href="./p2/p2_admin">P2</a> |
+    </nav> 
+
+    
+    
+    <div id="menu_float">
+    <ul>
+    <li><a href="#181018">181001</a></li> 
+    <li><a href="#181018">181018</a></li>
+    <li><a href="#181020">181019</a></li>
+    <li><a href="#181021">181020</a></li>
+    <li><a href="#181021">181021</a></li>
+    <li><a href="#todo">todo list</a></li>
+    <li><a href="#plan">work plan</a></li>
+    </ul>
+    </div>
+    
+    <div id="left_frame"> 
+    <h1 >log of architecture design for CISS</h1>  
+    <section> 
+    <!-- 文档中的节（section、区段）。比如章节、页眉、页脚或文档中的其他部分 -->
+    <hr>
+    <p>The log of architecture design for CISS.</p>
+
+    <h3><a name="181018">181018</a></h3>
+    <hr>
+    <h5>简易数据流程</h5>
+    <p>1,data flow:
+    1, wind-API --> dir\csv,jsonfile --> DB 
+    2, dir\csv,jsonfile --> class,df |.py --> dir\csv,json,DB
+    3, 
+    </p>
+    <h5>简易计算流程</h5>
+    <p> 
+    </p>
+
+    <h5>逻辑分析</h5>
+    <p>
+    以主动基准策略(综合性的大类策略，可以调用所有模块资源)为例
+    1, 策略大类放置在 apps\ 中  
+    2，engine 类文件在bin中，负责调用不同模块\部门；
+    3，DB\ 实现数据类需求  </p>
+    
+    </section>
+    </div>    
+</body>
+</html>
+

@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+<meta charset="UTF-8"> <!-- for HTML5 -->
+<!-- The block items for this base html file is: {nav_sub, left_frame,menu,content } -->
+
+
+{% block nav_sub %}
+
+    <a id="a_nav" href="./docs/5min_ciss.html">5分钟入手 |5 Minutes to CISS</a> >>
+    <a id="a_nav" href="./docs/esse_func.html">核心功能 |Essential Functions</a> >> 
+    <a id="a_nav" href="./docs/data_manage.html">数据管理 |Data Management</a> >> 
+    <a id="a_nav" href="./docs/stra_ana.html">策略分析 |Strategy Analysis</a> >> 
+    <a id="a_nav" href="./docs/port_simu.html">模拟组合 |Portfolio Simulation</a> >> 
+    <a id="a_nav" href="./docs/multi_asset.html">多资产管理 |Multi-Asset Investment</a> >> 
+    <a id="a_nav" href="./docs/stra_eval.html">策略评估及可视化 |Strategy Evaluation and Visualization</a> >> 
+    <a id="a_nav" href="./docs/web_plat.html"><b>策略平台网站 |Strategy Platform as Website</b></a>
+    <a id="a_nav" href="./docs/update_coop_opensource.html">更新，协作，和开源 |update,cooperation and open source</a> >> 
+    
+{% endblock nav_sub %}
+
+{% block left_frame %}
+
+
+{% endblock left_frame %}
+
+{% block menu %}
+
+
+{% endblock menu %}
+
+
+{% block content %}
+    <section>
+    <hr>
+    <div id="main" style="width: 800px;height:1200px;"></div> 
+    <script type="text/javascript" >
+    //横版有利于展示所有策略，竖版情况对末端策略数量有限制，过多会有显示不全的问题。
+    var myChart = echarts.init(document.getElementById('main'));
+    myChart.showLoading();
+
+    $.getJSON('./json/tree_stra_s.json', function (data) {
+        myChart.hideLoading();
+        echarts.util.each(data.children, function (datum, index) {
+            index % 2 === 0 && (datum.collapsed = true);
+        });
+
+        myChart.setOption(option = {
+            tooltip: {
+                trigger: 'item',
+                triggerOn: 'mousemove'
+            },
+            series: [
+                {
+                type: 'tree',
+
+                data: [data],
+
+                top: '1%',
+                left: '7%',
+                bottom: '1%',
+                right: '18%',
+
+                symbolSize: 7,
+
+                label: {
+                    normal: {
+                        position: 'left',
+                        verticalAlign: 'middle',
+                        align: 'right',
+                        fontSize: 11
+                    }
+                },
+
+                leaves: {
+                    label: {
+                        normal: {
+                            position: 'right',
+                            verticalAlign: 'middle',
+                            align: 'left'
+                        }
+                    }
+                },
+
+                expandAndCollapse: true,
+                animationDuration: 550,
+                animationDurationUpdate: 750
+                }
+            ]
+            });
+        }) 
+    </script>
+
+
+
+    </section>
+
+
+
+
+
+{% endblock content %}

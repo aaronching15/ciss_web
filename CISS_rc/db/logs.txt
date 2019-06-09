@@ -1,0 +1,15 @@
+db:{
+        backends:[base,mysql,oracle,postgressql,sqlite3],models:0,migrations:0,
+        db_ciss:{},
+            # 放置模块相关的 .json 数据
+        logs:{}, # all kinds of logs
+        assets:[stock,cash,bonds,comodities,forex,realestates],
+            stock:[quan:{},qual:{}],
+            corp_funda:[],
+        indicators:{},func_stra：{}， signal:{},class_algo_opt:{},
+        trades:{},
+        ports:{},funds:{},
+        ,accounts:{},,institutes:{},
+        markets:{},society:{},government:{},politics:{},global:{},
+        } # government 代替country, 每个politic party属于一个government管制下。
+    

@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>vue_rc</title>
+
+<style> 
+
+@import url("//unpkg.com/element-ui@2.7.0/lib/theme-chalk/index.css");
+
+</style>
+
+<script src="//unpkg.com/vue/dist/vue.js"></script>
+<script src="//unpkg.com/element-ui@2.7.0/lib/index.js"></script>
+
+</head>
+<body>
+    <!-- test of vue cases 190408  -->
+
+<hr>
+<h5>Cascader 级联选择器\显示所有层级</h5>
+<p>当一个数据集合有清晰的层级结构时，可通过级联选择器逐级查看并选择。 </p>
+<div id="app_cas">
+<div class="block">
+  <span class="demonstration">默认 click 触发子菜单</span>
+  <el-cascader
+    :options="options"
+    v-model="selectedOptions"
+    @change="handleChange">
+  </el-cascader>
+</div>
+<div class="block">
+  <span class="demonstration">hover 触发子菜单</span>
+  <el-cascader
+    expand-trigger="hover"
+    :options="options"
+    v-model="selectedOptions2"
+    @change="handleChange">
+  </el-cascader>
+</div>
+</div>
+
+<hr>
+<h5>Cascader 级联选择器\显示最后层级</h5>
+<p>仅在输入框中显示选中项最后一级的标签，而不是选中项所在的完整路径 </p>
+
+<div id="app_cas2">
+<el-cascader
+  :options="options"
+  :show-all-levels="false"
+></el-cascader>
+</div>
+
+<hr>
+<h5>Cascader 级联选择器\默认值</h5>
+<p> </p>
+
+<div id="app_cas3">
+<el-cascader
+  :options="options"
+  v-model="selectedOptions3"
+></el-cascader>
+</div>
+
+<h5>Cascader 级联选择器\可搜索</h5>
+<p> </p>
+
+<div id="app_cas4">
+    <div class="block">
+      <span class="demonstration">只可选择最后一级菜单的选项</span>
+      <el-cascader
+        placeholder="试试搜索：指南"
+        :options="options"
+        filterable
+      ></el-cascader>
+    </div>
+    <div class="block">
+      <span class="demonstration">可选择任意一级菜单的选项</span>
+      <el-cascader
+        placeholder="试试搜索：指南"
+        :options="options"
+        filterable
+        change-on-select
+      ></el-cascader>
+    </div>
+
+</div>
+<hr>
+<h5>Switch 开关
+表示两种相互对立的状态间的切换，多用于触发「开/关」。</h5>
+<p> 
+http://element-cn.eleme.io/#/zh-CN/component/switch </p>
+
+<div id="app_s1">
+<el-switch
+  v-model="value3"
+  active-text="按月付费"
+  inactive-text="按年付费">
+</el-switch>
+<el-switch
+  style="display: block"
+  v-model="value4"
+  active-color="#13ce66"
+  inactive-color="#ff4949"
+  active-text="by month"
+  inactive-text="by annual">
+</el-switch>
+</div>
+
+<hr>
+<h5>Slider 滑块 通过拖动滑块在一个固定区间内进行选择</h5>
+<p> 
+http://element-cn.eleme.io/#/zh-CN/component/slider </p>
+
+<div id="app_slider">
+<template>
+  <div class="block">
+    <span class="demonstration">默认</span>
+    <el-slider v-model="value1"></el-slider>
+  </div>
+  <div class="block">
+    <span class="demonstration">自定义初始值</span>
+    <el-slider v-model="value2"></el-slider>
+  </div>
+  <div class="block">
+    <span class="demonstration">隐藏 Tooltip</span>
+    <el-slider v-model="value3" :show-tooltip="false"></el-slider>
+  </div>
+  <div class="block">
+    <span class="demonstration">格式化 Tooltip</span>
+    <el-slider v-model="value4" :format-tooltip="formatTooltip"></el-slider>
+  </div>
+  <div class="block">
+    <span class="demonstration">禁用</span>
+    <el-slider v-model="value5" disabled></el-slider>
+  </div>
+
+  <div class="block">
+    <span class="demonstration">Slider 滑块 | 带输入框</span>
+    <el-slider
+      v-model="value8"
+      show-input>
+    </el-slider>
+  </div>
+
+  <div class="block">
+    <span class="demonstration">竖向模式</span>
+    <el-slider
+      v-model="value10"
+      vertical
+      height="200px">
+    </el-slider>
+  </div>
+
+</template>
+</div>
+
+<hr>
+<h5>TimePicker 时间选择器\用于选择或输入日期</h5>
+<p> 
+http://element-cn.eleme.io/#/zh-CN/component/time-picker </p>
+<div id="app_t">
+    <div class="block">
+    <span class="demonstration">固定时间</span>
+    <el-time-select
+      v-model="value1"
+      :picker-options="{
+        start: '09:30',
+        step: '00:15',
+        end: '15:00'
+      }"
+      placeholder="A shares time">
+    </el-time-select>
+    <el-time-select
+      v-model="value1"
+      :picker-options="{
+        start: '09:30',
+        step: '00:15',
+        end: '16:00'
+      }"
+      placeholder="HK stock time">
+    </el-time-select>
+    </div>
+
+    <div class="block">
+    <span class="demonstration">任意时间点</span>
+    <template>
+      <el-time-picker
+        v-model="value2"
+        :picker-options="{
+          selectableRange: '18:30:00 - 20:30:00'
+        }"
+        placeholder="任意时间点">
+      </el-time-picker>
+      <el-time-picker
+        arrow-control
+        v-model="value3"
+        :picker-options="{
+          selectableRange: '18:30:00 - 20:30:00'
+        }"
+        placeholder="任意时间点">
+      </el-time-picker>
+    </template>
+    </div>
+
+    <div class="block">
+    <span class="demonstration">固定时间范围</span>
+    <template>
+      <el-time-select
+        placeholder="起始时间"
+        v-model="startTime"
+        :picker-options="{
+          start: '08:30',
+          step: '00:15',
+          end: '18:30'
+        }">
+      </el-time-select>
+      <el-time-select
+        placeholder="结束时间"
+        v-model="endTime"
+        :picker-options="{
+          start: '08:30',
+          step: '00:15',
+          end: '18:30',
+          minTime: startTime
+        }">
+      </el-time-select>
+    </template>
+    </div>
+
+    <div class="block">
+    <span class="demonstration">任意时间范围</span>
+    <template>
+      <el-time-picker
+        is-range
+        v-model="value4"
+        range-separator="至"
+        start-placeholder="开始时间"
+        end-placeholder="结束时间"
+        placeholder="选择时间范围">
+      </el-time-picker>
+      <el-time-picker
+        is-range
+        arrow-control
+        v-model="value5"
+        range-separator="至"
+        start-placeholder="开始时间"
+        end-placeholder="结束时间"
+        placeholder="选择时间范围">
+      </el-time-picker>
+    </template>
+    </div>
+
+
+</div>
+
+
+<hr>
+<h5>TimePicker 时间选择器\用于选择或输入日期</h5>
+<p> 
+http://element-cn.eleme.io/#/zh-CN/component/time-picker </p>
+<div id="app_date">
+    <div class="block">
+    <template>
+      <div class="block">
+        <span class="demonstration">以「日」为基本单位，基础的日期选择控件</span>
+        <el-date-picker
+          v-model="value1"
+          type="date"
+          placeholder="选择日期">
+        </el-date-picker>
+      </div>
+      <div class="block">
+        <span class="demonstration">带快捷选项</span>
+        <el-date-picker
+          v-model="value2"
+          align="right"
+          type="date"
+          placeholder="选择日期"
+          :picker-options="pickerOptions1">
+        </el-date-picker>
+      </div>
+    </template>
+    </div>
+
+    <span class="demonstration">通过扩展基础的日期选择，可以选择周、月、年或多个日期</span>
+    <div class="container">
+      <div class="block">
+        <span class="demonstration">周</span>
+        <el-date-picker
+          v-model="value3"
+          type="week"
+          format="yyyy 第 WW 周"
+          placeholder="选择周">
+        </el-date-picker>
+      </div>
+      <div class="block">
+        <span class="demonstration">月</span>
+        <el-date-picker
+          v-model="value4"
+          type="month"
+          placeholder="选择月">
+        </el-date-picker>
+      </div>
+    </div>
+    <div class="container">
+      <div class="block">
+        <span class="demonstration">年</span>
+        <el-date-picker
+          v-model="value5"
+          type="year"
+          placeholder="选择年">
+        </el-date-picker>
+      </div>
+      <div class="block">
+        <span class="demonstration">多个日期</span>
+        <el-date-picker
+          type="dates"
+          v-model="value14"
+          placeholder="选择一个或多个日期">
+        </el-date-picker>
+      </div>
+    </div>
+
+    <div class="block">
+    <span class="demonstration">日期范围</span>
+    <el-date-picker
+      v-model="value7"
+      type="daterange"
+      align="right"
+      unlink-panels
+      range-separator="至"
+      start-placeholder="开始日期"
+      end-placeholder="结束日期"
+      :picker-options="pickerOptions2">
+    </el-date-picker>
+    </div>
+
+    <div class="block">
+    <span class="demonstration">选择月份</span>
+    <el-date-picker
+      v-model="value16"
+      type="monthrange"
+      align="right"
+      unlink-panels
+      range-separator="至"
+      start-placeholder="开始月份"
+      end-placeholder="结束月份"
+      :picker-options="pickerOptions3">
+    </el-date-picker>
+  </div>
+
+</div>
+
+<hr>
+<h5>DateTimePicker 日期时间选择器 在同一个选择器里选择日期和时间。</h5>
+<p> DateTimePicker 由 DatePicker 和 TimePicker 派生，Picker Options 或者其他选项可以参照 DatePicker 和 TimePicker </p>
+<p> 
+http://element-cn.eleme.io/#/zh-CN/component/datetime-picker </p>
+<div id="app_dt">
+<template>
+  <div class="block">
+    <span class="demonstration">默认</span>
+    <el-date-picker
+      v-model="value1"
+      type="datetime"
+      placeholder="选择日期时间">
+    </el-date-picker>
+  </div>
+  <div class="block">
+    <span class="demonstration">带快捷选项</span>
+    <el-date-picker
+      v-model="value2"
+      type="datetime"
+      placeholder="选择日期时间"
+      align="right"
+      :picker-options="pickerOptions1">
+    </el-date-picker>
+
+  <div class="block">
+    <span class="demonstration">设置默认时间</span>
+    <el-date-picker
+      v-model="value3"
+      type="datetime"
+      placeholder="选择日期时间"
+      default-time="12:00:00">
+    </el-date-picker>
+  </div>
+
+  <div class="block">
+    <span class="demonstration">日期和时间范围:</span>
+    <el-date-picker
+      v-model="value4"
+      type="datetimerange"
+      range-separator="至"
+      start-placeholder="开始日期"
+      end-placeholder="结束日期">
+    </el-date-picker>
+  </div>
+  <div class="block">
+    <span class="demonstration">带快捷选项</span>
+    <el-date-picker
+      v-model="value5"
+      type="datetimerange"
+      :picker-options="pickerOptions2"
+      range-separator="至"
+      start-placeholder="开始日期"
+      end-placeholder="结束日期"
+      align="right">
+    </el-date-picker>
+  </div>
+
+</template>
+</div>
+
+
+
+
+</body>
+ 
+
+
+<script>
+
+var Main = {
+    data() {
+      return {
+        options: [{
+          value: 'zhinan',
+          label: '指南',
+          children: [{
+            value: 'shejiyuanze',
+            label: '设计原则',
+            children: [{
+              value: 'yizhi',
+              label: '一致'
+            }, {
+              value: 'fankui',
+              label: '反馈'
+            }, {
+              value: 'xiaolv',
+              label: '效率'
+            }, {
+              value: 'kekong',
+              label: '可控'
+            }]
+          }, {
+            value: 'daohang',
+            label: '导航',
+            children: [{
+              value: 'cexiangdaohang',
+              label: '侧向导航'
+            }, {
+              value: 'dingbudaohang',
+              label: '顶部导航'
+            }]
+          }]
+        }, {
+          value: 'zujian',
+          label: '组件',
+          children: [{
+            value: 'basic',
+            label: 'Basic',
+            children: [{
+              value: 'layout',
+              label: 'Layout 布局'
+            }, {
+              value: 'color',
+              label: 'Color 色彩'
+            }, {
+              value: 'typography',
+              label: 'Typography 字体'
+            }, {
+              value: 'icon',
+              label: 'Icon 图标'
+            }, {
+              value: 'button',
+              label: 'Button 按钮'
+            }]
+          }, {
+            value: 'form',
+            label: 'Form',
+            children: [{
+              value: 'radio',
+              label: 'Radio 单选框'
+            }, {
+              value: 'checkbox',
+              label: 'Checkbox 多选框'
+            }, {
+              value: 'input',
+              label: 'Input 输入框'
+            }, {
+              value: 'input-number',
+              label: 'InputNumber 计数器'
+            }, {
+              value: 'select',
+              label: 'Select 选择器'
+            }, {
+              value: 'cascader',
+              label: 'Cascader 级联选择器'
+            }, {
+              value: 'switch',
+              label: 'Switch 开关'
+            }, {
+              value: 'slider',
+              label: 'Slider 滑块'
+            }, {
+              value: 'time-picker',
+              label: 'TimePicker 时间选择器'
+            }, {
+              value: 'date-picker',
+              label: 'DatePicker 日期选择器'
+            }, {
+              value: 'datetime-picker',
+              label: 'DateTimePicker 日期时间选择器'
+            }, {
+              value: 'upload',
+              label: 'Upload 上传'
+            }, {
+              value: 'rate',
+              label: 'Rate 评分'
+            }, {
+              value: 'form',
+              label: 'Form 表单'
+            }]
+          }, {
+            value: 'data',
+            label: 'Data',
+            children: [{
+              value: 'table',
+              label: 'Table 表格'
+            }, {
+              value: 'tag',
+              label: 'Tag 标签'
+            }, {
+              value: 'progress',
+              label: 'Progress 进度条'
+            }, {
+              value: 'tree',
+              label: 'Tree 树形控件'
+            }, {
+              value: 'pagination',
+              label: 'Pagination 分页'
+            }, {
+              value: 'badge',
+              label: 'Badge 标记'
+            }]
+          }, {
+            value: 'notice',
+            label: 'Notice',
+            children: [{
+              value: 'alert',
+              label: 'Alert 警告'
+            }, {
+              value: 'loading',
+              label: 'Loading 加载'
+            }, {
+              value: 'message',
+              label: 'Message 消息提示'
+            }, {
+              value: 'message-box',
+              label: 'MessageBox 弹框'
+            }, {
+              value: 'notification',
+              label: 'Notification 通知'
+            }]
+          }, {
+            value: 'navigation',
+            label: 'Navigation',
+            children: [{
+              value: 'menu',
+              label: 'NavMenu 导航菜单'
+            }, {
+              value: 'tabs',
+              label: 'Tabs 标签页'
+            }, {
+              value: 'breadcrumb',
+              label: 'Breadcrumb 面包屑'
+            }, {
+              value: 'dropdown',
+              label: 'Dropdown 下拉菜单'
+            }, {
+              value: 'steps',
+              label: 'Steps 步骤条'
+            }]
+          }, {
+            value: 'others',
+            label: 'Others',
+            children: [{
+              value: 'dialog',
+              label: 'Dialog 对话框'
+            }, {
+              value: 'tooltip',
+              label: 'Tooltip 文字提示'
+            }, {
+              value: 'popover',
+              label: 'Popover 弹出框'
+            }, {
+              value: 'card',
+              label: 'Card 卡片'
+            }, {
+              value: 'carousel',
+              label: 'Carousel 走马灯'
+            }, {
+              value: 'collapse',
+              label: 'Collapse 折叠面板'
+            }]
+          }]
+        }, {
+          value: 'ziyuan',
+          label: '资源',
+          children: [{
+            value: 'axure',
+            label: 'Axure Components'
+          }, {
+            value: 'sketch',
+            label: 'Sketch Templates'
+          }, {
+            value: 'jiaohu',
+            label: '组件交互文档'
+          }]
+        }],
+        selectedOptions: [],
+        selectedOptions2: []
+      };
+    },
+    methods: {
+      handleChange(value) {
+        console.log(value);
+      }
+    }
+  };
+
+var Ctor_cas = Vue.extend(Main);
+new Ctor_cas().$mount('#app_cas');
+
+var Ctor_cas2 = Vue.extend(Main);
+new Ctor_cas2().$mount('#app_cas2');
+
+var Ctor_cas3 = Vue.extend(Main);
+new Ctor_cas3().$mount('#app_cas3');
+
+var Ctor_cas4 = Vue.extend(Main);
+new Ctor_cas4().$mount('#app_cas4');
+
+// var Ctor_cas5 = Vue.extend(Main);
+// new Ctor_cas5().$mount('#app_cas5');
+
+//Switch
+var Main_s1 = {
+    data() {
+      return {
+        value3: true,
+        value4: true
+      }
+    }
+  };
+var Ctor_s1 = Vue.extend(Main_s1)
+new Ctor_s1().$mount('#app_s1');
+
+var Main_slider = {
+    data() {
+      return {
+        value1: 0,
+        value2: 50,
+        value3: 36,
+        value4: 48,
+        value5: 42,
+        value8: 0,
+        value10: 0,
+      }
+    },
+    methods: {
+      formatTooltip(val) {
+        return val / 100;
+      }
+    }
+  }
+var Ctor_slider = Vue.extend(Main_slider)
+new Ctor_slider().$mount('#app_slider');
+
+//Time picker
+var Main_t = {
+    data() {
+      return {
+        value1: '',
+        value2: new Date(2016, 9, 10, 18, 40),
+        value3: new Date(2016, 9, 10, 18, 40),
+        startTime: '',
+        endTime: '',
+        value4: [new Date(2016, 9, 10, 8, 40), new Date(2016, 9, 10, 9, 40)],
+        value5: [new Date(2016, 9, 10, 8, 40), new Date(2016, 9, 10, 9, 40)]
+      };
+    }
+  }
+var Ctor_t = Vue.extend(Main_t)
+new Ctor_t().$mount('#app_t');
+
+//Date picker
+var Main_d = {
+    data() {
+      return {
+        pickerOptions1: {
+          disabledDate(time) {
+            return time.getTime() > Date.now();
+          },
+          shortcuts: [{
+            text: '今天',
+            onClick(picker) {
+              picker.$emit('pick', new Date());
+            }
+          }, {
+            text: '昨天',
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24);
+              picker.$emit('pick', date);
+            }
+          }, {
+            text: '一周前',
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', date);
+            }
+          }]
+        },
+        value1: '',
+        value2: '',
+        value3: '',
+        value4: '',
+        value5: '',
+        value14: '',
+        ///////
+        pickerOptions2: {
+          shortcuts: [{
+            text: '最近一周',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近一个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近三个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit('pick', [start, end]);
+            }
+          }]
+        },
+        value6: '',
+        value7: '',
+
+        //////////
+        pickerOptions3: {
+          shortcuts: [{
+            text: '本月',
+            onClick(picker) {
+              picker.$emit('pick', [new Date(), new Date()]);
+            }
+          }, {
+            text: '今年至今',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date(new Date().getFullYear(), 0);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近六个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setMonth(start.getMonth() - 6);
+              picker.$emit('pick', [start, end]);
+            }
+          }]
+        },
+        value15: '',
+        value16: ''
+
+      };
+    }
+  };
+var Ctor_d = Vue.extend(Main_d)
+new Ctor_d().$mount('#app_date');
+
+var Main_dt = {
+    data() {
+      return {
+        pickerOptions1: {
+          shortcuts: [{
+            text: '今天',
+            onClick(picker) {
+              picker.$emit('pick', new Date());
+            }
+          }, {
+            text: '昨天',
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24);
+              picker.$emit('pick', date);
+            }
+          }, {
+            text: '一周前',
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', date);
+            }
+          }]
+        },
+        value1: '',
+        value2: '',
+        value3: '',
+        pickerOptions2: {
+          shortcuts: [{
+            text: '最近一周',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近一个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近三个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit('pick', [start, end]);
+            }
+          }]
+        },
+        value4: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
+        value5: ''
+        
+      };
+    }
+  };
+var Ctor_dt = Vue.extend(Main_dt)
+new Ctor_dt().$mount('#app_dt');
+
+
+
+
+
+
+
+</script>
+</html>
+
+
+

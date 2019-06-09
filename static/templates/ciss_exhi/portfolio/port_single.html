@@ -1,0 +1,388 @@
+{% extends "base.html" %}
+<meta charset="UTF-8"> <!-- for HTML5 -->
+<!-- The block items for this base html file is: {nav_sub, left_frame,menu,content } -->
+
+
+{% block nav_sub %}
+
+    <a id="a_nav" href="./core_port.html">核心组合 |Core portfolio</a> >>
+    <a id="a_nav" href="./last_port.html">最新组合 |Lastest portfolio</a> >>
+ 
+
+
+{% endblock nav_sub %}
+
+{% block left_frame %}
+    <!-- Menu in left frame -->
+    <h1 >投资组合实例 |CISS applications</h1> 
+    <p>explore details of portfolio developing process</p>
+    <hr>       
+    <h3>目录</h3>
+    <ul>
+    <li><a href="#port_snap">组合概要 |Portfolio snapshot </a></li> 
+    <li><a href="#port_accounts">组合账户 |Portfolio accounts</a></li> 
+    <li><a href="#port_trades">组合交易 |Portfolio trades</a></li> 
+    <li><a href="#port_signals">组合信号 |Portfolio signals</a></li> 
+    <li><a href="#port_stockpools">组合股票池 |Portfolio stockpools</a></li> 
+    <li><a href="#port_apps">组合应用（策略） |Portfolio applications</a></li> 
+    <li><a href="#port_data">组合数据 |Portfolio data</a></li> 
+    </ul>
+    <hr><hr>
+
+{% endblock left_frame %}
+
+
+{% block menu %}
+
+    <div id="menu_float">
+    <ul>
+    <li><a href="#port_snap">组合概要 |Portfolio snapshot</a></li> 
+    <li><a href="#port_accounts">组合账户 |Portfolio accounts</a></li> 
+    <li><a href="#port_trades">组合交易 |Portfolio trades</a></li> 
+    <li><a href="#port_signals">组合信号 |Portfolio signals</a></li> 
+    <li><a href="#port_stockpools">组合股票池 |Portfolio stockpools</a></li> 
+    <li><a href="#port_apps">组合应用（策略） |Portfolio applications</a></li> 
+    <li><a href="#port_data">组合数据 |Portfolio data</a></li> 
+    </ul>
+    </div>
+
+{% endblock menu %}
+
+
+{% block content %}
+    <h4>查询CISS组合信息：</h4>
+    <!--  网页的值传到服务器是通过 <input> 或 <textarea>标签中的 name 属性来传递的
+    source  https://code.ziqiangxuetang.com/django/django-forms.html    
+    wrong version : <form action="/port_single/" method="post">   -->
+    <form action="{% url "port_single" %}" method="post" accept-charset="utf-8">
+    {% csrf_token %}
+    <table border="0">
+    <tr><td>组合根目录|Base Directory:<br></td>
+        <td><input type="text" name="path_base" value="D:\\CISS_db\\"></td></tr>
+    <tr><td>组合名称|Portfolio Name: <br></td>
+        <td><input type="text" name="port_name"  value="port_rc181205_market_value_999"> <br></td></tr>
+    <tr><td>组合特征值|Portfolio I.D.: <br></td>
+        <td><input type="text" name="port_id" value="1544021284"> <br></td></tr>
+    <tr><td>最新更新日期|Lastest Update Date.:<br></td>
+        <td><input type="text" name="date_last" value="20181105"> <br><br></td></tr>
+
+    </table>
+    <input type="submit" value="提交">
+    </form>
+
+    <style type="text/css">
+    .table{ font-size:12px; }
+
+    </style>
+
+    <section id="s1">  
+    <h3><a name="port_snap">组合概要 |Portfolio snapshot</a></h3>  
+    <hr>
+
+    </section> 
+
+
+    <section id="s2">  
+
+    <h3><a name="port_accounts">组合账户 |Portfolio accounts</a></h3>  
+    <hr>
+    {% if latest_asum %}
+        
+        <table border="0.1"  class="table">
+        <caption>最近10个交易日净值| Units in last 10 trading days</caption>
+        <tr>
+            <td>日期|万</td><td>现金</td><td>总成本</td><td>总市值</td><td>账户总值</td>
+            <td>净值</td><td>最大回撤</td>
+        </tr>
+        {% for temp_date,row_asum in latest_asum.items %}
+        <tr>
+            <td>{{ temp_date }}</td>
+            <td>{{ row_asum.cash }}</td>
+            <td>{{ row_asum.total_cost }}</td>
+            <td>{{ row_asum.market_value }}</td>
+            <td>{{ row_asum.total }}</td>
+            <td>{{ row_asum.unit }}</td>
+            <td>{{ row_asum.mdd }}</td>
+            
+        </tr>
+        {% endfor %}
+
+        </table> 
+
+    {% else %}
+        <p>No portfolio:account sum is available.</p>
+
+    {% endif %}
+    <hr>
+
+    {% if asum_mon %}
+        
+        <table border="0.1"  class="table">
+        <caption>最近12个月收益率和最大回撤| Return and Maximum Drawdown in past 12 months</caption>
+        <tr>
+            <td>日期|</td><td>月末净值</td><td>月收益率</td><td>月最大回撤</td>
+            <td>现金|万</td><td>总成本|万</td><td>总市值|万</td><td>账户总值|万</td>
+            
+        </tr>
+        {% for temp_date,row_asum in asum_mon.items %}
+        <tr>
+            <td>{{ temp_date }}</td>
+            <td>{{ row_asum.unit }}</td>
+            <td>{{ row_asum.ret_mon }}</td>
+            <td>{{ row_asum.mdd_mon }}</td>
+            <td>{{ row_asum.cash }}</td>
+            <td>{{ row_asum.total_cost }}</td>
+            <td>{{ row_asum.market_value }}</td>
+            <td>{{ row_asum.total }}</td>
+            
+        </tr>
+        {% endfor %}
+
+        </table> 
+
+    {% else %}
+        <p>No portfolio:monthly account return is available.</p>
+
+    {% endif %}
+    <hr>
+    
+    {% if latest_as %}
+        
+        <table border="0.1"  class="table">
+        <caption>前10大权重持仓个股| Top 10 stocks in account weights</caption>
+        <tr>
+            <td>序号|万</td><td>证券名称</td><td>数量</td><td>平均成本</td>
+            <td>最新价</td>
+            <td>总市值</td><td>账面盈亏</td><td>盈亏百分比</td><td>占净值比例</td>
+            <td>更新日期</td><td>代码</td><td>资产货币</td><td>交易市场</td>
+        </tr>
+        {% for temp_date,row_as in latest_as.items %}
+        <tr>
+            <td>{{ row_as.index }}</td>
+            <td>{{ row_as.name }}</td>
+            <td>{{ row_as.num }}</td>
+            <td>{{ row_as.ave_cost }}</td>
+            <td>{{ row_as.last_quote }}</td>
+            <td>{{ row_as.market_value }}</td>
+            <td>{{ row_as.pnl }}</td>
+            <td>{{ row_as.pnl_pct }}</td>
+            <td>{{ row_as.w_real }}</td>
+            <td>{{ row_as.date_update }}</td>
+            <td>{{ row_as.code }}</td>
+            <td>{{ row_as.currency }}</td>
+            <td>{{ row_as.market }}</td>
+ 
+        </tr>
+        {% endfor %}
+
+        </table> 
+
+    {% else %}
+        <p>No portfolio:account stocks is available.</p>
+
+    {% endif %}
+    <hr>
+
+    </section> 
+
+    <section id="s3">  
+    <h3><a name="port_trades">组合交易 |Portfolio trades</a></h3>  
+    <hr>
+    {% if port_tp_summ %}
+        <table border="0.1"  class="table">
+        <caption>交易计划统计 | Staticstics of trade plans </caption>
+        <tr>
+            <td>月份|万</td><td>权重变动比例</td><td>交易总金额</td><td>交易总数量</td>
+            <td>权重变动比例绝对值</td><td>权重增加比例</td><td>权重减少比例</td>
+        </tr>
+        {% for temp_date,temp_tp_summ in port_tp_summ.items %}
+        <tr>
+            <td>{{ temp_tp_summ.date }}</td>
+            
+            <td>{{ temp_tp_summ.weight_dif }}</td>
+            <td>{{ temp_tp_summ.total_amount }}</td>
+            <td>{{ temp_tp_summ.num }}</td>
+            <td>{{ temp_tp_summ.weight_dif2 }}</td>
+            <td>{{ temp_tp_summ.weight_dif_add }}</td>
+            <td>{{ temp_tp_summ.weight_dif_minus }}</td>
+ 
+        </tr>
+        {% endfor %}
+
+        </table> 
+    {% else %}
+        <p>No portfolio:account stock is available.</p>
+
+    {% endif %}
+    <hr>
+    {% if port_tb_summ %}
+        <table border="0.1"  class="table">
+        <caption>交易成交统计:按月 | Staticstics of trade book：by month </caption>
+
+        <tr>
+            <td>月份|元</td><td>买卖交易数量</td><td>总交易费用|万</td><td>总实现收益|万</td>
+            <td>总交易金额|万</td><td>买入总金额|万</td><td>卖出总金额|万</td><td>买入总笔数</td><td>卖出总笔数</td>
+            <td>交易费用占实现收益比例</td><td>笔均买入金额</td><td>笔均卖出金额</td><td>笔均实现收益</td><td>笔均交易费用</td>
+        </tr>
+        {% for temp_date,temp_tb_summ in port_tb_summ.items %}
+        <tr>
+            <td>{{ temp_tb_summ.date }}</td>
+
+            <td>{{ temp_tb_summ.BSH }}</td>
+            <td>{{ temp_tb_summ.fees }}</td>
+            <td>{{ temp_tb_summ.profit_real }}</td>
+            <td>{{ temp_tb_summ.amount }}</td>
+            <td>{{ temp_tb_summ.amt_buy }}</td>
+            <td>{{ temp_tb_summ.amt_sell }}</td>
+            <td>{{ temp_tb_summ.num_buy }}</td>
+            <td>{{ temp_tb_summ.num_sell }}</td>
+            <td>{{ temp_tb_summ.pct_fees_profit }}</td>
+            <td>{{ temp_tb_summ.ave_amt_buy }}</td>
+            <td>{{ temp_tb_summ.ave_amt_sell }}</td>
+            <td>{{ temp_tb_summ.ave_profit }}</td>
+            <td>{{ temp_tb_summ.ave_fees }}</td>
+        </tr>
+        {% endfor %}
+
+        </table> 
+    {% else %}
+        <p>No portfolio:trading book summary is available.</p>
+
+    {% endif %}
+
+    <hr>
+    {% if port_tb_summ_s_posi %}
+        <table border="0.1"  class="table">
+        <caption>交易成交统计:按个股,收益前十 | Staticstics of trade book by stock:top 10 </caption>
+
+        <tr>
+            <td>个股|元</td><td>代码</td><td>交易笔数</td><td>平均成本|万</td>
+            <td>成交数量|万</td>
+            <td>交易费用|万</td><td>实现收益|万</td><td>总总金额|万</td><td>总金额百分比</td>
+            <td>买入总金额|万</td><td>卖出总金额|万</td><td>买入数量|万</td><td>卖出数量|万</td>
+            <td>实现收益百分比</td>
+        </tr>
+        {% for temp_date,temp_tb_summ_s_posi in port_tb_summ_s_posi.items %}
+        <tr>
+            <td>{{ temp_tb_summ_s_posi.name }}</td>
+            <td>{{ temp_tb_summ_s_posi.symbol }}</td>
+            <td>{{ temp_tb_summ_s_posi.BSH }}</td>
+            <td>{{ temp_tb_summ_s_posi.ave_cost }}</td>
+            <td>{{ temp_tb_summ_s_posi.number }}</td>
+            <td>{{ temp_tb_summ_s_posi.fees }}</td>
+            <td>{{ temp_tb_summ_s_posi.profit_real }}</td>
+            <td>{{ temp_tb_summ_s_posi.amount }}</td>
+            <td>{{ temp_tb_summ_s_posi.amt_pct }}</td>
+            <td>{{ temp_tb_summ_s_posi.amt_buy }}</td>
+            <td>{{ temp_tb_summ_s_posi.amt_sell }}</td>
+            <td>{{ temp_tb_summ_s_posi.num_buy }}</td>
+            <td>{{ temp_tb_summ_s_posi.num_sell }}</td>
+            <td>{{ temp_tb_summ_s_posi.profit_pct }}</td>
+
+        </tr>
+        {% endfor %}
+
+        </table> 
+    {% else %}
+        <p>No portfolio:trading book summary is available.</p>
+
+    {% endif %}
+    <hr>
+    {% if port_tb_summ_s_nega %}
+        <table border="0.1"  class="table">
+        <caption>交易成交统计:按个股,收益后十 | Staticstics of trade book by stock：last 10 </caption>
+
+        <tr>
+            <td>个股|元</td><td>代码</td><td>交易笔数</td><td>平均成本|万</td>
+            <td>成交数量|万</td>
+            <td>交易费用|万</td><td>实现收益|万</td><td>总总金额|万</td><td>总金额百分比</td>
+            <td>买入总金额|万</td><td>卖出总金额|万</td><td>买入数量|万</td><td>卖出数量|万</td>
+            <td>实现收益百分比</td>
+        </tr>
+        {% for temp_date,temp_tb_summ_s_nega in port_tb_summ_s_nega.items %}
+        <tr>
+            <td>{{ temp_tb_summ_s_nega.name }}</td>
+            <td>{{ temp_tb_summ_s_nega.symbol }}</td>            
+            <td>{{ temp_tb_summ_s_nega.BSH }}</td>
+            <td>{{ temp_tb_summ_s_nega.ave_cost }}</td>
+            <td>{{ temp_tb_summ_s_nega.number }}</td>
+            <td>{{ temp_tb_summ_s_nega.fees }}</td>
+            <td>{{ temp_tb_summ_s_nega.profit_real }}</td>
+            <td>{{ temp_tb_summ_s_nega.amount }}</td>
+            <td>{{ temp_tb_summ_s_nega.amt_pct }}</td>
+            <td>{{ temp_tb_summ_s_nega.amt_buy }}</td>
+            <td>{{ temp_tb_summ_s_nega.amt_sell }}</td>
+            <td>{{ temp_tb_summ_s_nega.num_buy }}</td>
+            <td>{{ temp_tb_summ_s_nega.num_sell }}</td>
+            <td>{{ temp_tb_summ_s_nega.profit_pct }}</td>
+
+        </tr>
+        {% endfor %}
+
+        </table> 
+    {% else %}
+        <p>No portfolio:trading book summary is available.</p>
+
+    {% endif %}
+
+
+
+    </section> 
+
+    <section id="s4">  
+
+    <h3><a name="port_signals">组合信号 |Portfolio signals</a></h3>  
+    <hr>
+    {% if signals_out %}
+        
+        <table border="0.1"  class="table">
+        <tr>
+            <td>序号|</td><td>证券名称</td><td>代码</td><td>买卖方向</td>
+            <td>交易权重</td><td>GICS一级行业</td><td>GICS二级行业</td>
+            <td>GICS三级行业</td><td>GICS四级行业</td>
+        </tr>
+        {% for temp_date,row_sig in signals_out.items %}
+        <tr>
+            <td>{{ row_sig.index }}</td>
+            <td>{{ row_sig.name }}</td>
+            <td>{{ row_sig.code }}</td>
+            <td>{{ row_sig.signal_CN }}</td>
+            <td>{{ row_sig.w_allo_value_ind1 }}</td>
+            <td>{{ row_sig.ind_1_name }}</td>
+            <td>{{ row_sig.ind_2_name }}</td>
+            <td>{{ row_sig.ind_3_name }}</td>
+            <td>{{ row_sig.ind_4_name }}</td>
+        </tr>
+        {% endfor %}
+
+        </table> 
+
+    {% else %}
+        <p>No signal information is available.</p>
+
+    {% endif %}
+
+    </section> 
+    <section id="s4">  
+
+    <h3><a name="port_stockpools">组合股票池 |Portfolio stockpools</a></h3>  
+    <hr>
+
+
+    </section> 
+    <section id="s4">  
+
+    <h3><a name="port_apps">组合应用（策略） |Portfolio applications</a></h3>  
+    <hr>
+
+    </section> 
+
+    <section id="s4">  
+
+    <h3><a name="port_data">组合数据 |Portfolio data</a></h3>  
+    <hr>
+
+    </section> 
+
+{% endblock content %}
+

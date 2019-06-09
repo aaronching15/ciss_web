@@ -1,0 +1,54 @@
+head{
+    architecture design
+    since 180719
+    last 180725
+    todo 
+    1,multi-asset for china market first,
+    
+    name of sys: CISS 
+    author 
+    
+
+}
+body{
+    menu
+    structure\
+ 
+
+
+    reference:
+    topic BlackRock\global-allocation
+    source https://www.blackrock.com/institutions/en-us/strategies/multi-asset/global-allocation
+    Drawing on the Breadth and Depth of BlackRock’s Resources:
+    Multi-Asset Strategies
+    Risk & Quantitative Analysis
+    BlackRock Investment Institute
+    Daily Global Meeting
+    Aladdin® Platform
+    Technology
+    Trading
+}
+# 匹配对象和编组group
+m = re.match(r'www\.(.*)\..{3}', 'www.python.org' )
+m.group(0) # 编组0表示整个string，(1)表示第一对括号内容sub_string，从左边开始数数。
+m.group(1) 
+m.start(1) # 第一对括号内容起始位置
+m.end(1)
+m.span(1)
+# match for line 'From: Tom Ford <123@qq.com>'
+import fileinput, re
+pat = re.compile('From:(.*)<.*?>$')
+for line in fileinput.input():
+    m = pat.match(line) # equals: m=re.match(pat,line)
+    if m: print(m.group(1) )
+# 
+import fileinput,re
+pat = re.compile(r'[a-z\-\.]+@[a-z\-\.]+', re.IGNORECASE)
+addresses =set()
+for line in fileinput.input():
+    for address in pat.findall(line):
+        addresses.add(address)
+for address in sorted(addresses):
+    print(address)
+
+

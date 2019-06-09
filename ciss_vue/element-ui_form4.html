@@ -1,0 +1,1594 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>vue_rc</title>
+
+<style> 
+
+@import url("//unpkg.com/element-ui@2.7.0/lib/theme-chalk/index.css");
+
+/* style for form 12    */ 
+.demo-table-expand {
+    font-size: 0;
+  }
+  .demo-table-expand label {
+    width: 90px;
+    color: #99a9bf;
+  }
+  .demo-table-expand .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 50%;
+  }
+
+
+</style>
+
+<script src="//unpkg.com/vue/dist/vue.js"></script>
+<script src="//unpkg.com/element-ui@2.7.0/lib/index.js"></script>
+
+</head>
+<body>
+    <!-- test of vue cases 190408  -->
+
+<hr>
+<h5>Table 表格</h5>
+<p>用于展示多条结构类似的数据，可对数据进行排序、筛选、对比或其他自定义操作。</p>
+<div id="app">
+<template>
+    <el-table
+      :data="tableData"
+      border
+      stripe
+      style="width: 100%">
+      <el-table-column
+        prop="date"
+        label="日期"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="name"
+        label="姓名"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="address"
+        label="地址">
+      </el-table-column>
+    </el-table>
+  </template>
+</div>
+
+<hr>
+<h5>带状态表格</h5>
+<p>可将表格内容 highlight 显示，方便区分「成功、信息、警告、危险」等内容。</p>
+<div id="app_f2">
+<template>
+  <el-table
+    :data="tableData"
+    style="width: 100%"
+    :row-class-name="tableRowClassName">
+    <el-table-column
+      prop="date"
+      label="日期"
+      width="180">
+    </el-table-column>
+    <el-table-column
+      prop="name"
+      label="姓名"
+      width="180">
+    </el-table-column>
+    <el-table-column
+      prop="address"
+      label="地址">
+    </el-table-column>
+  </el-table>
+</template>
+</div>
+
+<hr>
+<h5>固定表头</h5>
+<p>纵向内容过多时，可选择固定表头。</p>
+<div id="app_f3">
+<template>
+  <el-table
+    :data="tableData"
+    height="250"
+    border
+    style="width: 100%">
+    <el-table-column
+      prop="date"
+      label="日期"
+      width="180">
+    </el-table-column>
+    <el-table-column
+      prop="name"
+      label="姓名"
+      width="180">
+    </el-table-column>
+    <el-table-column
+      prop="address"
+      label="地址">
+    </el-table-column>
+  </el-table>
+</template>
+</div>
+
+<hr>
+<h5>固定列和表头</h5>
+<p>横纵内容过多时，可选择固定列和表头。</p>
+<div id="app_f4">
+<template>
+  <el-table
+    :data="tableData"
+    border
+    style="width: 100%">
+    <el-table-column
+      fixed
+      prop="date"
+      label="日期"
+      width="150">
+    </el-table-column>
+    <el-table-column
+      prop="name"
+      label="姓名"
+      width="120">
+    </el-table-column>
+    <el-table-column
+      prop="province"
+      label="省份"
+      width="120">
+    </el-table-column>
+    <el-table-column
+      prop="city"
+      label="市区"
+      width="120">
+    </el-table-column>
+    <el-table-column
+      prop="address"
+      label="地址"
+      width="300">
+    </el-table-column>
+    <el-table-column
+      prop="zip"
+      label="邮编"
+      width="120">
+    </el-table-column>
+    <el-table-column
+      fixed="right"
+      label="操作"
+      width="100">
+      <template slot-scope="scope">
+        <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
+        <el-button type="text" size="small">编辑</el-button>
+      </template>
+    </el-table-column>
+  </el-table>
+</template>
+</div>
+
+<hr>
+<h5>流体高度</h5>
+<p>当数据量动态变化时，可以为 Table 设置一个最大高度。</p>
+<div id="app_f5">
+<template>
+  <el-table
+    :data="tableData"
+    style="width: 100%"
+    max-height="250">
+    <el-table-column
+      fixed
+      prop="date"
+      label="日期"
+      width="150">
+    </el-table-column>
+    <el-table-column
+      prop="name"
+      label="姓名"
+      width="120">
+    </el-table-column>
+    <el-table-column
+      prop="province"
+      label="省份"
+      width="120">
+    </el-table-column>
+    <el-table-column
+      prop="city"
+      label="市区"
+      width="120">
+    </el-table-column>
+    <el-table-column
+      prop="address"
+      label="地址"
+      width="300">
+    </el-table-column>
+    <el-table-column
+      prop="zip"
+      label="邮编"
+      width="120">
+    </el-table-column>
+    <el-table-column
+      fixed="right"
+      label="操作"
+      width="120">
+      <template slot-scope="scope">
+        <el-button
+          @click.native.prevent="deleteRow(scope.$index, tableData)"
+          type="text"
+          size="small">
+          移除
+        </el-button>
+      </template>
+    </el-table-column>
+  </el-table>
+</template>
+</div>
+
+<hr>
+<h5>多级表头 </h5>
+<p>数据结构比较复杂的时候，可使用多级表头来展现数据的层次关系。</p>
+<div id="app_f6">
+<template>
+  <el-table
+    :data="tableData"
+    style="width: 100%">
+    <el-table-column
+      prop="date"
+      label="日期"
+      width="150">
+    </el-table-column>
+    <el-table-column label="配送信息">
+      <el-table-column
+        prop="name"
+        label="姓名"
+        width="120">
+      </el-table-column>
+      <el-table-column label="地址">
+        <el-table-column
+          prop="province"
+          label="省份"
+          width="120">
+        </el-table-column>
+        <el-table-column
+          prop="city"
+          label="市区"
+          width="120">
+        </el-table-column>
+        <el-table-column
+          prop="address"
+          label="地址"
+          width="300">
+        </el-table-column>
+        <el-table-column
+          prop="zip"
+          label="邮编"
+          width="120">
+        </el-table-column>
+      </el-table-column>
+    </el-table-column>
+  </el-table>
+</template>
+</div>
+
+
+<hr>
+<h5>单选</h5>
+<p>选择单行数据时使用色块表示。 </p>
+<div id="app_f7">
+<template>
+  <el-table
+    ref="singleTable"
+    :data="tableData"
+    highlight-current-row
+    @current-change="handleCurrentChange"
+    style="width: 100%">
+    <el-table-column
+      type="index"
+      width="50">
+    </el-table-column>
+    <el-table-column
+      property="date"
+      label="日期"
+      width="120">
+    </el-table-column>
+    <el-table-column
+      property="name"
+      label="姓名"
+      width="120">
+    </el-table-column>
+    <el-table-column
+      property="address"
+      label="地址">
+    </el-table-column>
+  </el-table>
+  <div style="margin-top: 20px">
+    <el-button @click="setCurrent(tableData[1])">选中第二行</el-button>
+    <el-button @click="setCurrent()">取消选择</el-button>
+  </div>
+</template>
+</div>
+
+<hr>
+<h5>多选 选择多行数据时使用 Checkbox。</h5>
+<div id="app_f8">
+<template>
+  <el-table
+    ref="multipleTable"
+    :data="tableData"
+    tooltip-effect="dark"
+    style="width: 100%"
+    @selection-change="handleSelectionChange">
+    <el-table-column
+      type="selection"
+      width="55">
+    </el-table-column>
+    <el-table-column
+      label="日期"
+      width="120">
+      <template slot-scope="scope">{{ scope.row.date }}</template>
+    </el-table-column>
+    <el-table-column
+      prop="name"
+      label="姓名"
+      width="120">
+    </el-table-column>
+    <el-table-column
+      prop="address"
+      label="地址"
+      show-overflow-tooltip>
+    </el-table-column>
+  </el-table>
+  <div style="margin-top: 20px">
+    <el-button @click="toggleSelection([tableData[1], tableData[2]])">切换第二、第三行的选中状态</el-button>
+    <el-button @click="toggleSelection()">取消选择</el-button>
+  </div>
+</template>
+</div>
+
+<hr>
+<h5>对表格进行排序</h5>
+<p>可快速查找或对比数据 </p>
+<div id="app_f9">
+<template>
+  <el-table
+    :data="tableData"
+    style="width: 100%"
+    :default-sort = "{prop: 'date', order: 'descending'}"
+    >
+    <el-table-column
+      prop="date"
+      label="日期"
+      sortable
+      width="180">
+    </el-table-column>
+    <el-table-column
+      prop="name"
+      label="姓名"
+      sortable
+      width="180">
+    </el-table-column>
+    <el-table-column
+      prop="address"
+      label="地址"
+      :formatter="formatter">
+    </el-table-column>
+  </el-table>
+</template>
+</div>
+
+<hr>
+<h5>对表格进行筛选</h5>
+<p></p>
+<div id="app_f10">
+<template>
+  <el-button @click="resetDateFilter">清除日期过滤器</el-button>
+  <el-button @click="clearFilter">清除所有过滤器</el-button>
+  <el-table
+    ref="filterTable"
+    :data="tableData"
+    style="width: 100%">
+    <el-table-column
+      prop="date"
+      label="日期"
+      sortable
+      width="180"
+      column-key="date"
+      :filters="[{text: '2016-05-01', value: '2016-05-01'}, {text: '2016-05-02', value: '2016-05-02'}, {text: '2016-05-03', value: '2016-05-03'}, {text: '2016-05-04', value: '2016-05-04'}]"
+      :filter-method="filterHandler"
+    >
+    </el-table-column>
+    <el-table-column
+      prop="name"
+      label="姓名"
+      width="180">
+    </el-table-column>
+    <el-table-column
+      prop="address"
+      label="地址"
+      :formatter="formatter">
+    </el-table-column>
+    <el-table-column
+      prop="tag"
+      label="标签"
+      width="100"
+      :filters="[{ text: '家', value: '家' }, { text: '公司', value: '公司' }
+        , { text: 'school', value: 'school' }]"
+      :filter-method="filterTag"
+      filter-placement="bottom-end">
+      <template slot-scope="scope">
+        <el-tag
+          :type="scope.row.tag === '家' ? 'primary' : 'success'"
+          disable-transitions>{{scope.row.tag}}</el-tag>
+      </template>
+    </el-table-column>
+  </el-table>
+</template>
+</div>
+
+<hr>
+<h5>自定义列的显示内容，可组合其他组件使用。</h5>
+<p>鼠标焦点显示备注信息,popover when trigger is "hover". </p>
+<div id="app_f11">
+<template>
+  <el-table
+    :data="tableData"
+    style="width: 100%">
+    <el-table-column
+      label="日期"
+      width="180">
+      <template slot-scope="scope">
+        <i class="el-icon-time"></i>
+        <span style="margin-left: 10px">{{ scope.row.date }}</span>
+      </template>
+    </el-table-column>
+    <el-table-column
+      label="姓名"
+      width="180">
+      <template slot-scope="scope">
+        <el-popover trigger="hover" placement="top">
+          <p>姓名: {{ scope.row.name }}</p>
+          <p>住址: {{ scope.row.address }}</p>
+          <div slot="reference" class="name-wrapper">
+            <el-tag size="medium">{{ scope.row.name }}</el-tag>
+          </div>
+        </el-popover>
+      </template>
+    </el-table-column>
+    <el-table-column label="操作">
+      <template slot-scope="scope">
+        <el-button
+          size="mini"
+          @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+        <el-button
+          size="mini"
+          type="danger"
+          @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+      </template>
+    </el-table-column>
+  </el-table>
+</template>
+</div>
+
+<hr>
+<h5>展开行:当行内容过多并且不想显示横向滚动条时，可以使用 Table 展开行功能</h5>
+<div id="app_f12">
+<template>
+  <el-table
+    :data="tableData"
+    style="width: 100%">
+    <el-table-column type="expand">
+      <template slot-scope="props">
+        <el-form label-position="left" inline class="demo-table-expand">
+          <el-form-item label="商品名称">
+            <span>{{ props.row.name }}</span>
+          </el-form-item>
+          <el-form-item label="所属店铺">
+            <span>{{ props.row.shop }}</span>
+          </el-form-item>
+          <el-form-item label="商品 ID">
+            <span>{{ props.row.id }}</span>
+          </el-form-item>
+          <el-form-item label="店铺 ID">
+            <span>{{ props.row.shopId }}</span>
+          </el-form-item>
+          <el-form-item label="商品分类">
+            <span>{{ props.row.category }}</span>
+          </el-form-item>
+          <el-form-item label="店铺地址">
+            <span>{{ props.row.address }}</span>
+          </el-form-item>
+          <el-form-item label="商品描述">
+            <span>{{ props.row.desc }}</span>
+          </el-form-item>
+        </el-form>
+      </template>
+    </el-table-column>
+    <el-table-column
+      label="商品 ID"
+      prop="id">
+    </el-table-column>
+    <el-table-column
+      label="商品名称"
+      prop="name">
+    </el-table-column>
+    <el-table-column
+      label="描述"
+      prop="desc">
+    </el-table-column>
+  </el-table>
+</template>
+</div>
+
+<hr>
+<h5>树形数据与懒加载</h5>
+<div id="app_f13">
+<template>
+<div>
+  <el-table
+    :data="tableData"
+    style="width: 100%;margin-bottom: 20px;"
+    border
+    row-key="id">
+    <el-table-column
+      prop="date"
+      label="日期"
+      sortable
+      width="180">
+    </el-table-column>
+    <el-table-column
+      prop="name"
+      label="姓名"
+      sortable
+      width="180">
+    </el-table-column>
+    <el-table-column
+      prop="address"
+      label="地址">
+    </el-table-column>
+  </el-table>
+
+</div>
+</template>
+</div>
+
+<hr>
+<h5>表头支持自定义。</h5>
+<div id="app_f14">
+<template>
+  <el-table
+    :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
+    style="width: 100%">
+    <el-table-column
+      label="Date"
+      prop="date">
+    </el-table-column>
+    <el-table-column
+      label="Name"
+      prop="name">
+    </el-table-column>
+    <el-table-column
+      align="right">
+      <template slot="header" slot-scope="scope">
+        <el-input
+          v-model="search"
+          size="mini"
+          placeholder="输入关键字搜索"/>
+      </template>
+      <template slot-scope="scope">
+        <el-button
+          size="mini"
+          @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
+        <el-button
+          size="mini"
+          type="danger"
+          @click="handleDelete(scope.$index, scope.row)">Delete</el-button>
+      </template>
+    </el-table-column>
+  </el-table>
+</template>
+</div>
+
+<hr>
+<h5>表尾合计行 若表格展示的是各类数字，可以在表尾显示各列的合计。</h5>
+<div id="app_f15">
+<template>
+  <el-table
+    :data="tableData"
+    border
+    show-summary
+    style="width: 100%">
+    <el-table-column
+      prop="id"
+      label="ID"
+      width="180">
+    </el-table-column>
+    <el-table-column
+      prop="name"
+      label="姓名">
+    </el-table-column>
+    <el-table-column
+      prop="amount1"
+      sortable
+      label="数值 1">
+    </el-table-column>
+    <el-table-column
+      prop="amount2"
+      sortable
+      label="数值 2">
+    </el-table-column>
+    <el-table-column
+      prop="amount3"
+      sortable
+      label="数值 3">
+    </el-table-column>
+  </el-table>
+
+  <el-table
+    :data="tableData"
+    border
+    height="200"
+    :summary-method="getSummaries"
+    show-summary
+    style="width: 100%; margin-top: 20px">
+    <el-table-column
+      prop="id"
+      label="ID"
+      width="180">
+    </el-table-column>
+    <el-table-column
+      prop="name"
+      label="姓名">
+    </el-table-column>
+    <el-table-column
+      prop="amount1"
+      label="数值 1（元）">
+    </el-table-column>
+    <el-table-column
+      prop="amount2"
+      label="数值 2（元）">
+    </el-table-column>
+    <el-table-column
+      prop="amount3"
+      label="数值 3（元）">
+    </el-table-column>
+  </el-table>
+</template>
+</div>
+
+<hr>
+<h5>多行或多列共用一个数据时，可以合并行或列。</h5>
+<div id="app_f16">
+<template>
+  <div>
+    <el-table
+      :data="tableData"
+      :span-method="arraySpanMethod"
+      border
+      style="width: 100%">
+      <el-table-column
+        prop="id"
+        label="ID"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="name"
+        label="姓名">
+      </el-table-column>
+      <el-table-column
+        prop="amount1"
+        sortable
+        label="数值 1">
+      </el-table-column>
+      <el-table-column
+        prop="amount2"
+        sortable
+        label="数值 2">
+      </el-table-column>
+      <el-table-column
+        prop="amount3"
+        sortable
+        label="数值 3">
+      </el-table-column>
+    </el-table>
+
+    <el-table
+      :data="tableData"
+      :span-method="objectSpanMethod"
+      border
+      style="width: 100%; margin-top: 20px">
+      <el-table-column
+        prop="id"
+        label="ID"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="name"
+        label="姓名">
+      </el-table-column>
+      <el-table-column
+        prop="amount1"
+        label="数值 1（元）">
+      </el-table-column>
+      <el-table-column
+        prop="amount2"
+        label="数值 2（元）">
+      </el-table-column>
+      <el-table-column
+        prop="amount3"
+        label="数值 3（元）">
+      </el-table-column>
+    </el-table>
+  </div>
+</template>
+</div>
+
+<hr>
+<h5>自定义索引 自定义 type=index 列的行号。</h5>
+<div id="app_f17">
+<template>
+  <el-table
+    :data="tableData"
+    style="width: 100%">
+    <el-table-column
+      type="index"
+      :index="indexMethod">
+    </el-table-column>
+    <el-table-column
+      prop="date"
+      label="日期"
+      width="180">
+    </el-table-column>
+    <el-table-column
+      prop="name"
+      label="姓名"
+      width="180">
+    </el-table-column>
+    <el-table-column
+      prop="address"
+      label="地址">
+    </el-table-column>
+  </el-table>
+</template>
+</div>
+
+
+
+
+
+
+
+
+
+<hr>
+<h5></h5>
+<p> </p>
+<div id="app">
+   <span class="demonstration"></span>
+
+  </div>
+</body>
+ 
+
+
+<script>
+
+var Main = {
+      data() {
+        return {
+          tableData: [{
+            date: '2016-05-02',
+            name: '王小虎',
+            address: '上海市普陀区金沙江路 1518 弄'
+          }, {
+            date: '2016-05-04',
+            name: '王小虎',
+            address: '上海市普陀区金沙江路 1517 弄'
+          }, {
+            date: '2016-05-01',
+            name: '王小虎',
+            address: '上海市普陀区金沙江路 1519 弄'
+          }, {
+            date: '2016-05-03',
+            name: '王小虎',
+            address: '上海市普陀区金沙江路 1516 弄'
+          }]
+        }
+      }
+    }
+var Ctor = Vue.extend(Main)
+new Ctor().$mount('#app');
+
+//区分「成功、信息、警告、危险」等内容。
+var Main_f2 = {
+      data() {
+        return {
+          tableData: [{
+            date: '2016-05-02',
+            name: '王小虎',
+            address: '上海市普陀区金沙江路 1518 弄'
+          }, {
+            date: '2016-05-04',
+            name: '王小虎',
+            address: '上海市普陀区金沙江路 1517 弄'
+          }, {
+            date: '2016-05-01',
+            name: '王小虎',
+            address: '上海市普陀区金沙江路 1519 弄'
+          }, {
+            date: '2016-05-03',
+            name: '王小虎',
+            address: '上海市普陀区金沙江路 1516 弄'
+          }, {
+            date: '2016-05-04',
+            name: '王小虎',
+            address: '上海市普陀区金沙江路 1517 弄'
+          }, {
+            date: '2016-05-01',
+            name: '王小虎',
+            address: '上海市普陀区金沙江路 1519 弄'
+          }, {
+            date: '2016-05-03',
+            name: '王小虎',
+            address: '上海市普陀区金沙江路 1516 弄'
+          }]
+        }
+      }
+    }
+var Ctor_f2 = Vue.extend(Main_f2)
+new Ctor_f2().$mount('#app_f2');
+
+//固定表头   纵向内容过多时，可选择固定表头。
+var Ctor_f3 = Vue.extend(Main_f2)
+new Ctor_f3().$mount('#app_f3');
+
+var Main_f4 = {
+    data() {
+      return {
+        tableData: [{
+          date: '2016-05-03',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '上海市普陀区金沙江路 1518 弄',
+          zip: 200333
+        }, {
+          date: '2016-05-02',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '上海市普陀区金沙江路 1518 弄',
+          zip: 200333
+        }, {
+          date: '2016-05-04',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '上海市普陀区金沙江路 1518 弄',
+          zip: 200333
+        }, {
+          date: '2016-05-01',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '上海市普陀区金沙江路 1518 弄',
+          zip: 200333
+        }, {
+          date: '2016-05-08',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '上海市普陀区金沙江路 1518 弄',
+          zip: 200333
+        }, {
+          date: '2016-05-06',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '上海市普陀区金沙江路 1518 弄',
+          zip: 200333
+        }, {
+          date: '2016-05-07',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '上海市普陀区金沙江路 1518 弄',
+          zip: 200333
+        }]
+      }
+    }
+  }
+var Ctor_f4 = Vue.extend(Main_f4)
+new Ctor_f4().$mount('#app_f4')
+
+var Main_f5 = {
+    methods: {
+      deleteRow(index, rows) {
+        rows.splice(index, 1);
+      }
+    },
+    data() {
+      return {
+        tableData: [{
+          date: '2016-05-03',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '上海市普陀区金沙江路 1518 弄',
+          zip: 200333
+        }, {
+          date: '2016-05-02',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '上海市普陀区金沙江路 1518 弄',
+          zip: 200333
+        }, {
+          date: '2016-05-04',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '上海市普陀区金沙江路 1518 弄',
+          zip: 200333
+        }, {
+          date: '2016-05-01',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '上海市普陀区金沙江路 1518 弄',
+          zip: 200333
+        }, {
+          date: '2016-05-08',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '上海市普陀区金沙江路 1518 弄',
+          zip: 200333
+        }, {
+          date: '2016-05-06',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '上海市普陀区金沙江路 1518 弄',
+          zip: 200333
+        }, {
+          date: '2016-05-07',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '上海市普陀区金沙江路 1518 弄',
+          zip: 200333
+        }]
+      }
+    }
+  }
+var Ctor_f5 = Vue.extend(Main_f5)
+new Ctor_f5().$mount('#app_f5');
+
+//多级表头 数据结构比较复杂的时候，可使用多级表头来展现数据的层次关系。
+var Main_f6 = {
+    data() {
+      return {
+        tableData: [{
+          date: '2016-05-03',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '上海市普陀区金沙江路 1518 弄',
+          zip: 200333
+        }, {
+          date: '2016-05-02',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '上海市普陀区金沙江路 1518 弄',
+          zip: 200333
+        }, {
+          date: '2016-05-04',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '上海市普陀区金沙江路 1518 弄',
+          zip: 200333
+        }, {
+          date: '2016-05-01',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '上海市普陀区金沙江路 1518 弄',
+          zip: 200333
+        }, {
+          date: '2016-05-08',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '上海市普陀区金沙江路 1518 弄',
+          zip: 200333
+        }, {
+          date: '2016-05-06',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '上海市普陀区金沙江路 1518 弄',
+          zip: 200333
+        }, {
+          date: '2016-05-07',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '上海市普陀区金沙江路 1518 弄',
+          zip: 200333
+        }]
+      }
+    }
+  }
+var Ctor_f6 = Vue.extend(Main_f6)
+new Ctor_f6().$mount('#app_f6');
+
+// 选择单行数据时使用色块表示。 _f7
+var Main_f7 = {
+    data() {
+      return {
+        tableData: [{
+          date: '2016-05-02',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-04',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1517 弄'
+        }, {
+          date: '2016-05-01',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1519 弄'
+        }, {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄'
+        }],
+        currentRow: null
+      }
+    },
+
+    methods: {
+      setCurrent(row) {
+        this.$refs.singleTable.setCurrentRow(row);
+      },
+      handleCurrentChange(val) {
+        this.currentRow = val;
+      }
+    }
+  }
+var Ctor_f7 = Vue.extend(Main_f7)
+new Ctor_f7().$mount('#app_f7');
+
+//多选 选择多行数据时使用 Checkbox。
+var Main_f8 = {
+    data() {
+      return {
+        tableData: [{
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-02',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-04',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-01',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-08',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-06',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-07',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }],
+        multipleSelection: []
+      }
+    },
+
+    methods: {
+      toggleSelection(rows) {
+        if (rows) {
+          rows.forEach(row => {
+            this.$refs.multipleTable.toggleRowSelection(row);
+          });
+        } else {
+          this.$refs.multipleTable.clearSelection();
+        }
+      },
+      handleSelectionChange(val) {
+        this.multipleSelection = val;
+      }
+    }
+  }
+var Ctor_f8 = Vue.extend(Main_f8)
+new Ctor_f8().$mount('#app_f8');
+
+//
+var Main_f9 = {
+    data() {
+      return {
+        tableData: [{
+          date: '2016-05-02',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-04',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1517 弄'
+        }, {
+          date: '2016-05-01',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1519 弄'
+        }, {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄'
+        }]
+      }
+    },
+    methods: {
+      formatter(row, column) {
+        return row.address;
+      }
+    }
+  }
+var Ctor_f9 = Vue.extend(Main_f9)
+new Ctor_f9().$mount('#app_f9');
+
+// 筛选
+var Main_f10 = {
+    data() {
+      return {
+        tableData: [{
+          date: '2016-05-02',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄',
+          tag: '家'
+        }, {
+          date: '2016-05-04',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1517 弄',
+          tag: '公司'
+        }, {
+          date: '2016-05-01',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1519 弄',
+          tag: '家'
+        }, {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄',
+          tag: '公司'
+        }, {
+          date: '2016-07-03',
+          name: 'Aaron',
+          address: 'Beijing',
+          tag: 'school'
+        }]
+      }
+    },
+    methods: {
+      resetDateFilter() {
+        this.$refs.filterTable.clearFilter('date');
+      },
+      clearFilter() {
+        this.$refs.filterTable.clearFilter();
+      },
+      formatter(row, column) {
+        return row.address;
+      },
+      filterTag(value, row) {
+        return row.tag === value;
+      },
+      filterHandler(value, row, column) {
+        const property = column['property'];
+        return row[property] === value;
+      }
+    }
+  }
+var Ctor_f10 = Vue.extend(Main_f10)
+new Ctor_f10().$mount('#app_f10');
+
+
+var Main_f11  = {
+    data() {
+      return {
+        tableData: [{
+          date: '2016-05-02',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-04',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1517 弄'
+        }, {
+          date: '2016-05-01',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1519 弄'
+        }, {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄'
+        }]
+      }
+    },
+    methods: {
+      handleEdit(index, row) {
+        console.log(index, row);
+      },
+      handleDelete(index, row) {
+        console.log(index, row);
+      }
+    }
+  }
+var Ctor_f11  = Vue.extend(Main_f11 )
+new Ctor_f11 ().$mount('#app_f11 ');
+
+//展开行 当行内容过多并且不想显示横向滚动条时，可以使用 Table 展开行功能。
+var Main_f12 = {
+    data() {
+      return {
+        tableData: [{
+          id: '12987122',
+          name: '好滋好味鸡蛋仔',
+          category: '江浙小吃、小吃零食',
+          desc: '荷兰优质淡奶，奶香浓而不腻',
+          address: '上海市普陀区真北路',
+          shop: '王小虎夫妻店',
+          shopId: '10333'
+        }, {
+          id: '12987123',
+          name: '好滋好味鸡蛋仔',
+          category: '江浙小吃、小吃零食',
+          desc: '荷兰优质淡奶，奶香浓而不腻',
+          address: '上海市普陀区真北路',
+          shop: '王小虎夫妻店',
+          shopId: '10333'
+        }, {
+          id: '12987125',
+          name: '好滋好味鸡蛋仔',
+          category: '江浙小吃、小吃零食',
+          desc: '荷兰优质淡奶，奶香浓而不腻',
+          address: '上海市普陀区真北路',
+          shop: '王小虎夫妻店',
+          shopId: '10333'
+        }, {
+          id: '12987126',
+          name: '好滋好味鸡蛋仔',
+          category: '江浙小吃、小吃零食',
+          desc: '荷兰优质淡奶，奶香浓而不腻',
+          address: '上海市普陀区真北路',
+          shop: '王小虎夫妻店',
+          shopId: '10333'
+        }]
+      }
+    }
+  }
+var Ctor_f12 = Vue.extend(Main_f12)
+new Ctor_f12().$mount('#app_f12');
+
+//树形数据与懒加载
+var Main_f13 = {
+    data() {
+      return {
+        tableData: [{
+          id: 1,
+          date: '2016-05-02',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          id: 2,
+          date: '2016-05-04',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1517 弄'
+        }, {
+          id: 3,
+          date: '2016-05-01',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1519 弄',
+          children: [{
+              id: 31,
+              date: '2016-05-01',
+              name: '王小虎',
+              address: '上海市普陀区金沙江路 1519 弄'
+            }, {
+              id: 32,
+              date: '2016-05-01',
+              name: '王小虎',
+              address: '上海市普陀区金沙江路 1519 弄'
+          }]
+        }, {
+          id: 4,
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄'
+        }],
+        tableData1: [{
+          id: 1,
+          date: '2016-05-02',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          id: 2,
+          date: '2016-05-04',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1517 弄'
+        }, {
+          id: 3,
+          date: '2016-05-01',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1519 弄',
+          hasChildren: true
+        }, {
+          id: 4,
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄'
+        }]
+      }
+    },
+    methods: {
+      load(tree, treeNode, resolve) {
+        resolve([
+          {
+            id: 31,
+            date: '2016-05-01',
+            name: '王小虎',
+            address: '上海市普陀区金沙江路 1519 弄'
+          }, {
+            id: 32,
+            date: '2016-05-01',
+            name: '王小虎',
+            address: '上海市普陀区金沙江路 1519 弄'
+          }
+        ])
+      }
+    },
+  }
+var Ctor_f13 = Vue.extend(Main_f13)
+new Ctor_f13().$mount('#app_f13')
+
+//自定义
+var Main_f14 = {
+    data() {
+      return {
+        tableData: [{
+          date: '2016-05-02',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-04',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1517 弄'
+        }, {
+          date: '2016-05-01',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1519 弄'
+        }, {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄'
+        }],
+        search: ''
+      }
+    },
+    methods: {
+      handleEdit(index, row) {
+        console.log(index, row);
+      },
+      handleDelete(index, row) {
+        console.log(index, row);
+      }
+    },
+  }
+var Ctor_f14 = Vue.extend(Main_f14)
+new Ctor_f14().$mount('#app_f14');
+
+//表尾合计行  app_f15
+var Main_f15 = {
+    data() {
+      return {
+        tableData: [{
+          id: '12987122',
+          name: '王小虎',
+          amount1: '234',
+          amount2: '3.2',
+          amount3: 10
+        }, {
+          id: '12987123',
+          name: '王小虎',
+          amount1: '165',
+          amount2: '4.43',
+          amount3: 12
+        }, {
+          id: '12987124',
+          name: '王小虎',
+          amount1: '324',
+          amount2: '1.9',
+          amount3: 9
+        }, {
+          id: '12987125',
+          name: '王小虎',
+          amount1: '621',
+          amount2: '2.2',
+          amount3: 17
+        }, {
+          id: '12987126',
+          name: '王小虎',
+          amount1: '539',
+          amount2: '4.1',
+          amount3: 15
+        }]
+      };
+    },
+    methods: {
+      getSummaries(param) {
+        const { columns, data } = param;
+        const sums = [];
+        columns.forEach((column, index) => {
+          if (index === 0) {
+            sums[index] = '总价';
+            return;
+          }
+          const values = data.map(item => Number(item[column.property]));
+          if (!values.every(value => isNaN(value))) {
+            sums[index] = values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return prev + curr;
+              } else {
+                return prev;
+              }
+            }, 0);
+            sums[index] += ' 元';
+          } else {
+            sums[index] = 'N/A';
+          }
+        });
+
+        return sums;
+      }
+    }
+  };
+var Ctor_f15 = Vue.extend(Main_f15)
+new Ctor_f15().$mount('#app_f15');
+
+//多行或多列共用一个数据时，可以合并行或列。
+var Main_f16 = {
+    data() {
+      return {
+        tableData: [{
+          id: '12987122',
+          name: '王小虎',
+          amount1: '234',
+          amount2: '3.2',
+          amount3: 10
+        }, {
+          id: '12987123',
+          name: '王小虎',
+          amount1: '165',
+          amount2: '4.43',
+          amount3: 12
+        }, {
+          id: '12987124',
+          name: '王小虎',
+          amount1: '324',
+          amount2: '1.9',
+          amount3: 9
+        }, {
+          id: '12987125',
+          name: '王小虎',
+          amount1: '621',
+          amount2: '2.2',
+          amount3: 17
+        }, {
+          id: '12987126',
+          name: '王小虎',
+          amount1: '539',
+          amount2: '4.1',
+          amount3: 15
+        }]
+      };
+    },
+    methods: {
+      arraySpanMethod({ row, column, rowIndex, columnIndex }) {
+        if (rowIndex % 2 === 0) {
+          if (columnIndex === 0) {
+            return [1, 2];
+          } else if (columnIndex === 1) {
+            return [0, 0];
+          }
+        }
+      },
+
+      objectSpanMethod({ row, column, rowIndex, columnIndex }) {
+        if (columnIndex === 0) {
+          if (rowIndex % 2 === 0) {
+            return {
+              rowspan: 2,
+              colspan: 1
+            };
+          } else {
+            return {
+              rowspan: 0,
+              colspan: 0
+            };
+          }
+        }
+      }
+    }
+  };
+var Ctor_f16 = Vue.extend(Main_f16)
+new Ctor_f16().$mount('#app_f16');
+
+//自定义索引 自定义 type=index 列的行号。
+var Main_f17 = {
+    data() {
+      return {
+        tableData: [{
+          date: '2016-05-02',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '上海市普陀区金沙江路 1518 弄',
+          zip: 200333,
+          tag: '家'
+        }, {
+          date: '2016-05-04',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '上海市普陀区金沙江路 1517 弄',
+          zip: 200333,
+          tag: '公司'
+        }, {
+          date: '2016-05-01',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '上海市普陀区金沙江路 1519 弄',
+          zip: 200333,
+          tag: '家'
+        }, {
+          date: '2016-05-03',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '上海市普陀区金沙江路 1516 弄',
+          zip: 200333,
+          tag: '公司'
+        }],
+      }
+    },
+    methods: {
+      indexMethod(index) {
+        return index * 2;
+      }
+    }
+  };
+var Ctor_f17 = Vue.extend(Main_f17)
+new Ctor_f17().$mount('#app_f17');
+
+
+
+
+</script>
+</html>
+
+
+

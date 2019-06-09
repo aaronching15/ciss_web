@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<html>
+
+    <head>
+    <!-- 头部，内容的介绍展示区域 -->
+    <meta charset="utf-8">
+    <title>log</title>
+    
+    <style type="text/css">
+        /* h3 {color:steelblue;}  */
+        #menu_float{color:steelblue;
+            position:fixed;
+            bottom: 50%;
+            right:40px;
+            margin-left: 70% ; /*为左侧留出70\%的空间*/
+            font-size:12px;  /*字体设置小点*/ 
+            border: 1px solid steelblue; /*  实线，dotted */
+            /* text-align:center;文字居中*/ 
+            border-radius:5px; /*倒角  */ 
+            background:#dddddd;
+            padding:3px 3px 3px 3px;/*元素所有内边距的宽度，上右，下左  */ 
+        } 
+        #left_frame{float: left;width: 70%; }
+        #sub_left{
+            width: 50%;
+            height: 350px;
+            background-color: #C5E9F3;
+            /*定义浮动，不定义的话，界面会乱*/
+            float: left;
+        }
+        #sub_right{
+            width: 50%;
+            height: 350px;
+            background-color: #F7575d;
+            float: right;
+        }
+    </style>
+    </head>
+
+    <body>
+    <nav> 
+    <!-- 导航链接 -->
+        <a href="./keti_admin_tash4paper">KETI</a> |
+        <a href="./keti_admin_demand">SYS</a> |
+        <a href="./p2/p2_admin">P2</a> |
+    </nav> 
+
+    
+    
+    <div id="menu_float">
+    <ul>
+    <li><a href="#181101">181101</a></li>
+    <li><a href="#181102">181102</a></li> 
+    </ul>
+    </div>
+    
+    <div id="left_frame"> 
+    <h1 >Log of portfolio development in portfolio modules.</h1>  
+    <section> 
+    <!-- 文档中的节（section、区段）。比如章节、页眉、页脚或文档中的其他部分 -->
+    <hr>
+    <h3> port组合分析应该包括 实盘监控，盈亏分析汇总，阶段性汇报统计，仓位变动，持仓股票分析等数据。 </h3>
+    <hr>
+    <p>
+    steps：|参考：rC_Portfolio_17Q1.py
+    1，导入port数据，确定需要计算的时间周期。
+
+    2，port_head记录，导入AS,Asum,sp,trade，signal,signal_nextday等数据
+    
+    3，导入(交易)参数? line 3419
+    
+    4,日初更新AS，Asum，...
+
+    5,导入真实数据，Tran_Live2Standard，得到交易模块 ||
+
+
+    6，获取指数，宏观择时模块 line 3485，
+
+    7，line3524，获取价格和回报率数据，更新Account_Sum, Account_Stocks, StockPool
+    
+    8，更新持仓股在stockpool或者port_df里的数据变量。
+
+    9,非持仓股的分析，信号和交易
+    
+    9，预判明日数据ana,signals
+
+    10，port_head 中更新log文件
+
+    注意：由于abm组合只需要每半年换仓，因此半年内不需要太复杂。
+    另外，换仓时根据1，5，10，50，100资金量的不同，设计交易调整计划！
+    </p>
+    <h3>历史组合管理的子模块 </h3>
+    <hr>
+    <p>
+       流程
+    rC_Portfolio_17Q1.py
+        rC_Portfolio_L_Update.py
+        line 2571
+            Import_Portfolio_Data
+                line 405
+                需要先读取上一个交易日的  temp_Sig_Ana 
+            Update_StockPool_Outside | if if_change_SP ==1 
+
+            Get_Signal(Index)
+
+            Get_Signal(code) line 2686
+            Get_BSH_Weight_Amount
+            Get_temp_Trade
+            Update_Trading_Book
+            Update_Account_List_Trade
+            Update_Account_List_NoTrade
+
+            Get_Sig_Ana
+            Get_BSH_Weight_Amount
+            Get_Price_Ret
+            Update_Account_List_Trade
+
+            # For next day
+            Get_Signal_Next
+            Get_Price_Ret_Next
+            Get_temp_Trade_Next
+
+            Get_Sig_Ana_Next
+            Get_Price_Ret_Next
+            Get_temp_Trade_Next
+    
+    
+    </p>
+    <h3>log 181109：开发日志：ports analysis </h3>
+    <hr>
+    <p>
+     
+    </p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h3>历史组合管理的子模块 </h3>
+    <hr>
+    <p> 
+    </p>
+
+    </div> 
+    </section> 
+  
+    <script>
+    var JSONObject= {
+        "dir":"keti\opensource\py-fi-invest\qtpylib",
+        "module_name":"QTPyLib 1.5.78", 
+        "source":"https://qtpylib.io/docs/latest/"
+        }; 
+
+    </script>
+
+</body>
+
+</html>
+

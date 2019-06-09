@@ -1,0 +1,373 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Stict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang = "zh-CN">
+{% extends "base.html" %}
+<!-- The block items for this base html file is: {nav_sub, left_frame,menu,content } <meta charset="UTF-8">  
+-->
+
+
+{% block nav_sub %}
+
+    <a href="./core_stra.html">核心策略 |Core strategy</a> >>
+    <a href="./last_stra.html">最新策略 |Lastest strategy</a> >>
+
+{% endblock nav_sub %}
+
+{% block left_frame %}
+    <!-- Menu in left frame -->
+    <h1 >投资策略实例 |CISS applications</h1> 
+    <p>explore details of strategy developing process</p>
+    <hr>       
+    <h3>目录</h3>
+    <ul>
+    <li><a href="#stra_intro">绪论| Introduction </a></li> 
+    <li><a href="#stra_theory">经典理论和模型| Theory and model</a></li> 
+    <li><a href="#stra_empirical">策略实证| Empirical </a></li> 
+    <li><a href="#stra_conclusion">策略结论| Conclusion</a></li> 
+    </ul>
+    <hr><hr>
+
+{% endblock left_frame %}
+
+
+{% block menu %}
+
+    <div id="menu_float">
+    <ul>
+    <li><a href="#stra_intro">绪论| Introduction </a></li> 
+    <li><a href="#stra_theory">经典理论和模型| Theory and model</a></li> 
+    <li><a href="#stra_empirical">策略实证| Empirical </a></li> 
+    <li><a href="#stra_conclusion">策略结论| Conclusion</a></li> 
+    </ul>
+    </div>
+
+{% endblock menu %}
+
+
+{% block content %}
+    <h4>CISS\Bond\ |输入jny债券分位数策略参数：</h4>
+    <!--Stra name   Stra code   Stra hier 1 Stra hier 2 Stra hier 3 Stra hier 4 -->
+    <form action="{% url "stra_bond_jny" %}" method="post" accept-charset="utf-8">
+    {% csrf_token %}
+
+    策略名称|Strategy Name: <input type="text" name="stra_name" value="bond_pct_ny"> <br>
+    高久期品种，如中债-7-10年国开行债券指数: <input type="text" name="symbol_a" value="CBA05203.CS"> <br>
+    中久期品种，如中债-企业债AAA指数（3-5年）指数: <input type="text" name="symbol_b" value="CBA04233.CS"><br>
+    低久期品种，如中债-货币市场基金可投资债券总值指数: <input type="text" name="symbol_c" value="CBA02203.CS"><br>
+    基准指数，如中债-综合全价(总值)指数: <input type="text" name="benchmark" value="CBA00203.CS"><br>
+
+    初始日期|Initial Date.: <input type="text" name="date_init"  value="20130101"> <br>
+     <!--部分指数的最早时间是20070101，一般考虑留1年的交易日时间比较合适 | onFocus="this.value=''" 
+    data of CBA05203.CS started from 20120101, so initial date might best start from 20130101
+     组合调整频率|1-250天: <input type="text" name="frequency_d" value="5"><br>
+    组合权重分档|1~30%: <input type="text" name="weight_diff" value="5"><br>
+
+     -->
+    最新日期|Lastest Date.: <input type="text" name="date_last" value="20190115"> <br> 
+   
+    最低现金比例|1~30%: <input type="text" name="weight_c_min" value="5"><br>
+
+    <input type="submit" value="提交">
+    
+    </form>
+
+    <style type="text/css">
+    .table{ font-size:12px; }
+
+    </style>
+
+    <section id="s1">  
+    <h3><a name="describe">指数描述统计| Descriptive Statistics：index yield to maturity</a></h3>  
+    <hr>
+    {% if ytm_describe %}
+        
+        <table border="0.1"  class="table">
+        <caption>三只成分指数和基准指数收益率描述统计</caption>
+        <tr>
+            <td>代码|到期收益率ytm,%</td><td>交易日数量</td><td>平均值</td><td>标准差</td>
+            <td>最小值</td><td>25%分位数</td><td>50%分位数</td><td>75%分位数</td>
+            <td>最大值</td>
+        </tr>
+        {% for temp_date,row_info in ytm_describe.items %}
+        <tr>
+            <td>{{ temp_date }}</td>
+            <td>{{ row_info.count }}</td>
+            <td>{{ row_info.mean }}</td>
+            <td>{{ row_info.std }}</td>
+            <td>{{ row_info.min }}</td>
+            <td>{{ row_info.pct_25 }}</td>
+            <td>{{ row_info.pct_50 }}</td>
+            <td>{{ row_info.pct_75 }}</td>
+            <td>{{ row_info.max }}</td>
+
+            
+        </tr>
+        {% endfor %}
+        </table> 
+
+    {% endif %}
+
+    </section> 
+
+
+    <section id="s2">  
+    <h3><a name="calculation">策略指标描述统计 | Descriptive Statistics：percentage and weights</a></h3>  
+    <hr>
+    {% if ytm_describe2 %}
+        
+        <table border="0.1"  class="table">
+        <caption>历史收益率分位数和组合配置权重计算：描述统计</caption>
+        <tr>
+            <td>代码|到期收益率ytm,%</td><td>交易日数量</td><td>平均值</td><td>标准差</td>
+            <td>最小值</td><td>25%分位数</td><td>50%分位数</td><td>75%分位数</td>
+            <td>最大值</td>
+        </tr>
+        {% for temp_date,row_info in ytm_describe2.items %}
+        <tr>
+            <td>{{ temp_date }}</td>
+            <td>{{ row_info.count }}</td>
+            <td>{{ row_info.mean }}</td>
+            <td>{{ row_info.std }}</td>
+            <td>{{ row_info.min }}</td>
+            <td>{{ row_info.pct_25 }}</td>
+            <td>{{ row_info.pct_50 }}</td>
+            <td>{{ row_info.pct_75 }}</td>
+            <td>{{ row_info.max }}</td>
+
+            
+        </tr>
+        {% endfor %}
+        </table> 
+
+    {% endif %}
+
+    </section> 
+
+    <section id="s3">  
+    <h3><a name="stra_empirical">{{ stra_name }} </a></h3>  
+    <hr>
+    <div id="main4" style="width: 800px;height:500px;"></div>
+    <script type="text/javascript" >
+    // source https://www.cnblogs.com/labc/articles/5954438.html
+    // django中传递到页面中的并不是变量， 是文本的替换
+    //190116 0841 确定的是数据传过来了。
+    //source http://www.runoob.com/js/js-json.html
+    // typeof data_rc  | string 
+
+
+    //JSON.stringify 返回的是双引号 {"testArray":[1,2,3,4,5],"name":"CSS3"}
+    // 尝试替换双引号 ||  data_rc = data_rc.replace(/'/, '"') 好像替换第一个单引号
+    // data_rc = data_rc.replace(/\'/g, '"')
+    // obj = JSON.parse(data_rc);
+
+    //window.alert( data_rc.substring(1,30) )
+
+    var myChart4 = echarts.init(document.getElementById('main4'));
+    //import data
+    // var str_sys_dir =  './data' 
+    //'C:/zd_zxjtzq/RC_trashes/temp/ciss_web/static/templates/ciss_exhi/strategy/data'
+    var str_sys_dir =  './data';
+    // './data'  
+    var str_json = 'jny.json' ;
+    var str_path = '' 
+    //据说这样最快 https://www.cnblogs.com/programs/p/5554742.html
+    str_path+= str_sys_dir ;
+    str_path+= '/' ;
+    str_path+= str_json ;
+    // 获取从viewspy传来的数据
+
+
+    //$.getJSON('./rc_sys/Sys_rC1703_1703Port/Port_CSI800_000300.SH_170101_20_0.95/Account_Sum_2018-08-09.json').done(function (data) {
+    // var temp_unit = $.getJSON( str_path ) 
+    // type of temp_unit is object 
+    //Query.parseJSON(jsonstr),可以将json字符串转换成json对象
+    // $.getJSON( str_path ).done(function (data) {
+    
+
+    var dates = {{ dates |safe }}; 
+    var units = {{ units |safe }}; 
+    var mdds = {{ mdds |safe }}; 
+    // window.alert( units[10] );
+    
+    var name1 = 'Unit';
+    var name2 = 'MDD';
+    var dates = dates;
+    var values1 = units  ;
+    var values2 = mdds ;
+    // $.each(data, function (index, item) {
+    //     // alert( item.name ) 弹窗是 601398.SH,600036.SH,997200,865500
+    //     // alert( index ) 弹窗是 index,MV
+    //     // item[0] 依次是 601398. 93w，似乎反了
+    //     // Ans:先在python-pandas中transpose转置。
+    //     // 奇怪，jQuery的中文是可以正常显示的，幸福 | python导入csv时选择了 GBK，导出json时没有特别的。 
+    //         dates.push(  item.date );    //挨个取出类别并填入类别数组 
+    //         values1.push( item.port_unit );
+    //         values2.push( item.port_unit );
+    //     });
+
+    // set options 
+    option4 = {
+        title : {
+            text: '净值和最大回撤 Unit MDD',
+            subtext: 'CISS\\bond\\momentum ',
+            x: 'center',
+            align: 'right'
+        },
+        grid: {
+            bottom: 80
+        },
+        toolbox: {
+            feature: {
+                dataZoom: {
+                    yAxisIndex: 'none'
+                },
+                restore: {},
+                saveAsImage: {}
+            }
+        },
+        tooltip : {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'cross',
+                animation: false,
+                label: {
+                    backgroundColor: '#99CCCC'
+                }
+            }
+        },
+        legend: {
+            data:[name1,name2],
+            x: 'left'
+        },
+        //设置初始显示的总图表的百分比。
+        dataZoom: [
+            {
+                show: true,
+                realtime: true,
+                start: 0,
+                end: 100
+            },
+            {
+                type: 'inside',
+                realtime: true,
+                start: 0,
+                end: 100
+            }
+        ],
+        xAxis : [
+            {
+                type : 'category',
+                boundaryGap : false,
+                axisLine: {onZero: false},
+                data : dates
+             }
+        ],
+        yAxis: [
+            {
+                name: 'Unit(1.000)',
+                type: 'value', 
+                max:   'dataMax',
+                //Math.ceil( Math.max( values1 )*100+10 )/100   ,
+                // min: Math.floor( Math.min( values1 )*100-10 )/100 
+                min: 'dataMin' 
+
+            },
+            {
+                name: 'MDD(%)',
+                nameLocation: 'start',
+                max: 0.0 ,
+                min:  'dataMin' ,
+                // Math.floor( Math.min( values2 )*100-10 )/100 , 
+                //Math.min( values2 ) *1.1*100 ,
+                type: 'value',
+                inverse: false //true
+            }
+        ],
+        series: [
+            {
+                name: name1,
+                type:'line',
+                animation: false,
+                areaStyle: {
+                    normal: {}
+                },
+                lineStyle: {
+                    normal: {
+                        width: 1
+                    }
+                },
+                markArea: {
+                    silent: true,
+                    data: [[{
+                        xAxis: dates[0]
+                    }, {
+                        xAxis: dates[dates.length-1]
+                    }]]
+                },
+                data: values1
+            },
+            {
+                name: name2,
+                type:'line',
+                yAxisIndex:1,
+                animation: false,
+                areaStyle: {
+                    normal: {}
+                },
+                lineStyle: {
+                    normal: {
+                        width: 1
+                    }
+                },
+                markArea: {
+                    silent: true,
+                    data: [[{
+                        xAxis: dates[0]
+                    }, {
+                        xAxis: dates[dates.length-1]
+                    }]]
+                },
+                data: values2
+            }]
+        };  // end of option 
+   
+    myChart4.setOption(option4)
+
+    //鼠标响应事件：params.name 对应日期，params.data 净值数字
+    //idea 未来可以跳转到个股，组合，系统的页面。
+    myChart4.on('click', function (params) {
+    window.open('https://www.baidu.com/s?wd=' + encodeURIComponent(params.name)); 
+        });
+
+    // })
+    
+
+    </script>
+    <hr>
+    <table border="0.1"  class="table">
+        <caption>最近10个交易日策略和成份指数收益率</caption>
+        <tr>
+            <td>日期</td><td>策略净值</td><td>基准净值</td><td>成份A净值</td><td>成份B净值</td><td>成份C净值</td>
+        </tr>
+        {% for temp_date,row_info in units_last.items %}
+        <tr>
+            <td>{{ row_info.date }}</td>
+            <td>{{ row_info.strategy }}</td>
+            <td>{{ row_info.benchmark }}</td>
+            <td>{{ row_info.symbol_a }}</td>
+            <td>{{ row_info.symbol_b }}</td>
+            <td>{{ row_info.symbol_c }}</td>
+            
+        </tr>
+        {% endfor %}
+    </table> 
+
+
+    </section> 
+
+   
+
+<p>  </p>
+<p>  </p>
+<p>  </p>
+{% endblock content %}
+

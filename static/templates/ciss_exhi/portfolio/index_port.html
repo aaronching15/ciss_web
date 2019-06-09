@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+<meta charset="UTF-8"> <!-- for HTML5 -->
+<!-- The block items for this base html file is: {nav_sub, left_frame,menu,content } -->
+
+
+{% block nav_sub %}
+
+    <a id="a_nav" href="./core_port.html">核心组合 |Core portfolio</a> >>
+    <a id="a_nav" href="./last_port.html">最新组合 |Lastest portfolio</a> >>
+ 
+
+
+{% endblock nav_sub %}
+
+{% block left_frame %}
+    <!-- Menu in left frame -->
+    <h1 >投资组合实例 |CISS applications</h1> 
+    <p>explore details of portfolio developing process</p>
+    <hr>       
+    <h3>目录</h3>
+    <ul>
+    <li><a href="#core_port">核心组合 |Core portfolio </a></li> 
+    <li><a href="#last_port">最新组合 |Lastest portfolio </a></li> 
+    </ul>
+    <hr><hr>
+
+{% endblock left_frame %}
+
+
+{% block menu %}
+
+    <div id="menu_float">
+    <ul>
+    <li><a href="#core_port">核心组合 |Core portfolio </a></li> 
+    <li><a href="#last_port">最新组合 |Lastest portfolio </a></li> 
+    </ul>
+    </div>
+
+{% endblock menu %}
+
+
+{% block content %}
+    <style type="text/css">
+    .table{ font-size:12px; }
+
+    </style>
+
+    <section id="s1">  
+    <h3><a name="last_port" href="./portfolio/core_port.html">核心组合 |Core portfolio</a></h3>  
+    <hr>
+    {% if core_port_list %}
+        <ul>
+        <li>Name of portfolio |Author |Supervisor</li>
+        {% for port in core_port_list %}
+            <li><a href="/portfolio/{{ port.id }}/">{{ port.port_name }} |{{ port.port_author }} |{{ port.port_supervisor}}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No portfolio is available.</p>
+    {% endif %}
+
+    </section> 
+
+
+    <section id="s2">  
+
+    <h3><a name="last_port" href="./portfolio/last_port.html">最新组合 |Lastest portfolio</a></h3>  
+    <hr>
+    {% if latest_port_list %}
+        <ul>
+        <li>Name of portfolio |Author |Supervisor</li>
+        {% for port in latest_port_list %}
+            <li><a href="/portfolio/{{ port.id }}/">{{ port.port_name }} |{{ port.port_author }} |{{ port.port_supervisor}}|{{ port.port_path }}|{{ port.port_name }}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No portfolio is available.</p>
+    {% endif %}
+
+
+    </section> 
+
+
+
+
+{% endblock content %}
+

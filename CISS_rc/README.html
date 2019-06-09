@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<!-- 头部，内容的介绍展示区域 -->
+<meta charset="utf-8"> 
+<style type="text/css">
+    /* h3 {color:steelblue;}  */
+    #menu_float{color:steelblue;
+        position:fixed;
+        bottom: 50%;
+        right:40px;
+        margin-left: 70% ; /*为左侧留出70\%的空间*/
+        font-size:12px;  /*字体设置小点*/ 
+        border: 1px solid steelblue; /*  实线，dotted */
+        /* text-align:center;文字居中*/ 
+        border-radius:5px; /*倒角  */ 
+        background: #FFFAF0; /* #dddddd */
+        padding:3px 3px 3px 3px;/*元素所有内边距的宽度，上右，下左  */ 
+    } 
+    #left_frame{float: left;width: 70%; }
+    #sub_left{
+        width: 50%;
+        height: 350px;
+        background-color: #C5E9F3;
+        /*定义浮动，不定义的话，界面会乱*/
+        float: left;
+    }
+    #sub_right{
+        width: 50%;
+        height: 350px;
+        background-color: #F7575d;
+        float: right;
+    }
+    #page_ppt{
+        width: 100%;  /* 700  */
+        height: 480px;
+        background-color: #FFFAF0; /* #FFE4E1  */
+        float: left;
+        border: 1px solid #3d3b4f ;
+    }
+    #page_ppt_sub{
+        width: 100%;  /* 700  */
+        height: 2400px;
+        background-color: #FFFAF0; /* #FFE4E1  */
+        float: left;
+        border: 1px solid #3d3b4f ;
+    }
+    
+    #page_stop{
+        width: 100%;
+        height: 5px;
+        background-color: white; /* #FFE4E1  */
+        float: left;
+        /* border: 1px solid #3d3b4f ;*/
+    }
+</style>
+
+<title>CISS\README</title> 
+</head>
+
+<body> 
+<nav> 
+<a href="../index.html">INDEX</a> |
+<a href="../index_keti.html">KETI</a> |
+<a href="../index_sys.html">SYS</a> |
+<a href="../index_papers.html">PAPER</a> |  
+------ | <br>
+
+</nav> 
+
+<div id="left_frame">
+<h1>CISS  </h1> 
+<p>Intro...... </p>
+<hr>
+<h3>目录</h3>
+<ol>
+<li><a href="#todo">todo list</a></li>
+<li><a href="#intro">intro</a></li>
+<li><a href="#theory">a2</a></li>
+<li><a href="#module_stru">CISS_core 模块结构</a></li>
+<li><a href="#framework">a4</a></li>  
+</ol>
+
+<div id="menu_float">
+<ol>
+<li><a href="#todo">todo list</a></li>
+<li><a href="#intro">a1</a></li>
+<li><a href="#theory">a2</a></li>
+<li><a href="#module_stru">CISS_core 模块结构</a></li>
+<li><a href="#framework">a4</a></li>  
+</ol>
+
+</div>
+<hr>
+<h3><a name="todo">todo list </h3>
+<p>1,建立FAQ帮助文档
+source 通联/帮助文档%20-%20帮助%20-%20优矿.html </p>
+
+
+<h3><a name="howto">How to,FAQ </h3>
+<p>FAQ帮助文档
+source 通联/帮助文档%20-%20帮助%20-%20优矿.html </p>
+
+<hr>
+<h4>Q1: Questions on data managing?</h4>
+<h5>Q1.01:How to get stock financial and index constituents data?</h5>
+<p>See file in .\CISS_rc\apps\test_wind_funda.py </p>
+
+<h5>Q1.02:How to get&save stock financial and index constituents data?</h5>
+<p>See file in .\CISS_rc\apps\test_wind_funda.py.
+    line 28 GET RAW INDEX CONSTITUENTS AND WEIGHTS from Wind API.
+    operating function:Data_funda_csvJson_test | get_wind.py </p>
+
+<h5>Q1.03:How to import index constituents data?</h5>
+<p>generate dataG in Get_json_groupdata | stocks_funda_wash.py;</p>
+
+<h5>Q1.04:How to get fundamental indicators ?</h5>
+<p>Get fundamental indicators for given period and index constituents.
+See file in .\CISS_rc\apps\test_wind_funda.py. </p>
+
+<h5>Q1.04:How to calculate ABM models indicators ?</h5>
+<p>Get fundamental indicators for given period and index constituents </p>
+<p>path: .\ciss_web\CISS_rc\bin\
+    file: engine_portfolio.py line 196
+    ### METHOD1: get symbol list for 1 index 
+    ### step1 Get symbol list for all indexes 
+    ### step2 Calculate financial estimates for current period
+    ### calculate weights of asset allocation for industry hierachy from level1 to level3 
+    ### step3 calculate for anchor stocks in value and growth perspective
+    ### step4 calculate shadow enterprise value from anchor stocks in value and growth perspectives
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5></h5>
+<p> </p>
+
+
+<h3><a name="module_stru">CISS_core 模块结构| Module Structure of CISS_core</h3>
+<hr>
+<section>	
+CISS_core模块结构\ # China Investment Strategy System # China ICBCCS Stra. Sys.
+    # 初期主要参考了Django的结构。
+    apps：{
+        ACTIVE_BENCH:{'name':主动基准模型}
+        } ,
+        # 实际应用功能
+
+    client 
+        #　用户角度相关模块
+    config 
+        # configuration 
+    server
+        # 服务器端
+    admin,auth
+        # 行政管理
+    envs
+        # environments: utils,environment, 环境设置，辅助支持的调试软件
+    libs
+        # 引用的相关模块，包等
+    io # 不同格式数据进出
+    db:{
+        backends:[base,mysql,oracle,postgressql,sqlite3],models:0,migrations:0,
+        db_ciss:{},
+            # 放置模块相关的 .json 数据
+        logs:{}, # all kinds of logs
+        assets:[stock,cash,bonds,comodities,forex,realestates],
+            stock:[quan:{},qual:{}],
+            corp_funda:[],
+        indicators:{},func_stra：{}， signals:{},class_algo_opt:{},
+        trades:{},
+        ports:{},funds:{},
+        ,accounts:{},groups/departs{},users{},institutes:{},
+        markets:{},society:{},government:{},politics:{},global:{},
+        } # government 代替country, 每个politic party属于一个government管制下。
+    
+    bin:{ # models with theory,algorithms,
+        head:[asset,analyzer,strategy,signal,optimizer,trade,port,fund,account,institute,market,society,government,politics,global],
+        tree:{
+            init:{初始化树结构},dev:{树发展状态}
+            },
+        sys:{
+            init:{初始化系统},dev:{系统发展状态}
+            },
+        asset:{
+            
+            },
+        analyzer:{
+            init:{初始化分析模块},
+            },
+        strategy:{},
+        signal:{},
+        optimizer:{},
+        trade:{},
+        port:{},
+        fund:{},
+        account:{},
+        institute:{},
+        market:{},
+        society:{},
+        government:{},
+        politics:{},
+        global:{},
+        
+    },            
+    view:[http,visualization,templates,static ],
+    docs:{
+        head:[tutor,install,library,reference,HOWTOS,FAQs,bugs,copyrights,history,contact],
+        history:{} # 介绍模块发展历史
+        # documents
+        }
+    tests:[],
+        # use tests more and demo rare,
+    security:[],
+    coopdev:[git,svn],
+        # co-operation and develpment modules
+
+source {C:\Program Files\Anaconda3\Lib\site-packages\django;C:\zd_zxjtzq\RC_trashes\temp;C:\Program Files\Anaconda3\Lib\site-packages\django;
+}
+path C:\zd_zxjtzq\RC_trashes\temp\sys_stra_24h\CISS_rc\docs\README.html
+
+
+
+
+
+
+</section>
+
+<h3><a name="intro">CISS介绍</h3>
+<hr>
+<section>
+<ul>
+<li>软硬件环境准备</li>
+<li>策略模块初始化</li>
+<li>一个策略例子</li>
+<li>数据管理</li>
+<li>策略研究，协作过程</li>
+<li>其他，个性化，发布，</li>
+</ul>
+ref:文档参考： http://docs.getpelican.com/en/stable/
+
+
+
+
+
+
+
+
+
+
+</section>
+
+
+
+
+
+
+
+<hr>
+<footer> 
+by rc
+    <!--尾部，页脚通常包含文档的作者，著作权信息，链接的使用条款，联系信息等 -->
+</footer> 
+
+</div>
+</body>
+
+</html>

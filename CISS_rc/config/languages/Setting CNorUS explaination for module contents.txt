@@ -1,0 +1,3 @@
+Setting CNorUS explaination for module contents
+
+source£ºD:\keti_modules\vnpy\vnpy\trader\language\english\constents.py

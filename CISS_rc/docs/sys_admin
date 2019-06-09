@@ -1,0 +1,72 @@
+head{
+    sys_stra_24h
+    name of platform prepared: rcic | return of complex investment strategy system
+    temp=self
+    项目设计
+    项目设计\架构设计
+    项目设计\架构设计
+
+    项目设计\数据和接口
+    项目设计\数据和接口
+    项目设计\模块设计\A股权益策略\
+    项目设计\模块设计\港股权益策略\
+    项目设计\架构设计\arch_desi
+    项目设计\模块设计\半自动生成报告
+    需求分析
+    需求分析\业务需求
+    需求分析\业务需求\数据管理，交易分析，策略生命周期，策略合规，策略开发协作
+    
+    需求分析\用户需求
+    需求分析\用户需求\策略研究，组合经理，领导，出资方
+    需求分析\研究需求
+    需求分析\研究需求\同业策略开发分析，学术研究，资管行业发展方向
+
+    测试
+    测试\实例测试
+    测试\实例测试\平台实例，数据接口，架构性能，模块，用户
+    测试\演示和汇报
+    测试\
+}
+
+
+body{
+    sys_stra_24h\项目设计\模块设计\A股权益策略\
+  
+
+}
+body{
+    项目设计\模块设计\半自动生成报告
+        \投资
+        \研究
+        \宣传
+    应该要做的比传统模式报告的逻辑更完整，更严密。
+
+
+}
+body{
+    项目设计\模块设计\A股权益策略\行业
+    wind-产业链平台 
+    例子：芯片产业链 | 中信建投 通信团队
+    把特定产业链和券商的行业研究小组来承接，感觉这确实是一个很好的思路。
+    但是在multi-co-op 上还可以优化。
+
+
+    
+}
+body{
+    项目设计\模块设计\港股权益策略\
+    since 180726
+
+    todo
+    1，结合A股特点，建立Object 对象。
+    2，derived from wind\HK stock stat.\
+
+
+
+}
+body{
+    项目设计\架构设计\arch_desi
+    design ideal architecture by learn existing frameworks, digesting and than creating my own version.
+
+
+}

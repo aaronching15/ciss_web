@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+<meta charset="UTF-8"> <!-- for HTML5  -->
+<!-- The block items for this base html file is: {nav_sub, left_frame,menu,content } -->
+
+
+{% block nav_sub %}
+
+    <a id="a_nav" href="./core_stra.html">核心策略 |Core strategy</a> >>
+    <a id="a_nav" href="./last_stra.html">最新策略 |Lastest strategy</a> >>
+    <a id="a_nav" href="../portfolio/port_single.html">主动基准组合 |ABM portfolio</a> >>
+
+{% endblock nav_sub %}
+
+{% block left_frame %}
+    <!-- Menu in left frame -->
+    <h1 >投资策略实例 |CISS applications</h1> 
+    <p>explore details of strategy developing process</p>
+    <hr>       
+    <h3>目录</h3>
+    <ul>
+    <li><a href="#para_abm">主动基准模型参数设置| Parameters for ABM model</a></li>
+    <li><a href="#forecast_indocator">财务预测指标摘要| Financial forecast indicators</a></li> 
+    <li><a href="../portfolio/port_single.html">主动基准组合| Page for ABM portfolio </a></li> 
+    </ul>
+    <hr><hr>
+
+{% endblock left_frame %}
+
+
+{% block menu %}
+
+    <div id="menu_float">
+    <ul>
+    <li><a href="#para_abm">主动基准模型参数设置| parameters for ABM model</a></li>
+    <li><a href="#forecast_indocator">财务预测指标摘要| Financial forecast indicators</a></li> 
+    <li><a href="../portfolio/port_single.html">主动基准组合| Page for ABM portfolio </a></li> 
+    </ul>
+    </div>
+
+{% endblock menu %}
+
+
+{% block content %}
+    <h4><a name="para_abm">主动基准模型参数设置| parameters for ABM model：</h4>
+    <!--  网页的值传到服务器是通过 <input> 或 <textarea>标签中的 name 属性来传递的
+    source  https://code.ziqiangxuetang.com/django/django-forms.html    
+    wrong version : <form action="/port_single/" method="post">   -->
+    <!--Stra name   Stra code   Stra hier 1 Stra hier 2 Stra hier 3 Stra hier 4 -->
+    <form action="{% url "stra_abm_rc" %}" method="post" accept-charset="utf-8">
+    {% csrf_token %}
+    <table border="0">
+    <tr><td>策略名称|Strategy Name:  <br></td>
+        <td><input type="text" name="stra_name" value="abm_strategy"></td></tr>
+    <tr><td>定期调整时间|Adjust time：</td>
+        <td><select type="text" name="date_adjust">
+              <option value ="2014-05-31">2014-05-31</option>
+              <option value ="2014-11-30">2014-11-30</option> 
+              <option value ="2015-05-31">2015-05-31</option>
+              <option value ="2015-11-30">2015-11-30</option> 
+              <option value ="2016-05-31">2016-05-31</option>
+              <option value ="2016-11-30">2016-11-30</option> 
+              <option value ="2017-05-31">2017-05-31</option>
+              <option value ="2017-11-30">2017-11-30</option> 
+              <option value ="2018-05-31">2018-05-31</option>
+              <option value ="2018-11-30">2018-11-30</option> 
+            </select>
+        </td></tr>
+    <tr>
+        <td>国家或地区市场|Country or region:<br></td>
+        <td><select type="text" name="country">
+              <option value ="cn">中国A股</option>
+              <option value ="us">美国股票</option>
+              <option value ="hk">香港股票</option> 
+            </select></td></tr>
+    <tr>
+        <td>行业或市场代码|GICS or market code:<br></td>
+        <td><select type="text" name="code_ind">
+              <option value ="999">市场</option> 
+              <option value ="10">能源</option> 
+              <option value ="15">材料</option>
+              <option value ="20">工业</option> 
+              <option value ="25">可选消费</option>
+              <option value ="30">日常消费</option> 
+              <option value ="35">医疗保健</option>
+              <option value ="40">金融</option> 
+              <option value ="45">信息技术</option> 
+              <option value ="50">电信服务</option>
+              <option value ="55">公用事业</option> 
+              <option value ="60">房地产</option> 
+            </select></td></tr>
+    <tr>
+        <td>风格|Style:<br></td>
+        <td><select type="text" name="style">
+              <option value ="value">价值</option> 
+              <option value ="growth">成长</option>  
+            </select></td></tr>
+    </table>
+         
+    <input type="submit" value="提交">
+    </form>
+    <table>
+    <tr><td>日期</td><td>国家或地区市场</td><td>行业代码</td><td>风格</td></tr>
+    <tr><td>{{ date_adjust }}</td><td>{{ country }} </td>
+        <td>{{ code_ind}} </td><td>{{ style }} </td></tr>
+    </table>
+    <hr>
+
+    <style type="text/css">
+    .table{ font-size:12px; }
+
+    #td01{ width: 60px; }
+    </style>
+
+    <section id="s1">  
+    <h3><a name="forecast_indocator">财务预测指标摘要| Financial forecast indicators
+    </a></h3>
+    <hr>
+    <!--port_rc181123_w_allo_value_60 for all ind1 in A shares || 
+    port_rc181205_market_value_999  ||  port_rc181130_w_allo_growth_999
+    port_rc181227_hk_market_value_999 ; port_rc181227_us_market_value_999     -->
+  
+    <table border="0.1"  class="table">
+        <caption>锚定价值前20个股：预测指标，锚定个股，相对系数，行业配置| 更新时间：{{ date_adjust }}</caption>
+        {% if style == "value"  %}
+        <!-- ["code","profit_q4_es","profit_sum_ind1","ind1_pct_profit_q4_es","para_value",
+        "w_allo_value_ind1","revenue_q4_es","revenue_sum_ind1","cf_oper_q4_es",
+        "w_allo_value_ind1_ind2","w_allo_value_ind2_ind3 ","code_anchor_value",
+        "profit_anchor_value","profit_dif_anchor_value"]   
+        -->
+        <tr>
+            <td>代码|亿元,%</td><td>证券名称</td><td>一级行业</td><td>当年预测净利润</td><td>一级行业预测净利润</td><td>净利润一级行业占比 </td><td>相对价值锚系数</td>
+            <td>一级行业配置比例</td><td>当年预测总收入</td><td>一级行业总收入</td>
+            <td  id="td01">所处二级在一级行业配置比例</td><td>锚定个股</td><td>锚定个股净利润</td>
+            <td>锚定个股净利润增长值</td>
+        </tr>
+        {% for temp_index,temp_row in funda_indicators.items %}
+        <tr>
+            <td>{{ temp_row.code }}</td>
+            <td id="td01">{{ temp_row.name }}</td>
+            <td id="td01">{{ temp_row.ind_1_name }}</td>
+            <td>{{ temp_row.profit_q4_es }}</td>
+            <td>{{ temp_row.profit_sum_ind1 }}</td>
+            <td>{{ temp_row.ind1_pct_profit_q4_es }}</td>
+            <td>{{ temp_row.para_value }}</td>
+            <td>{{ temp_row.w_allo_value_ind1 }}</td>
+            <td>{{ temp_row.revenue_q4_es }}</td>
+            <td>{{ temp_row.revenue_sum_ind1 }}</td>
+            <td>{{ temp_row.w_allo_value_ind1_ind2 }}</td> 
+            <td id="td01">{{ temp_row.name_anchor }}</td>
+            <td>{{ temp_row.profit_anchor_value }}</td>
+            <td>{{ temp_row.profit_dif_anchor_value }}</td>
+            
+        </tr>
+        {% endfor %}
+
+        {% elif style == "growth"  %}
+        <!--"code","profit_q4_es_dif","profit_dif_sum_ind1","para_growth",
+        "w_allo_growth_ind1","revenue_q4_es_dif","cf_oper_q4_es_dif",
+        "profit_q4_es_dif_pct","revenue_q4_es_dif_pct",
+        "cf_oper_q4_es_dif_pct","w_allo_growth_ind1_ind2",
+        "code_anchor_growth","profit_anchor_growth","profit_dif_anchor_growth"]
+        -->
+        <tr>
+            <td>代码|亿元,%</td><td>证券名称</td><td>一级行业</td><td>当年预测净利润增长值</td><td>一级行业预测净利润总增长</td>
+            <td>相对成长锚系数</td><td>一级行业配置比例</td><td>当年预测总收入增长值</td>
+            <td>当年预测经营性现金流增长值</td>
+            <td  id="td01">所处二级在一级行业配置比例</td>
+            <td>锚定个股代码</td><td>锚定个股净利润成长指标</td><td>锚定个股成长指标变动率</td>
+        </tr>
+        {% for temp_index,temp_row in funda_indicators.items %}
+        <tr>
+            <td>{{ temp_row.code }}</td>
+            <td id="td01">{{ temp_row.name }}</td>
+            <td id="td01">{{ temp_row.ind_1_name }}</td>
+            <td>{{ temp_row.profit_q4_es_dif }}</td>
+            <td>{{ temp_row.profit_dif_sum_ind1 }}</td>
+            <td>{{ temp_row.para_growth }}</td> 
+            <td>{{ temp_row.w_allo_growth_ind1 }}</td> 
+            <td>{{ temp_row.revenue_q4_es_dif }}</td>
+            <td>{{ temp_row.cf_oper_q4_es_dif }}</td> 
+            <td>{{ temp_row.w_allo_growth_ind1_ind2 }}</td> 
+            <td  id="td01">{{ temp_row.name_anchor }}</td>
+            <td>{{ temp_row.profit_anchor_growth }}</td>
+            <td>{{ temp_row.profit_dif_anchor_growth }}</td>
+            
+        </tr>
+        {% endfor %}
+        {% endif %}
+
+    </table> 
+    
+
+    </section> 
+
+
+
+
+{% endblock content %}
+

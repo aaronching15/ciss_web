@@ -1,0 +1,95 @@
+{% extends "base_docs.html" %}
+<meta charset="UTF-8"> <!-- for HTML5 -->
+<!-- The block items for this base html file is: {nav_sub, left_frame,menu,content } -->
+
+
+
+{% block left_frame %}
+
+    <h1 >中式投资策略系统模块 |CISS </h1> 
+    <p>A strategy platform supportting 24 hours strategy development for professional investment</p>
+    <hr>       
+    <div id="menu_float">
+    <ul>
+    <li><a href="#5min_ciss">5分钟入手 |5 Minutes to CISS</a></li> 
+    <li><a href="#esse_func">核心功能 |Essential Functions</a></li>  
+    <li><a href="#data_manage">数据管理 |Data Management</a></li>  
+    <li><a href="#stra_ana">策略分析 |Strategy Analysis</a></li>  
+    <li><a href="#port_simu">模拟组合 |Portfolio Simulation</a></li>  
+    <li><a href="#multi_asset">多资产管理 |Multi-Asset Investment</a></li>  
+    <li><a href="#stra_eval">策略评估及可视化 |Strategy Evaluation and Visualization</a></li>  
+    <li><a href="#web_platform.html">策略平台网站 |Strategy Platform as Website</a></li>  
+    <li><a href="#update_coop_opensource">更新，协作，和开源 |Update,Cooperation and Open source</a></li>  
+    </ul>
+    </div>
+
+
+{% endblock left_frame %}
+
+{% block menu %}
+
+{% endblock menu %}
+
+
+{% block content %}
+
+<h3><a name="web_plat">策略平台网站 |Strategy Platform as Website</a></h3>  
+<hr>
+<p>希望用户通过本页面能快速地了解策略平台网站的主要功能。  </p>
+<br>
+
+<h4><a name="intro">简要介绍 |Brief Introduction</a></h4>  
+<hr>
+<p>本平台使用python网络开源模块Django作为平台网站架构的框架。Django发展之初就是为了帮助新闻网站快速将功能性的概念实现成公开的服务(ref.)。相比于Pyramid,Flask等其他网络模块，Django为平台拥有者提供了一系列模块如模板、表单、路由、认证、基本数据库管理等。这使得没有网站开发经验的用户可以通过1,2行代码，获得一个可以使用的网站。由于投资策略的开发过程涉及到复杂多变的数据来源、不断迭代更新的策略算法与逻辑、多种用户对应的权限差异、以及策略展示的个性化图表等都需要一个全能型的网站框架提供服务。从开源社区内动态更新的角度，程序开发问答平台StackFlow上Django已经有超过80000个问题，能为策略开发团队提供丰富的技术支持。结合策略平台的用户不具备太多网站开发的技术背景，一个类似Django的框架是当前性价比最优的方案。<br>
+ref: https://docs.djangoproject.com/en/2.1/ </p>
+
+
+<h4><a name="get_help">获取帮助 |Get help</a></h4>  
+<hr>
+<p>关于Django的使用可以参考 https://docs.djangoproject.com，关于策略平台网站开发的使用可以参考本页面。</p>
+
+<h4><a name="app_model">平台应用:策略相关模型 |Application:Strategy Models</a></h4>  
+<hr>
+<p>Djnago框架下使用的是关系对象映射模型（Object Relational Mapping，简称ORM）。这使得用户完全不需要具备sql等数据库语言，仅需要改变models.py文件就可以修改数据库中的表格，如资产表格、策略表格、组合表格等。</p>
+<p>策略模型主要包括展示策略系统中的策略列表和展示单策略。用户可以通过models.py文件管理策略模型的所有特征(数据表单中的字段)，也可以通过连接策略平台项目根目录的的数据库文件中进行维护。对于单个策略模型，网站模型仅收录策略之间通用的特征，个性化的特征应通过以下的算法逻辑和模板实现。这样设计的主要目的之一是努力控制网站平台内生数据库的大小。
+</p>
+
+<h4><a name="app_logic">平台应用:策略算法逻辑 |Application:Strategy Logic</a></h4>  
+<hr>
+<p>{todo views.py }
+我们将策略平台中策略展示的业务逻辑主要包括策略个性化开发过程的展示过程和策略对应组合的标准化管理过程。个性化策略开发的角度，开发过程会遇到各种新的变量和特征值，例如新获取的数据指标或定性类型的假设；而策略组合可以对策略和多种策略的价值进行多维度的跟踪和评价。技术角度，ciss网站框架中通过views.py文件可以响应前端网页请求：从后端数据库提取数据，引入策略算法和业务逻辑计算后，输出标准化的展示内容。
+</p>
+<p>个性化策略的业务逻辑主要包括两部分：从网站数据库获取最新策略列表和核心(可以自由定义，如对应特定策略管理人或包括特定类型的策略)策略列表展示策略汇总网页、展示单个策略的重要信息(<a href="/ciss_exhi/strategy/stra_bond_jny.html">如：Bond Strategy by jny</a>)。    
+
+</p>
+<p>标准化组合的业务逻辑主要包括两部分：从网站数据库获取最新组合列表和核心(可以自由定义，如对应特定策略管理人或包括特定类型的组合)组合列表展示组合汇总网页、展示单组合的重要信息(<a href="/ciss_exhi/portfolio/port_single.html">如：Single Portfolio</a>)。    
+
+</p>
+
+<h4><a name="app_template">平台应用:策略内容和模板 |Application:Contents and Templates</a></h4>  
+<hr>
+<p>{todo：介绍 策略组，单策略，组合组，单组合}
+算法逻辑计算出的核心信息需要传入模板网页，渲染成最终展示的网页。
+
+</p>
+
+
+<h4><a name="plat_admin">平台管理|Platform Admin</a></h4>  
+<hr>
+<p>{todo}通过admin.py文件，用户可以设置管理界面需要展示的不同表格，并对表格数据进行维护。</p>
+
+<h4><a name="plat_db">平台数据管理|Platform Data Management</h4>  
+<hr>
+<p>{todo,重点是介绍和外部数据的交互。如引入外部数据等。}  </p>
+
+
+
+
+ 
+<p>  </p>
+<p>  </p>
+<p>  </p>
+<p>  </p>
+{# <p><a href="/ciss_exhi/test/test.html">Download CSV  </p> #}
+
+{% endblock content %}

@@ -1,0 +1,16 @@
+,class1,class2,class_yrs,name,symbol,symbol_full_price,symbol_net_price,symbol_total_return
+1,总指数族,综合类指数,total_value,中债-综合全价指数,,CBA00203.CS,CBA00202.CS,CBA00201.CS
+2,总指数族,综合类指数,yrs_0_1,中债-综合全价指数,,CBA00213.CS,CBA00212.CS,CBA00211.CS
+3,总指数族,综合类指数,yrs_1_3,中债-综合全价指数,,CBA00223.CS,CBA00222.CS,CBA00221.CS
+4,总指数族,综合类指数,yrs_3_5,中债-综合全价指数,,CBA00233.CS,CBA00232.CS,CBA00231.CS
+5,总指数族,综合类指数,yrs_5_7,中债-综合全价指数,,CBA00243.CS,CBA00242.CS,CBA00241.CS
+6,总指数族,综合类指数,yrs_7_10,中债-综合全价指数,,CBA00253.CS,CBA00252.CS,CBA00251.CS
+7,总指数族,综合类指数,yrs_10_more,中债-综合全价指数,,CBA00263.CS,CBA00262.CS,CBA00261.CS
+8,分类指数,代偿期限,total_value,中债-7-10年国开行债券指数全价指数,,CBA05203.CS,CBA05202.CS,CBA05201.CS
+9,分类指数,信用等级 ,yrs_0_1,中债-企业债AAA全价指数,,CBA04213.CS,CBA04212.CS,CBA04211.CS
+10,分类指数,信用等级 ,yrs_1_3,中债-企业债AAA全价指数,,CBA04223.CS,CBA04222.CS,CBA04221.CS
+11,分类指数,信用等级 ,yrs_3_5,中债-企业债AAA全价指数,,CBA04233.CS,CBA04232.CS,CBA04231.CS
+12,分类指数,信用等级 ,yrs_5_7,中债-企业债AAA全价指数,,CBA04243.CS,CBA04242.CS,CBA04241.CS
+13,分类指数,信用等级 ,yrs_7_10,中债-企业债AAA全价指数,,CBA04253.CS,CBA04252.CS,CBA04251.CS
+14,分类指数,信用等级 ,yrs_10_more,中债-企业债AAA全价指数,,CBA04263.CS,CBA04262.CS,CBA04261.CS
+15,现金工具,现金工具,yrs_0_1,中债-货币市场基金可投资债券指数,CBA02203.CS,CBA02202.CS,CBA02201.CS,货币市场基金可投资债券

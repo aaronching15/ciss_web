@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+<meta charset="UTF-8"> <!-- for HTML5 -->
+<!-- The block items for this base html file is: {nav_sub, left_frame,menu,content } -->
+
+
+{% block nav_sub %}
+
+    <a id="a_nav" href="./core_stra.html">核心策略 |Core strategy</a> >>
+    <a id="a_nav" href="./last_stra.html">最新策略 |Lastest strategy</a> >>
+ 
+
+
+{% endblock nav_sub %}
+
+{% block left_frame %}
+    <!-- Menu in left frame -->
+    <h1 >投资策略实例 |CISS applications</h1> 
+    <p>explore details of strategy developing process</p>
+    <hr>       
+    <h3>目录</h3>
+    <ul>
+    <li><a href="#core_stra">核心策略 |Core strategy </a></li> 
+    <li><a href="#last_stra">最新策略 |Lastest strategy </a></li> 
+    <li><a href="#hierachy_stra">策略层次分类 |Strategy Hierachy</a></li> 
+    <li><a href="#head_stra">策略概要 |Strategy snapshot</a></li> 
+    </ul>
+    <hr><hr>
+
+{% endblock left_frame %}
+
+
+{% block menu %}
+
+    <div id="menu_float">
+    <ul>
+    <li><a href="#core_stra">核心策略 |Core strategy </a></li> 
+    <li><a href="#last_stra">最新策略 |Lastest strategy </a></li> 
+    <li><a href="#hierachy_stra">策略层次分类 |Strategy Hierachy</a></li> 
+    <li><a href="#head_stra">策略概要 |Strategy snapshot</a></li> 
+    </ul>
+    </div>
+
+{% endblock menu %}
+
+
+{% block content %}
+    <section id="s1">  
+    <h3><a name="last_stra" href="./strategy/core_stra.html">核心策略 |Core strategy</a></h3>  
+    <hr>
+
+    <table border="0.1"  class="table">
+        <caption>核心策略列表</caption>
+        <tr>
+            <td>策略序号</td><td>策略名称</td><td>策略研究员</td><td>策略管理人</td>
+            <td>策略链接</td>
+        </tr>
+    {% for stra in core_stra_list %}
+        <tr>
+            <td>{{ stra.id }}</td>
+            <td>{{ stra.stra_name }}</td>
+            <td>{{ stra.stra_author }}</td>
+            <td>{{ stra.stra_supervisor}}</td>
+            <td><a href="/ciss_exhi/strategy/{{ stra.stra_link }}.html"> {{ stra.stra_link }}</a></td>
+        </tr>
+    {% endfor %}
+    </table>
+
+    </section> 
+
+
+    <section id="s2">  
+
+    <h3><a name="last_stra" href="./strategy/last_stra.html">最新策略 |Lastest strategy</a></h3>  
+    <hr>
+
+    <table border="0.1"  class="table">
+        <caption>最新策略列表</caption>
+        <tr>
+            <td>策略序号</td><td>策略名称</td><td>策略研究员</td><td>策略管理人</td>
+            <td>策略链接</td>
+        </tr>
+    {% for stra in latest_stra_list %}
+        <tr>
+            <td>{{ stra.id }}</td>
+            <td>{{ stra.stra_name }}</td>
+            <td>{{ stra.stra_author }}</td>
+            <td>{{ stra.stra_supervisor}}</td>
+            <td><a href="/ciss_exhi/strategy/{{ stra.stra_link }}.html"> {{ stra.stra_link }}</a></td>
+        </tr>
+    {% endfor %}
+    </table>
+
+    </section> 
+
+    <section>
+    <h3><a name="hierachy_stra">策略层次分类 |Strategy Hierachy </a></h3>  
+    <hr>
+
+    <table border="0.1"  class="table">
+    <caption>策略层次分类 |Strategy Hierachy </caption>
+    <tr>
+        <td>序号</td><td>一级分类</td><td>二级分类</td><td>三级分类</td></tr>
+    <tr><td>1</td><td>策略概要</td><td></td></tr>
+    <tr><td>2</td><td>财务预测和估值</td><td></td>    </tr>
+    <tr><td>3</td><td>公司（股票）</td><td></td>    </tr>
+    <tr><td>4</td><td>行业</td><td>产业链</td>    </tr>
+    <tr><td>5</td><td>空间：城镇，地区，国际</td><td></td>    </tr>
+    <tr><td>6</td><td>宏观经济总量</td><td></td>    </tr>
+    <tr><td>7</td><td>金融系统</td><td></td>    </tr>
+    <tr><td>7</td><td>金融系统</td><td>资产管理</td>
+        <td><a href="././stra_single.html">资产管理基准</a></td></tr>
+    <tr><td>7</td><td>金融系统</td><td>利率</td><td>价格分位数统计</td></tr>
+    <tr><td>8</td><td>用户分析</td><td></td>    </tr>
+    <tr><td>9</td><td>策略评估和分析</td><td></td>    </tr>
+    <tr><td>10</td><td>财务预测和估值</td><td></td>    </tr>
+
+
+    </table> 
+ 
+
+
+    </section> 
+
+   <section>
+    <h3><a name="head_stra">策略概要:主动基准模型 |Strategy snapshot </a></h3>  
+    <hr>
+    <div id="menu_sub">
+    <ul>
+    <li><a href="#stra_intro">绪论| Introduction </a></li> 
+    <li><a href="#stra_theory">经典理论和模型| Theory and model</a></li> 
+    <li><a href="#stra_empirical">策略实证| Empirical </a></li> 
+    <li><a href="#stra_conclusion">策略结论| Conclusion</a></li> 
+    </ul>
+    </div>
+
+
+
+
+    <!--
+    {% if df_stra %}
+        <table border="0.1"  class="table">
+        <caption>交易计划统计 | Staticstics of trade plans </caption>
+        <tr>
+            <td>月份|万</td><td>权重变动比例</td><td>交易总金额</td><td>交易总数量</td>
+            <td>权重变动比例绝对值</td><td>权重增加比例</td><td>权重减少比例</td>
+        </tr>
+        {% for temp_date,temp_tp_summ in port_tp_summ.items %}
+        <tr>
+            <td>{{ temp_tp_summ.date }}</td>            
+            <td>{{ temp_tp_summ.weight_dif }}</td>
+            <td>{{ temp_tp_summ.total_amount }}</td>
+            <td>{{ temp_tp_summ.num }}</td>
+            <td>{{ temp_tp_summ.weight_dif2 }}</td>
+            <td>{{ temp_tp_summ.weight_dif_add }}</td>
+            <td>{{ temp_tp_summ.weight_dif_minus }}</td>
+ 
+        </tr>
+        {% endfor %}
+
+        </table> 
+    {% else %}
+        <p>No portfolio:account stock is available.</p>
+
+    {% endif %}
+    -->
+
+    </section> 
+
+
+{% endblock content %}
