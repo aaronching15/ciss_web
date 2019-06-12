@@ -620,35 +620,33 @@ print( "mu_bl vs miu return of_asset  \n", pd.DataFrame([mu_bl, mu_asset_df],ind
 ################################################################
 ### Calculate covariance， method 1 :reference:Bayes,eq.(25),(26)
 ### note：若发生omega不可逆，则需要确保p_view matrix 是full rank
-## cov_bl= [(tau*sigma)^-1 +P_trans*omega^-1 *P ]^-1 
-temp_c1 = np.linalg.inv( tau*sigma )
-temp_c2 = np.matmul( np.transpose(p_views), np.linalg.inv(omega)  )
-temp_c2 =  np.matmul( temp_c2, p_views) 
-cov_bl = np.linalg.inv( temp_c1 +temp_c2 )
+###  cov_bl= [(tau*sigma)^-1 +P_trans*omega^-1 *P ]^-1 
+# temp_c1 = np.linalg.inv( tau*sigma )
 
-# print( "cov_bl \n" , cov_bl )
-temp_c3 = np.matmul( np.linalg.inv( omega )  , np.transpose(p_views) ) 
+# temp_c2 = np.matmul( np.transpose(p_views), np.linalg.inv(omega)  )
+# temp_c2 =  np.matmul( temp_c2, p_views) 
+# cov_bl = np.linalg.inv( temp_c1 +temp_c2 )
 
-todo
-print( np.shape(p_views ) )
-print( np.shape(temp_c3 ) )
+# # print( "cov_bl \n" , cov_bl )
+# temp_c3 = np.matmul( np.linalg.inv( omega )  , p_views ) 
 
-temp_c3 = np.matmul( np.transpose(p_views) , temp_c3 )
-M_post_m2 = np.linalg.inv( temp_c1 , temp_c3 )
-M_post = M_post_m1
+# temp_c3 = np.matmul( np.transpose(p_views) , temp_c3 )
+# # 15个股票，目标是 15*15 ，p_views is (6,15)
+# M_post_m1 = np.linalg.inv( temp_c1 + temp_c3 )
+# M_post = M_post_m1
 
 
 ################################################################
 ### Calculate covariance， method 2:reference:eq.(30)
-# temp_c1 = tau*sigma
-# temp_c2 = np.matmul( tau*sigma , np.transpose(p_views) ) 
+temp_c1 = tau*sigma
+temp_c2 = np.matmul( tau*sigma , np.transpose(p_views) ) 
 
-# temp_c3 = tau* np.matmul(  np.matmul( p_views,sigma ) ,  np.transpose(p_views)  ) + omega
-# temp_c3 = np.linalg.inv( temp_c3 )
-# # source: Bl in detail, eq.(26)
-# temp_c4 = tau* np.matmul( p_views,sigma )
-# M_post_m2 = temp_c1 - np.matmul( np.matmul( temp_c2,temp_c3), temp_c4 )
-# M_post = M_post_m2
+temp_c3 = tau* np.matmul(  np.matmul( p_views,sigma ) ,  np.transpose(p_views)  ) + omega
+temp_c3 = np.linalg.inv( temp_c3 )
+# source: Bl in detail, eq.(26)
+temp_c4 = tau* np.matmul( p_views,sigma )
+M_post_m2 = temp_c1 - np.matmul( np.matmul( temp_c2,temp_c3), temp_c4 )
+M_post = M_post_m2
 
 
 
@@ -744,7 +742,8 @@ print(np.round(  np.matmul( ret_asset_df.mean() ,w_mkt )*52  ,4 ), np.round(  np
     最优化模型：在协方差小于等于市场组合限制下，组合平均收益越高越好
 
 '''
-### Method 2 ,eq.(30), no inverse of Omega
+###########################################################################
+### Method 2 ,eq.(30), || use quotation data for only 5.5 years 
 # Ana: BL_raw,矩阵计算的方式会得到负值，完全不符合实际情况，特别是会出现-21,21这样的负值。
 # ret_port{BL_raw,{ALL, rolling_window}; BL_opt:{ALL, rolling_window}; mkt_opt:{ALL, rolling_window} }
 # tau=1    || 0.3553 0.7211 ;0.2071 0.4416 , 0.2699, 0.2709
@@ -781,8 +780,40 @@ print(np.round(  np.matmul( ret_asset_df.mean() ,w_mkt )*52  ,4 ), np.round(  np
     # BL opt
     # [0.     0.3845 0.     0.0199 0.5956 0.     0.     0.     0.     0. 0.     0.     0.     0.     0.    ]
 
+###########################################################################
+### Method 1 ,eq.(25),(26) | all hist quotation based on csi300 
+# tau=0.500|| 0.2462 0.4271 ; 0.2125 0.3079 ; 0.2418 0.3118
+    # BL matrix ||BL opt || market OPT.
+    # [ 0.0869  0.1605  0.0568  0.1096 -0.0397  0.     -0.      0.5383 -0.1114 -0.1671  0.      0.     -0.341   0.1897  0.3423] 
+    # [ 0.      0.0908  0.      0.      0.      0.      0.      0.4574  0.      0.  0.      0.      0.      0.129   0.2509] 
+    # [ 0.      0.      0.      0.0223  0.      0.      0.      0.6911  0.      0.  0.      0.      0.      0.2846  0.002 ]
 
-### Method 1 ,eq.(25),(26)
+# tau=0.05 || 0.3064 0.5231 ;0.2322 0.3384 ;0.2418 0.3118
+    # BL matrix ||BL opt || market OPT.
+    # [ 0.1062  0.1613  0.0576  0.1173  0.0153 -0.     -0.      0.6813 -0.1515 -0.2272 -0.     -0.     -0.3873  0.2711  0.3892]
+    # [ 0.      0.0813  0.      0.      0.      0.      0.      0.5189  0.      0.  0.      0.      0.      0.1154  0.2843]
+    # [ 0.      0.      0.      0.0223  0.      0.      0.      0.6911  0.      0.  0.      0.      0.      0.2846  0.002 ]
+# tau=0.025|| 0.3108 0.5298;0.2328 0.34; 0.2418 0.3118
+    # BL matrix ||BL opt || market OPT.
+    # [ 0.1075  0.1604  0.0573  0.1172  0.0206 -0.     -0.      0.6918 -0.1544 -0.2316 -0.      0.     -0.3901  0.2777  0.392 ]
+    # [ 0.      0.0805  0.      0.      0.      0.      0.      0.5236  0.      0.  0.      0.      0.      0.109   0.287 ]
+    # [ 0.      0.      0.      0.0223  0.      0.      0.      0.6911  0.      0.  0.      0.      0.      0.2846  0.002 ]
+
+###########################################################################
+### Method 2 ,eq.(20) | all hist quotation based on csi300 
+# notes: method 1 和method2 的收益率、weights结果是一样的。
+# tau=0.500|| 0.2462 0.4271 ;0.2125 0.3079;0.2418 0.3118
+    # BL matrix ||BL opt || market OPT.
+    # [ 0.0869  0.1605  0.0568  0.1096 -0.0397  0.     -0.      0.5383 -0.1114 -0.1671  0.      0.     -0.341   0.1897  0.3423]
+    # [ 0.      0.0908  0.      0.      0.      0.      0.      0.4574  0.      0.  0.      0.      0.      0.129   0.2509] 
+    # [ 0.      0.      0.      0.0223  0.      0.      0.      0.6911  0.      0.  0.      0.      0.      0.2846  0.002 ] 
+
+
+
+
+
+
+
 
 
 
