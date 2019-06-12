@@ -75,7 +75,11 @@ class wind_api():
         # todo 用来存放Wind历史数据的文件 file_path0=  D:\data_Input_Wind
 
         import csv
+        # version before 190612 2115 
         file_path=file_path0 +'Wind_'+ code +'_'+date+'_'+time_stamp+ '.csv'
+
+        
+
         # file_path2 = file_path0 + 'Wind_' + code+'_'+date+'_'+time_stamp + '_updated' + '.csv'
         #  Python中的csv的writer，打开文件的时候，要小心， 要通过binary模式去打开，即带b的，比如wb，ab+等;
         # 而不能通过文本模式，即不带b的方式，w,w+,a+等，否则，会导致使用writerow写内容到csv中时，产生对于的CR，导致多余的空行。

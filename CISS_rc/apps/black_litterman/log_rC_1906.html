@@ -437,6 +437,128 @@ todo
 
 </p>
 
+<h3><a name="190610">190610</a></h3> 
+<p>
+done
+1，
+
+todo
+1,BL:下载历史宽基金指数数据，周或月频率计算。
+1.1，资产选择
+
+
+
+</p>
+
+<h5>矩阵求逆引理</h5>
+<p> 
+#2x2 矩阵，矩阵相乘
+print "\n a mul b:\n",a.dot(b.T)
+
+#2x3矩阵，矩阵点乘
+print "\n a dot b: \n",a*b
+
+#2x3矩阵，矩阵点除
+print "\n a/b \n:",a/np.linalg.inv(b)
+
+#求迹
+print "\n a trace",np.trace(a) 
+
+#特征，特征向量
+eigval,eigvec = np.linalg.eig(a) 
+#eigval = np.linalg.eigvals(a) #直接求解特征值
+
+</p>
+
+<h3><a name="190611">190611</a></h3> 
+<p>
+done
+190610
+1，cs，pcf，pass
+2, BL历史收益率数据弄了一半
+190611
+1,BL:下载历史宽基金指数数据，周或月频率计算。
+2,test_bl.py 模型跑通了。
+
+
+</p>
+<h5>BL\收益率数据</h5>
+<p> 
+功能：获取多资产历史收益率
+
+steps：1，引入benchmark指数，指定时间区间，计算bench的周收益率
+2，对于每个资产，按照bench的周时间序列，计算周收益率数据
+
+benchmark：000300.SH
+asset：["601318.SH","600519.SH","600036.SH","000651.SZ","000333.SZ","601166.SH","600030.SH","600276.SH","601398.SH","000002.SZ","000001.SZ","000725.SZ","600104.SH","600900.SH","600009.SH"  ]
+
+notes:指数权重时每半年都在变的。
+
+### index_col="date" :把columns中的"date"设置成index的值，并且columns中去掉date
+bench_chg_w = pd.read_csv( path_out+ 'bench_chg_w.csv',index_col="date" )
+
+
+###Qs market 和BL方式算出来的值是一样的，初步怀疑可能是资产收益率数据量太小的原因，也有可能是计算过程有问题，也有可能是最优化模型有问题。
+# Ana：加了一行资产收益率数据，对结果没有影响
+# 该结果只使用了86.08%的仓位，似乎不能体现最大化风险收益比的问题
+# [0.2275 0.6174 0.     0.016  0.    ]
+Qs:之前5个资产算出来BL结果和market_eq是一样
+Ans：是代码的问题，w_bl = res2.x，原来是 w_bl = res.x，导致都是引用第一次opt.的结果！
+data：
+1，tau=0.5
+weights of optimal portfolio by BL
+    [0.     0.3447 0.0543 0.1528 0.3322 0.     0.     0.     0.     0.
+     0.     0.     0.116  0.     0.    ]
+    weights of market
+    [0. 0. 0. 0. 0. 0. 0. 1. 0. 0. 0. 0. 0. 0. 0.]
+
+Qs:line 628,covariance diff 协方差的差异还是很小。
+Ana：怀疑是mu_bl计算过程有误，重复乘了tau，导致数值较小
+    location:line 571
+    old :temp_p2 = tau*np.matmul( p_views, temp_p1 ) + omega
+    new :temp_p2 = np.matmul( p_views, temp_p1 ) + omega
+
+    location: line 619
+    old : temp_c2 = np.matmul( np.transpose(p_views), omega  )
+    new : temp_c2 = np.matmul( np.transpose(p_views), np.linalg.inv(omega)  )
+    ref : Bayes theorem for the estimation model, expanded fomular for P(A|B)
+
+Qs：BL原始的矩阵计算结果在无单资产权重限制的条件下，无法满足投资实践的需求。随tau值变小甚至会出现几倍、几十倍的权重。
+    随tau值变动，BL_opt 最优化计算在100周区间内年化平均收益介于【0.173,0.2071】，均小于 mkt_opt的 0.2699。
+    随tau值变动，BL_opt 最优化计算在5.5年区间内年化平均收益介于【0.0716,0.4416】，均大于 mkt_opt的 0.2709。
+Ans:### Modified :修正line 635 temp_c3少了tau的问题后，w_BL_matrix合理多了
+    from temp_c3 =      np.matmul(  np.matmul( p_views,sigma ) ,  np.transpose(p_views)  ) + omega
+    to   temp_c3 = tau* np.matmul(  np.matmul( p_views,sigma ) ,  np.transpose(p_views)  ) + omega
+
+
+</p> 
+<h3><a name="190612">190612</a></h3> 
+<p>
+done，
+1.2，BL 参数敏感性分析;案例分析，设计，1000字
+
+todo
+1，BL
+1.1，working on proper formula for miu_bl and cov_bl.
+
+
+
+
+2，邮寄生日蛋糕卡。
+3，晚上总结本月计划；gitee\update:0610,0611.
+4,收入证明，在职证明，visa。
+
+file study:
+1,desktop, 科创板新股网下申购流程梳理-20190610.xlsx
+2,D:\gyrx_TOUYAN\gyrx制度 , 2018年数据类信息服务项目
+3,看研报，20190610_方正证券*基金专题*朱定豪*【方正金工】公募基金股票投研的上下十年.pdf
+4，科创板打新收益测算 - 6000门槛&10%随机锁定.docx
+
+</p>
+
+
+
+
 
 
 

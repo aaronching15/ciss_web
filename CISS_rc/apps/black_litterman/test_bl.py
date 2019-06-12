@@ -113,57 +113,111 @@ import math
 
 ###################################################
 ### Get Return data 
-name_benchmark = "equity_CN"
-ret_benchmark = [ 0.001, -0.003, 0.014, 0.019, -0.0179 ,-0.0032  ,0.001, -0.003, 0.014, 0.019, -0.0179 ,-0.0032  ]
-name_asset1 = "A50"
-ret_asset1  = [ 0.0011, -0.0031, 0.0142, 0.0192, -0.01792 ,-0.0022 ,0.0011, -0.0031, 0.0142, 0.0192, -0.01792 ,-0.0022 ]
-name_asset2 = "csi300"
-ret_asset2  = [ 0.0013, -0.0039, 0.024, 0.023, -0.0219,-0.0067 ,0.0013, -0.0039, 0.024, 0.023, -0.0219,-0.0067 ]
-name_asset3 = "csi500"
-ret_asset3  = [ -0.0013, -0.019, 0.034, 0.023, -0.0219 ,-0.0192 ,-0.0013, -0.019, 0.034, 0.023, -0.0219 ,-0.0192]
-name_asset4 = "csi1000"
-ret_asset4  = [ -0.0033, 0.019, 0.024, 0.021, -0.0193 ,-0.0212 ,-0.0033, 0.019, 0.024, 0.021, -0.0193  ,-0.0212]
-name_asset5 = "cash_tool"
-ret_asset5  = [ 0.00001,0.000011,0.00001,0.000011,0.00001,0.00001  ,0.00001,0.000011,0.00001,0.000011,0.00001,0.00001]
+###################################################
+### Method 1 
 
-len_date = len( ret_benchmark )
+# name_benchmark = "equity_CN"
+# ret_benchmark = [ 0.001, -0.003, 0.014, 0.019, -0.0179 ,-0.0032  ,0.001, -0.003, 0.014, 0.019, -0.0179 ,-0.0032  ]
+# name_asset1 = "A50"
+# ret_asset1  = [ 0.0011, -0.0031, 0.0142, 0.0192, -0.01792 ,-0.0022 ,0.0011, -0.0031, 0.0142, 0.0192, -0.01792 ,-0.0022 ]
+# name_asset2 = "csi300"
+# ret_asset2  = [ 0.0013, -0.0039, 0.024, 0.023, -0.0219,-0.0067 ,0.0013, -0.0039, 0.024, 0.023, -0.0219,-0.0067 ]
+# name_asset3 = "csi500"
+# ret_asset3  = [ -0.0013, -0.019, 0.034, 0.023, -0.0219 ,-0.0192 ,-0.0013, -0.019, 0.034, 0.023, -0.0219 ,-0.0192]
+# name_asset4 = "csi1000"
+# ret_asset4  = [ -0.0033, 0.019, 0.024, 0.021, -0.0193 ,-0.0212 ,-0.0033, 0.019, 0.024, 0.021, -0.0193  ,-0.0212]
+# name_asset5 = "cash_tool"
+# ret_asset5  = [ 0.00001,0.000011,0.00001,0.000011,0.00001,0.00001  ,0.00001,0.000011,0.00001,0.000011,0.00001,0.00001]
+
+# len_date = len( ret_benchmark )
+# print("length of date for benchmark is ", len_date )
+# ret_benchmark_df = pd.DataFrame([ret_benchmark] )
+# ret_benchmark_df =ret_benchmark_df.T
+# ret_benchmark_df.columns=[name_benchmark]
+# ret_asset_df = pd.DataFrame([ret_asset1 ,ret_asset2, ret_asset3, ret_asset4, ret_asset5] )
+# ret_asset_df =ret_asset_df.T
+# ret_asset_df.columns=[name_asset1,name_asset2,name_asset3,name_asset4,name_asset5] 
+
+# print("ret_benchmark_df")
+# print( ret_benchmark_df )
+# print("ret_asset_df")
+# print(ret_asset_df)
+
+###################################################
+### Method 2 Improt from dict and csv  
+path_out ="D:\\"
+json_name = 'data_bl.json'
+### Json dict object
+with open( path_out+ json_name , 'r') as output_file:
+    dict_symbol= json.load( output_file)
+
+print("dict_symbol \n", dict_symbol)
+
+### index_col="date" :把columns中的"date"设置成index的值，并且columns中去掉date
+bench_chg_w = pd.read_csv( path_out+ 'bench_chg_w.csv',index_col="date" )
+
+asset_chg_w = pd.read_csv( path_out+ 'asset_chg_w.csv',index_col="date" )
+
+len_date = len( bench_chg_w.index )
 print("length of date for benchmark is ", len_date )
-ret_benchmark_df = pd.DataFrame([ret_benchmark] )
-ret_benchmark_df =ret_benchmark_df.T
-ret_benchmark_df.columns=[name_benchmark]
-ret_asset_df = pd.DataFrame([ret_asset1 ,ret_asset2, ret_asset3, ret_asset4, ret_asset5] )
-ret_asset_df =ret_asset_df.T
-ret_asset_df.columns=[name_asset1,name_asset2,name_asset3,name_asset4,name_asset5] 
 
-print("ret_benchmark_df")
-print( ret_benchmark_df )
-print("ret_asset_df")
-print(ret_asset_df)
+ret_benchmark_df = bench_chg_w 
+
+ret_asset_df = asset_chg_w
+ret_asset_df= ret_asset_df.fillna(0.0)
+print("bench_chg_w \n", ret_benchmark_df.head() )
+print("asset_chg_w \n", ret_asset_df.head() )
+
+### note, method1 和method2 的区别是前者index是数字序号，后者是日期date
+
+
+
+
 
 ###################################################
 ### Get covariance matrix, 计算协方差 sigma = cov( return )
 # Notice that all cov(cash, ~) is NaN
-# 使用过去5个时间频率的数据
-rolling_window = 8
+# 使用过去2年，即100周左右的时间频率的数据
+rolling_window = 100
+index_list = ret_asset_df.index[-1*rolling_window :]
+
 # 5*1 array 
-mu_asset_df = ret_asset_df.loc[-1*rolling_window :,:].mean() 
+mu_asset_df = ret_asset_df.loc[index_list,:].mean() 
 
 ### cov_asset_df  算错了！！！ 要的是variance，不是correlation！！！！ 
 ### notice np.cov(x) 计算的是x方差的无偏估计，分母是n-1, np.var(x) 对应的分母是n
-temp_df = ret_asset_df.loc[-1*rolling_window :,:]
-cov_asset_df = ret_asset_df.loc[-1*rolling_window :,:].cov() 
+temp_df = ret_asset_df.loc[index_list,:]
+cov_asset_df = ret_asset_df.loc[index_list,:].cov() 
 cov_asset_df = cov_asset_df.fillna(0.0)
 
+print("Rolling_window = ", rolling_window)
 print("ret_asset_mean")
 print( mu_asset_df )
+# type(mu_asset_df.values)  is np.array
 
 print("ret_asset_ covariance")
-print( cov_asset_df )
+print( cov_asset_df.head(1) )
+
+### notes,以2012-2017年为例，若使用df.mean() 所选的16只蓝筹股平均收益率均为正，
+###但df.median() 中位数收益率有2只为负数，600036从0.289%降为 -0.077%，601166从0.231%降为 -0.165%
+### 使用median可能更符合日常主观感受，但长期来看mean的值更合理，否则在中位数标准下将没有意愿持有600036
+
+# mu_asset_df = ret_asset_df.mean() 
+# cov_asset_df = ret_asset_df.cov() 
+# cov_asset_df = cov_asset_df.fillna(0.0)
+
+# print("Rolling_window = ALL history data")
+# print("ret_asset_mean")
+# print( mu_asset_df )
+# print("ret_asset_ covariance")
+# print( cov_asset_df )
+
+
 # var_asset  [1.77172000e-04 3.20958667e-04 5.78542667e-04 4.73122667e-04  2.66666667e-13]
 var_asset = np.diag( cov_asset_df )
 print("var_asset ", var_asset )
 
-var_bench = np.var( ret_benchmark )
+var_bench = np.var( ret_benchmark_df )
 print("var_benchmark ", var_bench )
 
 # print( np.var( temp_df["A50"] ) )
@@ -180,7 +234,7 @@ print("var_benchmark ", var_bench )
 # datafrmae to np.arrays
 ret_asset_np = ret_asset_df.values
 print("ret_asset_np  \n")
-print( ret_asset_np )
+print( ret_asset_np[:2] )
 
 ### no use 
 # numpy求解矩阵的逆：矩阵A为原始矩阵，矩阵Ainv为矩阵A的逆
@@ -262,15 +316,27 @@ from scipy import optimize
 #     {'type': 'ineq', 'fun': lambda x: ret_asset_np[4][0]*x[0]+ret_asset_np[4][1]*x[1]+ret_asset_np[4][2]*x[2]+ret_asset_np[4][3]*x[3]+ret_asset_np[4][4]*x[4]-ret_benchmark[4] },
 #     {'type': 'ineq', 'fun': lambda x: -1*x[0] -1*x[1] -1*x[2] -1*x[3] -1*x[4]+1 } ) 
 
+### todo
+### 要根据asset长度改造obj和cons方程！！
+
 obj_fun = lambda x: -1* (np.cumprod( np.matmul( ret_asset_np,x).sum()+1 )[-1]-1)    
-cons = ({'type': 'ineq', 'fun': lambda x: -1*x[0] -1*x[1] -1*x[2] -1*x[3] -1*x[4]+1 },
+cons = ({'type': 'ineq', 'fun': lambda x: -1*np.sum(x) +1 },
         {'type': 'ineq', 'fun': lambda x:  -1*np.matmul( x,np.matmul(cov_asset_df,x) )+ var_bench  } ) 
+# cons = ({'type': 'ineq', 'fun': lambda x: -1*x[0] -1*x[1] -1*x[2] -1*x[3] -1*x[4]+1 },
+#         {'type': 'ineq', 'fun': lambda x:  -1*np.matmul( x,np.matmul(cov_asset_df,x) )+ var_bench  } ) 
 
 #  'type':'ineq' # >= 
 #  'type':'eq'   # == 
 
-bnds = ((0,1),(0,1),(0,1),(0,1),(0,1))
-w_init = [1, 0,0,0,0]
+len_assets = len( ret_asset_df.columns )
+
+# example bnds: ((0,1),(0,1),(0,1),(0,1),(0,1))
+bnds = [(0,1)] * len_assets
+# w_init = [1, 0,0,0,0]
+w_init = [0] * len_assets
+w_init[0] = 1
+
+
 res = optimize.minimize( obj_fun , w_init, method='SLSQP', bounds=bnds,constraints=cons)
 
 print("result")
@@ -279,21 +345,35 @@ print(res.success,res.message)
 w_mkt = res.x
 print("weights of market")
 print( np.round(w_mkt,4 ) )
+# input1 = input("Type something here.....")
 
-print("portfolio return ", np.round(np.cumprod( np.matmul( ret_asset_np,w_mkt).sum()+1 )[-1]-1 ,4 ))
+print("portfolio return ", np.round( np.matmul( ret_asset_np,w_mkt).mean() ,4 ))
+
 print("portfolio variance ", np.round(np.matmul( w_mkt,np.matmul(cov_asset_df,w_mkt) ),8 ),  np.round(var_bench ,8 ) )
 
-print("Benchmark return ", np.round(np.cumprod( np.array(ret_benchmark) +1 )[-1]-1 ,4 ))
-w_temp = [1,0,0,0,0]
-print("portfolio return a1 ", np.round(np.cumprod( np.matmul( ret_asset_np,w_temp ).sum()+1 )[-1]-1 ,4 ))
-w_temp = [0,1,0,0,0]
-print("portfolio return a2", np.round(np.cumprod( np.matmul( ret_asset_np,w_temp ).sum()+1 )[-1]-1 ,4 ))
-w_temp = [0,0,1,0,0]
-print("portfolio return a3", np.round(np.cumprod( np.matmul( ret_asset_np,w_temp ).sum()+1 )[-1]-1 ,4 ))
-w_temp = [0,0,0,1,0]
-print("portfolio return a4", np.round(np.cumprod( np.matmul( ret_asset_np,w_temp ).sum()+1 )[-1]-1 ,4 ))
-w_temp = [0,0,0,0,1]
-print("portfolio return a5", np.round(np.cumprod( np.matmul( ret_asset_np,w_temp ).sum()+1 )[-1]-1 ,4 ))
+print("Benchmark return ", np.round(  np.array(ret_benchmark_df).mean() ,4 ))
+
+for i in range( len_assets  ) :
+    w_temp = [0] * len_assets
+    w_temp[i] = 1
+    print("portfolio return for the "+str(i)+" asset",ret_asset_df.columns[i] , np.round( np.matmul( ret_asset_np,w_temp ).mean() ,4 ))
+
+# w_temp = [0] * len_assets
+# w_temp[1] = 1
+# print("portfolio return a2", np.round(np.matmul( ret_asset_np,w_temp ).mean() ,4 ))
+# w_temp = [0] * len_assets
+# w_temp[2] = 1
+# print("portfolio return a3", np.round(np.matmul( ret_asset_np,w_temp ).mean() ,4 ))
+# w_temp = [0] * len_assets
+# w_temp[3] = 1
+# print("portfolio return a4", np.round(np.matmul( ret_asset_np,w_temp ).mean() ,4 ))
+# w_temp = [0] * len_assets
+# w_temp[4] = 1
+# print("portfolio return a5", np.round(np.matmul( ret_asset_np,w_temp ).mean() ,4 ))
+# w_temp = [0] * len_assets
+# w_temp[7] = 1
+# print("portfolio return 8th", np.round(np.matmul( ret_asset_np,w_temp ).mean() ,4 ))
+
 # weights of market [0.     0.     0.     0.5572 0.0042]
 # portfolio return  0.0148
 # portfolio variance  0.00014689 0.00014689
@@ -317,8 +397,10 @@ print("portfolio return a5", np.round(np.cumprod( np.matmul( ret_asset_np,w_temp
 
 
 ### 怎么感觉sharp和delta的计算不对呢，应该用求出来的最优组合计算吧
-miu_mkt = np.mean( np.matmul( ret_asset_np,w_mkt)  ) * 252 
-std_mkt = np.std(  np.matmul( ret_asset_np,w_mkt) ) *math.sqrt(252)
+# 50 weeks per year
+date_freq = 52
+miu_mkt = np.mean( np.matmul( ret_asset_np,w_mkt)  ) * date_freq 
+std_mkt = np.std(  np.matmul( ret_asset_np,w_mkt) ) *math.sqrt(date_freq )
 sharp_ratio = miu_mkt/std_mkt  
 ### notice：delta/δ的计算
 ###例： sharp= 0.2 , std=0.013, 如果std日波动率不乘100转化成百分比的单位，delta算出来的值15.35 
@@ -348,7 +430,7 @@ pie = delta * np.matmul(sigma , w_mkt)
 ### pie 值对于第三个和第五个asset收益较小的原因是市场组合的均衡配置比例都是0.0
 # value of PI is  [3.49090662e-03 4.62168365e-03 5.58691073e-03 4.09842457e-03 3.49421596e-08]
 print("value of PI is \n", pie )
-print("value of annual PI is \n", np.round(pie*252,4) )
+print("value of annual PI is \n", np.round(pie*date_freq ,4) )
 
 
 ###################################################
@@ -356,7 +438,35 @@ print("value of annual PI is \n", np.round(pie*252,4) )
 # show table 【view matrix， view_return， view_uncertainty】
 
 ### Q是主观观点的判断收益率，如果P是n*k matrix，则Q是n*1 vector。 即n个观点的每一个观点权重乘未知的收益率后得到该观点(策略)的预期收益率。
-p_views = [[1,0,0,0,0],[0,1,0,0,0],[0,0, 0.3,0.5,0.2],[0,0,0,0,1],[1,0,-1,0,0] ]
+# p_views = [[1,0,0,0,0],[0,1,0,0,0],[0,0, 0.3,0.5,0.2],[0,0,0,0,1],[1,0,-1,0,0] ]
+# p_views = [ [-1,0,1,0,0] ]
+view_0 = [0] * len_assets
+
+view_1 = [0] * len_assets
+view_1[0] = 1 
+view_2 = [0] * len_assets
+view_2[1] = 1 
+
+view_3 = [0] * len_assets
+# view_3[2:4] =[0.3,0.5,0.2] 会导致list长度从15变成16
+view_3[2] =0.3
+view_3[3] =0.5
+view_3[4] =0.2
+
+view_4 = [0] * len_assets
+view_4[4] =1 
+view_4[5] =0 
+view_4[6] =0 
+view_4[7] =-1 
+
+view_5 = [0] * len_assets
+view_5[-3:] = [-1,0,1]
+
+view_6 = [0] * len_assets
+view_6[8] = 0.4
+view_6[9] = 0.6
+
+p_views = [view_1,view_2,view_3,view_4,view_5,view_6 ]
 
 ###################################################
 ### q is k*1 vector，因为q的收益率对应的是资产的回测区间内总收益，因此不能只计算每日的观点收益率，还需要计算累计收益率。
@@ -371,14 +481,23 @@ for temp_col in ret_asset_df.columns :
         temp_r = temp_r *(1+ ret_asset_df.loc[temp_i,temp_col ]  )
     ret_asset_accu = ret_asset_accu +[ temp_r-1 ]
 
-print("Accumulated return of 5 assets ")
+print("Accumulated return of assets ")
+print( ret_asset_df.columns )
 print( np.round(ret_asset_accu,4) )
 # [0.013115466179756119, 0.02194142883508099, 0.013639412773122528, 0.04790597879378922, 5.200108101144352e-05]
 
 ### we want all return variables based on daily 
-ret_q = np.matmul( p_views,ret_asset_accu  ) /rolling_window 
+# np.shape(p_views)=(6,15) ;mu_asset_df.values is also (15,1)
+
+ret_q = np.matmul( p_views,  mu_asset_df.values )  
 print( "Q/ q as return of view " ) 
-print( np.round(ret_q*252 ,4) ) 
+print( np.round(ret_q ,4) ) 
+print( np.round(ret_q*date_freq ,4) ) 
+
+# this method is no good and might exaggerate the result 
+# ret_q = np.matmul( p_views,ret_asset_accu  ) /rolling_window 
+
+
 # [1.31154662e-02 2.19414288e-02 2.80552134e-02 5.20010810e-05]
 
 
@@ -386,6 +505,9 @@ print( np.round(ret_q*252 ,4) )
 # example, q =【0.04，0.053,0.068  】
 # first transpose list to np.array(), then use np.diag(  )
 tau = 0.5
+tau_str = input("Type in value for tau...")
+tau = float( tau_str )
+
 # tau =0.5 | [0.5        0.5        1.47615916 0.        ]
 # tau =  1 | [0.5        0.5        1.47615916 0.        ]
 # notes 两个矩阵不能直接相乘，#  result = np.matmul(A1,A2  )
@@ -406,6 +528,8 @@ omega = tau*np.diag(omega)
 print( "Omega " ) 
 print( omega  ) 
 
+### notice: omega 不可逆的情况取决于views组成的matrix是否full rank，这里发生了6*6matrix，但rank=5,需要改一下views、
+
 # BEFORE
 # omega = tau*  np.matmul( np.matmul(p_views,sigma), np.array(p_views ).T) 
 
@@ -416,7 +540,7 @@ print( omega  )
 C = tau*sigma
 
 print("C is ")
-print( C )
+# print( C )
 
 
 
@@ -445,33 +569,31 @@ print( C )
 ### cov_bl= [(tau*sigma)^-1 +P_trans*omega^-1 *P ]^-1 
 # notice that Q = ret_q
 
+### step 1: tau*sigma*P
 temp_p1 = tau* np.matmul( sigma, np.transpose(p_views) )
 ### notice that np.array() 矩阵可以直接乘常数，但是python-list格式变量乘常数会变成复制list
 # print( "temp_part1 \n", temp_p1 )
 
-temp_p2 =  tau* np.matmul( p_views, temp_p1 ) + omega
+### step 2: tau*P*sigma*P +omega
+temp_p2 = np.matmul( p_views, temp_p1 ) + omega
 # print( "temp_part2 \n", temp_p2 )
 
+### step 3: [tau*P*sigma*P +omega]^(-1)
 temp_p2 = np.linalg.inv( temp_p2 )
 # print( "temp_part2 \n", temp_p2 )
 
 ### df to np.array ,mu_asset_df column for assets 
 # mu_asset_np = np.array(mu_asset_df.T )
 
+### step 4: (tau*sigma*P)*[tau*P*sigma*P +omega]^(-1)*[Q-P*PI]
 temp_p3 = ret_q - np.matmul( p_views ,  pie )
 # print( "temp_part3 \n", temp_p3 )
 
 mu_bl_2 =  np.matmul( temp_p1,temp_p2)
-
-
 ### posterior estimate returns 
 mu_bl_2 =  np.matmul( mu_bl_2,temp_p3)
-###Qs 预期收益率的数据比较不合理。
-### notice: PI is not mean return of assets pie != mu_asset_df
-### mu_asset_df is on daily base but ret_q is on rolling windows(5 days )
-#                  0         1         2         3             4
-# pie      0.002123  0.002888  0.003630  0.002895  2.681732e-08
-# mu_bl_2 -0.000260 -0.002426 -0.009958  0.001233  3.044851e-07
+
+### step 5: PI+ (tau*sigma*P)*[tau*P*sigma*P +omega]^(-1)*[Q-P*PI]
 mu_bl = pie +mu_bl_2 
 
 print( "return in daily basis " )
@@ -496,33 +618,50 @@ print( "mu_bl vs miu return of_asset  \n", pd.DataFrame([mu_bl, mu_asset_df],ind
 # mu_bl的预期收益率基本都比资产历史先验prior收益率要低。
 
 ################################################################
-### Calculate covariance， method 1 
-### Qs: 计算出来的variance都是负值，有问题。
-### cov_bl= [(tau*sigma)^-1 +P_trans*omega^-1 *P ]^-1 
+### Calculate covariance， method 1 :reference:Bayes,eq.(25),(26)
+### note：若发生omega不可逆，则需要确保p_view matrix 是full rank
+## cov_bl= [(tau*sigma)^-1 +P_trans*omega^-1 *P ]^-1 
 temp_c1 = np.linalg.inv( tau*sigma )
-temp_c2 = np.matmul( np.transpose(p_views), omega  )
+temp_c2 = np.matmul( np.transpose(p_views), np.linalg.inv(omega)  )
 temp_c2 =  np.matmul( temp_c2, p_views) 
 cov_bl = np.linalg.inv( temp_c1 +temp_c2 )
-print( "cov_bl \n" , cov_bl )
 
-### todo 当前 cov_bl计算是否OK？
-### sigma_bl = cov_asset_df + M ?
+# print( "cov_bl \n" , cov_bl )
+temp_c3 = np.matmul( np.linalg.inv( omega )  , np.transpose(p_views) ) 
+
+todo
+print( np.shape(p_views ) )
+print( np.shape(temp_c3 ) )
+
+temp_c3 = np.matmul( np.transpose(p_views) , temp_c3 )
+M_post_m2 = np.linalg.inv( temp_c1 , temp_c3 )
+M_post = M_post_m1
+
+
 ################################################################
-### Calculate covariance， method 1 
-temp_c1 = tau*sigma
-temp_c2 = np.matmul( tau*sigma , np.transpose(p_views) ) 
+### Calculate covariance， method 2:reference:eq.(30)
+# temp_c1 = tau*sigma
+# temp_c2 = np.matmul( tau*sigma , np.transpose(p_views) ) 
 
-temp_c3 = np.matmul(  np.matmul( p_views,sigma ) ,  np.transpose(p_views)  ) + omega
-temp_c3 = np.linalg.inv( temp_c3 )
+# temp_c3 = tau* np.matmul(  np.matmul( p_views,sigma ) ,  np.transpose(p_views)  ) + omega
+# temp_c3 = np.linalg.inv( temp_c3 )
+# # source: Bl in detail, eq.(26)
+# temp_c4 = tau* np.matmul( p_views,sigma )
+# M_post_m2 = temp_c1 - np.matmul( np.matmul( temp_c2,temp_c3), temp_c4 )
+# M_post = M_post_m2
 
-temp_c4 = tau* np.matmul( p_views,sigma )
-M_post = temp_c1 - np.matmul( np.matmul( temp_c2,temp_c3), temp_c4 )
-print("M_post \n", M_post )
+
+
 cov_bl2 = sigma + M_post
-print( "cov_bl2 \n" , cov_bl2 )
-# Qs ：感觉covariance 差异很小
-print( "cov_bl2 diff\n" , cov_bl2-cov_asset_df   )
 
+print("M_post \n", M_post )
+print( "cov_bl2 \n" , cov_bl2 )
+
+# Qs ：感觉covariance 差异很小
+# # sigma  equals to cov_asset_df
+# print( "cov_bl2 diff\n" , cov_bl2-cov_asset_df   )
+# ## ??QQS
+# print( "cov_bl2 diff pct\n" , M_post/np.linalg.inv( cov_asset_df ) )
 
 ################################################################
 ### Get portfolio weights
@@ -533,10 +672,20 @@ w_bl = np.matmul(mu_bl , np.linalg.inv( cov_bl2 ) ) /delta
 # 无限制条件下算出来的数值非常不合理。
 #  [ 5.47 -2.34 -1.856  1.43 -6401]
 #  [ 5.47018260e+00 -2.34436397e+00 -1.85595481e+00  1.43266687e+00 -6.40167655e+03]
-print( "Optimal portfolio weight on unconstraint efficient frontier by BL \n" , w_bl )
+print("Method: Optimization")
+print( "Optimal portfolio weight on unconstraint efficient frontier by BL \n"  )
+print("weights of optimal portfolio by BL matrix calculation")
+print( np.round(w_bl,4 ) ) 
+# weights of optimal portfolio by BL
+# [  0.584    1.6897   0.4955   0.8259   2.701    0.       0.      -1.4183
+#    0.       0.      -0.      -0.      10.0546  -0.     -10.0546]
+# len=294, almost 6 years ; print("length \n", len(ret_asset_np ) )
+# 50 weeks per year with trading 
+print("portfolio return ,weekly :ALL hist.  vs rolling_window\n") 
+print(np.round(  np.matmul( ret_asset_df.mean() ,w_bl )*52  ,4 ), np.round(  np.matmul( mu_asset_df ,w_bl )*52  ,4 ) )
 
-# tau=0.5 ||  [ 6.92739029  1.51746758 -6.05542994  1.17607531  1.83571727]
 
+###########################################################################
 ### method 2  ，constrainted conditions
 ### notice 这里的预期收益率和协方差都要用新的！！ PI_hat and sigma_bl
 # obj_fun2 = lambda x: x[0] +x[1] +x[2] +x[3] +x[4] 
@@ -544,7 +693,7 @@ print( "Optimal portfolio weight on unconstraint efficient frontier by BL \n" , 
 # max  ret_port/std_port  equals to min -1*ret_port/std_port
 
 obj_fun2 = lambda x: -1* ( math.pow( (np.matmul( mu_bl,x)+1),len_date) -1) 
-cons2 = ({'type': 'ineq', 'fun': lambda x: -1*x[0] -1*x[1] -1*x[2] -1*x[3] -1*x[4]+1 },
+cons2 = ({'type': 'ineq', 'fun': lambda x: -1*np.sum(x) +1 },
         {'type': 'ineq', 'fun': lambda x:  -1*np.matmul( x,np.matmul(cov_bl2 ,x) )+ var_bench  } ) 
 
 # obj_fun2 = lambda x: -1* (np.cumprod( np.matmul( ret_asset_np,x).sum()+1 )[-1]-1) /(np.sqrt( np.matmul( x,np.matmul(cov_asset_df,x) ) ) ) 
@@ -555,32 +704,108 @@ cons2 = ({'type': 'ineq', 'fun': lambda x: -1*x[0] -1*x[1] -1*x[2] -1*x[3] -1*x[
 #     {'type': 'ineq', 'fun': lambda x: ret_asset_np[4][0]*x[0]+ret_asset_np[4][1]*x[1]+ret_asset_np[4][2]*x[2]+ret_asset_np[4][3]*x[3]+ret_asset_np[4][4]*x[4]-mu_bl[4] },
 #     {'type': 'ineq', 'fun': lambda x: -1*x[0] -1*x[1] -1*x[2] -1*x[3] -1*x[4]+1 } ) 
 
-bnds2 = ((0,1),(0,1),(0,1),(0,1),(0,1))
-w_init2 = [1, 0,0,0,0]
+len_assets = len( ret_asset_df.columns )
+
+# example bnds: ((0,1),(0,1),(0,1),(0,1),(0,1))
+bnds2  = [(0,1)] * len_assets
+# w_init = [1, 0,0,0,0]
+w_init2 = [0] * len_assets
+w_init2[0] = 1
+
 res2 = optimize.minimize( obj_fun2 , w_init2, method='SLSQP', bounds=bnds2,constraints=cons2)
 
 print("result2")
 print(res.success,res.message)
 
-w_bl = res.x
+w_bl = res2.x
+print("Method: Optimization")
 print("weights of optimal portfolio by BL")
 print( np.round(w_bl,4 ) )
+# len=294, almost 6 years ; print("length \n", len(ret_asset_np ) )
+# 50 weeks per year with trading 
+print("portfolio return ,weekly :ALL hist.  vs rolling_window\n")
+print( np.round(  np.matmul( ret_asset_df.mean() ,w_bl )*52  ,4 ), np.round(  np.matmul( mu_asset_df ,w_bl )*52  ,4 ))
+# 0.0042 ; 0.0088
+
 print("weights of market")
 print( np.round(w_mkt,4 ) )
-# [2.518e-01 2.000e-04 0.000e+00 4.828e-01 7.800e-03]
-# [2.518e-01 2.000e-04 0.000e+00 4.828e-01 7.800e-03]
-# [25.18, 0.0, 0.0, 48.28, 0.78%  ]
+print("portfolio return ,weekly :ALL hist.  vs rolling_window\n") 
+print(np.round(  np.matmul( ret_asset_df.mean() ,w_mkt )*52  ,4 ), np.round(  np.matmul( mu_asset_df ,w_mkt )*52  ,4 ))
 
-###Qs market 和BL方式算出来的值是一样的，初步怀疑可能是资产收益率数据量太小的原因，也有可能是计算过程有问题，也有可能是最优化模型有问题。
-# Ana：加了一行资产收益率数据，对结果没有影响
-# 该结果只使用了86.08%的仓位，似乎不能体现最大化风险收益比的问题
-# [0.2275 0.6174 0.     0.016  0.    ]
+###########################################################################
+### 案例数据分析
+###########################################################################
+### 1，计算过去rolling windows(100周)和全历史(约5.5年)的收益值。 
+# 测试不同tau值；2，测试无主观view的结果。
+'''
 
-#Ana，改进了最优化目标方程后，权重之和变成1，但现金工具权重从0增加至14.13%，说明非现金部分的权重基本不变，且上证50权重下降1.6%，沪深300权重增加1%。
-# weights of optimal portfolio by BL
-# [0.215  0.6275 0.     0.0162 0.1413]
-# weights of market
-# [0.215  0.6275 0.     0.0162 0.1413]
+备注：
+    # tau取0值时矩阵计算会有问题，因此用0.001替代。
+    最优化模型：在协方差小于等于市场组合限制下，组合平均收益越高越好
+
+'''
+### Method 2 ,eq.(30), no inverse of Omega
+# Ana: BL_raw,矩阵计算的方式会得到负值，完全不符合实际情况，特别是会出现-21,21这样的负值。
+# ret_port{BL_raw,{ALL, rolling_window}; BL_opt:{ALL, rolling_window}; mkt_opt:{ALL, rolling_window} }
+# tau=1    || 0.3553 0.7211 ;0.2071 0.4416 , 0.2699, 0.2709
+    # [0.     0.4255 0.0694 0.1428 0.3368 0.     0.     0.     0.     0. 0.     0.     0.0254 0.     0.    ]
+# tau=0.5  || 0.4779 1.04920.,2041 ,0.4309, 0.2699, 0.2709
+    # [0.     0.3447 0.0543 0.1528 0.3322 0.     0.     0.     0.     0. 0.     0.     0.116  0.     0.    ]
+# tau=0.05 ||                0.1397 ,0.3122, 0.2699, 0.2709
+    # [0.     0.     0.     0.     0.     0.     0.     0.     0.     0. 0.     0.     0.9939 0.     0.0041]
+# tau=0.025|| 0.1258 6.4162, 1.6704 2.7176 ,0.2699, 0.2709
+    # Qs : weights of BL_matrix: [1. 1. 1. 1. 1. 1. 1. 0. 1. 0. 1. 0. 1. 1. 0.]
+# tau=0.001|| -22.768 109.3922,0.173 0.2716, 0.2699 0.2709
+
+### Modified :修正line 635 temp_c3少了tau的问题后，w_BL_matrix合理多了
+# ret_port{BL_raw,{ALL, rolling_window}; BL_opt:{ALL, rolling_window}; mkt_opt:{ALL, rolling_window} }
+# tau=1    || 0.3553 0.7211 ;0.2071 0.4416 , 0.2699, 0.2709
+    # BL matrix
+    # [ 0.1451  0.6159  0.1349  0.2249  0.203  -0.      0.      0.3869 -0.  0.     -0.     -0.      0.3488  0.     -0.3488]
+    # BL opt
+    # [0.     0.4255 0.0694 0.1428 0.3368 0.     0.     0.     0.     0. 0.     0.     0.0254 0.     0.    ]
+
+# tau=0.500|| 0.4244 0.8223 ; 0.2132 0.463 ; 0.2699, 0.2709
+    # BL matrix
+    # [ 0.1487  0.7109  0.1429  0.2381  0.2181 -0.      0.      0.5438 -0.  0.      0.     -0.      0.3379  0.     -0.3379]
+    # BL opt
+    # [0.     0.4452 0.     0.1199 0.4349 0.     0.     0.     0.     0. 0.     0.     0.     0.     0.    ]
+# tau=0.025|| 0.5245 0.9624 ; 0.2126 0.4611 ; 0.2699, 0.2709
+    # BL matrix
+    # [ 0.1407  0.8234  0.1413  0.2354  0.2636 -0.      0.      0.8062 -0.  0.      0.     -0.      0.3302  0.     -0.3302]
+    # BL opt
+    # [0.     0.3866 0.     0.0258 0.5876 0.     0.     0.     0.     0. 0.     0.     0.     0.     0.    ]
+# tau=0.001|| 0.531 0.9713 ; 0.2125 0.461 ; 0.2699, 0.2709
+    # BL matrix
+    # [ 0.1397  0.8294  0.1406  0.2343  0.2679  0.      0.      0.8248  0.  0.      0.     -0.      0.3301 -0.     -0.3301]
+    # BL opt
+    # [0.     0.3845 0.     0.0199 0.5956 0.     0.     0.     0.     0. 0.     0.     0.     0.     0.    ]
+
+
+### Method 1 ,eq.(25),(26)
+
+
+
+
+
+
+
+
+
+###########################################################################
+### 2，检查当前BL模型在计算 miu_bl cov_bl是否有误； 并尝试替代的模型，如引入 C 
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
