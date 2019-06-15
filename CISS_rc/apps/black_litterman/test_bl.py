@@ -438,6 +438,8 @@ print("value of annual PI is \n", np.round(pie*date_freq ,4) )
 # show table 【view matrix， view_return， view_uncertainty】
 
 ### Q是主观观点的判断收益率，如果P是n*k matrix，则Q是n*1 vector。 即n个观点的每一个观点权重乘未知的收益率后得到该观点(策略)的预期收益率。
+#asset order0 1 2   3   4    5  6  7    8    9    10  11 12 13  14 
+# view_sum=[1,1,0.3,0.5,1.2, 0, 0,-0.6, 0.4, 0.6, 0,  0, -1, 0, 1   ]
 # p_views = [[1,0,0,0,0],[0,1,0,0,0],[0,0, 0.3,0.5,0.2],[0,0,0,0,1],[1,0,-1,0,0] ]
 # p_views = [ [-1,0,1,0,0] ]
 view_0 = [0] * len_assets
@@ -541,7 +543,7 @@ C = tau*sigma
 
 print("C is ")
 # print( C )
-
+# input1 = input("Check if continue......")
 
 
 ###################################################
@@ -721,14 +723,19 @@ print("weights of optimal portfolio by BL")
 print( np.round(w_bl,4 ) )
 # len=294, almost 6 years ; print("length \n", len(ret_asset_np ) )
 # 50 weeks per year with trading 
+miu_bl = np.matmul( ret_asset_df.mean() ,w_bl )*52
+miu_bl2 = np.matmul( mu_asset_df ,w_bl )*52
+miu_mkt =   np.matmul( ret_asset_df.mean() ,w_mkt )*52
+miu_mkt2 = np.matmul( mu_asset_df  ,w_mkt )*52
+
 print("portfolio return ,weekly :ALL hist.  vs rolling_window\n")
-print( np.round(  np.matmul( ret_asset_df.mean() ,w_bl )*52  ,4 ), np.round(  np.matmul( mu_asset_df ,w_bl )*52  ,4 ))
+print( np.round(miu_bl  ,4 ), np.round( miu_bl2  ,4 ))
 # 0.0042 ; 0.0088
 
 print("weights of market")
 print( np.round(w_mkt,4 ) )
 print("portfolio return ,weekly :ALL hist.  vs rolling_window\n") 
-print(np.round(  np.matmul( ret_asset_df.mean() ,w_mkt )*52  ,4 ), np.round(  np.matmul( mu_asset_df ,w_mkt )*52  ,4 ))
+print( np.round(miu_mkt ,4 ), np.round( miu_mkt2 ,4 ))
 
 ###########################################################################
 ### 案例数据分析
@@ -781,6 +788,13 @@ print(np.round(  np.matmul( ret_asset_df.mean() ,w_mkt )*52  ,4 ), np.round(  np
     # [0.     0.3845 0.     0.0199 0.5956 0.     0.     0.     0.     0. 0.     0.     0.     0.     0.    ]
 
 ###########################################################################
+#asset order0 1 2   3   4    5  6  7    8    9    10  11 12 13  14 
+# view_sum=[1,1,0.3,0.5,1.2, 0, 0,-0.6, 0.4, 0.6, 0,  0, -1, 0, 1   ]
+### Ana:案例计算的views中，给与asset 0~4超配，7、12负权重,...
+# 可以看出BL_matrix方法比较客观地反映了views的影响：tau的值越小，反映的权重波动越大。
+
+
+###########################################################################
 ### Method 1 ,eq.(25),(26) | all hist quotation based on csi300 
 # tau=0.500|| 0.2462 0.4271 ; 0.2125 0.3079 ; 0.2418 0.3118
     # BL matrix ||BL opt || market OPT.
@@ -800,31 +814,35 @@ print(np.round(  np.matmul( ret_asset_df.mean() ,w_mkt )*52  ,4 ), np.round(  np
     # [ 0.      0.      0.      0.0223  0.      0.      0.      0.6911  0.      0.  0.      0.      0.      0.2846  0.002 ]
 
 ###########################################################################
-### Method 2 ,eq.(20) | all hist quotation based on csi300 
+### Method 2 ,eq.(30) | all hist quotation based on csi300 
 # notes: method 1 和method2 的收益率、weights结果是一样的。
 # tau=0.500|| 0.2462 0.4271 ;0.2125 0.3079;0.2418 0.3118
     # BL matrix ||BL opt || market OPT.
     # [ 0.0869  0.1605  0.0568  0.1096 -0.0397  0.     -0.      0.5383 -0.1114 -0.1671  0.      0.     -0.341   0.1897  0.3423]
     # [ 0.      0.0908  0.      0.      0.      0.      0.      0.4574  0.      0.  0.      0.      0.      0.129   0.2509] 
     # [ 0.      0.      0.      0.0223  0.      0.      0.      0.6911  0.      0.  0.      0.      0.      0.2846  0.002 ] 
+# tau=0.025|| 0.3108 0.5298 || 0.2328 0.34 || 0.2418 0.3118
+    # [ 0.1075  0.1604  0.0573  0.1172  0.0206  0.     -0.      0.6918 -0.1544 -0.2316  0.      0.     -0.3901  0.2777  0.392 ]
+    # [0.     0.0805 0.     0.     0.     0.     0.     0.5236 0.     0. 0.     0.     0.     0.109  0.287 ]
+    # [0.     0.     0.     0.0223 0.     0.     0.     0.6911 0.     0. 0.     0.     0.     0.2846 0.002 ]
+
+########################################################################
+### Fusai and Meucci的改进，可以避免posterior estimate过于极端。
+# BL in detail.pdf page 36, eq.(52)
+### Calculate squared Mahalanobis distance
+miu_diff = w_bl - w_mkt
+temp_m1 = np.matmul( miu_diff, np.linalg.inv(tau*sigma)  )
+M_q = np.matmul( temp_m1 , miu_diff) 
+print("M_q \n ")
+print( M_q )
+# tau=0.05, M_q = 5583 || # tau=0.5, M_q = 542.58
+### M(q) is distributed as Chi^2(q) where q is the number of assets
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-###########################################################################
-### 2，检查当前BL模型在计算 miu_bl cov_bl是否有误； 并尝试替代的模型，如引入 C 
+########################################################################
+### todo, 尝试替代的模型，如引入 C 
 
 
 
