@@ -143,21 +143,31 @@ import math
 # print("ret_asset_df")
 # print(ret_asset_df)
 
+path_out ="D:\\"
+###################################################
+### EQUITY CASE 
 ###################################################
 ### Method 2 Improt from dict and csv  
-path_out ="D:\\"
+
 json_name = 'data_bl.json'
+### index_col="date" :把columns中的"date"设置成index的值，并且columns中去掉date
+bench_chg_w = pd.read_csv( path_out+ 'bench_chg_w.csv',index_col="date" )
+asset_chg_w = pd.read_csv( path_out+ 'asset_chg_w.csv',index_col="date" )
+
+###################################################
+### BOND CASE 
+# json_name ="data_blcn_bond_cba.json"
+# bench_chg_w = pd.read_csv( path_out+ 'bench_chg_w_cn_bond_cba.csv',index_col="date" )
+# asset_chg_w = pd.read_csv( path_out+ 'asset_chg_w_cn_bond_cba.csv',index_col="date" )
+
+
+
 ### Json dict object
 with open( path_out+ json_name , 'r') as output_file:
     dict_symbol= json.load( output_file)
-
 print("dict_symbol \n", dict_symbol)
 
-### index_col="date" :把columns中的"date"设置成index的值，并且columns中去掉date
-bench_chg_w = pd.read_csv( path_out+ 'bench_chg_w.csv',index_col="date" )
-
-asset_chg_w = pd.read_csv( path_out+ 'asset_chg_w.csv',index_col="date" )
-
+###################################################
 len_date = len( bench_chg_w.index )
 print("length of date for benchmark is ", len_date )
 
@@ -667,22 +677,26 @@ print( "cov_bl2 \n" , cov_bl2 )
 ### Get portfolio weights
 print("666 ", delta )
 
-### method 1  ， unconstraint conditions
-w_bl = np.matmul(mu_bl , np.linalg.inv( cov_bl2 ) ) /delta
-# 无限制条件下算出来的数值非常不合理。
-#  [ 5.47 -2.34 -1.856  1.43 -6401]
-#  [ 5.47018260e+00 -2.34436397e+00 -1.85595481e+00  1.43266687e+00 -6.40167655e+03]
+print("rank  ",  np.linalg.matrix_rank( cov_bl2 )   )
 print("Method: Optimization")
-print( "Optimal portfolio weight on unconstraint efficient frontier by BL \n"  )
-print("weights of optimal portfolio by BL matrix calculation")
-print( np.round(w_bl,4 ) ) 
-# weights of optimal portfolio by BL
-# [  0.584    1.6897   0.4955   0.8259   2.701    0.       0.      -1.4183
-#    0.       0.      -0.      -0.      10.0546  -0.     -10.0546]
-# len=294, almost 6 years ; print("length \n", len(ret_asset_np ) )
-# 50 weeks per year with trading 
-print("portfolio return ,weekly :ALL hist.  vs rolling_window\n") 
-print(np.round(  np.matmul( ret_asset_df.mean() ,w_bl )*52  ,4 ), np.round(  np.matmul( mu_asset_df ,w_bl )*52  ,4 ) )
+
+if np.linalg.matrix_rank( cov_bl2 ) ==len(mu_asset_df) :
+    ### method 1  ， unconstraint conditions
+    w_bl = np.matmul(mu_bl , np.linalg.inv( cov_bl2 ) ) /delta
+    # 无限制条件下算出来的数值非常不合理。
+    #  [ 5.47 -2.34 -1.856  1.43 -6401]
+    #  [ 5.47018260e+00 -2.34436397e+00 -1.85595481e+00  1.43266687e+00 -6.40167655e+03]
+    
+    print( "Optimal portfolio weight on unconstraint efficient frontier by BL \n"  )
+    print("weights of optimal portfolio by BL matrix calculation")
+    print( np.round(w_bl,4 ) ) 
+    # weights of optimal portfolio by BL
+    # [  0.584    1.6897   0.4955   0.8259   2.701    0.       0.      -1.4183
+    #    0.       0.      -0.      -0.      10.0546  -0.     -10.0546]
+    # len=294, almost 6 years ; print("length \n", len(ret_asset_np ) )
+    # 50 weeks per year with trading 
+    print("portfolio return ,weekly :ALL hist.  vs rolling_window\n") 
+    print(np.round(  np.matmul( ret_asset_df.mean() ,w_bl )*52  ,4 ), np.round(  np.matmul( mu_asset_df ,w_bl )*52  ,4 ) )
 
 
 ###########################################################################
@@ -724,6 +738,7 @@ print( np.round(w_bl,4 ) )
 # len=294, almost 6 years ; print("length \n", len(ret_asset_np ) )
 # 50 weeks per year with trading 
 miu_bl = np.matmul( ret_asset_df.mean() ,w_bl )*52
+
 miu_bl2 = np.matmul( mu_asset_df ,w_bl )*52
 miu_mkt =   np.matmul( ret_asset_df.mean() ,w_mkt )*52
 miu_mkt2 = np.matmul( mu_asset_df  ,w_mkt )*52
@@ -734,9 +749,12 @@ print( np.round(miu_bl  ,4 ), np.round( miu_bl2  ,4 ))
 
 print("weights of market")
 print( np.round(w_mkt,4 ) )
+
 print("portfolio return ,weekly :ALL hist.  vs rolling_window\n") 
 print( np.round(miu_mkt ,4 ), np.round( miu_mkt2 ,4 ))
-
+print("Variance ")
+print( np.matmul( w_mkt,np.matmul(cov_bl2 ,w_mkt) ), var_bench  )
+print( np.matmul( w_bl,np.matmul(cov_bl2 ,w_bl) ), var_bench  )
 ###########################################################################
 ### 案例数据分析
 ###########################################################################

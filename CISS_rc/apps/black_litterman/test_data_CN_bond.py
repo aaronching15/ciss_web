@@ -5,9 +5,9 @@ __author__ = " ruoyu.Cheng"
 ===============================================
 需求：
 在test_data_wind.py下载完wind原始数据后，将多个资产数据合并成相同时间区间的表格。
-这里主要对应A股权益类资产。
+这里主要对应A股债券类指数。
 
-last 190616 || since 190529
+last 190616 || since 190616
 
 Function:
 功能：
@@ -41,26 +41,31 @@ path0 = "D:\\data_Input_Wind\\"
 ### Create dictionary object for symbols
 dict_symbol = {}
 dict_symbol["path_csv"] = path_out
-
+benchmark_name = "cn_bond_cba"
+# input1 = input("Type in asset type:e.g. cn_bond_cba... ")
+input1 = benchmark_name
 
 #####################################################################
 ### Import week date list 
+# CBA00301.CS  start date 2002/1/7 ,earliest date
+# CBA07501.CS  start date 2014/1/7 ,latest   date 
 path_date = "C:\\zd_zxjtzq\\RC_trashes\\temp\\ciss_web\\CISS_rc\\db\\db_times\\"
-# 
-file_date = "times_CN_week_20120101_20181102.csv"
-# file_date = "times_CN_week_20090101_20190612.csv"
-
+# "times_CN_week_20120101_20181102.csv"
+file_date = "times_CN_week_20090101_20190612.csv"
 list_week = pd.read_csv(path_date+file_date)
-list_week = list_week.dropna( axis=0 )
-list_week_SSE = list( list_week["SSE"]  )
+# list_week = list_week.dropna( axis=0 )
+list_week_SSE = list( list_week["INTERBANK_BM"]  )
 print("list_week ")
 print( list_week_SSE[:3] )
 print( list_week_SSE[-3:] )
 
+
+
 #####################################################################
-### Working on benchmark
-benchmark_name = "CSI300"
-benchmark_code = "000300.SH"
+### Working on benchmark | China Bond Aggregate 
+benchmark_name = "CBA_total_value"
+
+benchmark_code = "CBA00301.CS"
 
 
 file_name = "Wind_" + benchmark_code + "_updated.csv"
@@ -100,7 +105,16 @@ dict_symbol["benchmark_code"] = benchmark_code
 
 #####################################################################
 ### Get weekly return for benchmark and assets
-code_list = ["601318.SH","600519.SH","600036.SH","000651.SZ","000333.SZ","601166.SH","600030.SH","600276.SH","601398.SH","000002.SZ","000001.SZ","000725.SZ","600104.SH","600900.SH","600009.SH"  ]
+### Equity case 
+# code_list = ["601318.SH","600519.SH","600036.SH","000651.SZ","000333.SZ","601166.SH","600030.SH","600276.SH","601398.SH","000002.SZ","000001.SZ","000725.SZ","600104.SH","600900.SH","600009.SH"  ]
+
+### Bond case 
+code_list =[ "CBA00101.CS","CBA00201.CS","CBA04401.CS","CBA00601.CS","CBA01201.CS","CBA05801.CS","CBA02701.CS","CBA02001.CS","CBA06101.CS","CBA03001.CS","CBA07501.CS","CBA01701.CS","CBA01801.CS","CBA02601.CS" ]
+items='close,pct_chg'
+
+# [ "CBA00101.CS","CBA00201.CS","CBA04401.CS","CBA00601.CS","CBA01201.CS",
+#   "CBA05801.CS","CBA02701.CS","CBA02001.CS","CBA06101.CS","CBA03001.CS",
+#   "CBA07501.CS","CBA01701.CS","CBA01801.CS","CBA02601.CS" ]
 
 ### Initialize dataframe for all asset returns 
 asset_chg_w = pd.DataFrame(columns=code_list, index=bench_chg_w.index  )
@@ -142,16 +156,16 @@ print( asset_chg_w.head() )
 # dict_symbol["asset_chg_week_df"] = asset_chg_w
 
 #####################################################################
-### save json to jsgon file 
+### save json to json file 
 dict_symbol["asset_name"] = "stock"
 dict_symbol["asset_code_list"] = code_list
 
 print("dict_symbol \n ", dict_symbol )
-with open( path_out+ 'data_bl.json', 'w') as output_file:
+with open( path_out+ 'data_bl'+ input1 +'.json', 'w') as output_file:
     json.dump( dict_symbol, output_file)
 
-bench_chg_w.to_csv( path_out+ 'bench_chg_w.csv' )
-asset_chg_w.to_csv( path_out+ 'asset_chg_w.csv' )
+bench_chg_w.to_csv( path_out+ 'bench_chg_w_'+ input1  +'.csv' )
+asset_chg_w.to_csv( path_out+ 'asset_chg_w_'+ input1  +'.csv' )
 
 
 

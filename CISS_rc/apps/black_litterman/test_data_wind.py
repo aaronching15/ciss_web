@@ -6,12 +6,13 @@ __author__ = " ruoyu.Cheng"
 需求：
 下载相关资产的日线数据
 
-last 190612 || since 190612
+last 190616 || since 190612
 
 Function:
 功能：
 
-todo:
+updates:
+190616,更新了债券的下载
 
 Notes:
 ##############################################
@@ -42,19 +43,33 @@ dict_symbol["path_csv"] = path_out
 
 file_path0 = "D:\\data_Input_Wind\\"
 
-#####################################################################
-bench_symbol = "000300.SH"
-asset_list =["601318.SH","600519.SH","600036.SH","000651.SZ","000333.SZ","601166.SH","600030.SH","600276.SH","601398.SH","000002.SZ","000001.SZ","000725.SZ","600104.SH","600900.SH","600009.SH"  ]
-
 import WindPy as WP
 # Or: from WindPy import w
 WP.w.start()
+
+
+
+
+#####################################################################
+### Equity case 
+# bench_symbol = "000300.SH"
+# asset_list =["601318.SH","600519.SH","600036.SH","000651.SZ","000333.SZ","601166.SH","600030.SH","600276.SH","601398.SH","000002.SZ","000001.SZ","000725.SZ","600104.SH","600900.SH","600009.SH"  ]
+# items='open,high,low,close,volume,amt,pct_chg'
+# len_items = 7
+
+#####################################################################
+### Bond Index case ，CBI 
+bench_symbol = "CBA00301.CS"
+asset_list =[ "CBA00101.CS","CBA00201.CS","CBA04401.CS","CBA00601.CS","CBA01201.CS","CBA05801.CS","CBA02701.CS","CBA02001.CS","CBA06101.CS","CBA03001.CS","CBA07501.CS","CBA01701.CS","CBA01801.CS","CBA02601.CS" ]
+items='close,pct_chg'
+len_items = 2
+
 
 code = bench_symbol 
 
 date_0=''
 date_1='20190612'
-items='open,high,low,close,volume,amt,pct_chg'
+
 
 
 def get_wind_csv(code,items, date_0, date_1,file_path0) :
@@ -72,18 +87,14 @@ def get_wind_csv(code,items, date_0, date_1,file_path0) :
 		len_item=len(WindData.Data) # = len(Columns) =6
 
 		len_contents=len(WindData.Data[1]) #codes here 253 
-
+		
 		for i in range(len_contents ) :
 		    temp_list  = [WindData.Times[i]  ] 
 		    
+		    for j in range(len_items) :
 		    # items='open,high,low,close,volume,amt,pct_chg'
-		    temp_list.append( WindData.Data[0][i] ) 
-		    temp_list.append( WindData.Data[1][i] ) 
-		    temp_list.append( WindData.Data[2][i] ) 
-		    temp_list.append( WindData.Data[3][i] ) 
-		    temp_list.append( WindData.Data[4][i] ) 
-		    temp_list.append( WindData.Data[5][i] ) 
-		    temp_list.append( WindData.Data[6][i] ) 
+
+		    	temp_list.append( WindData.Data[j][i] ) 
 
 		    writer.writerow( temp_list ) # date
 
