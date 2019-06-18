@@ -340,8 +340,9 @@ cons = ({'type': 'ineq', 'fun': lambda x: -1*np.sum(x) +1 },
 
 len_assets = len( ret_asset_df.columns )
 
+w_max = 0.25
 # example bnds: ((0,1),(0,1),(0,1),(0,1),(0,1))
-bnds = [(0,1)] * len_assets
+bnds = [(0, w_max )] * len_assets
 # w_init = [1, 0,0,0,0]
 w_init = [0] * len_assets
 w_init[0] = 1
@@ -721,7 +722,7 @@ cons2 = ({'type': 'ineq', 'fun': lambda x: -1*np.sum(x) +1 },
 len_assets = len( ret_asset_df.columns )
 
 # example bnds: ((0,1),(0,1),(0,1),(0,1),(0,1))
-bnds2  = [(0,1)] * len_assets
+bnds2  = [(0, w_max)] * len_assets
 # w_init = [1, 0,0,0,0]
 w_init2 = [0] * len_assets
 w_init2[0] = 1
