@@ -93,70 +93,70 @@ class gen_portfolios():
         time_admin1 = time_admin()
         time_stamp = time_admin1.get_time_stamp()
 
-        if config == {} :
-            ## Basic info
-            # initial date of generate portfolio 
-            portfolio_head["InitialDate"] = "" # previous 
-            portfolio_head["Index_Name"] = ""
-            if port_name =='':
-                portfolio_head["portfolio_name"] = str(time_stamp )
-                portfolio_head["portfolio_id"] =  "id_time_" + str(time_stamp )
-                portfolio_head["portfolio_id_time"] = str(time_stamp )
-            else :
-                portfolio_head["portfolio_name"] = port_name
-                portfolio_head["portfolio_id"] =  "id_time_" + str(time_stamp)+"_name_"+port_name
-                portfolio_head["portfolio_id_time"] = str(time_stamp )
+        # if config == {} :
+        ## Basic info
+        # initial date of generate portfolio 
+        portfolio_head["InitialDate"] = "" # previous 
+        portfolio_head["Index_Name"] = ""
+        if port_name =='':
+            portfolio_head["portfolio_name"] = str(time_stamp )
+            portfolio_head["portfolio_id"] =  "id_time_" + str(time_stamp )
+            portfolio_head["portfolio_id_time"] = str(time_stamp )
+        else :
+            portfolio_head["portfolio_name"] = port_name
+            portfolio_head["portfolio_id"] =  "id_time_" + str(time_stamp)+"_name_"+port_name
+            portfolio_head["portfolio_id_time"] = str(time_stamp )
 
-            portfolio_head["MaxN"] = ""
-            portfolio_head["Leverage"] = ""
-            portfolio_head["date_Start"] = ""
-            portfolio_head["date_LastUpdate"] = ""
-            portfolio_head["path_SP"] = ""   # previous name = path_Symbol
-            portfolio_head["w_equity_max"] = 0.0
-            portfolio_head["w_equity_min"] = 0.0
-            portfolio_head["w_bond_max"] = 0.0
-            portfolio_head["w_bond_min"] = 0.0
-            portfolio_head["w_cash_min"] = 0.0 # min level of cash as weight in portfolio
-            portfolio_head["info"] = ""
-            ## Values 
-            portfolio_head["Total_Cost"] = 0.0
-            portfolio_head["Cash"] = 0.0
-            portfolio_head["Stock"] = 0.0
-            portfolio_head["Total"] = 0.0
-            portfolio_head["Unit"] = 0.0
-            portfolio_head["MDD"] = 0.0
-            ## profit,loss, returns,risks and other statistics 
-            portfolio_head["PnL"] = 0.0
-            portfolio_head["PnL_pct"] = 0.0
-            portfolio_head["r_annual"] = 0.0
-            portfolio_head["PnL_total"] = 0.0
-            portfolio_head["PnL_Pct"] = 0.0
-            portfolio_head["total_ProfitReal"] = 0.0
-            portfolio_head["total_Profit_R"] = 0.0
-            # statistics: max,min,mean,median
-            portfolio_head["W_max"] = 0.0
-            portfolio_head["W_max_code"] = 0.0
-            portfolio_head["profit_max"] = 0.0
-            portfolio_head["profit_max_code"] = ""
-            portfolio_head["loss_max"] = 0.0
-            portfolio_head["loss_max_code"] = ""
-            portfolio_head["PnL_Pct_max"] = 0.0
-            portfolio_head["PnL_Pct_max_code"] = ""
-            portfolio_head["PnL_Pct_min"] = 0.0
-            portfolio_head["PnL_Pct_min_code"] = ""
-            portfolio_head["num_Trade_Profit"] = 0.0
-            portfolio_head["ave_Trade_Profit"] = 0.0
-            portfolio_head["total_Loss_R"] = 0.0
-            portfolio_head["num_Trade_Loss"] = 0.0
-            portfolio_head["total_Fees"] = 0.0
-            portfolio_head["W_Ideal_max"] = 0.0
-            portfolio_head["W_Ideal_max_code"] = ""
-            portfolio_head["ave_Trade_Loss"] = 0.0
-            # unit, cash,stocks
-            portfolio_head["Unit-5D"] = {}
-            portfolio_head["Cash-5D"] = {}
-            portfolio_head["Stock-5D"]= {}
- 
+        portfolio_head["MaxN"] = ""
+        portfolio_head["Leverage"] = ""
+        portfolio_head["date_Start"] = ""
+        portfolio_head["date_LastUpdate"] = ""
+        portfolio_head["path_SP"] = ""   # previous name = path_Symbol
+        portfolio_head["w_equity_max"] = 0.0
+        portfolio_head["w_equity_min"] = 0.0
+        portfolio_head["w_bond_max"] = 0.0
+        portfolio_head["w_bond_min"] = 0.0
+        portfolio_head["w_cash_min"] = 0.0 # min level of cash as weight in portfolio
+        portfolio_head["info"] = ""
+        ## Values 
+        portfolio_head["Total_Cost"] = 0.0
+        portfolio_head["Cash"] = 0.0
+        portfolio_head["Stock"] = 0.0
+        portfolio_head["Total"] = 0.0
+        portfolio_head["Unit"] = 0.0
+        portfolio_head["MDD"] = 0.0
+        ## profit,loss, returns,risks and other statistics 
+        portfolio_head["PnL"] = 0.0
+        portfolio_head["PnL_pct"] = 0.0
+        portfolio_head["r_annual"] = 0.0
+        portfolio_head["PnL_total"] = 0.0
+        portfolio_head["PnL_Pct"] = 0.0
+        portfolio_head["total_ProfitReal"] = 0.0
+        portfolio_head["total_Profit_R"] = 0.0
+        # statistics: max,min,mean,median
+        portfolio_head["W_max"] = 0.0
+        portfolio_head["W_max_code"] = 0.0
+        portfolio_head["profit_max"] = 0.0
+        portfolio_head["profit_max_code"] = ""
+        portfolio_head["loss_max"] = 0.0
+        portfolio_head["loss_max_code"] = ""
+        portfolio_head["PnL_Pct_max"] = 0.0
+        portfolio_head["PnL_Pct_max_code"] = ""
+        portfolio_head["PnL_Pct_min"] = 0.0
+        portfolio_head["PnL_Pct_min_code"] = ""
+        portfolio_head["num_Trade_Profit"] = 0.0
+        portfolio_head["ave_Trade_Profit"] = 0.0
+        portfolio_head["total_Loss_R"] = 0.0
+        portfolio_head["num_Trade_Loss"] = 0.0
+        portfolio_head["total_Fees"] = 0.0
+        portfolio_head["W_Ideal_max"] = 0.0
+        portfolio_head["W_Ideal_max_code"] = ""
+        portfolio_head["ave_Trade_Loss"] = 0.0
+        # unit, cash,stocks
+        portfolio_head["Unit-5D"] = {}
+        portfolio_head["Cash-5D"] = {}
+        portfolio_head["Stock-5D"]= {}
+
         return portfolio_head
 
     def gen_port_stat(self, sp_df,config={},port_name='' ) :
