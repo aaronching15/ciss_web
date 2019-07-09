@@ -23,6 +23,39 @@ class wind_api():
         # self.end=end 
         ''' TODO： Build a class for account: Cash, Stocks, Futures,Options , etc.  '''
 
+    def print_info(self):
+        ### print all modules for current clss
+
+        print("Get_wss: 获取多维数据。")
+
+
+        return 1 
+
+    def Get_wss(self,code_list,items,tradeDate):
+        ### 获取多维数据
+        ### code_list ="600036.SH,601398.SH"
+        ### items ="close,volume"
+        ### tradeDate = "20190708"
+        ### w.wss("600036.SH,601398.SH", "close,volume","tradeDate=20190708;priceAdj=U;cycle=D")
+        import WindPy as WP
+        # Or: from WindPy import w
+        WP.w.start()
+        WindData = WP.w.w.wss(code_list, items,"tradeDate="+tradeDate+";priceAdj=U;cycle=D")
+
+        '''
+        .ErrorCode=0
+        .Codes=[600036.SH,601398.SH]
+        .Fields=[CLOSE,VOLUME]
+        .Times=[20190709 18:57:38]
+        .Data=[[35.56,5.59],[50610541.0,196259034.0]]
+        '''
+
+
+
+
+        return WindData
+
+
     ''' Part 1 Get Price data '''
     def GetWindData(self, code='600036.SH', date_0='20151220', date_1='20160118', items='open,high,low,close,volume,amt,pct_chg', output=1):
         # last ?

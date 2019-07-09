@@ -432,6 +432,64 @@ todo: engine_etf.py\\ line 218
 
 </p>
 
+<h3><a name="190709">190709</a></h3> 
+<p>
+done,
+1,fesco问本月交社保的问题。
+
+todo,
+0，上午etf，下午BL 
+8，return firm laptop.
+
+1,files after 0705;[log_rC_1907.html; test_etf.py]
+
+2,ETF项目；
+4.1，新建etf模拟组合
+4.2，每日匹配pcf变动
+4.3，Weekly report，Quarterly report
+4.4,观察指数权重和PCF的细微区别：如因篮子规模和单券整百限制导致的
+
+3,print OA-leave-Approval to 冯丹
+
+5,trash_clear:todo
+5.1,有用信息归纳:["C:\zd_zxjtzq", ]
+5.2,Just_delete:["D:\CISS_db","D:\data_Input_Wind","D:\db_dzh_dfw","D:\py_modules"]
+5.3,data_in_out: manage、zhidu，经验，model，research;path:C:\zd_zxjtzq\RC_trashes\temp\mirror_1906\
+
+6，BL\\大类资产配置\\paper;{主要参考资料：中金研报，多资产的书，yuwei的书，Wind,国家统计局}
+6.1，todo，SAA-长期:经济数据建模继续，选取相关性最大的10个指标做回归
+6.2,TAA-短期：锚策略
+1，大类资产配置\\SAA\\主要宏观数据处理：按照季度末梳理，原始数据有很多按周的。这一部分不追求得到有超额收益的值，因为实践中需要叠加公司领导的主观观点。
+2，大类资产配置\\TAA+SAA\\机构持仓数据：长期视角，应该代表了机构整体能做的最优选择，并且往往受到股票池的影响。常见的限制是必须在沪深300指数成份股中选股。但是也有限制，例如数据只包括了前十大重仓股，只能看到大方向。
+4，分行业建模脚本
+6.3,Aliyun的网站
+
+7，午睡，少吃，健身
+================================================
+todo:
+1,对191个指标，分别和资产指数计算相关性。前5年和后5年相关性、高点/低点的相关性
+2，对于GDP，Price等10个大类的分类，确定最相关的指标匹配规则。
+3，确定经济数据指导中期或短期资产配置的策略。{时间，精力有限，结合实践需要，不太考虑长期因素}
+
+
+</p>
+
+<h4>portfolio模块改进问题分析 190709</h4>
+<p>Qs:
+1,func_stra.py\\class:stra_allocation\\def:stock_weights\\ 输入项是（ind_level,sty_v_g, sp_df），
+对于ETF，其实input就是pcf对象
+Ana:增加 def stock_weights_etf(self, sp_df) 专门给etf使用的模块。
+
+4.1，新建etf模拟组合
+1,T日pcf，T日新建port_etf
+2,
+
+</p>
+
+<p>
+todo: func_stra.py\\ line 145 
+
+
 
 
 

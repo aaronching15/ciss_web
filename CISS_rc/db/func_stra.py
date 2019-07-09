@@ -122,7 +122,52 @@ class stra_allocation():
         return weight_list 
 
 
+    def stock_weights_etf(self, df_head,df_stocks) :
+        ### Function：生成etf组合权重
+        ### INPUT :df_head{etf组合信息} ；df_stocks or sp_df{股票池权重}，
+        ### OUTPUT:
+        ### update:190709 | since 190709
+        '''
+        Example of df_stocks:
+        code name num mark premium_pct amount
+        0 1 平安银行 2400 3 0.1 33624
+        todo items:
+        1, if mark in{1=允许,3=深市退补},需要计算可成交价格，乘以股票数量后减去交易成本得到所费的现金。其中etf-sse的"amount"有值的是szse的
+        2，if mark ==2=必须,要么选取停牌前20天均价，要么使用“amount"中的价格。
 
+        '''
+        ### get last quotation for given period and code list 
+        ###TODO 在 db\\db_assets\\get_wind.py 里更新
+        # 一次性获取所有的历史当日的股票收盘价，记住这里不要复权！
+        '''
+        >>> Wp.w.wss("600036.SH,601398.SH", "close,volume","tradeDate=20190704;priceAdj=U;cycle=D")
+        .ErrorCode=0
+        .Codes=[600036.SH,601398.SH]
+        .Fields=[CLOSE,VOLUME]
+        .Times=[20190709 16:48:28]
+        .Data=[[36.08,5.68],[37917354.0,151690647.0]]
+        '''
+        from db.db_assets.get_wind import wind_api
+        code_list = list( df_stocks.code )
+        items = ["close","volume"]
+        tradeDate =  df_head["TradingDay"].values[0]  # "20190708"
+        wind0 = wind_api.Get_wss(code_list,items,tradeDate)
+
+        df_wind = pd.DataFrame( wind0.Data, columns=code_list,index=items )
+
+        TODOTODO
+        ####################################################################
+        ### 根据mark计算权重、可执行价格。
+        for temp_i in df_stocks.index :
+        temp_mark = df_stocks.loc[temp_i, "mark"]
+        print("temp_mark ", temp_mark)
+        if temp_mark in [1,3] :
+            ### get last price from quotation
+            df_stocks.loc[temp_i, "mv_es"] = df_stocks.loc[temp_i, "amount"]
+
+
+        elif temp_mark in [2] :
+        df_stocks.loc[temp_i, "mv_es"] = df_stocks.loc[temp_i, "amount"]
 
 
 

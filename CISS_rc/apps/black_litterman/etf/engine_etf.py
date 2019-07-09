@@ -215,7 +215,7 @@ class ETF_manage():
         ### Run strategy for allocation weights 
         # Straetgy could be a roughly estimation of how many stock to trade
         # 策略是粗线条的，只说我们要买入多少比例的股票
-        stra_weight_list = stra_allocation('').stock_weights(ind_level,sty_v_g,stockpool_df)
+        stra_weight_list = stra_allocation('').stock_weights_etf(df_head,df_stocks)
         print('weight_list of strategy:')
         print(stra_weight_list)
 
