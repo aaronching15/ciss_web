@@ -33,6 +33,9 @@ path_etf = "C:\\zd_zxjtzq\\RC_trashes\\temp\\ciss_web\\CISS_rc\\apps\\black_litt
 name_etf = "510300"
 date_init = "0704"
 df_head,df_stocks = etf_manage0.get_pcf_file(date_init,name_etf,path_etf )
+df_head.index = df_head.key
+print("df_head ", df_head)
+print( df_head.loc["TradingDay","value"] )
 print("Head of df_stocks \n", df_stocks.head() )
 
 

@@ -147,28 +147,58 @@ class stra_allocation():
         .Times=[20190709 16:48:28]
         .Data=[[36.08,5.68],[37917354.0,151690647.0]]
         '''
-        from db.db_assets.get_wind import wind_api
-        code_list = list( df_stocks.code )
+        import pandas as pd 
+        
+        ### notesL: df_stocks.code is in raw format : [1, 2, 63, 69, 100, 157, 166, 333]
+        code_list = list( df_stocks.code_wind )
         items = ["close","volume"]
-        tradeDate =  df_head["TradingDay"].values[0]  # "20190708"
-        wind0 = wind_api.Get_wss(code_list,items,tradeDate)
 
-        df_wind = pd.DataFrame( wind0.Data, columns=code_list,index=items )
+        # "20190708" or # "20190708.0"
+        tradeDate =  df_head.loc["TradingDay","value"]  
+        print( tradeDate )
 
-        TODOTODO
+        ### Method1 : Get wind quotation 
+        # from db.db_assets.get_wind import wind_api
+        # wind_api0 =wind_api()
+        # wind0 = wind_api0.Get_wss(code_list,items,tradeDate)
+        # df_wind = pd.DataFrame( wind0.Data, columns=code_list,index=items )
+        # df_wind.to_csv("D:\\df_wind_1907.csv")
+
+        ### Method2 :Import quotation from absolute path 
+        df_wind = pd.read_csv("D:\\df_wind_190704.csv",index_col="Unnamed: 0")
+
+        print("df_wind \n", df_wind.head)
+        print( df_wind.info() )
+
         ####################################################################
         ### 根据mark计算权重、可执行价格。
         for temp_i in df_stocks.index :
-        temp_mark = df_stocks.loc[temp_i, "mark"]
-        print("temp_mark ", temp_mark)
-        if temp_mark in [1,3] :
-            ### get last price from quotation
-            df_stocks.loc[temp_i, "mv_es"] = df_stocks.loc[temp_i, "amount"]
+            temp_mark = df_stocks.loc[temp_i, "mark"]
+            temp_code_w = df_stocks.loc[temp_i, "code_wind"]
+            # type(temp_code) is string 
+
+            ### add quotation for trading stocks 
+            #notes: type(temp_mark) is "str"
+            
+            if temp_mark in ["1","3"] :
+                ### get last price from quotation
+                df_stocks.loc[temp_i, "mv_es"] = df_stocks.loc[temp_i, "amount"]
+                ### find quotes
+                temp_close = df_wind.loc["close",temp_code_w]
+                temp_vol = df_wind.loc["volume",temp_code_w]
+                if temp_vol > 0 :
+                    
+                    # print( type( df_stocks.loc[temp_i, "num"]) )   # "str"
+                    df_stocks.loc[temp_i, "mv_es"] =  temp_close * float( df_stocks.loc[temp_i, "num"] )
 
 
-        elif temp_mark in [2] :
-        df_stocks.loc[temp_i, "mv_es"] = df_stocks.loc[temp_i, "amount"]
+            elif temp_mark in ["2"] :
+                df_stocks.loc[temp_i, "mv_es"] = df_stocks.loc[temp_i, "amount"]
 
+
+        df_stocks.to_csv("D:\\df_stocks_1907.csv",encoding="gbk")
+
+        return df_stocks
 
 
 

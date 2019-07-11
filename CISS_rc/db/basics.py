@@ -5,12 +5,15 @@ __author__ = " ruoyu.Cheng"
 ===============================================
 Function:
 功能：
-last update 181023 | since  181023
+last update 190711 | since  181023
 Menu :
 class basics() : 
     初始化各类基础数据
 class sector() : 初始化（股票）板块
 class industry() :
+
+class symbol_admin() : 不同类型代码之间的相互转化，如symbol_pcf -- code_wind -- code_bloomberg
+
 
 THREE COMPONENTS:
 1,class A:
@@ -118,8 +121,48 @@ class time_admin(basics) :
         return output
 
 
+###################################################
+class symbol_admin(basics) :
+    ### transpose symbol among different types 
+    # last | since 190711
+    # get from base class
+    def __init__(self):
+        super(basics, self).__init__()
 
+    def raw2wind(self,code_single,mkt="CN") :
+        ### From "333" to "000333.SZ"
+        len0 = len(code_single)
+        if mkt=="CN" :
+            if len(code_single) <6 :
+                code_single ="0"*(6-len0)  + code_single 
+        if mkt=="HK" :
+            if len(code_single) <5 :
+                code_single ="0"*(5-len0)  + code_single 
 
+        if code_single[0:2] in ["00","30","15"] :
+            temp_code_w = code_single + ".SZ"
+        elif code_single[0:2] in ["60","68","51"] :
+            temp_code_w = code_single + ".SH"
+        else :
+            print("ERROR WARNING FOR ADDING CODE suffix/postfix ", code_single)
+
+        return temp_code_w
+
+    def raw2wind_list(self,code_list) :
+        ### working on code list 
+
+        ### Add suffix for code from pcf file 
+        ### SZ for ["00","30","15"]; SH: ["60","68","51"]
+        ### notes: ["0","3","1"]  might not work if we have bond codes in portfolios
+        if len(code_list ) == 1 :
+            
+            code_list_w = self.raw2wind(code_list,"CN")
+        else :
+            code_list_w = []
+            for temp_code in code_list : 
+                code_list_w = code_list_w + [ self.raw2wind(temp_code,"CN") ]
+
+        return code_list_w
 
 
 

@@ -178,15 +178,15 @@ class gen_portfolios():
         return portfolio
 
 
-    def gen_port_suites(self,port_head,config_apps,temp_df_growth,sp_name0,port_name) :
+    def gen_port_suites(self,port_head,config_apps,df_sp,sp_name0,port_name) :
         ### using stockpool as input to generate portfolio 
         # 应该是不包括apps对象信息的
         # Ana:portfolio中，cash deposit/withdraw 是被动接受。
         # Ana:account 中，由于要算净值，出入金应该放account里，
         # funds是主动管理cash I/O的主体，涉及安排资金流转的功能
         ### 根据带权重的symbol list，用gen_portfolio 模块，建立初始组合，采用不复权价格。
+        # 190711： var name: df_sp = temp_df_growth
         
-        ###
         id_time_stamp = port_head["portfolio_id_time"]  
 
 
@@ -197,19 +197,23 @@ class gen_portfolios():
         # config= {}
         # sp_name0= 'growth_' + str(int_ind3)  
         config ={}
-        stockpool_0 = gen_stockpools(id_time_stamp,temp_df_growth,config,sp_name0)
+        stockpool_0 = gen_stockpools(id_time_stamp,df_sp,config,sp_name0)
         print("type of sp_df",  type( stockpool_0 )  ) 
 
+        ###########################################################
         ### Initialize supportting configuration 
+        ### 生成组合的配置文件 config_IO_0
         from config.config_IO import config_IO
         ## Import config module 
         config_IO_0 = config_IO('config_name').gen_config_IO_port('',port_name)
+
         import json
         file_json = stockpool_0.sp_head["id_sp"] +'.json'
         with open( config_IO_0['path_stockpools']+ file_json ,'w') as f:
             json.dump( stockpool_0.sp_head ,f) 
         file_csv = stockpool_0.sp_head["id_sp"] +'.csv'
-        stockpool_0.sp_df.to_csv(config_IO_0['path_stockpools']+file_csv)
+        ### encoding with "gbk" if contain CN 
+        stockpool_0.sp_df.to_csv(config_IO_0['path_stockpools']+file_csv, encoding="gbk")
 
         print("Stockpool has been generated ")
         print( stockpool_0.sp_head )

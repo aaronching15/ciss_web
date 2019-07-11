@@ -437,19 +437,43 @@ todo: engine_etf.py\\ line 218
 done,
 1,fesco问本月交社保的问题。
 
-todo,
-0，上午etf，下午BL 
-8，return firm laptop.
+</p>
 
-1,files after 0705;[log_rC_1907.html; test_etf.py]
+<h4>portfolio模块改进问题分析 190709</h4>
+<p>Qs:
+1,func_stra.py\\class:stra_allocation\\def:stock_weights\\ 输入项是（ind_level,sty_v_g, sp_df），
+对于ETF，其实input就是pcf对象
+Ana:增加 def stock_weights_etf(self, sp_df) 专门给etf使用的模块。
+
+4.1，新建etf模拟组合
+1,T日pcf，T日新建port_etf
+2,
+
+</p>
+
+<p>
+
+
+<h3><a name="190711">190711</a></h3> 
+
+<p>
+done,
+
+todo: func_stra.py\\ line 145 
+
+todo,
+1,0711，notes:pc-gyrx的\CISS_rc\目录文件比较复杂，只保存更新了的文件
+    今日更新文件：{ log_rC_1907.html;enging_etf.py,test_etf.py  }
+    {db\\basics.py, ports.py,accounts.py,func_stra.py,stockpools.py,get_wind.py }
+    {"D:\\df_wind_190704.csv",   }
 
 2,ETF项目；
-4.1，新建etf模拟组合
-4.2，每日匹配pcf变动
-4.3，Weekly report，Quarterly report
+4.1，新建etf模拟组合；4.2，每日匹配pcf变动；4.3，Weekly report，Quarterly report
 4.4,观察指数权重和PCF的细微区别：如因篮子规模和单券整百限制导致的
 
-3,print OA-leave-Approval to 冯丹
+8，0711,晚上准备,return firm laptop; ask员工积分--融e购文轩网图书劵500*9
+
+3,0713，OA-leave-time-0719/22,print OA-leave-Approval to 冯丹
 
 5,trash_clear:todo
 5.1,有用信息归纳:["C:\zd_zxjtzq", ]
@@ -471,47 +495,77 @@ todo:
 2，对于GDP，Price等10个大类的分类，确定最相关的指标匹配规则。
 3，确定经济数据指导中期或短期资产配置的策略。{时间，精力有限，结合实践需要，不太考虑长期因素}
 
-
 </p>
-
-<h4>portfolio模块改进问题分析 190709</h4>
-<p>Qs:
-1,func_stra.py\\class:stra_allocation\\def:stock_weights\\ 输入项是（ind_level,sty_v_g, sp_df），
-对于ETF，其实input就是pcf对象
-Ana:增加 def stock_weights_etf(self, sp_df) 专门给etf使用的模块。
-
-4.1，新建etf模拟组合
-1,T日pcf，T日新建port_etf
-2,
-
-</p>
-
 <p>
-todo: func_stra.py\\ line 145 
+企业年金权益归属： 
+权益归属核算时点    N   归属比例
+职工与本单位终止、解除劳动合同；出国定居    N<  1 年 0%
+     1 年≤N< 3 年 30%
+    3 年≤N< 6 年  60%
+    6 年≤N< 9 年  90%
+    N≥ 9 年  100%
+</p>
+<p>
+天风证券\\纺织服装\\吕明
+比音勒芬（002832.SZ）：7小时蹲点比音勒芬成都时代奥莱店，告诉您真实的存货情况
+20190707_天风证券_行业报告_行业研究周报_寻找中报超预期标的--纺织服装_吕明.pdf
+
+</p>
+<h4>指数增强·Smart Beta</h4>
+<p>
+topic 20190708_华泰证券_金融工程专题_林晓明陈烨李子钰何康_XNDL1e7df433-d6a3-4ce2-a7c6-4534c96923f2.pdf
+美国的价值和成长类 Smart Beta 产品发展良好，相比其他类型的产品规模位居前两位。而国内价值和成长类 Smart Beta 产品发展差异较大，成长类
+产品规模逐渐缩水。探究其中原因，本文总结了海内外价值和成长指数编制方案的 4 个差异.
+
+本文对比了海内外价值和成长指数的编制方案，总结了 4 个方面的差异：
+（1）不同于海外指数将宽基指数进行二分类的核心思路，国内指数存在从全样本中选出特定数量股票的构建思路。
+（2）国内指数针对个股只使用价值或成长指标进行评分，而不考虑个股在价值和成长维度相对暴露程度的高低。
+（3）相比国内指数，海外指数通常会对评分指标进行累积市值调整以达到将宽基指数一分为二的效果。
+（4）海外指数在成长指标上会同时选取个股历史和未来的增长率，而国内指数仅选取个股历史计算出的增长率。
+
+</p>
+
+<h4>port_pcf进度</h4>
+<p>
+1,port_pcf进度:
+    1, 生成stockpool，func_stra
+
+Qs,
+1,generate stockpool csv file 没有组合信息
+    ports.py\\ line 200
+    stockpool_0 = gen_stockpools(id_time_stamp,temp_df_growth,config,sp_name0)
+
+    Ana:sp文件生成有问题；def gen_stockpool() 主要依靠 变量temp_df_growth 生成 sp_df
+
+2, 原始pcf中的代码是无后缀且不符合wind需要的，需要从"333"改成"000333.SZ"
+Ans:   新增模块 \\db\\basics.py\\ class symbol_admin() :代码管理
+
+3, fucn_stra.py\\line 151, 避免每次都要用wind抓数据
+    导入 df_stocks.to_csv("D:\\df_stocks_1907.csv",encoding="gbk")
+
+4,trades.py\\class manage_trades\\def manage_tradeplan() 
+    输入项中 ind_level 似乎不再需要，
+    def manage_tradeplan(self,if_rebalance,ind_level,sty_v_g,portfolio_suites,signals_df,config_IO_0,date_start,date_end,quote_type,data_wind):
+
+    manager_trades.manage_tradeplan() 是比较大的通用型标准模块，其中根据“ind_level,sty_v_g”生成的   weight_target = signals_df.loc[temp_i,name_column ]
+    主要是为abm model服务的，在etf-pcf模式下是互相独立还是互相融合？？？
+
+Ana: signals_df.loc[temp_i,name_column ]#'w_allo_value_ind3'] 
+    对应的是 signals的生成过程。在其之前是：
+    stra_estimates_group = {}
+    stra_estimates_group['key_1'] = stra_weight_list
+    optimizer('').optimizer_weight(stra_estimates_group )
+    
+    4.1，这些过程都没有过度加工，因此可以在tradeplan处做一个逻辑判断。
+        line278: name_column = "w_allo_"+sty_v_g + "_ind" +ind_level2
+    4.2，manage_tradeplan还涉及到 引用最新行情，这个对于etf来说也不是那么重要。
+        line222： load_quotes()
+    
+    todotodo
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+</p>
 
 
 

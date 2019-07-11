@@ -40,7 +40,7 @@ class wind_api():
         import WindPy as WP
         # Or: from WindPy import w
         WP.w.start()
-        WindData = WP.w.w.wss(code_list, items,"tradeDate="+tradeDate+";priceAdj=U;cycle=D")
+        WindData = WP.w.wss(code_list, items,"tradeDate="+tradeDate+";priceAdj=U;cycle=D")
 
         '''
         .ErrorCode=0

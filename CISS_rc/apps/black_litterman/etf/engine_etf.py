@@ -84,6 +84,9 @@ class ETF_manage():
         # abm模型的参数 config_apps_abm
         from config.config_apps_abm import config_apps_abm
         from config.config_IO import config_IO
+        ### Add suffix for code from pcf file 
+        from db.basics import symbol_admin
+        symbol_admin0 = symbol_admin()
 
         # import time module 
         from db.times import times
@@ -133,7 +136,13 @@ class ETF_manage():
         ### Setting initial table of stockpoo 
         # "temp_df_growth" 实质上是 table of stockpool,具体表格内容是没有要求的，建议将当期持仓股票代码列表加入即可
         # df_sp == temp_df_growth
-        df_sp = df_stocks.loc[:,['code','name'] ] 
+
+        ### Add suffix for code from pcf file 
+        ### SZ for ["00","30","15"]; SH: ["60","68","51"]
+        ### notes: ["0","3","1"]  might not work if we have bond codes in portfolios
+        df_stocks["code_wind"] = symbol_admin0.raw2wind_list( list( df_stocks.code)  )
+
+        df_sp = df_stocks.loc[:,['code_wind',"code",'name'] ] 
 
         portfolio_suites = portfolio_gen.gen_port_suites(port_head,config_apps,df_sp,sp_name0,port_name)
         print('portfolio_suites has been generated.')
@@ -236,6 +245,7 @@ class ETF_manage():
         ### Signal generator
         ## get signals by strategy estimations 
         # 交易信号是精细化的，对应了目标的数量，金额，持仓百分比等要素。
+        
         portfolio_suites = signals('sig_stra_weight').update_signals_stock_weight(optimizer_weight_list,portfolio_suites)
         signals_list = portfolio_suites.signals.signals_df 
 
@@ -249,6 +259,8 @@ class ETF_manage():
         manager_trades = manage_trades('')
         # sty_v_g,sty_v_g is used to judge value , growth or other styles. sty_v_g='value'
         if_rebalance =0 # 0 for the generate period and 1 for the update period 
+        ind_level = "0" # 0 is default value for ind_level.,should be str type
+        sty_v_g='value' # "value" as default 
         portfolio_suites = manager_trades.manage_tradeplan(if_rebalance,ind_level,sty_v_g,portfolio_suites, signals_list, config_IO_0 ,date_start,date_end,quote_type,data_wind_0 )
         print('trade_plan')
         print( portfolio_suites.trades.tradeplan.info() )

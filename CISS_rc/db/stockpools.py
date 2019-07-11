@@ -54,8 +54,8 @@ class gen_stockpools():
         stockpool_head = {} 
         ### ref. previous portfolio file. 
         ## get stockpool id using  time stamp
-        import sys
-        sys.path.append("..")
+        # import sys
+        # sys.path.append("..")
         # from db.basics import time_admin
         # time_admin1 = time_admin()
         # time_stamp = time_admin1.get_time_stamp()

@@ -72,7 +72,8 @@ class gen_accounts():
         # self.account_cash | cash instuments:{SSE:GC001 ; IB-Mkt:R001 }
 
     def gen_account_sum (self, port_df,account_head,init_date='2014-05-31'  ) :
-        # account_sum  
+        ### account_sum  
+        ### last update 190711
 
         len_init = 50 # initial maximum positions is 50 
         # market_value used to be 'Stock',but now we have more asset types
@@ -90,7 +91,13 @@ class gen_accounts():
         #  np.zeros([len_init, len(columns_sum)])
         account_sum  = pd.DataFrame( columns=columns_sum, index=dates)
         # initialize the first day 
-        start_date = dates.iloc[0]
+        print("dates \n", dates ,"init_date",init_date)
+        ### if length of dates is 0, then assign initial date to start-date
+        if len( dates.index ) < 1 :
+            start_date = init_date
+        else :
+            start_date = dates.iloc[0]
+        
         account_sum.loc[start_date,'cash'] = account_head["Cash"] # =init cash
         account_sum.loc[start_date,'total_cost'] = 0.0
         account_sum.loc[start_date,'market_value'] = 0.0

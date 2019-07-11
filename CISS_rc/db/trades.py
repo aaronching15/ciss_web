@@ -143,6 +143,9 @@ class manage_trades():
 
 
     def manage_tradeplan(self,if_rebalance,ind_level,sty_v_g,portfolio_suites,signals_df,config_IO_0,date_start,date_end,quote_type,data_wind):
+        ### 
+        # line 276,"name_column" 需要用到 "ind_level"和"sty_v_g" |last 190711
+        ### last modified 190711
         '''
         there are 4 cases: 
         1, buy with no previous positions
@@ -155,7 +158,9 @@ class manage_trades():
         if_rebalance means we need to sell all previous positions if code is not in latest target weight from signals
         '''
 
-        # sty_v_g is used to judge value , growth or other styles. sty_v_g='value'
+        # sty_v_g is used to judge value , growth or other styles. sty_v_g='value' in default
+
+        
         # making trade plan using signals 
         #################################################################
         ### modify ind_level if we want to calculate the whole market 
