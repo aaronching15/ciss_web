@@ -60,10 +60,11 @@ class stra_allocation():
 
     def stock_weights(self,ind_level,sty_v_g, sp_df) :
         # update:增加对市场组合的权重重新计算 | 190412
-        # todo import config file
         # sty_v_g = 'value' or 'growth'
         # INPUT sp_df
-        # OUTPUT ALLOCATION 
+        # OUTPUT: weigh_list
+        # weigh_list.columns=['code','ind1_code','ind2_code','ind3_code',col_w_value,col_w_growth]
+        
         # print(sp_df.loc[:,['code','ind1_code']].head()  )
 
         ####################################################################
@@ -116,7 +117,13 @@ class stra_allocation():
         
         
         '''
-
+        ######################################################################
+        ### 根据input参数，赋值给标准权重 
+        # last | since 190712
+        if sty_v_g == 'value' :
+            weight_list[ "pct_port"] = weight_list[col_w_value]
+        elif sty_v_g == 'growth':
+            weight_list[ "pct_port"] = weight_list[col_w_growth] 
 
 
         return weight_list 
@@ -195,10 +202,20 @@ class stra_allocation():
             elif temp_mark in ["2"] :
                 df_stocks.loc[temp_i, "mv_es"] = df_stocks.loc[temp_i, "amount"]
 
+        ####################################################################
+        ### 
+        weight_list = df_stocks
+        para_cash_pct = 0.03 # 现金比例
+        
+        # type is str or char change to float
+        weight_list[ "mv_es"] = pd.to_numeric( weight_list[ "mv_es"] )
+        # print( weight_list[ "mv_es"].sum() )
 
-        df_stocks.to_csv("D:\\df_stocks_1907.csv",encoding="gbk")
+        weight_list[ "pct_port"] = weight_list[ "mv_es"]/ (weight_list[ "mv_es"].sum()/para_cash_pct  )
+        weight_list[ "amt"] =  weight_list[ "mv_es"]
+        # df_stocks.to_csv("D:\\df_stocks_1907.csv",encoding="gbk")
 
-        return df_stocks
+        return weight_list
 
 
 

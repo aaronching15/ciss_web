@@ -5,8 +5,8 @@ __author__ = " ruoyu.Cheng"
 ===============================================
 Function:
 功能：
-last update 181106 | since  181106
-Menu :
+last update 190712 | since  181106
+
 Menu :
 THREE COMPONENTS:
 1,class A:
@@ -47,6 +47,19 @@ class signals():
         signals_df = self.gen_signals_stock()
         self.signals_df = signals_df
 
+    def print_info(self):
+        ### print(  )
+
+        print("All columns for signals_df==weight_list ")
+        print("代码，买卖，按账户总值百分比，持仓百分比，现金可用百分比，市场流动性百分比， \n  'code','bsh','pct_account','pct_holding','pct_cash','pct_liquid', 'number','amt' ")
+        print("资产类别，市场，货币,'asset','market','currency'")
+        print("委托方向、委托类型{数量、金额、组合净值比例，股票持仓比例}，价格-预估或限制，是否限价,\n 'entrust_dir','entrust_type'-'num','amt','pct_port','pct_stock'--,'price_limit','if_limit' ")
+        print("num","amt","pct_port","pct_stock")
+
+        print("Function:update_signals_stock_weight | get precise signal list using weight list as input")
+
+        return 1
+
     def gen_signals_head(self, id_time_stamp,config={},signals_name='') :
         # generate head file of signals
         import sys
@@ -84,27 +97,36 @@ class signals():
         return signals_head
 
     def gen_signals_stock(self) :
-        # generate dataframe signals
-        # old version:  ['Signal', 'temp_Ana', 'Order', 'Symbol'])
-        # 按账户总值百分比，持仓百分比，现金可用百分比，市场流动性百分比 'pct_account','pct_holding','pct_cash'
+        # generate dataframe signals # format: DataFrame 
+        # befo1907:old version:  ['Signal', 'temp_Ana', 'Order', 'Symbol'])
+        # last 190712
+        
+        ### 按账户总值百分比，持仓百分比，现金可用百分比，市场流动性百分比 
+        ### 'pct_account','pct_holding','pct_cash','pct_liquid'
         columns_signals= ['code','bsh','pct_account','pct_holding','pct_cash','pct_liquid',
-        'number','amt','asset','market','currency']
-        # 资产类别，市场，货币,'asset','market','currency'
+        'number','amt']
+        ### 资产类别，市场，货币,'asset','market','currency'
+        columns_signals= columns_signals + ['asset','market','currency']
+        ### 增加 委托方向、委托类型{数量、金额、组合净值比例，股票持仓比例}，价格{预估或限制}，是否限价。
+        ### "entrust_dir","entrust_type"{"num","amt","pct_port","pct_stock"},"price_limit","if_limit"
+        columns_signals= columns_signals + ["entrust_dir","entrust_type","price_limit","if_limit"]
+        ### "num","amt","pct_port","pct_stock"
+        columns_signals= columns_signals + ["num","amt","pct_port","pct_stock"]
 
         signals_df =  pd.DataFrame(columns=columns_signals)
-        # pure signal： 1，0，-1
+        
+        ### pure signal： 1，0，-1 ;多头，无、空头
         signals_df['signal_pure'] = 1 
+
         return signals_df
 
-
     def update_signals_stock_weight(self,optimizer_weight_list,portfolio_suites):
-        # using weight list to get precise signal list 
-
-        ## load trading days to get latest trading dates 
-
-
-        ## step load quotes using given dates 
-
+        ### Function:get precise signal list using weight list 
+        ### NOTES: signals_df 实质上就是 weight_list
+        # last 190712 
+        # minimum output columns: code,entrust direction委托方向，entrust method委托方式
+        # columns:["code","entrust_dir","entrust_type","weight","num","price"]
+        # derived from def gen_signals_stock(self)
 
         portfolio_suites.signals.signals_df = optimizer_weight_list
         # signals_list = optimizer_weight_list

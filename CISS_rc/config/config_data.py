@@ -40,7 +40,7 @@ class config_data():
             # original
             # items = ["open","high","low","close","volume","amt","turn"]
             # short items
-            items = ["open","close","volume","amt","turn"]
+            items = ["open","close","volume","amt"]
             para = "PriceAdj=F"
 
         elif type_wsd in [ 'day_us','day_hk' ]:

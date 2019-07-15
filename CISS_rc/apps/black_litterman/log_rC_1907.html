@@ -455,47 +455,7 @@ Ana:增加 def stock_weights_etf(self, sp_df) 专门给etf使用的模块。
 
 
 <h3><a name="190711">190711</a></h3> 
-
-<p>
-done,
-
-todo: func_stra.py\\ line 145 
-
-todo,
-1,0711，notes:pc-gyrx的\CISS_rc\目录文件比较复杂，只保存更新了的文件
-    今日更新文件：{ log_rC_1907.html;enging_etf.py,test_etf.py  }
-    {db\\basics.py, ports.py,accounts.py,func_stra.py,stockpools.py,get_wind.py }
-    {"D:\\df_wind_190704.csv",   }
-
-2,ETF项目；
-4.1，新建etf模拟组合；4.2，每日匹配pcf变动；4.3，Weekly report，Quarterly report
-4.4,观察指数权重和PCF的细微区别：如因篮子规模和单券整百限制导致的
-
-8，0711,晚上准备,return firm laptop; ask员工积分--融e购文轩网图书劵500*9
-
-3,0713，OA-leave-time-0719/22,print OA-leave-Approval to 冯丹
-
-5,trash_clear:todo
-5.1,有用信息归纳:["C:\zd_zxjtzq", ]
-5.2,Just_delete:["D:\CISS_db","D:\data_Input_Wind","D:\db_dzh_dfw","D:\py_modules"]
-5.3,data_in_out: manage、zhidu，经验，model，research;path:C:\zd_zxjtzq\RC_trashes\temp\mirror_1906\
-
-6，BL\\大类资产配置\\paper;{主要参考资料：中金研报，多资产的书，yuwei的书，Wind,国家统计局}
-6.1，todo，SAA-长期:经济数据建模继续，选取相关性最大的10个指标做回归
-6.2,TAA-短期：锚策略
-1，大类资产配置\\SAA\\主要宏观数据处理：按照季度末梳理，原始数据有很多按周的。这一部分不追求得到有超额收益的值，因为实践中需要叠加公司领导的主观观点。
-2，大类资产配置\\TAA+SAA\\机构持仓数据：长期视角，应该代表了机构整体能做的最优选择，并且往往受到股票池的影响。常见的限制是必须在沪深300指数成份股中选股。但是也有限制，例如数据只包括了前十大重仓股，只能看到大方向。
-4，分行业建模脚本
-6.3,Aliyun的网站
-
-7，午睡，少吃，健身
-================================================
-todo:
-1,对191个指标，分别和资产指数计算相关性。前5年和后5年相关性、高点/低点的相关性
-2，对于GDP，Price等10个大类的分类，确定最相关的指标匹配规则。
-3，确定经济数据指导中期或短期资产配置的策略。{时间，精力有限，结合实践需要，不太考虑长期因素}
-
-</p>
+  
 <p>
 企业年金权益归属： 
 权益归属核算时点    N   归属比例
@@ -555,7 +515,7 @@ Ana: signals_df.loc[temp_i,name_column ]#'w_allo_value_ind3']
     stra_estimates_group = {}
     stra_estimates_group['key_1'] = stra_weight_list
     optimizer('').optimizer_weight(stra_estimates_group )
-    
+
     4.1，这些过程都没有过度加工，因此可以在tradeplan处做一个逻辑判断。
         line278: name_column = "w_allo_"+sty_v_g + "_ind" +ind_level2
     4.2，manage_tradeplan还涉及到 引用最新行情，这个对于etf来说也不是那么重要。
@@ -567,13 +527,314 @@ Ana: signals_df.loc[temp_i,name_column ]#'w_allo_value_ind3']
 
 </p>
 
+<h3><a name="190712">190712</a></h3> 
+
+<p>
+done,
+1,bye-bye meal
+2,Xi'an plan
+3，0711，备份，notes:pc-gyrx的\CISS_rc\目录文件比较复杂，只保存更新了的文件
+    今日更新文件：
+    { log_rC_1907.html;enging_etf.py,test_etf.py  }
+    {db\\basics.py, ports.py,accounts.py,func_stra.py,stockpools.py,get_wind.py }
+    {"config_data.py",   }
+
+todo,
+1, 15:35，出发-北京西站
+
+3，今日更新文件：{log_rC_1907.html;enging_etf.py,  }
+    {trades.py,signals.py }
+
+2,ETF项目；
+4.1，新建etf模拟组合；4.2，每日匹配pcf变动；4.3，Weekly report，Quarterly report
+4.4,观察指数权重和PCF的细微区别：如因篮子规模和单券整百限制导致的
+
+8，0711,晚上准备,return firm laptop; ask员工积分--融e购文轩网图书劵500*9
+
+3,0713，OA-leave-time-0719/22,print OA-leave-Approval to 冯丹
+
+5,trash_clear:todo
+5.1,有用信息归纳:["C:\zd_zxjtzq", ]
+5.2,Just_delete:["D:\CISS_db","D:\data_Input_Wind","D:\db_dzh_dfw","D:\py_modules"]
+5.3,data_in_out: manage、zhidu，经验，model，research;path:C:\zd_zxjtzq\RC_trashes\temp\mirror_1906\
+
+6，BL\\大类资产配置\\paper;{主要参考资料：中金研报，多资产的书，yuwei的书，Wind,国家统计局}
+6.1，todo，SAA-长期:经济数据建模继续，选取相关性最大的10个指标做回归
+6.2,TAA-短期：锚策略
+1，大类资产配置\\SAA\\主要宏观数据处理：按照季度末梳理，原始数据有很多按周的。这一部分不追求得到有超额收益的值，因为实践中需要叠加公司领导的主观观点。
+2，大类资产配置\\TAA+SAA\\机构持仓数据：长期视角，应该代表了机构整体能做的最优选择，并且往往受到股票池的影响。常见的限制是必须在沪深300指数成份股中选股。但是也有限制，例如数据只包括了前十大重仓股，只能看到大方向。
+4，分行业建模脚本
+6.3,Aliyun的网站
+
+7，午睡，少吃，健身
+================================================
+todo:
+1,对191个指标，分别和资产指数计算相关性。前5年和后5年相关性、高点/低点的相关性
+2，对于GDP，Price等10个大类的分类，确定最相关的指标匹配规则。
+3，确定经济数据指导中期或短期资产配置的策略。{时间，精力有限，结合实践需要，不太考虑长期因素}
+
+</p>
+
+<h4>port_pcf进度</h4>
+<p>
+1,trades.py\\class manage_trades\\def manage_tradeplan() 
+    输入项中 ind_level 似乎不再需要，
+    def manage_tradeplan(self,if_rebalance,ind_level,sty_v_g,portfolio_suites,signals_df,config_IO_0,date_start,date_end,quote_type,data_wind):
+
+    manager_trades.manage_tradeplan() 是比较大的通用型标准模块，其中根据“ind_level,sty_v_g”生成的   weight_target = signals_df.loc[temp_i,name_column ]
+    主要是为abm model服务的，在etf-pcf模式下是互相独立还是互相融合？？？
+
+Ana: signals_df.loc[temp_i,name_column ]#'w_allo_value_ind3'] 
+    对应的是 signals的生成过程。在其之前是：
+    stra_estimates_group = {}
+    stra_estimates_group['key_1'] = stra_weight_list
+    optimizer('').optimizer_weight(stra_estimates_group )
+
+    4.1，这些过程都没有过度加工，因此可以在tradeplan处做一个逻辑判断。
+        line278: name_column = "w_allo_"+sty_v_g + "_ind" +ind_level2
+    4.2，manage_tradeplan还涉及到 引用最新行情，这个对于etf来说也不是那么重要。
+        line222： load_quotes()
+
+idea:考虑将分类的判断都放到组合的配置文件里去，比如portfolio_suites.config
+Ans:
+    1,更新了 def gen_signals_stock(self) 里对signals的columns；对signals里的信息做统一设置，方便后续和O32系统里的指令下达联系起来。
+    
+    1，根据signals.columns 更新  def stock_weights_etf 的输出项，
+        是的w_allo_ 这些都改成统一的格式,例如为ABM模型服务的
+        func_stra.py\\class stra_allocation\\def stock_weights\\line126  weight_list[ "pct_port"] 
+
+todo
+todo trades.py line 316\\
+    (code_head,code_df)=data_wind.load_quotes(config_IO_0,temp_code,date_start,date_end,quote_type)
+    现有模式下，在没有全历史复权行情情况下，会从wind抓取开始日期之前250天的日数据，这有2个问题：
+    1，etf-pcf对应的价格和数量是时点的不复权数据，本地行情数据对应的通常是本地给定日期或最新日期往前倒推的前复权数据。
+    2，如果是逐日维护，如何解决这个问题？？？
+
+    3，仅仅解决生成组合的话，在trades.py中增加输入项对组合做判断，可以新建 manage_tradeplan_etf(),
+    manage_tradebook_etf()。
 
 
 
+</p>
+
+
+<h3><a name="190715">190715</a></h3> 
+
+<p>
+done,
+190712，
+1, 15:35，出发-北京西站
+3，今日更新文件：{log_rC_1907.html;enging_etf.py,  }
+    {trades.py,signals.py }
+190715
+1,早上准备,return firm laptop
+2，京东买书：计量经济分析6-Econometric Analysis-格林；高级计量经济学及Stata应用-陈强
+3，还笔记本电脑，
+2，上周总结；7月份计划；
+4,梳理了wind-api关于“分红送配”的相关数据功能，明确了组合模块需要改进的事项。
+
+todo,
+3，1700-gym；1930-自习{ciss_app_etf }；2130-打车，床；晚上带行李箱。
+9，今日更新文件：{log_rC_1907.html;  }
+
+7,23:00前睡觉！！| 0716，带行李箱；
+8，0716，下午找租客去居委会反映问题&看视频。 潍坊物业公司打电话，说漏水问题也要和居委会反映。
+
+1,delete-trash
+4，尽快推进ciss_app_etf构建。
+
+5,0716，OA-leave-time-0719/22,print OA-leave-Approval to 冯丹
+6,0716，问一下上海防水做的怎么样了。如果本周没解决漏水问题，给租客转1000.
+
+2,ETF项目；
+4.1，新建etf模拟组合；4.2，每日匹配pcf变动；4.3，Weekly report，Quarterly report
+4.4,观察指数权重和PCF的细微区别：如因篮子规模和单券整百限制导致的
+4.5，短期/周内/日间组合微调模块研究。
+4.6，用stata+scipy做计量经济学模型
+
+5,trash_clear:todo
+    5.1,有用信息归纳:["C:\zd_zxjtzq", ]
+    5.2,Just_delete:["D:\CISS_db","D:\data_Input_Wind","D:\db_dzh_dfw","D:\py_modules"]
+    5.3,data_in_out: manage、zhidu，经验，model，research;path:C:\zd_zxjtzq\RC_trashes\temp\mirror_1906\
+
+6，BL\\大类资产配置\\paper;{主要参考资料：中金研报，多资产的书，yuwei的书，Wind,国家统计局}
+    6.1，todo，SAA-长期:经济数据建模继续，选取相关性最大的10个指标做回归
+    6.2,TAA-短期：锚策略
+    1，大类资产配置\\SAA\\主要宏观数据处理：按照季度末梳理，原始数据有很多按周的。这一部分不追求得到有超额收益的值，因为实践中需要叠加公司领导的主观观点。
+    2，大类资产配置\\TAA+SAA\\机构持仓数据：长期视角，应该代表了机构整体能做的最优选择，并且往往受到股票池的影响。常见的限制是必须在沪深300指数成份股中选股。但是也有限制，例如数据只包括了前十大重仓股，只能看到大方向。
+    4，分行业建模脚本
+    6.3,Aliyun的网站
+
+8，PLAN:1,19p2-论文准备：计量经济学模型；
+
+7，午睡，少吃，健身
+================================================
+todo:
+1,对191个指标，分别和资产指数计算相关性。前5年和后5年相关性、高点/低点的相关性
+2，对于GDP，Price等10个大类的分类，确定最相关的指标匹配规则。
+3，确定经济数据指导中期或短期资产配置的策略。{时间，精力有限，结合实践需要，不太考虑长期因素}
+
+</p>
+<h4>19Q2反思：job shift</h4> 
+<p>不受环境影响，按照既定的目标坚定地往前走，往往会得到比计划更优的结果。trader to researcher
+预期是在gyrx待3年，做2个课题，2个论文，考博成功后的事情。没想到实际中gyrx待满2年，做1个课题，1个论文未完全搞定的情况下就成了。虽然可能运气占了50%，但是另外的50%也是重要的基础。</p>
+
+<h4>ETF匹配模块：功能和需求分类</h4> 
+<p>
+
+
+</p>
+
+<h5>match_pcf</h5>
+<p>
+ref:zhidu:working mannual.
+Function:
+1, calculate difference: in code,cash,iopv,amount/num/pct 
+    
 
 
 
+</p>
 
+<h4>CISS_port-manage_trade 功能分析</h4> 
+<p>
+Qs:如何为有组合调整交易信号的股票设计交易计划？
+    location: trades.py line 316\\
+    (code_head,code_df)=data_wind.load_quotes(config_IO_0,temp_code,date_start,date_end,quote_type)
+    现有模式下，在没有全历史复权行情情况下，会从wind抓取开始日期之前250天的日数据，这有2个问题：
+    1，etf-pcf对应的价格和数量是时点的不复权数据，本地行情数据对应的通常是本地给定日期或最新日期往前倒推的前复权数据。
+    2，如果是逐日维护，如何解决这个问题？？？
+
+    3，仅仅解决生成组合的话，在trades.py中增加输入项对组合做判断，可以新建 manage_tradeplan_etf(),
+    manage_tradebook_etf()。
+
+一、当前对“分红送配”的处理和分析：
+    1，首先假设所有的行情都是前复权的，不涉及逐日更新调整。这个在2016-2018年模拟组合逐日跟踪过程中逐渐发生问题，因为【T0，T1】历史回测区间的前复权价格数据，在【T1,T_latest】的逐日跟踪期间，容易因为“除权除息”等变动发生账户的误差。之前的一个逻辑是：
+    逻辑：{价量数据/quotation_data中，若涨跌幅数据变动超过+/-10%，则按照最新价更新股票历史行情数据、account中更按照变动比例更新股票的成本价并重新计算市值。 }
+
+    背景资料：
+    1，分红派息的重要日期：登记日，发放日。
+    2，wind\\公司行动事件汇总\\分红除息、分红派息、停牌、红股上市、配股股份上市、配股除权。
+    3，除权除息：总股本发生变化的情况有很多，主要包括：上市公司实施送股、转增、增发、配股、回购注销等。其中，送股和转增是比较常见的会导致除权的情况。
+    4，WindPy\\WSET\\股票\\沪深一级市场\\增发与配股：配股实施、增发实施：
+    4.1，配股实施
+        ### keys:{配股价格、配股比例、配股公告日、股权登记日、除权日、配股上市日}
+        ### keys:{rights_issue_price,rights_issue_ratio,rights_issue_anncedate,record_date,ex_rights_date,listing_date }
+        # 公告日到登记日之前要准备好配股需要付出的现金部分，一种是卖出该比例的股票{better}，另一种是先参加配股待其上市后再卖出。
+        w.wset("rightsissueimplementation","startdate=2019-01-15;enddate=2019-07-15;sectorid=1000011893000000;windcode=")
+    4.2，增发实施
+        ### 增发里大部分都是定向增发，key="offering_type" == "定向"；
+        # 关键字段：{公告日、股权登记日、除权日，配股上市日}
+        # {rights_issue_anncedate,record_date,ex_rights_date,listing_date }
+        w.wset("seoimplementation","startdate=2019-01-15;enddate=2019-07-15;sectorid=1000011893000000;windcode=;datetype=issue_date")
+    5，WindPy\\WSET\\股票\\沪深二级市场\\分红送转：分红送转、分红实施：
+        5.1 分红送转，针对个股；
+        ### 分红送转是综合性的数据，分类齐全但是重要日期方面只有一个除权除息日。另外，"cash_payout_ratio"=0.2 表示一股分红0.2 rmb
+        # 除权除息日、...,...,派息比例，转增比例，送股比例，增发比例，增发比例，增发价格，配股价格，配股比例，除权说明。
+        # ex_dividend_date wind_code sec_name cash_payout_ratio stock_split_ratio stock_dividend_ratio seo_ratio seo_price rights_issue_price rights_issue_ratio ex_dividend_note
+        # 2018/8/9 002202.SZ 金风科技 0.2 0 0 0 0 0 0 [20171231]每10股派2元(含税)
+        # 2019/3/29 002202.SZ 金风科技 0 0 0 0 0 7.02 0.19 [20191231]每10股配1.9股,每股7.02元
+        w.wset("corporationaction","startdate=2018-01-01;enddate=2019-07-15;windcode=002202.SZ")
+
+        5.2，分红实施，针对报告期{年报、中报}、实施公告日、股权登记日三种排列顺序：
+        ### 例子：深圳100，按照股权登记日排序，
+        ### keys:{..,..,报告期，方案进度{value:"实施完毕"},每股派息_税前,每股派息_税后，送股比例，转增比例，基准股本-万股，股本基准日，除权除息日，派息日，红股上市日 }
+        ### keys:{..,..,reporting_date,progress,dividendsper_share_pretax,dividendsper_share_aftertax,sharedividends_proportion,shareincrease_proportion,share_benchmark,share_benchmark_date,exrights_exdividend_date，dividend_payment_date,redchips_listing_date
+        # notes:股本基准日和“报告期”日期一致；睡前和税后分红是一样的；除权除息日和除息日通常一样的.因此重复项可以不提取。
+        w.wset("bonus","orderby=股权登记日;startdate=2019-01-15;enddate=2019-07-15;sectorid=1000000089000000;field=wind_code,sec_name,reporting_date,progress,dividendsper_share_pretax,sharedividends_proportion,shareincrease_proportion,share_benchmark,exrights_exdividend_date,dividend_payment_date")
+
+        5.3,指数成分股进出记录
+        ### keys  :交易日期,..,..wind一级行业，权重，涨跌幅{当年YTD}，调整时市值
+        ### keys  :No. tradedate tradecode tradename tradestatus windhy weight changepct mv 
+        ### values:1 2019/6/14 600157.SH 永泰能源 剔除 能源 NaN 20.149254 208.753361
+        w.wset("indexhistory","startdate=2019-05-15;enddate=2019-07-15;windcode=000300.SH")
+
+        5.4，etf成分清单 申购赎回列表
+        ### keys  :No. date wind_code sec_name volume cash_substitution_mark cash_substitution_premium_ratio fixed_substitution_amount 
+        ### values:1 2019/7/15 000001.SZ 平安银行 2000 允许 15 NaN
+        w.wset("etfconstituent","date=2019-07-15;windcode=159901.OF")
+
+    6，东方财富网Eastmoney\\
+        6.1,东方财富网 > 数据中心 > 新股数据 > 配股
+            source http://data.eastmoney.com/zrz/pg.html
+        6.2,股市日历--特别提示--分红转增
+            source http://data.eastmoney.com/gsrl/default.html#
+    7，中证、证监会行业分类静态/动态市盈率和所有个股pe,pb,divd.：
+        中证指数有限公司借鉴国际主流行业分类方法，并结合我国上市公司特点，将上市公司分为10个一级行业、25个二级行业、67个三级行业和138个四级行业，目前计算并发布至四级行业的静态市盈率等相关数据。
+        source http://www.csindex.cn/zh-CN/downloads/industry-price-earnings-ratio?type=zz1&date=2019-07-12
+    7.2，中证系列指数\\规模类：指数名称 行情走势    编制方案    成份股列表   权重下载
+        source http://www.csindex.cn/zh-CN/downloads/indices?lb=17&xl=1
+
+二、行情解决方案设计
+    1，回顾一遍模拟组合对行情的引用。
+    1.1，模拟组合运行分类:
+        type="历史回测" ：一次性历史回测全部使用现有的历史复权数据；
+        type="逐日更新"：sub_type in {前复权{原有的方案}，不复权}
+    1.2,逐日更新——不复权：
+        a,初始日：根据给定的信号signals，给定成本价*数量/引用市场行情价构建组合。notes：建立“建仓期”参数，对应组合管理部分。notes:如果遇到停牌等因素，有可能建仓期无法完成建仓或需要从备选股票池中选取替代性股票。
+        完成组合初始化部分后，
+
+        b,逐日更新T日：
+        b1,检查“分红送配”：给定个股，查找“分红送配”列表里是否有T日发生相应的权息变动或停牌信息。如果有，需要更新持仓中个股的成本价、数量、浮动收益、已实现收益和组合中的现金。
+        b2,行情数据：依次尝试多种数据源{本地每日文件，wind-api}，获取当日最大可交易量和价格。
+
+    3，数据管理：现有的行情数据基于单个股票，保存单个股票的全历史行情数据；过去1年多虽然也按照单个交易日保存所有股票，但是还没有投入使用。为了恢复对行情数据的保存：
+    3.1，新数据：每周下载一次新上市股票列表，并维护历史行情数据
+    3.2，历史缺失数据：在获取历史行情数据时，若出现T日S股票无信息的情况，则引入行情数据补录模块，完善数据。
+    3.3，每日收盘行情数据：wind；回家看看"D:\data_Input_Wind"
+
+三、结论，实施步骤
+    1，更新wind数据管理模块：
+        1.0，建立本地数据更新日志，判断每个环节是否已经更新。
+            【证券/指数前复权日频率数据，个股】
+        1.1，逐日保存wind单日收盘的行情数据，使用w.wss();
+        1.2，每周更新股票代码、
+        1.3,定期调整：每年6和12月第二个星期六获取指数成分变动信息，通常是周五剔除，周一加入。
+        1.4，缺失数据维护：判断是否发生分红送配，并和当日涨跌幅比较。若无异常，更新本地全复权个股历史数据。若有异常，则打印近期行情数据，确定后重新下载该股历史行情数据。
+    2,更新 data_wind.load_quotes(),除了最新前复权数据，还需要抓取昨日分红送配事件数据放在输出的code_df 里。
+    3，对于 [trade_plan,trade_book,account_s,a_sum,stockpool] 依次修改。
+
+todo
+</p>
+<p>
+    
+中证长三角一体化发展主题指数等9条指数3月20日发布 2019年02月26日 10:44
+　一、指数名称及代码
+指数代码：931141
+2、选样方法
+
+　　（1）将样本空间内过去一年日均成交金额排名在后20%的股票剔除。
+
+　　（2）将上市公司注册地位于上海市、江苏省、浙江省、安徽省区域内的剩余股票作为待选样本。
+
+　　（3）在各中证二级行业内，将过去一年营业收入与营业利润排名均位于A股全部上市公司前20%的待选样本优先入选指数，每个二级行业样本入选数量不超过5只。
+
+　　（4）在剩余的待选样本中，从金融、交通运输、汽车及其零配件、医药生物、计算机设备及软件、通信设备及运营、集成电路及电子设备、家用电器、钢铁及有色金属等行业中选取市值最大的股票依次入选指数，直至指数样本股数量为180只。
+
+指数名称：中证安徽发展指数　　指数代码：930987
+（1）在中证全指中，选取注册地在安徽省、实际控制人为央企、地方国企的上市公司； （2）在中国战略新兴产业综合指数成分股中，选取注册地在安徽省的民营上市公司，以及在安徽有参股或控股公司、且参股或控股公司注册资本超过100亿元的省外上市公司； （3）步骤（1）和（2）的并集构成中证安徽发展指数的待选样本； （4）对待选样本中的股票按照过去一年日均总市值排名，选取排名靠前的50只股票构成中证安徽发展指数样本股。
+
+</p>
+<h4>看研报</h4> 
+<p>
+topic
+20190714_海通证券_金融工程专题_冯佳睿张振岗_金融科技（Fintech）和数据挖掘研究（四）——FactSet供应链数据的介绍和应用.pdf
+head_info
+FactSet 深度行业分类（Revere Business Industrial Classification System，
+RBICS）数据。一套精确的结构化公司分类体系。利用 FactSet 独有的 Revere
+Hierarchy 行业分类，构建有固定层次的 6 级结构。作为一类自下而上的分类方
+法，该体系利用每个公司的产品与服务信息，对它们进行精确、细粒度的行业划
+分。这种分类方式正在为越来越多的投资者接受与认可，被广泛应用于各种细分
+行业或特定主题的指数编制以及投资组合的构建中。
+ FactSet 供应链（Supply Chain Relationships）数据。供应链研究是当前证券
+市场的热点。随着产业整合度的不断提高，公司之间的关联对其自身业绩的影响
+正变得越来越大。上游供应商的业绩波动、下游客户的主营变迁都会在很大程度
+上影响公司的盈利状况，从而反映在股价的表现中。FactSet 供应链数据在传统
+的行业或公司研究之外，提供了一种更加全面的视角，对全市场所有可能的关联
+公司进行透视。
+
+
+</p>
 
 
 

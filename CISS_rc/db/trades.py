@@ -146,6 +146,7 @@ class manage_trades():
         ### 
         # line 276,"name_column" 需要用到 "ind_level"和"sty_v_g" |last 190711
         ### last modified 190711
+        ### NOTES: signals_df 实质上就是 weight_list
         '''
         there are 4 cases: 
         1, buy with no previous positions
@@ -219,6 +220,8 @@ class manage_trades():
                 ### we want to sell all of  this positions 
                 weight_dif = account_1.account_stock.loc[as_index,'w_real']*-1
                 ### load quote date
+
+
                 (code_head,code_df)=data_wind.load_quotes(config_IO_0,temp_code,date_start,date_end,quote_type)
                 ################################################################################
                 ### Filter: we want only trading day that has volume > 0 
@@ -269,14 +272,22 @@ class manage_trades():
                 print("Date",dt_start_str,"cash_balance ", cash_balance)
         ################################################################################
         ### Buy or Sell all positions that is in latest signal list 
+        ### NOTES: signals_df 实质上就是 weight_list
         signals_df['signal_pure']=1
         for temp_i in signals_df.index : 
             if signals_df.loc[temp_i,'signal_pure'] == 1 : 
                 ### buy or open long position  trade
                 temp_code = signals_df.loc[temp_i,'code']
                 print( 'Working on code ', temp_code, date_start )
-                name_column = "w_allo_"+sty_v_g + "_ind" +ind_level2
-                weight_target = signals_df.loc[temp_i,name_column ]#'w_allo_value_ind3']
+                
+                ### Setting weight target 
+                ## BEFORE 190712: only serve for ABM model
+                # name_column = "w_allo_"+sty_v_g + "_ind" +ind_level2
+                # weight_target = signals_df.loc[temp_i,name_column ] 
+                ### using stantdard column item origined from signals.py\\def gen_signals_stock
+                # where you can find all columns
+                weight_target = signals_df.loc[temp_i, "pct_port" ]
+
                 # type of temp_asum.index is timestamp,so we need to change date_start2 into timestamp
                 import datetime as dt 
                 ### get target weights from signals, and real weights in current positions
@@ -301,6 +312,7 @@ class manage_trades():
                 account_1.account_sum['date'] = pd.to_datetime( account_1.account_sum['date'] ,format="%Y-%m-%d",errors="ignore") 
                 ################################################################################
                 ### load quote date
+
                 (code_head,code_df)=data_wind.load_quotes(config_IO_0,temp_code,date_start,date_end,quote_type)
                 
                 ################################################################################
