@@ -5,6 +5,24 @@ __author__ = " ruoyu.Cheng"
 ===============================================
 Function:
 功能：
+1, class data_wind:管理来自Wind-API的数据
+2，input：
+3，OUTPUT:data_head{字典信息},data_df{表格信息}
+
+wind数据管理模块：
+1.0，建立本地数据更新日志，判断每个环节是否已经更新。
+    【证券/指数前复权日频率数据，个股】
+    input:date
+    output:log_data_head,log_data_df
+1.1，逐日保存wind单日收盘的行情数据，使用w.wss();
+1.2，每周更新股票代码、
+1.3,定期调整：每年6和12月第二个星期六获取指数成分变动信息，通常是周五剔除，周一加入。
+1.4，缺失数据维护：判断是否发生分红送配，并和当日涨跌幅比较。
+若无异常，更新本地全复权个股历史数据。若有异常，则打印近期行情数据，确定后重新下载该股历史行情数据。
+2,更新 data_wind.load_quotes(),除了最新前复权数据，还需要抓取昨日分红送配事件数据放在输出的code_df 里。
+
+
+
 last update 181107 | since 181107
 Menu :
 THREE COMPONENTS:
@@ -25,6 +43,7 @@ THREE COMPONENTS:
 
 Notes: 
 refernce: rC_Data_Initial.py 
+similar with get_wind.py
 ===============================================
 '''
 import sys
@@ -38,15 +57,175 @@ class data_io():
         # todo todo :create data directory !!!
 
 
-# 1，逻辑：数据的获取应该有专属的 data_head，包括数据文件夹内数据的各种参数，方便未来重复使用
-    # data_df,数据大表
-# step:1,get data;2,save data to csv 
-#    3,load data,4,
+#######################################################################
+
 class data_wind():
     def __init__(self, db_name_win='',path0='D:\\db_wind\\'):
         # 2 data types: head and df 
         self.db_name_win = 'db_name_win' 
         self.path0 = path0
+
+    def print_info(self):
+        ###
+        print("class data_wind() operates data from wind-api.  ")
+
+        print("log_data_wind || 建立本地数据更新日志，判断每个环节是否已经更新。")
+
+
+        return 1
+
+    def log_data_wind(self,temp_date,if_generate=1):
+        ### 建立本地数据更新日志，判断每个环节是否已经更新。可以导出后在json和csv中维护。
+        '''
+        # input : temp_date
+        # output: log_data_head,log_data_df
+        目的：覆盖全部数据及位置，不求全，但求精简能找到数据的位置。
+
+        last | since 190716
+        '''
+
+        #######################################################################
+        ### 1,Generate file for the first time 
+        if if_generate == 1 : 
+
+            #######################################################################
+            ### Check or generate log directory
+            import os
+            path_log_data_io= "D:\\CISS_db\\log\\data_io\\"
+            if not os.path.isdir( path_log_data_io ) :
+                os.mkdir( path_log_data_io )
+
+            ### generate head and dataframe for data log
+            import pandas as pd 
+            log_data_head = {}
+            log_data_head["date_initial"] = temp_date #20190716
+
+            col_list=[]
+            ### id, 名称，键{以逗号划分的表名}，值{以逗号划分的值例子}，数据分类{基础信息、行情、指数和etf}
+            col_list=col_list + ["id","name","key","value_example","type"]
+            ### 数据获取时间、数据起始时间、数据截止时间,是否有错误，是否完整,价格复权
+            col_list=col_list + ["date_update","date_start","date_end","if_error","if_complete","price_adj"]
+            ### 文件位置，文件名称，文件(关键字)类型，文件日期格式{直接字符串替代即可}
+            #例子：Wind_all_A_Stocks_wind_170925_updated.csv
+            #：Wind_all_A_Stocks_wind_YYMMDD_updated.csv
+            # file_name =file_name.replace("YYMMDD", temp_date ) # temp_date="190716"
+            # "date_format" = "YYMMDD"
+            col_list=col_list + ["file_dir","file_name","file_type","date_format","basic_format","quote_format" ]
+            
+            log_data_df=pd.DataFrame(columns=col_list )
+
+            #######################################################################
+            ### Assgin specific data file to rows of log_data_df
+            # derived from ：
+            name_list= []
+
+
+            #######################################################################
+            ### save json and csv file to location path 
+            log_data_head["file_json"] = "log_data_head" +'.json'
+            
+            import json
+            with open( log_data_head["file_json"]  ,'w') as f:
+                json.dump( log_data_head ,f) 
+
+            log_data_head["file_csv"] = "log_data_head" +'.csv'
+
+            log_data_df.to_csv(log_data_head["file_csv"], encoding="gbk" ) 
+
+        #######################################################################
+        ### 2,Update given data files 
+        '''
+        columns=[""]
+        数据及参数分类：
+        基本数据：代码和简称匹配{曾用代码，曾用简称}，行业分类数据，时间数据
+        行情数据：{A股，指数，基金}{个股前复权日行情，单日市场不复权行情}
+        指数和etf数据：T日成分股列表，成分股进出
+        基本面数据：财务数据，财务指标数据
+
+        检查要点：item/列名是否完整，时间序列是否完整，(i,j)处是否有缺失值
+
+        例子：
+        单日市场不复权行情：
+        file_name = "Wind_all_A_Stocks_wind_170925_updated.csv"
+
+        notes:中证数据
+        1，指数调整日期，
+        2，中证行业市盈率，逐日-个股，http://www.csindex.cn/zh-CN/downloads/industry-price-earnings-ratio?type=zz1&date=2019-07-15
+            上市公司分为10个一级行业、25个二级行业、67个三级行业和138个四级行业
+        3，中证行业分类{和GICS一个意思}：
+        3.1，行业分类CICS表： http://www.csindex.cn/uploads/downloads/other/files/zh_CN/other_download10.xls
+        3.2，逐日中证行业市盈率：http://203.187.160.133:9011/115.29.210.20/c3pr90ntc0td/syl/csi20190715.zip
+        3.3，逐日中证行业分类表,cicslevel2.xls： http://203.187.160.132:9011/www.csindex.cn/c3pr90ntc0td/uploads/downloads/other/files/zh_CN/ZzhyflWz.zip
+        3.4，逐日中证行业分类变动{新股}，cicslevel2change20190715.xls:http://203.187.160.132:9011/www.csindex.cn/c3pr90ntc0td/uploads/downloads/other/files/zh_CN/ZzhyflWzDay.zip
+        3.5,中证行业分类说明：http://203.187.160.132:9011/www.csindex.cn/c3pr90ntc0td/uploads/downloads/other/files/zh_CN/other_download7.pdf
+        数据位置：D:\\CISS_db\\data_csi\\
+        idea:由于中证数据是以压缩包方式下载，因此可能需要人工维护。
+        '''
+
+        #######################################################################
+        ### 2.1,Import log_data_head,log_data_df
+        with open( log_data_head["file_json"] ,'r') as f:
+            # sp_head = json.loads( f )  will bring error 
+            log_data_head = json.loads( f.read() ) 
+
+        log_data_df = pd.read_csv(log_data_head["file_csv"], encoding="gbk" ) 
+        
+        #######################################################################
+        ### 2.2,按照顺序依次下载
+        '''
+        1,Daily\\Stock\\CN:{csi300，csi500，csi1000 }
+           ..\\Stock\\HK:{HK?? }
+           ..\\Stock\\US:{US?? }
+           ..\\Index\\CN:{csi300，csi500，csi1000,csi_industry,csi_concept }
+           ..\\Index\\HK:{hsi }
+           ..\\Index\\US:{SP500,nasdaq}
+           ..\\ETF\\CN:{csi300，csi500，csi1000,etf_industry,etf_concept,bond,commodities }
+           ..\\ETF\\HK:{hsi }
+           ..\\ETF\\US:{sp500,iShares }
+        2,Monthly\\stock_list\\CN-csi,HK-csi,US-?
+            每个月更新一次：{交易日，中港美股票列表。}
+        '''
+        ### todo,确定上述的信息保存在本地的表格里。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        #######################################################################
+
+        return log_data_head,log_data_df
 
     def data_wind_wsd(self,symbols,date_start,date_end,type_wsd='week') :
         # get data using wind api\wsd 
@@ -199,7 +378,8 @@ class data_wind():
         return wind_obj_0
 
     def load_quotes(self,config_IO_0,code,date_start,date_end,quote_type='CN_day') :
-        # last 190414
+        ### Function import stock daily forawrd quotations .
+        # last 190414 
         # Qs：000001.SZ在 20070601-20070620之间停牌，好奇这个模块是否能返回正确的quote？
         
         # we assume quotes already in local driectory.
