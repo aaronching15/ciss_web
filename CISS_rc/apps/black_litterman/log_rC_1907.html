@@ -837,34 +837,36 @@ Hierarchy 行业分类，构建有固定层次的 6 级结构。作为一类自�
 </p>
 
 <h3><a name="190716">190716</a></h3> 
-
+<h3><a name="190717">190717</a></h3> 
+<h3><a name="190718">190718</a></h3> 
 <p>
 done,
-190715
-1,1700-gym；1930-自习{ciss_app_etf }；2130-打车，床
+190716
+今日更新文件：{log_rC_1907.html;  } {data_io.py,}
+190717
+9，今日更新文件：{log_rC_1907.html;  } 
+    {times.py,data_io.py,get_wind.py}
+    {times_CN_day.csv }
+
 
 todo,
-3，0717,晚上带行李箱。
-9，今日更新文件：{log_rC_1907.html;  }
-    {data_io.py,}
+3，0717,晚上带行李箱。007063.OF
+9，今日更新文件：{log_rC_1907.html;  } 
+    { ,test_Wind_19.py}
+    {D:\CISS_db\data_csi\\ }
 
-10，sub_file{kechaung25.xlsx}
+8，0716，下午找租客去居委会反映问题&看视频。 || 物业公司打电话，说漏水问题也要和居委会反映。6,0716，问一下上海防水做的怎么样了。如果本周没解决漏水问题，给租客转1000.
 
-8，0716，下午找租客去居委会反映问题&看视频。 || 物业公司打电话，说漏水问题也要和居委会反映。
-1,0718，delete-trash
+5,0716，OA-leave-time-0719/22,print OA-leave-Approval to 冯丹
+6,0719,周六，整理阳台杂物，丢掉不需要的东西。
 
 4，尽快推进ciss_app_etf构建。
-
-5,0716，OA-leave-time-0719/22,print OA-leave-Approval to 冯丹,ask 福利积分能不能换
-6,0716，问一下上海防水做的怎么样了。如果本周没解决漏水问题，给租客转1000.
-
-2,ETF项目；
 4.1，新建etf模拟组合；4.2，每日匹配pcf变动；4.3，Weekly report，Quarterly report
 4.4,观察指数权重和PCF的细微区别：如因篮子规模和单券整百限制导致的
 4.5，短期/周内/日间组合微调模块研究。
 4.6，用stata+scipy做计量经济学模型
 
-5,trash_clear:todo
+5,0719，trash_clear:todo
     5.1,有用信息归纳:["C:\zd_zxjtzq", ]
     5.2,Just_delete:["D:\CISS_db","D:\data_Input_Wind","D:\db_dzh_dfw","D:\py_modules"]
     5.3,data_in_out: manage、zhidu，经验，model，research;path:C:\zd_zxjtzq\RC_trashes\temp\mirror_1906\
@@ -877,9 +879,9 @@ todo,
     4，分行业建模脚本
     6.3,Aliyun的网站
 
-8，PLAN:1,19p2-论文准备：计量经济学模型；
+8，PLAN:1,19p2-论文准备：计量经济学模型，看公众号确定研究方向；
 
-7，午睡，少吃，健身
+7，午睡，少吃，健身，背gre单词
 ================================================
 todo:
 1,对191个指标，分别和资产指数计算相关性。前5年和后5年相关性、高点/低点的相关性
@@ -916,7 +918,7 @@ email: cheng.ruoyu@pku.edu.cn
 
 <p>
 steps:
-1, (1.3)，(1.2)
+1, (1.3)搜集指数成分信息和代码列表 ，(1.2)
 2，下载当日/T日收盘数据；(1.1)
 3,(1.0)
 steps at home:
@@ -926,8 +928,84 @@ steps at home:
 <h5>1.1，逐日保存wind单日收盘的行情数据 </h5>
 <p>
 todotodo
+190716
 进度 data_io.py line 186
-    
+190717
+11：30
+进度 data_io.py line 210  
+16：56
+进度 data_io.py line 236
+进度 test_Wind.py line 138 Get_temp_Date_Data :下载当日数据？
+    line 165 Update_WSQ_Get_errorCodes:
+    C:\zd_zxjtzq\RC_trashes\temp\ciss_web\CISS_rc\apps\rc_stra\
+        rC_Data_Initial.py\\ line 324\
+190718
+08:30
+1,根据中证{A股和港股}{指数，etf}列表，下载T{190718}日数据
+
+13:30
+todo:
+    2，根据T日数据，完善个股历史复权数据
+    3，更新log文件，完善开放式的列表抓取功能
+    4，建立网页，展示log文件和数据更新状态；连接其他数据。
+
+progress:rC_Data_Initial.py\\def Update_Synthetic_Index()
+
+1710
+T日收盘行情下载成功。
+
+
+
+
+</p>
+<p>
+source http://stock.eastmoney.com/news/1406,20181028971837110.html    
+当年叱咤风云的赵宏宇和赵楠如今业绩难复昔日之勇；其次，长盛目前“最为器重”的权益类基金经理非乔培涛莫属，他如今自管或与他人合管基金8只，但其中主题类基金众多，前三季度业绩悉数尽墨；此外，基金经理吴达独自一人管理公司唯一的沪港深基金和QDII基金，但他同时还管理着A股基金转型升级，但2018年以来的业绩也同样差强人意。
+虽然股基和混基的加总规模不及货基，但是公司权益类基金的数量达到了44只；而公司目前在任的基金经理总共只有14人，其中段鹏、王赛飞、李琪、杨哲4人基本主攻固收类产品，也就意味着权益类操盘手恰好10人，他们分别是：赵宏宇、赵楠、钱文礼、乔培涛、冯雨生、王超、吴达、代毅、吴博文、杨衡。
+
+不算已经离职的王克玉，两位现任的赵姓基金经理(赵宏宇、赵楠)都曾有过显赫一时的业绩：赵宏宇掌舵的长盛电子信息主题在2015年全年实现净值增长率155.40%，在同类基金中排在了第3位；同样是电子信息主题，接棒王克玉掌管长盛电子信息产业A的赵楠同一年的成绩是净值增长率88.27%。
+
+
+</p>
+<p>notes小技巧
+1,"cicslevel2_1907.xls" 删除'2'和'9'开头的代码。
+Qs,没有科创板股票。 
+=s_info_windcode() ; col_name="wind_code" 
+
+2，excel中生成港股股票代码wind；=REPT("0",I2)&E2&".HK"
+EXCEL单元格中快速填充字符串多次
+函数解释：rept(text,num)
+
+text：想要填充的字符串； num：想要填充的次数
+
+3,pd.read_csv()参数研究
+source https://blog.csdn.net/sinat_35562946/article/details/81058221 
+read_csv(filepath_or_buffer, sep=',', delimiter=None, header='infer', names=None, index_col=None, usecols=None, squeeze=False, prefix=None, mangle_dupe_cols=True, dtype=None, engine=None, converters=None, true_values=None, false_values=None, skipinitialspace=False, skiprows=None, nrows=None, na_values=None, keep_default_na=True, na_filter=True, verbose=False, skip_blank_lines=True, parse_dates=False, infer_datetime_format=False, keep_date_col=False, date_parser=None, dayfirst=False, iterator=False, chunksize=None, compression='infer', thousands=None, decimal=b'.', lineterminator=None, quotechar='"', quoting=0, escapechar=None, comment=None, encoding=None, dialect=None, tupleize_cols=None, error_bad_lines=True, warn_bad_lines=True, skipfooter=0, doublequote=True, delim_whitespace=False, low_memory=True, memory_map=False, float_precision=None)
+
+usecols : array-like, default None
+
+返回一个数据子集，该列表中的值必须可以对应到文件中的位置（数字可以对应到指定的列）或者是字符传为文件中的列名。例如：usecols有效参数可能是 [0,1,2]或者是 [‘foo’, ‘bar’, ‘baz’]。使用这个参数可以加快加载速度并降低内存消耗。 
+
+dtype : Type name or dict of column -> type, default None
+每列数据的数据类型。例如 {‘a’: np.float64, ‘b’: np.int32}
+
+skipinitialspace : boolean, default False
+忽略分隔符后的空白（默认为False，即不忽略）.
+
+skiprows : list-like or integer, default None
+需要忽略的行数（从文件开始处算起），或需要跳过的行号列表（从0开始）。
+skipfooter : int, default 0
+从文件尾部开始忽略。 (c引擎不支持)
+
+nrows : int, default None
+需要读取的行数（从文件头开始算起）。
+
+na_values : scalar, str, list-like, or dict, default None
+一组用于替换NA/NaN的值。如果传参，需要制定特定列的空值。默认为‘1.#IND’, ‘1.#QNAN’, ‘N/A’, ‘NA’, ‘NULL’, ‘NaN’, ‘nan’`.
+
+
+
+
 </p>
 
 

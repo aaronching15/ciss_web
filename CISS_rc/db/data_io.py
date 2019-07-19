@@ -3,7 +3,7 @@ __author__ = " ruoyu.Cheng"
 
 '''
 ===============================================
-Function:
+Function: 
 功能：
 1, class data_wind:管理来自Wind-API的数据
 2，input：
@@ -74,19 +74,28 @@ class data_wind():
 
         return 1
 
-    def log_data_wind(self,temp_date,if_generate=1):
+    def log_data_wind(self,temp_date,if_type="gen",type_freq="daily"):
         ### 建立本地数据更新日志，判断每个环节是否已经更新。可以导出后在json和csv中维护。
         '''
-        # input : temp_date
+        # input : 
+            temp_date:当前日期
+            if_type 判断类型
+                1，"gen" 生成log文件等
+                2，"update" 更新log文件
+            type_freq 日期频率
+                1，"daily" 每日行为
+                2，"month" 每月行为
+                3，"quart" 每季度行为
         # output: log_data_head,log_data_df
         目的：覆盖全部数据及位置，不求全，但求精简能找到数据的位置。
 
-        last | since 190716
+        last 190717| since 190716
+
         '''
 
         #######################################################################
         ### 1,Generate file for the first time 
-        if if_generate == 1 : 
+        if if_type == "gen" : 
 
             #######################################################################
             ### Check or generate log directory
@@ -134,6 +143,18 @@ class data_wind():
 
         #######################################################################
         ### 2,Update given data files 
+
+        if if_type == "update" : 
+            #######################################################################
+            ### 2.1,Import log_data_head,log_data_df
+            with open( log_data_head["file_json"] ,'r') as f:
+                # sp_head = json.loads( f )  will bring error 
+                log_data_head = json.loads( f.read() ) 
+
+            log_data_df = pd.read_csv(log_data_head["file_csv"], encoding="gbk" ) 
+
+
+
         '''
         columns=[""]
         数据及参数分类：
@@ -162,13 +183,7 @@ class data_wind():
         idea:由于中证数据是以压缩包方式下载，因此可能需要人工维护。
         '''
 
-        #######################################################################
-        ### 2.1,Import log_data_head,log_data_df
-        with open( log_data_head["file_json"] ,'r') as f:
-            # sp_head = json.loads( f )  will bring error 
-            log_data_head = json.loads( f.read() ) 
-
-        log_data_df = pd.read_csv(log_data_head["file_csv"], encoding="gbk" ) 
+        
         
         #######################################################################
         ### 2.2,按照顺序依次下载
@@ -184,7 +199,95 @@ class data_wind():
            ..\\ETF\\US:{sp500,iShares }
         2,Monthly\\stock_list\\CN-csi,HK-csi,US-?
             每个月更新一次：{交易日，中港美股票列表。}
+        
+        3,Quarterly\\basics\\trading_dates{} 
         '''
+
+
+        #######################################################################
+        ### Quarterly adjustment | 目前以手动为主
+        from db.db_assets.get_wind import wind_api
+        wind_api_1 = wind_api()
+
+
+        if if_type == "quart" : 
+            ### 导入最新交易日文件，获取最新日期，和当年
+            path_dt= "C:\\zd_zxjtzq\\RC_trashes\\temp\\ciss_web\\CISS_rc\\db\\db_times\\"
+            from db.times import times
+            times1 = times()
+            date_start= "20100101"
+            date_end = temp_date 
+            # col_name= [SSE,SZSE,INTERBANK_BM,HKEX,NASDAQ,NYSE]
+            # wind_para=[SSE SSE, NIB,HKE,NASDAQ,NASDAQ ]
+            # note:
+            for mkt in ["SSE","HKE","NIB","NASDAQ"]:
+                date_list = times1.update_tday_list(date_start,date_end,mkt) 
+
+            ### TODO，将更新信息加入 log_data_wind
+
+        if if_type == "month" :
+            ### todo:手工维护可能更合适？
+            ### 每个月更新一次：{交易日，中港美股票列表。}
+            file_path0 = "D:\\CISS_db\\data_csi\\"
+            
+            ### CN A股：csi300,500,1000
+            for temp_index in ["000300.SH","000905.SH","000852.SH"] :
+                ### get constituents from wind-api
+                wind_data0 = wind_api_1.GetWind_indexconst(temp_date,temp_index )
+                ### save to csv file 
+                date_report = input("Type in date to get index constituents:e.g. 20190617") # temp_date # 
+                date_update = temp_date
+                file_path = wind_api_1.Wind2Csv_indexconst(wind_data0,file_path0,temp_index, date_report,date_update  )
+
+            ### HK H ，csi_HK300
+            ### TODO，将更新信息加入 log_data_wind
+
+        if if_type == "daily" :
+            #########################################################################
+            ### 1,下载当日所有指数、ETF，股票{A,H}收盘数据
+            ### todo,参考 test_Wind_19.py
+
+            path_data = 'D:\\data_Input_Wind\\'
+            SP_path = 'D:\\CISS_db\\data_csi\\'
+            print("Path for symbol list:",SP_path)
+            ### A_Index&ETF, A_stocks, csi_HK300
+            ### A股指数和ETF，A股全部股票，中证港股300指数成分。
+            SP_List = ['All_Index_ETF.csv',"cicslevel2_1907.xls" ,'H11164cons.xls']
+            list_names =["index_ETF","CN_stocks","HK_stocks"]
+            print("File name for symbols :",SP_List)
+            # Excel format for code2wind_code, 
+            # =REPT("0",(5-len(code) ) )&E2&".HK"
+            # =if(left(code,1)="6",code&".SH",'..SZ') || 删除2和9开头的股票
+
+            temp_date =  input('Please type in Date,e.g.190718 : ')
+            temp_predate = input('Please type in Pre Day,e.g.190717 : ')
+
+            file_List = SP_List
+
+            from db.db_assets.get_wind import wind_api
+            wind_api_1 = wind_api()
+
+            j=0
+            for temp_f in  file_List :
+                print('Working on Symbol List :', temp_f )
+                # Get Wind-WSQ single day data
+                # step 1 get SymbolList from : SL_path : path of SymbolList
+                path_list = SP_path  + temp_f
+
+                list_name = list_names[j]
+                quote_list = wind_api_1.Get_wsq(path_list,temp_date,path_data,list_name,temp_f ,  '')
+                j=j+1 
+            #########################################################################
+            ### 2，
+
+
+            ### 2,更新历史数据
+
+
+
+
+
+
         ### todo,确定上述的信息保存在本地的表格里。
 
 

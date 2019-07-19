@@ -3,9 +3,11 @@ __author__ = " ruoyu.Cheng"
 
 '''
 ===============================================
+todo: replace rC_Data_Initial.py with get-Wind.py gradually. | 190718file_name
+
 功能：初始化需要的股票价格，回报等数据
 数据来源： Wind-API 万得量化数据接口
-last update 180923 | since  160121
+last update 190718 | since  160121
 / 
 ===============================================
 '''
@@ -26,10 +28,139 @@ class wind_api():
     def print_info(self):
         ### print all modules for current clss
 
-        print("Get_wss: 获取多维数据。")
-
+        print("WSQ | Get_wsq: 获取实时行情数据。")
+        print("WSS | Get_wss: 获取多维数据。")
+        print("TDAYS | Get_tdays: 获取交易日数据。")
+        print("WSD | GetWindData:个股历史前复权数据。")
+        print("    | Wind2Csv_indexconst：指数权重WindData保存至csv "  )
+        print("Wset | GetWind_indexconst：T日指数成分股数据")
+        print("WSS 多维数据| GetWind_funda：个股财务数据")
+        print(" | Data_funda_csvJson：获取和保存json、csv数据文件")
+        print(" | Data_funda_csvJson_test 给定财务年份list和年内更新日期，获取和保存json、csv数据文件")
+        print(" | Load_funda_csvJson 导入json和csv文件并放在object里返回")
+ 
 
         return 1 
+
+    def Get_wsq(self,path_list,temp_date,path_data,list_name,file_name , items=''):
+        ### 获取实时行情数据
+        ### last | sicne 190718
+        ### derived from rC_Data_Initial.py\\Get_temp_Date_Data()
+        import pandas as pd
+        import WindPy as WP
+        WP.w.start()
+
+        if len(items) < 1 :
+            items = "rt_date,rt_pre_close,rt_open,rt_high,rt_low,rt_last,rt_vol,rt_amt,rt_pct_chg,rt_mkt_cap,rt_float_mkt_cap"
+
+        SymbolList = pd.read_csv( path_list ,encoding="gbk")
+        # usecols="wind_code"
+        print( path_list )
+        print("SymbolList \n", SymbolList.head() )
+        # todo columns '1' 对应的是 wind_code， '2' 对应的是 中文简称
+
+        # todo errorCode_List4csv 是要搜集因为 _updated 导致csv数据出问题的代码
+        errorCode_List4csv = []
+        code_List = []
+        # 170506 2251 WSQ 一次最多提取 4000个信息，也就是 11* 350,建议一次抓取300个股票
+        temp_period = 300
+        temp_len = round(len(SymbolList) / temp_period)
+        if temp_len > len(SymbolList) / temp_period:
+            temp_len = temp_len - 1
+        print('temp_len', temp_len)
+        temp_mode = len(SymbolList) % temp_period
+
+        ## quote_list use to be temp_pd_Date
+        quote_list = pd.DataFrame()
+
+        if len(SymbolList) < temp_period :
+            code_list = list( SymbolList["wind_code"] )
+            temp_Data = WP.w.wsq(code_list, items)
+            temp_pd_set = pd.DataFrame(temp_Data.Data)
+            temp_pd_set = temp_pd_set.T
+            temp_pd_set.columns = temp_Data.Fields
+            temp_pd_set.index = temp_Data.Codes
+
+                
+            # temp_f[:-4] = 'all_A_Stocks_wind' 
+            quote_list.to_csv(path_data + 'Wind_' + file_name[:-4] + '_' + temp_date+ '_updated' + '.csv')
+            print(path_data + '\\Wind_' + file_name[:-4] + '_' + temp_date + '_updated' + '.csv')
+
+        else :
+            for j in range(temp_len + 1):
+                # todo 把太长的 code_List 切分成几个sub_code_List
+                # for j in range(temp_len, temp_len + 1):
+                # print( 'aaaa',len(SymbolList) ,temp_period*(j),temp_period*(j+1)  )
+
+                code_list = []
+                if j == temp_len:
+                    for i in range(temp_period * (j), len(SymbolList)):
+                        # code = str(SymbolList.values[i])[2:-2]
+                        # todo columns '1' 对应的是 wind_code， '2' 对应的是 中文简称
+                        # code = SymbolList.loc[i, 1]
+                        code = SymbolList.loc[i, "wind_code"]
+                        code_list = code_list + [code]
+                else:
+                    for i in range(temp_period * (j), temp_period * (j + 1)):
+                        # code = str(SymbolList.values[i])[2:-2]
+
+                        # code = SymbolList.loc[i, 1]
+                        code = SymbolList.loc[i, "wind_code"]
+                        code_list = code_list + [code]
+                print('code_list ', code_list)
+                # todo Get 600036 quote data.
+                # w.wsq("000001.SZ", "rt_date,rt_time,rt_pre_close,rt_open,rt_high,rt_low,rt_last,rt_last_amt,rt_last_vol,rt_vol,rt_amt,rt_pct_chg,rt_mkt_cap,rt_float_mkt_cap")
+                temp_Data = WP.w.wsq(code_list, items)
+                # print('temp_Data \n ', temp_Data)
+                # .Codes = [600734.SH, 600735.SH, 600773.SH, 600807.SH, 600834.SH, 600855.SH, 600859.SH, 600887.SH, 600888.SH,
+                #           600890.SH, ...]
+                # .Fields = [RT_DATE, RT_PRE_CLOSE, RT_OPEN, RT_HIGH, RT_LOW, RT_LAST, RT_VOL, RT_AMT, RT_PCT_CHG, RT_MKT_CAP,
+                #            ...]
+                # .Times = [20170508 16:02: 22]
+                # .Data = [[20170508.0, 20170508.0, 20170508.0, 20170508.0, 20170508.0, 20170508.0, 20170508.0, 20170508.0,
+                #           20170508.0, 20
+                # todo 170508
+                temp_pd_set = pd.DataFrame(temp_Data.Data)
+                temp_pd_set = temp_pd_set.T
+                temp_pd_set.columns = temp_Data.Fields
+                temp_pd_set.index = temp_Data.Codes
+
+                quote_list = quote_list.append(temp_pd_set)  # todo 注意，这里不能 , ignore_index=1
+                # temp_f[:-4] = 'all_A_Stocks_wind' 
+                quote_list.to_csv(path_data + 'Wind_' + list_name + '_' + temp_date+ '_updated' + '.csv')
+                print(path_data + '\\Wind_' + list_name + '_' + temp_date + '_updated' + '.csv')
+                # print( temp_pd.head(3) )
+                #       RT_DATE  RT_PRE_CLOSE  RT_OPEN  RT_HIGH  RT_LOW  RT_LAST  \   RT_VOL        RT_AMT  RT_PCT_CHG    RT_MKT_CAP  \RT_FLOAT_MKT_CAP
+                # 600734.SH  20170508.0         12.75     0.00     0.00    0.00     0.00         0.0  0.000000e+00      0.0000  7.949827e+09    4.476632e+09
+                # 600735.SH  20170508.0         20.74     0.00     0.00    0.00     0.00
+                # 600773.SH  20170508.0         12.32    12.35    12.44   11.49    11.55 
+
+        return quote_list 
+
+    def Get_tdays(self,date_start,date_end,mkt=""):
+        ### 获取交易日数据
+        ''' w.tdays("2019-07-17", "2019-10-17", "") # 
+        .Times=[20190717,20190718,20190719,20190722,20190723,20190724,20190725,20190726,20190729,20190730,...]
+        .Data=[[2019-07-17 00:00:00,2019-07-18 00:00:00,2019-07-19 00:00:00,2019-07-22 00:00:00,2019-07-23 00:00:00,2019-07-24 0
+        0:00:00,2019-07-25 00:00:00,2019-07-26 00:00:00,2019-07-29 00:00:00,2019-07-30 00:00:00,...]]
+        ###
+        Merkets:
+        1,SSE,SZSE : ""
+        2,HKE : "TradingCalendar=HKEX"
+        3,纳斯达克，纽交所； "TradingCalendar=NASDAQ"
+        4,银行间市场 "TradingCalendar=NIB"
+        w.tdays("2019-07-17", "2019-07-30", "TradingCalendar=NIB") 银行间市场
+        '''
+        import WindPy as WP 
+        WP.w.start()
+        if mkt == "" :
+            wd0 = WP.w.tdays(date_start,date_end, mkt)
+        else : 
+            wd0 = WP.w.tdays(date_start,date_end, "TradingCalendar="+ mkt) # 
+        ### type of wd0 is datetime , len(wd0.Data) = 1 
+        date_list = wd0.Data[0]
+
+        return date_list 
 
     def Get_wss(self,code_list,items,tradeDate):
         ### 获取多维数据
@@ -48,11 +179,7 @@ class wind_api():
         .Fields=[CLOSE,VOLUME]
         .Times=[20190709 18:57:38]
         .Data=[[35.56,5.59],[50610541.0,196259034.0]]
-        '''
-
-
-
-
+        ''' 
         return WindData
 
 
@@ -101,18 +228,18 @@ class wind_api():
 
         return WindData 
 
-    def Wind2Csv(self,WindData,file_path0,code, date,time_stamp  ):
+    def Wind2Csv_indexconst(self,WindData,file_path0,code, date_report,date_update  ):
         # 180923 |与其把csv文件做那么长，不如将小规模数据改成json格式，如果文件较大，
         # 则同时存成 json+csv，json可以放核心的描述变量
-
+        # last 190717
+        # date_report, date_update used to be date and stamp
         # todo 用来存放Wind历史数据的文件 file_path0=  D:\data_Input_Wind
 
         import csv
         # version before 190612 2115 
-        file_path=file_path0 +'Wind_'+ code +'_'+date+'_'+time_stamp+ '.csv'
-
-        
-
+        # file_path=file_path0 +'Wind_'+ code +'_'+date+'_'+time_stamp+ '.csv' 
+        # after 190717
+        file_path=file_path0 +'Wind_'+ code +'_'+date_report+'_'+date_update+ '.csv' 
         # file_path2 = file_path0 + 'Wind_' + code+'_'+date+'_'+time_stamp + '_updated' + '.csv'
         #  Python中的csv的writer，打开文件的时候，要小心， 要通过binary模式去打开，即带b的，比如wb，ab+等;
         # 而不能通过文本模式，即不带b的方式，w,w+,a+等，否则，会导致使用writerow写内容到csv中时，产生对于的CR，导致多余的空行。
@@ -132,12 +259,7 @@ class wind_api():
             len_contents=len(WindData.Data[1]) #codes here 253 
 
             for i in range(len_contents ) :
-                temp_list  = [date.replace('-','') ,time_stamp]
-
-                # writer.writerow({ fieldnames[0] :WindData.Times[i] }) # date
-
-                # for j in range(len_item) : # without date here
-                # 180923
+                temp_list  = [date.replace('-','') ,time_stamp] 
                 # WindData.Data[0] | datetime.datetime(2018, 5, 31, 0, 0)
                 
                 temp_list.append( WindData.Data[0][i].strftime('%Y%m%d') )
@@ -466,6 +588,8 @@ class wind_api():
 
     def Data_funda_concat_json(self,file_path_funda,time_stamp_input="20180923"):
         '''
+        ### 190717：似乎只是载入某个json文件，和function名称无关，考虑删了。
+
         last 181013 | since 181013
         Merge additional data into one pd： create/import database file,update data 
         with imported new info, save to database file.

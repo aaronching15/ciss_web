@@ -49,6 +49,23 @@ class times():
     def __init__(self,country='CN',exchange='SSE'):
         self.country = country 
         self.exchange = exchange
+        ### Setting path for datetime files 
+        self.path_dt = "C:\\zd_zxjtzq\\RC_trashes\\temp\\ciss_web\\CISS_rc\\db\\db_times\\"
+        ### datetime file name  | from 20070101 to 20190708
+        self.file_name_day = "times_CN_day.csv"
+        self.file_name_week = "times_CN_week.csv"
+
+    def print_info(self):
+        ### print all modules for current clss
+
+        print("gen_dates_week: 给定起始日，生成交易周数据")
+        print("gen_dates_day: 给定起始日，生成交易日数据")
+        print("change_datetime_format:按照给定日期格式将datetime转为str,或str转为datetime. derived from:get_time_format")
+        print("update_tday_list : 根据最新交易日，更新现有日期文件 ")
+        print(" ")
+        print(" ")
+
+        return 1 
 
     def gen_dates_week(self,country='CN',exchange='SSE',init_date='2014-05-31',if_start=0) :
         # if_start = 0 means init_date is the start date and 1 means it is the end date
@@ -57,7 +74,7 @@ class times():
         # Before 190412
         # path0= "C:\\zd_zxjtzq\\RC_trashes\\temp\\sys_stra_24h\\CISS_rc\\db\\db_times\\"
         # After 190412
-        path0= "C:\\zd_zxjtzq\\RC_trashes\\temp\\ciss_web\\CISS_rc\\db\\db_times\\"
+        path0= self.path_dt 
 
         filename = "times_CN_week_20120101_20181102.csv"
 
@@ -74,7 +91,7 @@ class times():
         # if_start = 0 means init_date is the start date and 1 means it is the end date
         # generate data list using initial date or end date 
         # format if time : "2012-01-01"
-        path0= "C:\\zd_zxjtzq\\RC_trashes\\temp\\ciss_web\\CISS_rc\\db\\db_times\\"
+        path0= self.path_dt 
         # before 190412
         # filename = "times_CN_day_20120101_20181102.csv"
         # After 190412
@@ -89,17 +106,107 @@ class times():
         # change string date to datetime and get what we want 
         return dates 
 
-    def get_time_format(self, format0='%Y%m%d',type='str') :
-        # return string date format using datetime module
+    def change_datetime_format(self, date_list ,type_input='str', format0='%Y%m%d') :
+        ### return string date format using datetime module
+        # previous function name: get_time_format
+        # last | since 190717
         import datetime as dt 
-        datetime = dt.datetime.now()
-         
-        if type == 'dt' :
-            return datetime
-        elif type == 'str' :
-            date = dt.datetime.strftime(datetime,format=format0)
-            return date 
+        if format0 =='' :
+            format0='%Y%m%d'
 
+        if len( date_list  ) == 1 :
+            if type_input == 'dt' :
+                date_list = dt.datetime.strftime(date_list,format0)
+            elif type == 'str' :
+                date_list = dt.datetime.strptime(date_list,format0)
+        elif len( date_list  ) > 1 :
+            date_list2 = []
+            if type_input == 'dt' :
+                for temp_date in date_list :
+                    date_list2 = date_list2 +[ dt.datetime.strftime(temp_date,format0) ]
+
+            elif type == 'str' :
+                for temp_date in date_list :
+                    date_list2 = date_list2 +[ dt.datetime.strptime(temp_date,format0) ]
+            date_list = date_list2
+
+        return date_list
+
+    def update_tday_list(self,date_start,date_end,mkt="SSE") :
+        ### 根据最新交易日，补全和更新现有日期文件
+        ### 默认是上海交易所，即 SSE
+        # notes：由于节假日变更，自然灾害如台风等因素，当年内的交易日有可能发生变动，需要每个季度调整
+        # note:若导入的日期原始值为"20190701"，则导入值可能为"20190701.0","float". 
+        # note:若导入的日期原始值为"2019-07-01"，则需要 str1.replce("-","")
+        # | since 190717
+        if mkt =="" :
+            mkt= "SSE"
+
+        ### step 1 | import date file 
+        date_list_raw = pd.read_csv( self.path_dt+ self.file_name_day)
+        ### chagne type as string in case float 
+
+        date_list = date_list_raw[mkt].dropna().astype("str")
+        ### date_list_raw.loc[len_SSE,'SSE'] 对应最后一个值
+        len_SSE = len( date_list )
+
+        date_list = date_list.apply(lambda x : x.replace(".0",""))
+        date_list = list( date_list )
+        ### step 2 | compare latest date 
+        import datetime as dt 
+        # 默认是str格式的日期数据
+        date_list_end = dt.datetime.strptime(date_list[-1], '%Y%m%d' )
+        date_end_dt =   dt.datetime.strptime(date_end, '%Y%m%d' )
+        date_list_start = dt.datetime.strptime(date_list[0], '%Y%m%d' )
+        date_start_dt=   dt.datetime.strptime(date_start, '%Y%m%d' )
+
+        ### forward 
+        if date_end_dt > date_list_end :
+            from db.db_assets.get_wind import wind_api
+            wind_api_1 = wind_api()
+            ### Need to get missing trading dates from wind-api
+            # forward | type is datetime 
+            date_list_f = wind_api_1.Get_tdays( date_list[-1] ,date_end, mkt )
+            
+            date_list_f = self.change_datetime_format(date_list_f ,'dt', '')
+            
+            ### Add forawrd date list to current list
+            # s1 get last index 
+            len_old = len(date_list)
+            # get rid of the first item
+            # for temp_i in range( len(date_list_f[1:]) ) :
+            #     date_list_raw.loc[len_old+ temp_i ,mkt ] = date_list[temp_i+1]
+            print("len_old",len_old)
+            print("len_date_list_f",len(date_list_f) )
+            print("len_date_list",len(date_list) )
+
+            date_list = date_list + date_list_f[1:]
+            len_new= len(date_list) 
+            print("len_date_list",len(date_list) )
+            
+            date_list_raw.loc[0:len_new-1,mkt ] = date_list
+            # save to csv with index 
+            date_list_raw.to_csv( self.path_dt+ self.file_name_day ,index=None)
+
+        ### backward case 
+        if date_start_dt < date_list_start :
+            from db.db_assets.get_wind import wind_api
+            wind_api_1 = wind_api()
+            ### Need to get missing trading dates from wind-api
+            # forward | type is datetime 
+            date_list_b = wind_api_1.Get_tdays( date_start,date_list[0], mkt )
+            ### Add backawrd date list to current list
+            date_list = date_list_f[:-1] + date_list 
+            len_new= len(date_list) 
+            date_list_raw.loc[0:len_new-1,mkt ] = date_list
+            # save to csv with index 
+            date_list_raw.to_csv( self.path_dt+ self.file_name_day ,index=None)
+            
+
+
+        return date_list 
+
+    ################################################################################
     def get_port_rebalance_dates(self,date_start,date_end,method='stock_index_csi'  ):
         # get rebalance dates of portfolio using given start and end dates 
 

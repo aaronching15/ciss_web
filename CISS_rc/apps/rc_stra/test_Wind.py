@@ -59,7 +59,7 @@ Idea：每日数据下载后，用行业和概念的指数数据抓取强势指�
     Logic : 从行业和概念的角度计算强势股票，这样有可能会漏掉一些细分行业牛股，但是好在覆盖面广。
         是否需要对所有股票进行反复的计算呢？——能不能同时计算出明日肯定不会有买入信号的股票，计算出股票明日需要
         上涨多少才有可能出现买入信号？
-    文件夹位置 |  C:\zd_zxjtzq\rCtrashes\rC_Stockpool
+    文件夹位置 |  C:\zd_zxjtzq\rCtrashes\\rC_Stockpool
         concept_wind , industry_4_wind 行业指数，单个指数的成分股列表
     todo-Future：以行业和概念指数作为基准，发掘有超额收益的个股，形成当日股票池
     Step 1：计算有买入信号的所有行业和概念指数；
@@ -137,114 +137,117 @@ for temp_f in  file_List :
     # todo 170511
     temp_pd_Date = Results2.Get_temp_Date_Data( SL_path, temp_Date , Path_Data, temp_f )
 
-    # todo items = "rt_date,rt_pre_close,rt_open,rt_high,rt_low,rt_last,rt_vol,rt_amt,rt_pct_chg,rt_mkt_cap,rt_float_mkt_cap"
-    # print( 'temp_pd_Date 170509 ')
-    # print( temp_pd_Date.head(5) )
-    # print(temp_pd_Date.tail(5))
-    #               RT_DATE  RT_PRE_CLOSE  RT_OPEN  RT_HIGH  RT_LOW  RT_LAST  \
-    # 000001.SZ  20170509.0          8.57     8.56     8.64    8.55     8.64
-    # todo 股票的情况 ============================
-    # todo before 171209 | if temp_f == 'all_A_Stocks_wind.csv' or temp_f == 'All_Index_ETF.csv' :
-    if temp_f in  file_List  :
-        # todo Import  temp_pd_Date
-        # temp_pd_Date = pd.read_csv( Path_Data + '\Wind_' + temp_f[:-4] + '_' + temp_Date + '_updated' + '.csv')
-        # temp_pd_Date.index = temp_pd_Date['Unnamed: 0']
-        # temp_pd_Date = temp_pd_Date.drop( ['Unnamed: 0'], axis =1 )
-        # print( 'length of temp_pd_Date', len(temp_pd_Date.index )  )
+# line 141-248
+    # # todo items = "rt_date,rt_pre_close,rt_open,rt_high,rt_low,rt_last,rt_vol,rt_amt,rt_pct_chg,rt_mkt_cap,rt_float_mkt_cap"
+    # # print( 'temp_pd_Date 170509 ')
+    # # print( temp_pd_Date.head(5) )
+    # # print(temp_pd_Date.tail(5))
+    # #               RT_DATE  RT_PRE_CLOSE  RT_OPEN  RT_HIGH  RT_LOW  RT_LAST  \
+    # # 000001.SZ  20170509.0          8.57     8.56     8.64    8.55     8.64
+    # # todo 股票的情况 ============================
+    # # todo before 171209 | if temp_f == 'all_A_Stocks_wind.csv' or temp_f == 'All_Index_ETF.csv' :
+    # if temp_f in  file_List  :
+    #     # todo Import  temp_pd_Date
+    #     # temp_pd_Date = pd.read_csv( Path_Data + '\Wind_' + temp_f[:-4] + '_' + temp_Date + '_updated' + '.csv')
+    #     # temp_pd_Date.index = temp_pd_Date['Unnamed: 0']
+    #     # temp_pd_Date = temp_pd_Date.drop( ['Unnamed: 0'], axis =1 )
+    #     # print( 'length of temp_pd_Date', len(temp_pd_Date.index )  )
 
-        # todo 已经获取了当日所有股票/指数代码的交易数据
-        # todo for all codes，判断 _updated.csv 是否存在，若不存在， 用 .csv copy 出 _updated.csv
-        # todo 因为尽量不要去改变 .csv, 所有的操作如：判断数据问题，数据更新等，都在_updated.csv 层面进行
-        import os
-        # todo 170510 1131 要先看 _updated 存不存在，是否正常，因为 Get_errorCodes 只抓取 _updated
-        i = 0
+    #     # todo 已经获取了当日所有股票/指数代码的交易数据
+    #     # todo for all codes，判断 _updated.csv 是否存在，若不存在， 用 .csv copy 出 _updated.csv
+    #     # todo 因为尽量不要去改变 .csv, 所有的操作如：判断数据问题，数据更新等，都在_updated.csv 层面进行
+    #     import os
+    #     # todo 170510 1131 要先看 _updated 存不存在，是否正常，因为 Get_errorCodes 只抓取 _updated
+    #     i = 0
 
-        # todo VIP Update csv file and Get errorCodes
-        # 在有历史日线数据的情况下，更新csv数据
-        # 注意：Update_WSQ_Get_errorCodes 只更新包括 code_updated 文件中的数据
-        errorCodes = Results2.Update_WSQ_Get_errorCodes(temp_pd_Date, temp_f, Path_Data, temp_Date,
-                                                        temp_LastDay)
+    #     # todo VIP Update csv file and Get errorCodes
+    #     # 在有历史日线数据的情况下，更新csv数据
+    #     # 注意：Update_WSQ_Get_errorCodes 只更新包括 code_updated 文件中的数据
+    #     errorCodes = Results2.Update_WSQ_Get_errorCodes(temp_pd_Date, temp_f, Path_Data, temp_Date,
+    #                                                     temp_LastDay)
 
-        # for temp_code in temp_pd_Date.index :
-            # temp_fileName = Path_Data + 'Wind_' + temp_code + '_updated' + '.csv'
-            # if os.path.isfile(temp_fileName):
-            #     errorCodes = errorCodes + [temp_code]
-                # # print('170510 2049')
-                # temp_fileName_0  = Path_Data + 'Wind_' + temp_code  + '.csv'
-                #
-                # import pandas as pd
-                # if os.path.isfile(temp_fileName_0 ):
-                #     temp_pd = pd.read_csv( temp_fileName_0 ,  header=None, sep=',', encoding='gbk')
-                #     temp_pd.columns = temp_pd.loc[0, :]
-                #     # delete row 0 :  drop([0], axis=0 )
-                #     temp_pd = temp_pd.drop([0], axis=0 )
-                #     temp_pd.to_csv( temp_fileName )
-                # else :
-                #     # 无历史数据的情况
-                #     # brandly new code 171121 1826
+    #     # for temp_code in temp_pd_Date.index :
+    #         # temp_fileName = Path_Data + 'Wind_' + temp_code + '_updated' + '.csv'
+    #         # if os.path.isfile(temp_fileName):
+    #         #     errorCodes = errorCodes + [temp_code]
+    #             # # print('170510 2049')
+    #             # temp_fileName_0  = Path_Data + 'Wind_' + temp_code  + '.csv'
+    #             #
+    #             # import pandas as pd
+    #             # if os.path.isfile(temp_fileName_0 ):
+    #             #     temp_pd = pd.read_csv( temp_fileName_0 ,  header=None, sep=',', encoding='gbk')
+    #             #     temp_pd.columns = temp_pd.loc[0, :]
+    #             #     # delete row 0 :  drop([0], axis=0 )
+    #             #     temp_pd = temp_pd.drop([0], axis=0 )
+    #             #     temp_pd.to_csv( temp_fileName )
+    #             # else :
+    #             #     # 无历史数据的情况
+    #             #     # brandly new code 171121 1826
 
-        # todo Import errorCodes
-        # errorCodes = pd.read_csv( Path_Data + 'Wind_' + temp_f + '_' + 'errorCodes' + '_' + temp_Date + '_updated' + '.csv' )
-        # errorCodes.index = errorCodes['Unnamed: 0']
-        # errorCodes = errorCodes.drop(['Unnamed: 0'], axis=1)
-        # print('length of errorCodes', len( errorCodes.index))
-        # print( errorCodes )
+    #     # todo Import errorCodes
+    #     # errorCodes = pd.read_csv( Path_Data + 'Wind_' + temp_f + '_' + 'errorCodes' + '_' + temp_Date + '_updated' + '.csv' )
+    #     # errorCodes.index = errorCodes['Unnamed: 0']
+    #     # errorCodes = errorCodes.drop(['Unnamed: 0'], axis=1)
+    #     # print('length of errorCodes', len( errorCodes.index))
+    #     # print( errorCodes )
 
-        # print('170510 2045  errorCodes  ')
+    #     # print('170510 2045  errorCodes  ')
 
-        # todo 根据 errorCodes ，用 wind-WSD 下载 .csv 全历史数据
-        if len( errorCodes.index ) >0 :
-            temp_col = errorCodes.columns[0]
-            for i in errorCodes.index :
+    #     # todo 根据 errorCodes ，用 wind-WSD 下载 .csv 全历史数据
+    #     if len( errorCodes.index ) >0 :
+    #         temp_col = errorCodes.columns[0]
+    #         for i in errorCodes.index :
 
-                code = errorCodes.loc[ i,temp_col ]
-                try:
-                    # todo 170505 之前都是下载截止到最新日期的前复权数据，今后可能还要下载不复权数据
-                    WindData3 = Results2.GetWindData(code, '', '', items='open,high,low,close,volume,amt,pct_chg', output=0)
-                    # file_path = Results2.Wind2Csv(WindData3, Path_Data  , code)
-                    # todo to check 170511
-                    file_path = Results2.Wind2Csv_pd(WindData3, Path_Data, code)
-                    # todo 170505 之前都是下载截止到最新日期的前复权数据，今后可能还要下载不复权数据
-                    # WindData4 = Results2.GetWindData_NoAdj(code, '', '', items='open,high,low,close,volume,amt,pct_chg,total_shares', output=0)
-                    # file_path = Results2.Wind2Csv_NoAdj(WindData4, file_path0, code)
+    #             code = errorCodes.loc[ i,temp_col ]
+    #             try:
+    #                 # todo 170505 之前都是下载截止到最新日期的前复权数据，今后可能还要下载不复权数据
+    #                 WindData3 = Results2.GetWindData(code, '', '', items='open,high,low,close,volume,amt,pct_chg', output=0)
+    #                 # file_path = Results2.Wind2Csv(WindData3, Path_Data  , code)
+    #                 # todo to check 170511
+    #                 file_path = Results2.Wind2Csv_pd(WindData3, Path_Data, code)
+    #                 # todo 170505 之前都是下载截止到最新日期的前复权数据，今后可能还要下载不复权数据
+    #                 # WindData4 = Results2.GetWindData_NoAdj(code, '', '', items='open,high,low,close,volume,amt,pct_chg,total_shares', output=0)
+    #                 # file_path = Results2.Wind2Csv_NoAdj(WindData4, file_path0, code)
 
-                    print('The ', str(i), 'th code is ', code, 'still ', str( errorCodes.index[-1] - i), ' to go.')
-                # python中date、datetime、string的相互转换  http://my.oschina.net/u/1032854/blog/198179
-                #  WindData3.Times[1].strftime('%Y-%m-%d') # '2016-01-05'
-                # time.mktime( WindData3.Times[1].timetuple()) # datetime.datetime(2016, 1, 5, 0, 0, 0, 5000) to 1451923200.0
-                except:
-                    print('The code ' + code + ' is not working ')
-    else :
-        # case 'industry_4_wind.csv',  'concept_wind.csv'
-        # todo Create temp_pd_Date
-        temp_pd_Date = Results2.Get_temp_Date_Data( SL_path, temp_Date, Path_Data, temp_f)
-        # todo Import temp_pd_Date from csv
-        # temp_pd_Date = pd.read_csv(Path_Data + '\Wind_' + temp_f[:-4] + '_' + temp_Date + '_updated' + '.csv')
-        # temp_pd_Date.index = temp_pd_Date['Unnamed: 0']
-        # temp_pd_Date = temp_pd_Date.drop(['Unnamed: 0'], axis=1)
-        print('length of temp_pd_Date', len(temp_pd_Date.index))
-        import os
-        i = 0
-        for temp_code in temp_pd_Date.index:
-            code =  temp_code
-            try:
-                # todo 170505 之前都是下载截止到最新日期的前复权数据，今后可能还要下载不复权数据
-                WindData3 = Results2.GetWindData( code, '', '', items='open,high,low,close,volume,amt,pct_chg', output=0)
-                # todo From WindData3 to DataFrame
+    #                 print('The ', str(i), 'th code is ', code, 'still ', str( errorCodes.index[-1] - i), ' to go.')
+    #             # python中date、datetime、string的相互转换  http://my.oschina.net/u/1032854/blog/198179
+    #             #  WindData3.Times[1].strftime('%Y-%m-%d') # '2016-01-05'
+    #             # time.mktime( WindData3.Times[1].timetuple()) # datetime.datetime(2016, 1, 5, 0, 0, 0, 5000) to 1451923200.0
+    #             except:
+    #                 print('The code ' + code + ' is not working ')
+    # else :
+    #     # case 'industry_4_wind.csv',  'concept_wind.csv'
+    #     # todo Create temp_pd_Date
+    #     temp_pd_Date = Results2.Get_temp_Date_Data( SL_path, temp_Date, Path_Data, temp_f)
+    #     # todo Import temp_pd_Date from csv
+    #     # temp_pd_Date = pd.read_csv(Path_Data + '\Wind_' + temp_f[:-4] + '_' + temp_Date + '_updated' + '.csv')
+    #     # temp_pd_Date.index = temp_pd_Date['Unnamed: 0']
+    #     # temp_pd_Date = temp_pd_Date.drop(['Unnamed: 0'], axis=1)
+    #     print('length of temp_pd_Date', len(temp_pd_Date.index))
+    #     import os
+    #     i = 0
+    #     for temp_code in temp_pd_Date.index:
+    #         code =  temp_code
+    #         try:
+    #             # todo 170505 之前都是下载截止到最新日期的前复权数据，今后可能还要下载不复权数据
+    #             WindData3 = Results2.GetWindData( code, '', '', items='open,high,low,close,volume,amt,pct_chg', output=0)
+    #             # todo From WindData3 to DataFrame
 
-                file_path = Results2.Wind2Csv_pd( WindData3, Path_Data  , code)
+    #             file_path = Results2.Wind2Csv_pd( WindData3, Path_Data  , code)
 
-                # todo 170505 之前都是下载截止到最新日期的前复权数据，今后可能还要下载不复权数据
-                # WindData4 = Results2.GetWindData_NoAdj(code, '', '', items='open,high,low,close,volume,amt,pct_chg,total_shares', output=0)
-                # file_path = Results2.Wind2Csv_NoAdj(WindData4, file_path0, code)
+    #             # todo 170505 之前都是下载截止到最新日期的前复权数据，今后可能还要下载不复权数据
+    #             # WindData4 = Results2.GetWindData_NoAdj(code, '', '', items='open,high,low,close,volume,amt,pct_chg,total_shares', output=0)
+    #             # file_path = Results2.Wind2Csv_NoAdj(WindData4, file_path0, code)
 
-                print('The ', str(i), 'th code is ', code, 'still ', len(temp_pd_Date.index) - i , ' to go.')
-            # python中date、datetime、string的相互转换  http://my.oschina.net/u/1032854/blog/198179
-            #  WindData3.Times[1].strftime('%Y-%m-%d') # '2016-01-05'
-            # time.mktime( WindData3.Times[1].timetuple()) # datetime.datetime(2016, 1, 5, 0, 0, 0, 5000) to 1451923200.0
-            except:
-                print('The code ' + code + ' is not working ')
-            i = i+1
+    #             print('The ', str(i), 'th code is ', code, 'still ', len(temp_pd_Date.index) - i , ' to go.')
+    #         # python中date、datetime、string的相互转换  http://my.oschina.net/u/1032854/blog/198179
+    #         #  WindData3.Times[1].strftime('%Y-%m-%d') # '2016-01-05'
+    #         # time.mktime( WindData3.Times[1].timetuple()) # datetime.datetime(2016, 1, 5, 0, 0, 0, 5000) to 1451923200.0
+    #         except:
+    #             print('The code ' + code + ' is not working ')
+    #         i = i+1
+
+
 
 # todo 2，根据 Wind 行业和概念指数，计算强势指数，寻找当日有买入信号的股票 ===========
 # 170528

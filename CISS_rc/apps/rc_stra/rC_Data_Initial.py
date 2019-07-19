@@ -3,6 +3,8 @@ __author__=" ruoyu.Cheng"
 
 '''
 ===============================================
+todo: replace rC_Data_Initial.py with get-Wind.py gradually. | 190718file_name
+
 功能：初始化需要的股票价格，回报等数据
 数据来源： Wind
 last update 170509 | since  160121
@@ -342,6 +344,7 @@ class rC_Database( ) :
         SymbolList = pd.read_csv( SL_path , skiprows=1, header=None, sep=',', encoding='gbk')
         # SymbolList = SymbolList.drop([0], axis=0)
         # todo columns '1' 对应的是 wind_code， '2' 对应的是 中文简称
+        SymbolList = SymbolList["wind_code"]
         print('SymbolList.head', SymbolList.head(5))
 
         # todo errorCode_List4csv 是要搜集因为 _updated 导致csv数据出问题的代码
@@ -367,13 +370,15 @@ class rC_Database( ) :
                 for i in range(temp_period * (j), len(SymbolList)):
                     # code = str(SymbolList.values[i])[2:-2]
                     # todo columns '1' 对应的是 wind_code， '2' 对应的是 中文简称
-                    code = SymbolList.loc[i, 1]
+                    # code = SymbolList.loc[i, 1]
+                    code = SymbolList.loc[i, "wind_code"]
                     code_List = code_List + [code]
             else:
                 for i in range(temp_period * (j), temp_period * (j + 1)):
                     # code = str(SymbolList.values[i])[2:-2]
 
-                    code = SymbolList.loc[i, 1]
+                    # code = SymbolList.loc[i, 1]
+                    code = SymbolList.loc[i, "wind_code"]
                     code_List = code_List + [code]
             print('code_List ', code_List)
             # todo Get 600036 quote data.
