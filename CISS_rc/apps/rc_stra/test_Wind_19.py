@@ -7,7 +7,14 @@ Function：
 derived from test_Wind.py
 last  | since 190718 
 '''
-import unittest
+import sys
+# 添加祖父目录
+sys.path.append("../..")
+sys.path.append("C:\\zd_zxjtzq\\RC_trashes\\temp\\ciss_web\\CISS_rc\\db\\")
+
+from db.db_assets.get_wind import wind_api
+wind_api_1 = wind_api()
+
 import time
 temp_time1 = time.strftime('%y%m%d%H%M%S',time.localtime(time.time()))
 print( temp_time1 )
@@ -22,41 +29,35 @@ SP_path = 'D:\\CISS_db\\data_csi\\'
 print("Path for symbol list:",SP_path)
 ### A_Index&ETF, A_stocks, csi_HK300
 ### A股指数和ETF，A股全部股票，中证港股300指数成分。
-SP_List = ['All_Index_ETF.csv',"cicslevel2_1907.csv" ,'H11164cons.csv']
+file_list = ['All_Index_ETF.csv',"cicslevel2_1907.csv" ,'H11164cons.csv']
 list_names =["Index-ETF","CN-stocks","HK-stocks"]
-print("File name for symbols :",SP_List)
+print("File name for symbols :",file_list)
+print("List name for symbols :",list_names)
 # Excel format for code2wind_code, 
 # =REPT("0",(5-len(code) ) )&E2&".HK"
 # =if(left(code,1)="6",code&".SH",'..SZ') || 删除2和9开头的股票
 
-
-temp_date =  input('Please type in Date,e.g.190718 : ')
-temp_predate = input('Please type in Pre Day,e.g.190717 : ')
+# temp_date =  input('Please type in Date,e.g.190718 : ')
+# temp_predate = input('Please type in Pre Day,e.g.190717 : ')
 
 #########################################################################
 ### 根据 股票，指数+ETF，下载wind-WSQ数据 
-file_List = SP_List
 
-import sys
-# 添加祖父目录
-sys.path.append("../..")
-sys.path.append("C:\\zd_zxjtzq\\RC_trashes\\temp\\ciss_web\\CISS_rc\\db\\")
 
-from db.db_assets.get_wind import wind_api
-wind_api_1 = wind_api()
-j=0
-for temp_f in  file_List :
-    print('Working on Symbol List :', temp_f )
-    # Get Wind-WSQ single day data
-    # step 1 get SymbolList from : SL_path : path of SymbolList
-    path_list = SP_path  + temp_f
+# j=0
+# for temp_f in  file_list :
+#     print('Working on Symbol List :', temp_f )
+#     # Get Wind-WSQ single day data
+#     # step 1 get SymbolList from : SL_path : path of SymbolList
+#     path_list = SP_path  + temp_f
 
-    list_name = list_names[j]
-    quote_list = wind_api_1.Get_wsq(path_list,temp_date,path_data,list_name,temp_f ,  '')
+#     list_name = list_names[j]
+#     quote_list = wind_api_1.Get_wsq(path_list,temp_date,path_data,list_name,temp_f ,  '')
 
-    j=j+1
+#     j=j+1
 
-ASD
+# ASD
+
 #########################################################################
 ### Part 2 更新个股历史前复权行情和不复权行情。
 
@@ -82,7 +83,7 @@ T_end转为datetime格式，做日期匹配。
         # todo，一次性引用分红送配数据(对ETF很重要，但是对于策略回测来说不着急)
 
         # 计算复权因子: T日前复权价格/T日真实收盘价
-        adj_factor = CLOSE(T_end) / RT_PRE_CLOSE(T)
+        adj_factor =  RT_PRE_CLOSE(T)/CLOSE(T_end) 
         # 将 df_stock_f 前复权日期数据中所有历史"open,high,low,close"等价格数据乘 adj_factor,并取4位小数。
         # 同时 vol除以adj_factor并取整
 
@@ -98,39 +99,30 @@ reference:rC_Data_Initial.py\\Update_WSQ_Get_errorCodes
 ### 2.1,step0，股票s：T-1,T转为datetime格式
 # 1,读取股票s的前复权数据、不复权数据，读取数据中的最新日期T_end(默认读取的时间序列数据是升序)。
 # T_end转为datetime格式，做日期匹配。
+import pandas as pd 
+import datetime as dt
 
-temp_code = "600036.SH"
+
+j=0
+file_name = file_list[j]
+list_name = list_names[j]
+temp_code = "000300.SH"
 
 # Wind_all_A_Stocks_wind_190717_updated.csv
-temp_date_pre = "190717"
+temp_predate = "190717"
 temp_date = "190718"
+
+###################################################################
 # change datetime format 
-import datetime as dt 
-temp_dt = dt.datetime.strptime("20"+temp_date,"%Y%m%d")
-temp_dt_str = dt.datetime.strftime(temp_dt,"%Y%m%d")
+df_stock = wind_api_1.quote_concat_csv(temp_code,temp_date,list_name,path_data)
 
-### Get pre_close from day T list 
-temp_file = "Wind_" + "all_A_Stocks_wind_"+ temp_date +"_updated.csv"
-df_T = pd.read_csv(path_data+temp_file,index_col="Unnamed: 0"  )
-### index is code
-# df_T.loc[temp_code,"RT_LAST"] = 35.21
-rt_pre_close = df_T.loc[temp_code,"RT_PRE_CLOSE"]
+ASD
 
-### Get historical quotation for single stocks
-# "Wind_600036.SH_updated.csv"
-temp_file_2 = "Wind_"+temp_code+"_updated.csv"
-df_stock = pd.read_csv(path_data+temp_file_2 ,index_col="Unnamed: 0"  )
+close_pre_hist = 1
 
 
-# dt_str_hist = '2019-06-12'
-dt_str_hist = df_stock["DATE"].iloc[-1] 
-dt_hist = dt.datetime.strptime( dt_str_hist ,"%Y-%m-%d")
 
-dt_diff = temp_dt - dt_hist 
-
-close_pre_hist = 
-
-
+# for temp_code in df_T.index :
 
 
 

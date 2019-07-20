@@ -31,14 +31,17 @@ class wind_api():
         print("WSQ | Get_wsq: 获取实时行情数据。")
         print("WSS | Get_wss: 获取多维数据。")
         print("TDAYS | Get_tdays: 获取交易日数据。")
-        print("WSD | GetWindData:个股历史前复权数据。")
+        print("WSD | GetWindData:个股历史前复权数据。") 
+
         print("    | Wind2Csv_indexconst：指数权重WindData保存至csv "  )
         print("Wset | GetWind_indexconst：T日指数成分股数据")
         print("WSS 多维数据| GetWind_funda：个股财务数据")
         print(" | Data_funda_csvJson：获取和保存json、csv数据文件")
         print(" | Data_funda_csvJson_test 给定财务年份list和年内更新日期，获取和保存json、csv数据文件")
         print(" | Load_funda_csvJson 导入json和csv文件并放在object里返回")
- 
+        
+        print("data_manage | Wind2Csv_wsd:WSD获得的个股历史数据保存至csv  ")
+        print("data_manage |quote_concat_csv: 导入个股历史行情数据,更新个股历史前复权行情和不复权行情")
 
         return 1 
 
@@ -83,8 +86,8 @@ class wind_api():
 
                 
             # temp_f[:-4] = 'all_A_Stocks_wind' 
-            quote_list.to_csv(path_data + 'Wind_' + file_name[:-4] + '_' + temp_date+ '_updated' + '.csv')
-            print(path_data + '\\Wind_' + file_name[:-4] + '_' + temp_date + '_updated' + '.csv')
+            quote_list.to_csv(path_data + 'Wind_' + list_name + '_' + temp_date+ '_updated' + '.csv')
+            print(path_data + '\\Wind_' + list_name + '_' + temp_date + '_updated' + '.csv')
 
         else :
             for j in range(temp_len + 1):
@@ -185,7 +188,7 @@ class wind_api():
 
     ''' Part 1 Get Price data '''
     def GetWindData(self, code='600036.SH', date_0='20151220', date_1='20160118', items='open,high,low,close,volume,amt,pct_chg', output=1):
-        # last ?
+        # 前复权方式获取历史前复权数据  | last 190720
         # items='open,high,low,close,volume,pct_chg'
         # Notice that pct_chg is with format as 2.45 , we need to divide it with 100
         # Get Daily data
@@ -664,4 +667,178 @@ class wind_api():
         return data_json_rc
  
 
+    def Wind2Csv_wsd(self, WindData,file_path0,code  ):
+        # file_path0=  D:\data_Input_Wind
+        # last 190720 | since 170505
+        # dervied from rC_Data_Initial.py  
+
+        code=  WindData.Codes[0]
+
+        import csv
+        file_path=file_path0 +'Wind_'+ code + '.csv'
+        file_path2 = file_path0 + 'Wind_' + code + '_updated' + '.csv'
+        #  Python中的csv的writer，打开文件的时候，要小心， 要通过binary模式去打开，即带b的，比如wb，ab+等;
+        # 而不能通过文本模式，即不带b的方式，w,w+,a+等，否则，会导致使用writerow写内容到csv中时，产生对于的CR，导致多余的空行。
+        # open 这个功能会直接新建一个csv的文件，如果它不存在的话
+        #  打开csv并写入内容时，避免出现空格，Python文档中有提到：open('eggs.csv', newline='')
+        #  也就是说，打开文件的时候多指定一个参数
+        #  open( file_path, 'w',newline='') 而不只是 open( file_path, 'w' )
+        with open( file_path, 'w',newline='') as csvfile:
+            # fieldnames = ['first_name', 'last_name'] ; Columns=[  'date', 'open', 'high',  'low'  , 'close', 'volume']
+            fieldnames = WindData.Fields #  Data3.Fields=Columns ？
+            # writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            writer = csv.writer(csvfile ) #　delimiter=' '
+            # Write the first row as head
+            writer.writerow(['DATE']+ fieldnames )
+            len_item=len(WindData.Data) # = len(Columns) =6
+
+            len_dates=len(WindData.Data[1]) # 253
+            # print(WindData.Data[1])
+            # print(WindData.Data[-1])
+            # python中date、datetime、string的相互转换  http://my.oschina.net/u/1032854/blog/198179
+            #  WindData3.Times[1].strftime('%Y-%m-%d') # '2016-01-05'
+            # time.mktime( WindData3.Times[1].timetuple()) # datetime.datetime(2016, 1, 5, 0, 0, 0, 5000) to 1451923200.0
+            for i in range(len_dates ) :
+                temp_list=[ WindData.Times[i].strftime('%Y-%m-%d') ]# str  '20161215', we still need to change it to list
+                # writer.writerow({ fieldnames[0] :WindData.Times[i] }) # date
+                for j in range(len_item) : # without date here
+                    temp_list.append( WindData.Data[j][i] )
+                writer.writerow( temp_list ) # date
+
+        with open( file_path2 , 'w',newline='') as csvfile:
+            # fieldnames = ['first_name', 'last_name'] ; Columns=[  'date', 'open', 'high',  'low'  , 'close', 'volume']
+            fieldnames = WindData.Fields #  Data3.Fields=Columns ？
+            # writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            writer = csv.writer(csvfile ) #　delimiter=' '
+            # Write the first row as head
+            writer.writerow(['DATE']+ fieldnames )
+            len_item=len(WindData.Data) # = len(Columns) =6
+
+            len_dates=len(WindData.Data[1]) # 253
+            # print(WindData.Data[1])
+            # print(WindData.Data[-1])
+            # python中date、datetime、string的相互转换  http://my.oschina.net/u/1032854/blog/198179
+            #  WindData3.Times[1].strftime('%Y-%m-%d') # '2016-01-05'
+            # time.mktime( WindData3.Times[1].timetuple()) # datetime.datetime(2016, 1, 5, 0, 0, 0, 5000) to 1451923200.0
+            for i in range(len_dates ) :
+                temp_list=[ WindData.Times[i].strftime('%Y-%m-%d') ]# str  '20161215', we still need to change it to list
+                # writer.writerow({ fieldnames[0] :WindData.Times[i] }) # date
+                for j in range(len_item) : # without date here
+                    temp_list.append( WindData.Data[j][i] )
+                writer.writerow( temp_list ) # date
+
+        return file_path2
+
+
+    def quote_concat_csv(self,temp_code,temp_date,list_name,path_data):    
+        ### 导入个股历史行情数据,
+        '''
+        steps:
+        0，T-1，T日，股票s：T-1,T转为datetime格式
+        1,读取股票s的前复权数据、不复权数据，读取数据中的最新日期T_end(默认读取的时间序列数据是升序)。
+        T_end转为datetime格式，做日期匹配。
+            若:
+            case1： T_end=T-1,将T日数据写入不复权列表，同时判断当日是否发生"分红送配",调整后计算复权因子，写入前复权列表。
+            case2： T_end<T-1, 存在缺失日期【T_end+1,T】,需要补全这部分数据
+            case3： T_end>T-1, 报错：数据已经更新或输入日期有误。
+
+        2，case1：
+            2.1,获取股票前复权数据，获得CLOSE(T_end),计算收盘价的百分比差额
+             CLOSE(T_end) / RT_PRE_CLOSE(T) -1, 是否小于0.1%
+            逻辑：分红的股息率一般不会低于千分之一，若低于千分之一则可以忽略。
+            
+            if diff < 0.1% :
+                # 说明可以将T日直接贴到T_end之后
+            else :
+                # 检查是否存在分红送配。
+                # todo，一次性引用分红送配数据(对ETF很重要，但是对于策略回测来说不着急)
+
+                # 计算复权因子: T日前复权价格/T日真实收盘价
+                adj_factor = RT_PRE_CLOSE(T)/CLOSE(T_end) 
+                # 将 df_stock_f 前复权日期数据中所有历史"open,high,low,close"等价格数据乘 adj_factor,并取4位小数。
+                # 同时 vol除以adj_factor并取整
+
+                # adj_factor 保存至 df_stock_noadj
+        3,case2:
+            3.1，wind抓取【T_end+1，T】期间的不复权行情数据，和前复权的收盘价数据。
+            3.2，识别出存在“分红送配”的日期，可能有 1~n次的分红送配情况，并依次计算复权因子。
+            
+        reference:rC_Data_Initial.py\\Update_WSQ_Get_errorCodes
+        '''
+        items='open,high,low,close,volume,amt,pct_chg'
+        import pandas as pd 
+        import datetime as dt 
+        temp_dt = dt.datetime.strptime("20"+temp_date,"%Y%m%d")
+        temp_dt_str = dt.datetime.strftime(temp_dt,"%Y%m%d")
+
+        ### s1,Get pre_close from day T list 
+        # temp_file = "Wind_" + "all_A_Stocks_wind_"+ temp_date +"_updated.csv"
+        temp_file = 'Wind_' + list_name  + '_' + temp_date+ '_updated' + '.csv'
+
+        df_T = pd.read_csv(path_data+temp_file,index_col="Unnamed: 0"  )
+        print( df_T.head(3) )
+        ### index is code
+        # df_T.loc[temp_code,"RT_LAST"] = 35.21
+        print("list_name ",list_name )
+        print("df_T.index ", df_T.index )
+
+        rt_pre_close = df_T.loc[temp_code,"RT_PRE_CLOSE"]
+
+        ### s2, Get historical quotation for single stocks
+        # "Wind_600036.SH_updated.csv"
+        temp_file_2 = "Wind_"+temp_code+"_updated.csv"
+        df_stock = pd.read_csv(path_data+temp_file_2   )
+
+        # dt_str_hist = '2019-06-12'
+        dt_str_hist = df_stock["DATE"].iloc[-1] 
+        dt_hist = dt.datetime.strptime( dt_str_hist ,"%Y-%m-%d")
+
+        dt_diff = temp_dt - dt_hist 
+        print("dt_diff ", dt_diff, dt_diff> dt.timedelta(1) )
+
+        if dt_diff> dt.timedelta(1) :
+            ### get period quotation data using wind\\WSD
+            # dt_0 = dt.datetime.strftime( dt_hist + dt.timedelta(1),"%Y-%m-%d")
+            # note:由于存在“分红送配”的可能，因此也要再次抓取dt_hist当日数据，和本地历史行情数据作对比。
+            dt_0 = dt.datetime.strftime( dt_hist ,"%Y-%m-%d")
+            dt_1 = dt.datetime.strftime( temp_dt ,"%Y-%m-%d")
+
+            ### s3,get periodic missing data for single stock
+            # wind_data0= self.GetWindData(temp_code, dt_0,dt_1 ,items,1)
+            # # wind to csv 
+            # file_path0 = "D:\\temp\\"
+            # result_path2 = self.Wind2Csv_wsd( wind_data0,file_path0,temp_code  )
+            # print(result_path2)
+            
+            temp_df= pd.read_csv( "D:\\temp\\" +  "Wind_000300.SH_updated.csv")
+            close_hist_new = temp_df.loc[0,"CLOSE"]
+
+            ### get rid of first row
+            temp_df = temp_df.iloc[1:,:]
+
+            # debug use :todo:现在需要新增时间序列的df格式 
+            # print( df_stock.tail(2)  )
+            # print( df_stock.loc[df_stock.index[-1],"CLOSE"] )
+            # print( close_hist_new )
+            # print("diff value ",abs(df_stock.loc[df_stock.index[-1],"CLOSE"]/close_hist_new - 1) )
+
+            if abs(df_stock.loc[df_stock.index[-1],"CLOSE"]/close_hist_new - 1) < 0.001 :
+                # no adjustment during period,we just add to df_stock and save to csv 
+                df_stock =df_stock.append( temp_df,ignore_index=True)
+
+                # df_stock.to_csv(path_data+temp_file_2   )
+                df_stock.to_csv("D:\\temp\\temp_all_"+temp_file_2   )
+
+
+            else :
+                ### We need to make adjustment for listorical quotations  
+                ### 计算复权因子: T日前复权价格/T日真实收盘价
+                # from O,H,L,C to O',H',L' , o'=O * (C'/C)
+                adj_factor = close_hist_new/df_stock.loc[df_stock.index[-1],"CLOSE"]
+                ### todo 
+                # 依次调整df_stock中的 OPEN,HIGH,LOW,CLOSE,VOLUME
+                
+
+
+        return df_stock 
 

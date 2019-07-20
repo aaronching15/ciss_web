@@ -252,8 +252,8 @@ class data_wind():
             print("Path for symbol list:",SP_path)
             ### A_Index&ETF, A_stocks, csi_HK300
             ### A股指数和ETF，A股全部股票，中证港股300指数成分。
-            SP_List = ['All_Index_ETF.csv',"cicslevel2_1907.xls" ,'H11164cons.xls']
-            list_names =["index_ETF","CN_stocks","HK_stocks"]
+            file_list = ['All_Index_ETF.csv',"cicslevel2_1907.xls" ,'H11164cons.xls']
+            list_names =["index-ETF","CN-stocks","HK-stocks"]
             print("File name for symbols :",SP_List)
             # Excel format for code2wind_code, 
             # =REPT("0",(5-len(code) ) )&E2&".HK"
@@ -262,26 +262,46 @@ class data_wind():
             temp_date =  input('Please type in Date,e.g.190718 : ')
             temp_predate = input('Please type in Pre Day,e.g.190717 : ')
 
-            file_List = SP_List
-
             from db.db_assets.get_wind import wind_api
             wind_api_1 = wind_api()
 
             j=0
-            for temp_f in  file_List :
-                print('Working on Symbol List :', temp_f )
+            for file_name in  file_list :
+                print('Working on Symbol List :', file_name )
                 # Get Wind-WSQ single day data
                 # step 1 get SymbolList from : SL_path : path of SymbolList
-                path_list = SP_path  + temp_f
+                path_list = SP_path  + file_name
 
                 list_name = list_names[j]
-                quote_list = wind_api_1.Get_wsq(path_list,temp_date,path_data,list_name,temp_f ,  '')
+                quote_list = wind_api_1.Get_wsq(path_list,temp_date,path_data,list_name,file_name ,  '')
                 j=j+1 
             #########################################################################
-            ### 2，
+            ### 2，更新历史数据
+            '''
+            
+            quote_list.to_csv(path_data + 'Wind_' + file_name[:-4] + '_' + temp_date+ '_updated' + '.csv')
+            Wind_Index-ETF_190718_updated.csv
+            '''
+            temp_date = "190718"
+            temp_f = 'All_Index_ETF.csv'
+            j=0
+            list_name = list_names[j]
+
+            # Assign wind_code to indx 
+            df_quote_list = pd.read_csv(path_data + 'Wind_' + list_name + '_' + temp_date+ '_updated' + '.csv',index_col='Unnamed: 0')
+
+            for temp_code in df_quote_list.index :
+                ###
+                df_stock = pd.read_csv(path_data + 'Wind_' + temp_code + '_updated' + '.csv')
+                # get lastest date 
+                df_stock.loc[df_stock.index[-1],'DATE' ]
 
 
-            ### 2,更新历史数据
+
+
+
+
+            ### 2,
 
 
 

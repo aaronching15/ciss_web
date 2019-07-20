@@ -31,6 +31,7 @@ urlpatterns = [
     ##################################################################
     ### working urls of data
     path('data/index_data.html', views.data_index,name="data_index" ),
+    path('data/data_log.html', views.data_log,name="data_log" ),
 
 
     ##################################################################
