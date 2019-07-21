@@ -52,7 +52,7 @@ class wind_api():
 
         if len(items) < 1 :
             items = "rt_date,rt_pre_close,rt_open,rt_high,rt_low,rt_last,rt_vol,rt_amt,rt_pct_chg,rt_mkt_cap,rt_float_mkt_cap"
-
+        
         SymbolList = pd.read_csv( path_list ,encoding="gbk")
         # usecols="wind_code"
         print( path_list )
@@ -81,10 +81,10 @@ class wind_api():
             temp_pd_set.columns = temp_Data.Fields
             temp_pd_set.index = temp_Data.Codes
 
-                
+            quote_list = temp_pd_set
             # temp_f[:-4] = 'all_A_Stocks_wind' 
-            quote_list.to_csv(path_data + 'Wind_' + file_name[:-4] + '_' + temp_date+ '_updated' + '.csv')
-            print(path_data + '\\Wind_' + file_name[:-4] + '_' + temp_date + '_updated' + '.csv')
+            quote_list.to_csv(path_data + 'Wind_' + list_name + '_' + temp_date+ '_updated' + '.csv')
+            print(path_data + '\\Wind_' + list_name + '_' + temp_date + '_updated' + '.csv')
 
         else :
             for j in range(temp_len + 1):

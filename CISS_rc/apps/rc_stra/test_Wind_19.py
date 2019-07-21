@@ -22,20 +22,21 @@ SP_path = 'D:\\CISS_db\\data_csi\\'
 print("Path for symbol list:",SP_path)
 ### A_Index&ETF, A_stocks, csi_HK300
 ### A股指数和ETF，A股全部股票，中证港股300指数成分。
-SP_List = ['All_Index_ETF.csv',"cicslevel2_1907.csv" ,'H11164cons.csv']
+# file_List = ['All_Index_ETF.csv',"cicslevel2_1907.csv" ,'H11164cons.csv']
+file_List = ['All_Index_ETF.csv']
+
 list_names =["Index-ETF","CN-stocks","HK-stocks"]
-print("File name for symbols :",SP_List)
+print("File name for symbols :",file_List)
 # Excel format for code2wind_code, 
 # =REPT("0",(5-len(code) ) )&E2&".HK"
 # =if(left(code,1)="6",code&".SH",'..SZ') || 删除2和9开头的股票
 
 
 temp_date =  input('Please type in Date,e.g.190718 : ')
-temp_predate = input('Please type in Pre Day,e.g.190717 : ')
+# temp_predate = input('Please type in Pre Day,e.g.190717 : ')
 
 #########################################################################
 ### 根据 股票，指数+ETF，下载wind-WSQ数据 
-file_List = SP_List
 
 import sys
 # 添加祖父目录
@@ -43,7 +44,7 @@ sys.path.append("../..")
 sys.path.append("C:\\zd_zxjtzq\\RC_trashes\\temp\\ciss_web\\CISS_rc\\db\\")
 
 from db.db_assets.get_wind import wind_api
-wind_api_1 = wind_api()
+wind_api_1 = wind_api() 
 j=0
 for temp_f in  file_List :
     print('Working on Symbol List :', temp_f )
@@ -128,7 +129,7 @@ dt_hist = dt.datetime.strptime( dt_str_hist ,"%Y-%m-%d")
 
 dt_diff = temp_dt - dt_hist 
 
-close_pre_hist = 
+close_pre_hist = 1
 
 
 
