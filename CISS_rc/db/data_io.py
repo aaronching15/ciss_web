@@ -252,8 +252,8 @@ class data_wind():
             print("Path for symbol list:",SP_path)
             ### A_Index&ETF, A_stocks, csi_HK300
             ### A股指数和ETF，A股全部股票，中证港股300指数成分。
-            SP_List = ['All_Index_ETF.csv',"cicslevel2_1907.xls" ,'H11164cons.xls']
-            list_names =["index_ETF","CN_stocks","HK_stocks"]
+            file_list = ['All_Index_ETF.csv',"cicslevel2_1907.xls" ,'H11164cons.xls']
+            list_names =["index-ETF","CN-stocks","HK-stocks"]
             print("File name for symbols :",SP_List)
             # Excel format for code2wind_code, 
             # =REPT("0",(5-len(code) ) )&E2&".HK"
@@ -262,63 +262,46 @@ class data_wind():
             temp_date =  input('Please type in Date,e.g.190718 : ')
             temp_predate = input('Please type in Pre Day,e.g.190717 : ')
 
-            file_List = SP_List
-
             from db.db_assets.get_wind import wind_api
             wind_api_1 = wind_api()
 
             j=0
-            for temp_f in  file_List :
-                print('Working on Symbol List :', temp_f )
+            for file_name in  file_list :
+                print('Working on Symbol List :', file_name )
                 # Get Wind-WSQ single day data
                 # step 1 get SymbolList from : SL_path : path of SymbolList
-                path_list = SP_path  + temp_f
+                path_list = SP_path  + file_name
 
                 list_name = list_names[j]
-                quote_list = wind_api_1.Get_wsq(path_list,temp_date,path_data,list_name,temp_f ,  '')
+                quote_list = wind_api_1.Get_wsq(path_list,temp_date,path_data,list_name,file_name ,  '')
                 j=j+1 
             #########################################################################
-            ### 2，
+            ### 2，更新历史数据
+            '''
+            
+            quote_list.to_csv(path_data + 'Wind_' + file_name[:-4] + '_' + temp_date+ '_updated' + '.csv')
+            Wind_Index-ETF_190718_updated.csv
+            '''
+            temp_date = "190718"
+            temp_f = 'All_Index_ETF.csv'
+            j=0
+            list_name = list_names[j]
 
+            # Assign wind_code to indx 
+            df_quote_list = pd.read_csv(path_data + 'Wind_' + list_name + '_' + temp_date+ '_updated' + '.csv',index_col='Unnamed: 0')
 
-            ### 2,更新历史数据
-
-
-
+            for temp_code in df_quote_list.index :
+                ###
+                df_stock = pd.read_csv(path_data + 'Wind_' + temp_code + '_updated' + '.csv')
+                # get lastest date 
+                df_stock.loc[df_stock.index[-1],'DATE' ]
 
 
 
         ### todo,确定上述的信息保存在本地的表格里。
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ 
 
 
 
@@ -592,65 +575,6 @@ class data_wind():
 
         return code_head,code_df
 
-
-    def Wind2Csv(self, WindData,file_path0,code  ):
-        # file_path0=  D:\data_Input_Wind
-        # last 181117 | since 170505
-        # dervied from rC_Data_Initial.py  
-
-        code=  WindData.Codes[0]
-
-        import csv
-        file_path=file_path0 +'Wind_'+ code + '.csv'
-        file_path2 = file_path0 + 'Wind_' + code + '_updated' + '.csv'
-        #  Python中的csv的writer，打开文件的时候，要小心， 要通过binary模式去打开，即带b的，比如wb，ab+等;
-        # 而不能通过文本模式，即不带b的方式，w,w+,a+等，否则，会导致使用writerow写内容到csv中时，产生对于的CR，导致多余的空行。
-        # open 这个功能会直接新建一个csv的文件，如果它不存在的话
-        #  打开csv并写入内容时，避免出现空格，Python文档中有提到：open('eggs.csv', newline='')
-        #  也就是说，打开文件的时候多指定一个参数
-        #  open( file_path, 'w',newline='') 而不只是 open( file_path, 'w' )
-        with open( file_path, 'w',newline='') as csvfile:
-            # fieldnames = ['first_name', 'last_name'] ; Columns=[  'date', 'open', 'high',  'low'  , 'close', 'volume']
-            fieldnames = WindData.Fields #  Data3.Fields=Columns ？
-            # writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-            writer = csv.writer(csvfile ) #　delimiter=' '
-            # Write the first row as head
-            writer.writerow(['DATE']+ fieldnames )
-            len_item=len(WindData.Data) # = len(Columns) =6
-
-            len_dates=len(WindData.Data[1]) # 253
-            # print(WindData.Data[1])
-            # print(WindData.Data[-1])
-            # python中date、datetime、string的相互转换  http://my.oschina.net/u/1032854/blog/198179
-            #  WindData3.Times[1].strftime('%Y-%m-%d') # '2016-01-05'
-            # time.mktime( WindData3.Times[1].timetuple()) # datetime.datetime(2016, 1, 5, 0, 0, 0, 5000) to 1451923200.0
-            for i in range(len_dates ) :
-                temp_list=[ WindData.Times[i].strftime('%Y-%m-%d') ]# str  '20161215', we still need to change it to list
-                # writer.writerow({ fieldnames[0] :WindData.Times[i] }) # date
-                for j in range(len_item) : # without date here
-                    temp_list.append( WindData.Data[j][i] )
-                writer.writerow( temp_list ) # date
-
-        with open( file_path2 , 'w',newline='') as csvfile:
-            # fieldnames = ['first_name', 'last_name'] ; Columns=[  'date', 'open', 'high',  'low'  , 'close', 'volume']
-            fieldnames = WindData.Fields #  Data3.Fields=Columns ？
-            # writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-            writer = csv.writer(csvfile ) #　delimiter=' '
-            # Write the first row as head
-            writer.writerow(['DATE']+ fieldnames )
-            len_item=len(WindData.Data) # = len(Columns) =6
-
-            len_dates=len(WindData.Data[1]) # 253
-            # print(WindData.Data[1])
-            # print(WindData.Data[-1])
-            # python中date、datetime、string的相互转换  http://my.oschina.net/u/1032854/blog/198179
-            #  WindData3.Times[1].strftime('%Y-%m-%d') # '2016-01-05'
-            # time.mktime( WindData3.Times[1].timetuple()) # datetime.datetime(2016, 1, 5, 0, 0, 0, 5000) to 1451923200.0
-            for i in range(len_dates ) :
-                temp_list=[ WindData.Times[i].strftime('%Y-%m-%d') ]# str  '20161215', we still need to change it to list
-                # writer.writerow({ fieldnames[0] :WindData.Times[i] }) # date
-                for j in range(len_item) : # without date here
-                    temp_list.append( WindData.Data[j][i] )
-                writer.writerow( temp_list ) # date
-
-        return file_path
+'''
+find Wind2Csv at get_wind.py
+'''

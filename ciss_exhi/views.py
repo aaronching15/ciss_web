@@ -25,6 +25,9 @@ def data_index(request):
     #  
     return render_to_response("ciss_exhi/data/index_data.html")
 
+def data_log(request):
+    #  
+    return render_to_response("ciss_exhi/data/data_log.html")
 ###########################################################################
 ### Index of strategy list 
 ### working on test strategy file

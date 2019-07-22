@@ -727,7 +727,7 @@ Qs:如何为有组合调整交易信号的股票设计交易计划？
         # 关键字段：{公告日、股权登记日、除权日，配股上市日}
         # {rights_issue_anncedate,record_date,ex_rights_date,listing_date }
         w.wset("seoimplementation","startdate=2019-01-15;enddate=2019-07-15;sectorid=1000011893000000;windcode=;datetype=issue_date")
-    5，WindPy\\WSET\\股票\\沪深二级市场\\分红送转：分红送转、分红实施：
+    5，WindPy\\WSET\\股票\\沪深公司研究\\分红送转：分红送转、分红实施：
         5.1 分红送转，针对个股；
         ### 分红送转是综合性的数据，分类齐全但是重要日期方面只有一个除权除息日。另外，"cash_payout_ratio"=0.2 表示一股分红0.2 rmb
         # 除权除息日、...,...,派息比例，转增比例，送股比例，增发比例，增发比例，增发价格，配股价格，配股比例，除权说明。
@@ -741,7 +741,7 @@ Qs:如何为有组合调整交易信号的股票设计交易计划？
         ### keys:{..,..,报告期，方案进度{value:"实施完毕"},每股派息_税前,每股派息_税后，送股比例，转增比例，基准股本-万股，股本基准日，除权除息日，派息日，红股上市日 }
         ### keys:{..,..,reporting_date,progress,dividendsper_share_pretax,dividendsper_share_aftertax,sharedividends_proportion,shareincrease_proportion,share_benchmark,share_benchmark_date,exrights_exdividend_date，dividend_payment_date,redchips_listing_date
         # notes:股本基准日和“报告期”日期一致；睡前和税后分红是一样的；除权除息日和除息日通常一样的.因此重复项可以不提取。
-        w.wset("bonus","orderby=股权登记日;startdate=2019-01-15;enddate=2019-07-15;sectorid=1000000089000000;field=wind_code,sec_name,reporting_date,progress,dividendsper_share_pretax,sharedividends_proportion,shareincrease_proportion,share_benchmark,exrights_exdividend_date,dividend_payment_date")
+        w.wset("bonus","orderby=股权登记日;startdate=2019-06-15;enddate=2019-07-22;sectorid=1000000089000000;field=wind_code,sec_name,reporting_date,progress,dividendsper_share_pretax,sharedividends_proportion,shareincrease_proportion,share_benchmark,exrights_exdividend_date,dividend_payment_date")
 
         5.3,指数成分股进出记录
         ### keys  :交易日期,..,..wind一级行业，权重，涨跌幅{当年YTD}，调整时市值
@@ -839,6 +839,8 @@ Hierarchy 行业分类，构建有固定层次的 6 级结构。作为一类自�
 <h3><a name="190716">190716</a></h3> 
 <h3><a name="190717">190717</a></h3> 
 <h3><a name="190718">190718</a></h3> 
+<h3><a name="190719">190719</a></h3> 
+<h3><a name="190722">190722</a></h3> 
 <p>
 done,
 190716
@@ -847,29 +849,46 @@ done,
 9，今日更新文件：{log_rC_1907.html;  } 
     {times.py,data_io.py,get_wind.py}
     {times_CN_day.csv }
+190718
+1，delete all——gyrx_pc；整理个人办公物品。
+5,0719，trash_clear:todo
+    5.1,有用信息归纳:["C:\zd_zxjtzq", ]
+    5.2,Just_delete:["D:\CISS_db","D:\data_Input_Wind","D:\db_dzh_dfw","D:\py_modules"]
+    5.3,data_in_out: manage、zhidu，经验，model，research;path:C:\zd_zxjtzq\RC_trashes\temp\mirror_1906\
 
+190719
+1，买了2个iphone充电线；1个笔记本电脑电池-感觉我们的电池已经坏了。
+9，0719-1130：吃午饭，午睡；1730,回家晚饭，健身：
+11，0720，完成每日个股的行情更新；建立etf相关数据每日维护。
 
-todo,
-3，0717,晚上带行李箱。007063.OF
-9，今日更新文件：{log_rC_1907.html;  } 
-    { ,test_Wind_19.py}
-    {D:\CISS_db\data_csi\\ }
+190722，
+1，长盛入职，
 
-8，0716，下午找租客去居委会反映问题&看视频。 || 物业公司打电话，说漏水问题也要和居委会反映。6,0716，问一下上海防水做的怎么样了。如果本周没解决漏水问题，给租客转1000.
+ 
+todo，
+3，2130，下载A股和H股的 行情：用test_Wind_19 下载
+4，2200，带充电宝的线；
+1，0723，找财务和合规领导签字；部门领导签字。
+2，0723，问冯总、赵总拿部门学习资料，但笔记本可能还需要2-4天准备。
 
-5,0716，OA-leave-time-0719/22,print OA-leave-Approval to 冯丹
+1,0722,1600找王冶；加各位领导同事的微信。
+
+2,0722,本周搞定ETF相关数据跟踪模块，参考之前  。
+
+10,0726，cash_io;zsyh-1400-done,ningbo-5500-todo;gsyh-13500-todo | gyrx+income,gyrx+18000?
+
+8，0722/0723，601整改投诉。
+
+5,0722,早上
 6,0719,周六，整理阳台杂物，丢掉不需要的东西。
+7,0725,keti,论文题目，
+8，0817开始准备迁户口，8-30前要交学费。
 
 4，尽快推进ciss_app_etf构建。
 4.1，新建etf模拟组合；4.2，每日匹配pcf变动；4.3，Weekly report，Quarterly report
 4.4,观察指数权重和PCF的细微区别：如因篮子规模和单券整百限制导致的
 4.5，短期/周内/日间组合微调模块研究。
 4.6，用stata+scipy做计量经济学模型
-
-5,0719，trash_clear:todo
-    5.1,有用信息归纳:["C:\zd_zxjtzq", ]
-    5.2,Just_delete:["D:\CISS_db","D:\data_Input_Wind","D:\db_dzh_dfw","D:\py_modules"]
-    5.3,data_in_out: manage、zhidu，经验，model，research;path:C:\zd_zxjtzq\RC_trashes\temp\mirror_1906\
 
 6，BL\\大类资产配置\\paper;{主要参考资料：中金研报，多资产的书，yuwei的书，Wind,国家统计局}
     6.1，todo，SAA-长期:经济数据建模继续，选取相关性最大的10个指标做回归
@@ -953,6 +972,11 @@ progress:rC_Data_Initial.py\\def Update_Synthetic_Index()
 
 1710
 T日收盘行情下载成功。
+190720
+13:47
+1, 更新个股历史行情数据，test_Wind_19.py;data_io.py
+17:41
+进度：get_wind.py \\ line 839
 
 
 
@@ -1007,11 +1031,28 @@ na_values : scalar, str, list-like, or dict, default None
 
 
 </p>
+<h4>长盛入职</h4> 
+<p>
+邮箱：chengry@csfund.com.cn
+厕所密码：990326
+账号W5707909077 的密码已初始化为 65642052 。
 
+目前量化主要是多因子，没有通用的框架，以研究员自己算为主。主要是周频。
+
+进度 log_rC_1907.html\\line 712
+    line 744, 
+    idea:查个股分红送配怕会占用太多历史收益，
+
+<<<<<<< HEAD
 <p>Qs:
 1,Wind_All_Index_ETF_190719_updated.csv
 没有行情。 
 Ans: def Get_wsq\\line 86 变量设置错误</p>
+=======
+    w.wset("bonus","orderby=股权登记日;startdate=2019-06-15;enddate=2019-07-22;sectorid=1000000089000000;field=wind_code,sec_name,reporting_date,progress,dividendsper_share_pretax,sharedividends_proportion,shareincrease_proportion,share_benchmark,exrights_exdividend_date,dividend_payment_date")
+
+</p>
+>>>>>>> db1f3a2db1660d20671744676c0700606c94bbd1
 
 
 
