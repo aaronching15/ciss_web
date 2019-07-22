@@ -44,17 +44,17 @@ temp_predate = input('Please type in Pre Day,e.g.190717 : ')
 ### 根据 股票，指数+ETF，下载wind-WSQ数据 
 
 
-j=0
-for temp_f in  file_list :
-    print('Working on Symbol List :', temp_f )
-    # Get Wind-WSQ single day data
-    # step 1 get SymbolList from : SL_path : path of SymbolList
-    path_list = SP_path  + temp_f
+# j=0
+# for temp_f in  file_list :
+#     print('Working on Symbol List :', temp_f )
+#     # Get Wind-WSQ single day data
+#     # step 1 get SymbolList from : SL_path : path of SymbolList
+#     path_list = SP_path  + temp_f
 
-    list_name = list_names[j]
-    quote_list = wind_api_1.Get_wsq(path_list,temp_date,path_data,list_name,temp_f ,  '')
+#     list_name = list_names[j]
+#     quote_list = wind_api_1.Get_wsq(path_list,temp_date,path_data,list_name,temp_f ,  '')
 
-    j=j+1
+#     j=j+1
 
 # ASD
 
@@ -99,27 +99,33 @@ reference:rC_Data_Initial.py\\Update_WSQ_Get_errorCodes
 ### 2.1,step0，股票s：T-1,T转为datetime格式
 # 1,读取股票s的前复权数据、不复权数据，读取数据中的最新日期T_end(默认读取的时间序列数据是升序)。
 # T_end转为datetime格式，做日期匹配。
+
 import pandas as pd 
 import datetime as dt
 
+file_list = ['All_Index_ETF.csv',"cicslevel2_1907.csv" ,'H11164cons.csv']
+list_names =["Index-ETF","CN-stocks","HK-stocks"]
 
-j=0
-# file_name = file_list[j]
-# list_name = list_names[j]
-# temp_code = "000300.SH"
-
-file_list = ['All_Index_ETF.csv']
-for file_name in file_list :
+for j in [1,2] :
     list_name = list_names[j]
+    file_name = file_list[j]
 
     ### read code list from 
     # Assign wind_code to indx 
     df_quote_list = pd.read_csv(path_data + 'Wind_' + list_name + '_' + temp_date+ '_updated' + '.csv',index_col='Unnamed: 0')
     for temp_code in df_quote_list.index :
         ###################################################################
+        ### 拼接历史行情数据中未更新部分
         df_stock = wind_api_1.quote_concat_csv(temp_code,temp_date,list_name,path_data)
 
+
     j=j+1 
+asd
+
+###################################################################
+### 下载当日分红送配数据，更新至本地文件，识别当日分红送配数据并提示。
+
+
 
 # Wind_all_A_Stocks_wind_190717_updated.csv
 # temp_predate = "190717"

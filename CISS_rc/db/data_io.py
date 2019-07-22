@@ -298,47 +298,10 @@ class data_wind():
 
 
 
-
-
-
-            ### 2,
-
-
-
-
-
-
         ### todo,确定上述的信息保存在本地的表格里。
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ 
 
 
 
@@ -612,65 +575,6 @@ class data_wind():
 
         return code_head,code_df
 
-
-    def Wind2Csv(self, WindData,file_path0,code  ):
-        # file_path0=  D:\data_Input_Wind
-        # last 181117 | since 170505
-        # dervied from rC_Data_Initial.py  
-
-        code=  WindData.Codes[0]
-
-        import csv
-        file_path=file_path0 +'Wind_'+ code + '.csv'
-        file_path2 = file_path0 + 'Wind_' + code + '_updated' + '.csv'
-        #  Python中的csv的writer，打开文件的时候，要小心， 要通过binary模式去打开，即带b的，比如wb，ab+等;
-        # 而不能通过文本模式，即不带b的方式，w,w+,a+等，否则，会导致使用writerow写内容到csv中时，产生对于的CR，导致多余的空行。
-        # open 这个功能会直接新建一个csv的文件，如果它不存在的话
-        #  打开csv并写入内容时，避免出现空格，Python文档中有提到：open('eggs.csv', newline='')
-        #  也就是说，打开文件的时候多指定一个参数
-        #  open( file_path, 'w',newline='') 而不只是 open( file_path, 'w' )
-        with open( file_path, 'w',newline='') as csvfile:
-            # fieldnames = ['first_name', 'last_name'] ; Columns=[  'date', 'open', 'high',  'low'  , 'close', 'volume']
-            fieldnames = WindData.Fields #  Data3.Fields=Columns ？
-            # writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-            writer = csv.writer(csvfile ) #　delimiter=' '
-            # Write the first row as head
-            writer.writerow(['DATE']+ fieldnames )
-            len_item=len(WindData.Data) # = len(Columns) =6
-
-            len_dates=len(WindData.Data[1]) # 253
-            # print(WindData.Data[1])
-            # print(WindData.Data[-1])
-            # python中date、datetime、string的相互转换  http://my.oschina.net/u/1032854/blog/198179
-            #  WindData3.Times[1].strftime('%Y-%m-%d') # '2016-01-05'
-            # time.mktime( WindData3.Times[1].timetuple()) # datetime.datetime(2016, 1, 5, 0, 0, 0, 5000) to 1451923200.0
-            for i in range(len_dates ) :
-                temp_list=[ WindData.Times[i].strftime('%Y-%m-%d') ]# str  '20161215', we still need to change it to list
-                # writer.writerow({ fieldnames[0] :WindData.Times[i] }) # date
-                for j in range(len_item) : # without date here
-                    temp_list.append( WindData.Data[j][i] )
-                writer.writerow( temp_list ) # date
-
-        with open( file_path2 , 'w',newline='') as csvfile:
-            # fieldnames = ['first_name', 'last_name'] ; Columns=[  'date', 'open', 'high',  'low'  , 'close', 'volume']
-            fieldnames = WindData.Fields #  Data3.Fields=Columns ？
-            # writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-            writer = csv.writer(csvfile ) #　delimiter=' '
-            # Write the first row as head
-            writer.writerow(['DATE']+ fieldnames )
-            len_item=len(WindData.Data) # = len(Columns) =6
-
-            len_dates=len(WindData.Data[1]) # 253
-            # print(WindData.Data[1])
-            # print(WindData.Data[-1])
-            # python中date、datetime、string的相互转换  http://my.oschina.net/u/1032854/blog/198179
-            #  WindData3.Times[1].strftime('%Y-%m-%d') # '2016-01-05'
-            # time.mktime( WindData3.Times[1].timetuple()) # datetime.datetime(2016, 1, 5, 0, 0, 0, 5000) to 1451923200.0
-            for i in range(len_dates ) :
-                temp_list=[ WindData.Times[i].strftime('%Y-%m-%d') ]# str  '20161215', we still need to change it to list
-                # writer.writerow({ fieldnames[0] :WindData.Times[i] }) # date
-                for j in range(len_item) : # without date here
-                    temp_list.append( WindData.Data[j][i] )
-                writer.writerow( temp_list ) # date
-
-        return file_path
+'''
+find Wind2Csv at get_wind.py
+'''

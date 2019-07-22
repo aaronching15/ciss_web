@@ -727,7 +727,7 @@ Qs:如何为有组合调整交易信号的股票设计交易计划？
         # 关键字段：{公告日、股权登记日、除权日，配股上市日}
         # {rights_issue_anncedate,record_date,ex_rights_date,listing_date }
         w.wset("seoimplementation","startdate=2019-01-15;enddate=2019-07-15;sectorid=1000011893000000;windcode=;datetype=issue_date")
-    5，WindPy\\WSET\\股票\\沪深二级市场\\分红送转：分红送转、分红实施：
+    5，WindPy\\WSET\\股票\\沪深公司研究\\分红送转：分红送转、分红实施：
         5.1 分红送转，针对个股；
         ### 分红送转是综合性的数据，分类齐全但是重要日期方面只有一个除权除息日。另外，"cash_payout_ratio"=0.2 表示一股分红0.2 rmb
         # 除权除息日、...,...,派息比例，转增比例，送股比例，增发比例，增发比例，增发价格，配股价格，配股比例，除权说明。
@@ -741,7 +741,7 @@ Qs:如何为有组合调整交易信号的股票设计交易计划？
         ### keys:{..,..,报告期，方案进度{value:"实施完毕"},每股派息_税前,每股派息_税后，送股比例，转增比例，基准股本-万股，股本基准日，除权除息日，派息日，红股上市日 }
         ### keys:{..,..,reporting_date,progress,dividendsper_share_pretax,dividendsper_share_aftertax,sharedividends_proportion,shareincrease_proportion,share_benchmark,share_benchmark_date,exrights_exdividend_date，dividend_payment_date,redchips_listing_date
         # notes:股本基准日和“报告期”日期一致；睡前和税后分红是一样的；除权除息日和除息日通常一样的.因此重复项可以不提取。
-        w.wset("bonus","orderby=股权登记日;startdate=2019-01-15;enddate=2019-07-15;sectorid=1000000089000000;field=wind_code,sec_name,reporting_date,progress,dividendsper_share_pretax,sharedividends_proportion,shareincrease_proportion,share_benchmark,exrights_exdividend_date,dividend_payment_date")
+        w.wset("bonus","orderby=股权登记日;startdate=2019-06-15;enddate=2019-07-22;sectorid=1000000089000000;field=wind_code,sec_name,reporting_date,progress,dividendsper_share_pretax,sharedividends_proportion,shareincrease_proportion,share_benchmark,exrights_exdividend_date,dividend_payment_date")
 
         5.3,指数成分股进出记录
         ### keys  :交易日期,..,..wind一级行业，权重，涨跌幅{当年YTD}，调整时市值
@@ -865,7 +865,12 @@ done,
 1，长盛入职，
 
  
-todo,
+todo，
+3，2130，下载A股和H股的 行情：用test_Wind_19 下载
+4，2200，带充电宝的线；
+1，0723，找财务和合规领导签字；部门领导签字。
+2，0723，问冯总、赵总拿部门学习资料，但笔记本可能还需要2-4天准备。
+
 1,0722,1600找王冶；加各位领导同事的微信。
 
 2,0722,本周搞定ETF相关数据跟踪模块，参考之前  。
@@ -1032,6 +1037,13 @@ na_values : scalar, str, list-like, or dict, default None
 厕所密码：990326
 账号W5707909077 的密码已初始化为 65642052 。
 
+目前量化主要是多因子，没有通用的框架，以研究员自己算为主。主要是周频。
+
+进度 log_rC_1907.html\\line 712
+    line 744, 
+    idea:查个股分红送配怕会占用太多历史收益，
+
+    w.wset("bonus","orderby=股权登记日;startdate=2019-06-15;enddate=2019-07-22;sectorid=1000000089000000;field=wind_code,sec_name,reporting_date,progress,dividendsper_share_pretax,sharedividends_proportion,shareincrease_proportion,share_benchmark,exrights_exdividend_date,dividend_payment_date")
 
 </p>
 

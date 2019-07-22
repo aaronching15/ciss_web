@@ -775,25 +775,37 @@ class wind_api():
         temp_file = 'Wind_' + list_name  + '_' + temp_date+ '_updated' + '.csv'
 
         df_T = pd.read_csv(path_data+temp_file,index_col="Unnamed: 0"  )
-        print( df_T.head(3) )
+        # print( df_T.head(3) )
         ### index is code
         # df_T.loc[temp_code,"RT_LAST"] = 35.21
-        print("list_name ",list_name )
-        print("df_T.index ", df_T.index )
+        # print("list_name ",list_name )
+        # print("df_T.index ", df_T.index )
 
         rt_pre_close = df_T.loc[temp_code,"RT_PRE_CLOSE"]
 
         ### s2, Get historical quotation for single stocks
         # "Wind_600036.SH_updated.csv"
         temp_file_2 = "Wind_"+temp_code+"_updated.csv"
-        df_stock = pd.read_csv(path_data+temp_file_2   )
+        #########################################################################
+        ### 判断是否有该证券的历史行情文件数据。
+        import os
+        if not os.path.exists( path_data+temp_file_2 ) :
+            ### download hist. data and save to csv    
+            wind_data0= self.GetWindData(temp_code, "","" ,items,1)
+            # temperery wind to csv  
+            result_path2 = self.Wind2Csv_wsd( wind_data0,path_data,temp_code  )
+            df_stock = pd.read_csv( result_path2 )
+        else :
+            df_stock = pd.read_csv(path_data+temp_file_2   )
 
         # dt_str_hist = '2019-06-12'
         dt_str_hist = df_stock["DATE"].iloc[-1] 
         dt_hist = dt.datetime.strptime( dt_str_hist ,"%Y-%m-%d")
 
         dt_diff = temp_dt - dt_hist 
+        print("Working on code ",temp_code )
         print("dt_diff ", dt_diff, dt_diff> dt.timedelta(1) )
+        
 
         if dt_diff> dt.timedelta(1) :
             ### get period quotation data using wind\\WSD
@@ -803,13 +815,15 @@ class wind_api():
             dt_1 = dt.datetime.strftime( temp_dt ,"%Y-%m-%d")
 
             ### s3,get periodic missing data for single stock
-            # wind_data0= self.GetWindData(temp_code, dt_0,dt_1 ,items,1)
-            # # wind to csv 
-            # file_path0 = "D:\\temp\\"
-            # result_path2 = self.Wind2Csv_wsd( wind_data0,file_path0,temp_code  )
-            # print(result_path2)
+            wind_data0= self.GetWindData(temp_code, dt_0,dt_1 ,items,1)
+            # temperery wind to csv 
+            file_path0 = "D:\\temp\\"
+            result_path2 = self.Wind2Csv_wsd( wind_data0,file_path0,temp_code  )
+            print(result_path2)
             
-            temp_df= pd.read_csv( "D:\\temp\\" +  "Wind_000300.SH_updated.csv")
+            # temp_df= pd.read_csv( "D:\\temp\\" +  "Wind_000300.SH_updated.csv" )
+            temp_df= pd.read_csv( result_path2 )
+
             close_hist_new = temp_df.loc[0,"CLOSE"]
 
             ### get rid of first row
@@ -821,23 +835,25 @@ class wind_api():
             # print( close_hist_new )
             # print("diff value ",abs(df_stock.loc[df_stock.index[-1],"CLOSE"]/close_hist_new - 1) )
 
-            if abs(df_stock.loc[df_stock.index[-1],"CLOSE"]/close_hist_new - 1) < 0.001 :
-                # no adjustment during period,we just add to df_stock and save to csv 
-                df_stock =df_stock.append( temp_df,ignore_index=True)
-
-                # df_stock.to_csv(path_data+temp_file_2   )
-                df_stock.to_csv("D:\\temp\\temp_all_"+temp_file_2   )
-
-
-            else :
+            if abs(df_stock.loc[df_stock.index[-1],"CLOSE"]/close_hist_new - 1) >= 0.001 :
                 ### We need to make adjustment for listorical quotations  
                 ### 计算复权因子: T日前复权价格/T日真实收盘价
                 # from O,H,L,C to O',H',L' , o'=O * (C'/C)
                 adj_factor = close_hist_new/df_stock.loc[df_stock.index[-1],"CLOSE"]
                 ### todo 
                 # 依次调整df_stock中的 OPEN,HIGH,LOW,CLOSE,VOLUME
-                
+                # 
+                df_stock["CLOSE" ] = df_stock["CLOSE" ]*adj_factor
+                df_stock["LOW" ] =df_stock["LOW" ]*adj_factor
+                df_stock["HIGH" ] = df_stock["HIGH" ]*adj_factor
+                df_stock["OPEN" ] = df_stock["OPEN" ]*adj_factor
+                df_stock["VOLUME" ] = df_stock["VOLUME" ] /adj_factor
 
+            #else case means  no adjustment during period,we just add to df_stock and save to csv           
+            
+            df_stock =df_stock.append( temp_df,ignore_index=True)
+            # df_stock.to_csv(path_data+temp_file_2   )
+            df_stock.to_csv(path_data + temp_file_2   )
 
         return df_stock 
 
