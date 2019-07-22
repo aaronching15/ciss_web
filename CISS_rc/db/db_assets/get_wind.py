@@ -84,11 +84,10 @@ class wind_api():
             temp_pd_set.columns = temp_Data.Fields
             temp_pd_set.index = temp_Data.Codes
 
-                
             # temp_f[:-4] = 'all_A_Stocks_wind' 
-            quote_list.to_csv(path_data + 'Wind_' + list_name + '_' + temp_date+ '_updated' + '.csv')
+            temp_pd_set.to_csv(path_data + 'Wind_' + list_name + '_' + temp_date+ '_updated' + '.csv')
             print(path_data + '\\Wind_' + list_name + '_' + temp_date + '_updated' + '.csv')
-
+            
         else :
             for j in range(temp_len + 1):
                 # todo 把太长的 code_List 切分成几个sub_code_List

@@ -37,24 +37,24 @@ print("List name for symbols :",list_names)
 # =REPT("0",(5-len(code) ) )&E2&".HK"
 # =if(left(code,1)="6",code&".SH",'..SZ') || 删除2和9开头的股票
 
-# temp_date =  input('Please type in Date,e.g.190718 : ')
-# temp_predate = input('Please type in Pre Day,e.g.190717 : ')
+temp_date =  input('Please type in Date,e.g.190718 : ')
+temp_predate = input('Please type in Pre Day,e.g.190717 : ')
 
 #########################################################################
 ### 根据 股票，指数+ETF，下载wind-WSQ数据 
 
 
-# j=0
-# for temp_f in  file_list :
-#     print('Working on Symbol List :', temp_f )
-#     # Get Wind-WSQ single day data
-#     # step 1 get SymbolList from : SL_path : path of SymbolList
-#     path_list = SP_path  + temp_f
+j=0
+for temp_f in  file_list :
+    print('Working on Symbol List :', temp_f )
+    # Get Wind-WSQ single day data
+    # step 1 get SymbolList from : SL_path : path of SymbolList
+    path_list = SP_path  + temp_f
 
-#     list_name = list_names[j]
-#     quote_list = wind_api_1.Get_wsq(path_list,temp_date,path_data,list_name,temp_f ,  '')
+    list_name = list_names[j]
+    quote_list = wind_api_1.Get_wsq(path_list,temp_date,path_data,list_name,temp_f ,  '')
 
-#     j=j+1
+    j=j+1
 
 # ASD
 
@@ -104,17 +104,28 @@ import datetime as dt
 
 
 j=0
-file_name = file_list[j]
-list_name = list_names[j]
-temp_code = "000300.SH"
+# file_name = file_list[j]
+# list_name = list_names[j]
+# temp_code = "000300.SH"
+
+file_list = ['All_Index_ETF.csv']
+for file_name in file_list :
+    list_name = list_names[j]
+
+    ### read code list from 
+    # Assign wind_code to indx 
+    df_quote_list = pd.read_csv(path_data + 'Wind_' + list_name + '_' + temp_date+ '_updated' + '.csv',index_col='Unnamed: 0')
+    for temp_code in df_quote_list.index :
+        ###################################################################
+        df_stock = wind_api_1.quote_concat_csv(temp_code,temp_date,list_name,path_data)
+
+    j=j+1 
 
 # Wind_all_A_Stocks_wind_190717_updated.csv
-temp_predate = "190717"
-temp_date = "190718"
+# temp_predate = "190717"
+# temp_date = "190718"
 
-###################################################################
-# change datetime format 
-df_stock = wind_api_1.quote_concat_csv(temp_code,temp_date,list_name,path_data)
+
 
 ASD
 
