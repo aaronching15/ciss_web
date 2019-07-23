@@ -436,7 +436,7 @@ class ETF_manage():
 
         i=0
         for temp_str in pcf_const :
-            print("temp_str \n", temp_str )
+            # print("temp_str \n", temp_str )
 
             ### Notes:正常 len(pcf_const[?]) == 44, len(pcf_const[-1])=9{ENDENDEND},len(pcf_const[-2])=0
             if len(temp_str) > 10 :

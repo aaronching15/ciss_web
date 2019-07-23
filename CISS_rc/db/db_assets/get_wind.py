@@ -35,14 +35,15 @@ class wind_api():
 
         print("    | Wind2Csv_indexconst：指数权重WindData保存至csv "  )
         print("Wset | GetWind_indexconst：T日指数成分股数据")
+        print("Wset | get_wset_1sector：获取1个板块的多股区间数据")
         print("WSS 多维数据| GetWind_funda：个股财务数据")
         print(" | Data_funda_csvJson：获取和保存json、csv数据文件")
         print(" | Data_funda_csvJson_test 给定财务年份list和年内更新日期，获取和保存json、csv数据文件")
         print(" | Load_funda_csvJson 导入json和csv文件并放在object里返回")
         
-        print("data_manage | Wind2Csv_wsd:WSD获得的个股历史数据保存至csv  ")
+        print("data_manage |Wind2Csv_wsd:WSD获得的个股历史数据保存至csv  ")
         print("data_manage |quote_concat_csv: 导入个股历史行情数据,更新个股历史前复权行情和不复权行情")
-
+        print("data_manage |Wind2Csv_wset: save wset result to csv file ")
         return 1 
 
     def Get_wsq(self,path_list,temp_date,path_data,list_name,file_name , items=''):
@@ -229,6 +230,39 @@ class wind_api():
         '''
 
         return WindData 
+
+    def get_wset_1sector(self,para_dict ):
+        ### get_wset_1sector：获取1个板块的多股区间数据
+        ''' wind_data0=WP.w.wset("bonus","orderby=股权登记日;startdate=2019-06-15;enddat
+        e=2019-07-22;sectorid=1000000089000000;field=wind_code,sec_name,reporting_date,p
+        rogress,dividendsper_share_pretax,sharedividends_proportion,shareincrease_propor
+        tion,share_benchmark,exrights_exdividend_date,dividend_payment_date")
+        '''
+        type_bonus = para_dict["type_bonus"]  
+        orderby= para_dict["orderby"]  
+        date_start= para_dict["date_start"]  
+        date_end= para_dict["date_end"]  
+        sectorid= para_dict["sectorid"]  
+        fields= para_dict["fields"]  
+
+        # type_bonus= "bonus"
+        # orderby= "股权登记日"
+        # date_start= "2019-06-15"
+        # date_end= "2019-07-22"
+        # sectorid= "1000000089000000"
+        # fields = "wind_code,sec_name,reporting_date,progress,dividendsper_share_pretax,sharedividends_proportion,shareincrease_proportion,share_benchmark,exrights_exdividend_date,dividend_payment_date"
+
+        para = "orderby="+orderby+";startdate="+date_start+";enddate="+date_end
+        para = para +";sectorid="+sectorid +";field="+fields
+        print("para \n" + para)
+
+        import WindPy as WP
+        WP.w.start()
+        wind_data0=WP.w.wset(type_bonus,para )
+
+
+        return wind_data0
+
 
     def Wind2Csv_indexconst(self,WindData,file_path0,code, date_report,date_update  ):
         # 180923 |与其把csv文件做那么长，不如将小规模数据改成json格式，如果文件较大，
@@ -844,9 +878,9 @@ class wind_api():
                 # 依次调整df_stock中的 OPEN,HIGH,LOW,CLOSE,VOLUME
                 # 
                 df_stock["CLOSE" ] = df_stock["CLOSE" ]*adj_factor
-                df_stock["LOW" ] =df_stock["LOW" ]*adj_factor
-                df_stock["HIGH" ] = df_stock["HIGH" ]*adj_factor
-                df_stock["OPEN" ] = df_stock["OPEN" ]*adj_factor
+                df_stock["LOW" ]   =df_stock["LOW" ]*adj_factor
+                df_stock["HIGH" ]  = df_stock["HIGH" ]*adj_factor
+                df_stock["OPEN" ]   = df_stock["OPEN" ]*adj_factor
                 df_stock["VOLUME" ] = df_stock["VOLUME" ] /adj_factor
 
             #else case means  no adjustment during period,we just add to df_stock and save to csv           
@@ -857,3 +891,157 @@ class wind_api():
 
         return df_stock 
 
+
+    def Wind2Csv_wset(self, WindData,file_path0,para_dict ):
+        # save wset result to csv file 
+        # case 1 : 1 period with multiple symbols
+        # case 2 : 1 symbol with multiple peirods
+        # file_path0=  D:\data_Input_Wind
+        # last  | since 190723
+        # dervied from Wind2Csv_wsq.py  
+
+        sector_name = para_dict["sector_name"] # "csi300" 
+        type_bonus = para_dict["type_bonus"]  
+        orderby= para_dict["orderby"]  
+        date_start= para_dict["date_start"]  
+        date_end= para_dict["date_end"]  
+        sectorid= para_dict["sectorid"]  
+        fields= para_dict["fields"]  
+
+        # type_bonus= "bonus"
+        # orderby= "股权登记日"
+        # date_start= "2019-06-15"
+        # date_end= "2019-07-22"
+        # sectorid= "1000000089000000"
+        # fields = "wind_code,sec_name,reporting_date,progress,dividendsper_share_pretax,sharedividends_proportion,shareincrease_proportion,share_benchmark,exrights_exdividend_date,dividend_payment_date"
+
+        # [1,2,3,4,...]
+        code_list = WindData.Codes
+
+        ####################################################################
+        ### Case 1: 
+        # sector_id = "1000000089000000"
+        # sector_name = "csi300"
+
+        import csv
+        file_path=file_path0 +'Wind_wset_'+ sector_name + '.csv'
+        file_path2 = file_path0 + 'Wind_wset_' + sector_name + '_updated' + '.csv'
+        #  Python中的csv的writer，打开文件的时候，要小心， 要通过binary模式去打开，即带b的，比如wb，ab+等;
+        # 而不能通过文本模式，即不带b的方式，w,w+,a+等，否则，会导致使用writerow写内容到csv中时，产生对于的CR，导致多余的空行。
+        # open 这个功能会直接新建一个csv的文件，如果它不存在的话
+        #  打开csv并写入内容时，避免出现空格，Python文档中有提到：open('eggs.csv', newline='')
+        #  也就是说，打开文件的时候多指定一个参数
+        #  open( file_path, 'w',newline='') 而不只是 open( file_path, 'w' )
+        with open( file_path, 'w',newline='') as csvfile:
+            # fieldnames = ['first_name', 'last_name'] ; Columns=[  'date', 'open', 'high',  'low'  , 'close', 'volume']
+            fieldnames = WindData.Fields #  Data3.Fields=Columns ？
+            # writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            writer = csv.writer(csvfile ) #　delimiter=' '
+            # Write the first row as head
+            writer.writerow( ['code_raw']+ fieldnames )
+            len_item=len(WindData.Data) # = len(Columns) =6
+
+            len_dates=len(WindData.Data[1]) # 253
+            # print(WindData.Data[1])
+            # print(WindData.Data[-1])
+            # python中date、datetime、string的相互转换  http://my.oschina.net/u/1032854/blog/198179
+            #  WindData3.Times[1].strftime('%Y-%m-%d') # '2016-01-05'
+            # time.mktime( WindData3.Times[1].timetuple()) # datetime.datetime(2016, 1, 5, 0, 0, 0, 5000) to 1451923200.0
+            for i in range(len_dates ) :
+                temp_list=[ WindData.Codes[i] ]# str  '20161215', we still need to change it to list
+                # writer.writerow({ fieldnames[0] :WindData.Times[i] }) # date
+                for j in range(len_item) : # without date here
+                    temp_list.append( WindData.Data[j][i] )
+                writer.writerow( temp_list ) # date
+
+        with open( file_path2 , 'w',newline='') as csvfile:
+            # fieldnames = ['first_name', 'last_name'] ; Columns=[  'date', 'open', 'high',  'low'  , 'close', 'volume']
+            fieldnames = WindData.Fields #  Data3.Fields=Columns ？
+            # writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            writer = csv.writer(csvfile ) #　delimiter=' '
+            # Write the first row as head
+            writer.writerow(['code_raw']+ fieldnames )
+            len_item=len(WindData.Data) # = len(Columns) =6
+
+            len_dates=len(WindData.Data[1]) # 253
+            # print(WindData.Data[1])
+            # print(WindData.Data[-1])
+            # python中date、datetime、string的相互转换  http://my.oschina.net/u/1032854/blog/198179
+            #  WindData3.Times[1].strftime('%Y-%m-%d') # '2016-01-05'
+            # time.mktime( WindData3.Times[1].timetuple()) # datetime.datetime(2016, 1, 5, 0, 0, 0, 5000) to 1451923200.0
+            for i in range(len_dates ) :
+                temp_list= [ WindData.Codes[i] ]# str  '20161215', we still need to change it to list
+                # writer.writerow({ fieldnames[0] :WindData.Times[i] }) # date
+                for j in range(len_item) : # without date here
+                    temp_list.append( WindData.Data[j][i] )
+                writer.writerow( temp_list ) # date
+
+        return file_path2
+
+    def Wind2df_wset(self, WindData  ):
+        # save wset result to dataframe
+        # file_path0=  D:\data_Input_Wind
+        # last  | since 190723
+        # dervied from Wind2Csv_wsq.py  
+
+        import pandas as pd 
+        df0 = pd.DataFrame(WindData.Data)
+        print(df0.head(3) )
+        df0 = df0.T
+        df0.columns = WindData.Fields
+        print(df0.head(3) )
+
+        # import csv
+        # file_path=file_path0 +'Wind_wset_'+ sector_name + '.csv'
+        # file_path2 = file_path0 + 'Wind_wset_' + sector_name + '_updated' + '.csv'
+        # #  Python中的csv的writer，打开文件的时候，要小心， 要通过binary模式去打开，即带b的，比如wb，ab+等;
+        # # 而不能通过文本模式，即不带b的方式，w,w+,a+等，否则，会导致使用writerow写内容到csv中时，产生对于的CR，导致多余的空行。
+        # # open 这个功能会直接新建一个csv的文件，如果它不存在的话
+        # #  打开csv并写入内容时，避免出现空格，Python文档中有提到：open('eggs.csv', newline='')
+        # #  也就是说，打开文件的时候多指定一个参数
+        # #  open( file_path, 'w',newline='') 而不只是 open( file_path, 'w' )
+        # with open( file_path, 'w',newline='') as csvfile:
+        #     # fieldnames = ['first_name', 'last_name'] ; Columns=[  'date', 'open', 'high',  'low'  , 'close', 'volume']
+        #     fieldnames = WindData.Fields #  Data3.Fields=Columns ？
+        #     # writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        #     writer = csv.writer(csvfile ) #　delimiter=' '
+        #     # Write the first row as head
+        #     writer.writerow( ['code_raw']+ fieldnames )
+        #     len_item=len(WindData.Data) # = len(Columns) =6
+
+        #     len_dates=len(WindData.Data[1]) # 253
+        #     # print(WindData.Data[1])
+        #     # print(WindData.Data[-1])
+        #     # python中date、datetime、string的相互转换  http://my.oschina.net/u/1032854/blog/198179
+        #     #  WindData3.Times[1].strftime('%Y-%m-%d') # '2016-01-05'
+        #     # time.mktime( WindData3.Times[1].timetuple()) # datetime.datetime(2016, 1, 5, 0, 0, 0, 5000) to 1451923200.0
+        #     for i in range(len_dates ) :
+        #         temp_list=[ WindData.Codes[i] ]# str  '20161215', we still need to change it to list
+        #         # writer.writerow({ fieldnames[0] :WindData.Times[i] }) # date
+        #         for j in range(len_item) : # without date here
+        #             temp_list.append( WindData.Data[j][i] )
+        #         writer.writerow( temp_list ) # date
+
+        # with open( file_path2 , 'w',newline='') as csvfile:
+        #     # fieldnames = ['first_name', 'last_name'] ; Columns=[  'date', 'open', 'high',  'low'  , 'close', 'volume']
+        #     fieldnames = WindData.Fields #  Data3.Fields=Columns ？
+        #     # writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        #     writer = csv.writer(csvfile ) #　delimiter=' '
+        #     # Write the first row as head
+        #     writer.writerow(['code_raw']+ fieldnames )
+        #     len_item=len(WindData.Data) # = len(Columns) =6
+
+        #     len_dates=len(WindData.Data[1]) # 253
+        #     # print(WindData.Data[1])
+        #     # print(WindData.Data[-1])
+        #     # python中date、datetime、string的相互转换  http://my.oschina.net/u/1032854/blog/198179
+        #     #  WindData3.Times[1].strftime('%Y-%m-%d') # '2016-01-05'
+        #     # time.mktime( WindData3.Times[1].timetuple()) # datetime.datetime(2016, 1, 5, 0, 0, 0, 5000) to 1451923200.0
+        #     for i in range(len_dates ) :
+        #         temp_list= [ WindData.Codes[i] ]# str  '20161215', we still need to change it to list
+        #         # writer.writerow({ fieldnames[0] :WindData.Times[i] }) # date
+        #         for j in range(len_item) : # without date here
+        #             temp_list.append( WindData.Data[j][i] )
+        #         writer.writerow( temp_list ) # date
+
+        return df0

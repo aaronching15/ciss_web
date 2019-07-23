@@ -6,11 +6,11 @@ __author__ = " ruoyu.Cheng"
 需求：
 建立ETF组合日常管理的仿真脚本
 
-last 19 || since 190705
+last 190723 || since 190705
 
 Function:功能：
 1, pcf_manage:读取申购赎回清单，保存成数据对象
-2，
+2，新建和更新ETF组合数据。
 
 
 todo:

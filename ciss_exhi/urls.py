@@ -51,4 +51,8 @@ urlpatterns = [
     ##################################################################
     ### working urls for testing 
     path('test/test.html', views.test_index ),
+
+    ##################################################################
+    ### working ETF files
+    path('etf/etf_data.html', views.etf_data ,name="etf_data")
 ]

@@ -425,42 +425,155 @@ def stra_bond_jny(request):
     return render(request, 'ciss_exhi/strategy/stra_bond_jny.html', context)
 
 
-'''
-label: {
-                    backgroundColor: '#505765'
-                }
 
-line 153
+#####################################################################
+### ETF | Author: r.Cheng 
+@csrf_protect
+@requires_csrf_token
+@csrf_exempt
+def etf_data(request):
+    # create page for single strategy   
+    # last | since 19723
+    # 返回查询的结果。
+    context={"info":"none"}
 
-//var data_rc = "{{ df_out |safe }}" ;
-    
-    //jQuery.parseJSON(jsonstr),可以将json字符串转换成json对象  | https://www.cnblogs.com/hgmyz/p/7451461.html
-    // data_rc = $.parseJSON( data_rc )
-    $.parseJSON( data_rc ).done(function (data_rc) { 
-        var obj = data_rc.port_unit ;
-        if ( obj.includes(1.00)) {
-        console.log('red');
-        }else{
-        console.log('blue');
-        }
-        })
+    ### step 1 get input items
+    print( request.POST.get("path_base") )
 
 
-    <tr><td>高久期品种，如中债-7-10年国开行债券指数:<br></td>
-        <td><input type="text" name="symbol_a" value="CBA05203.CS"> <br></td></tr>
-    <tr><td>中久期品种，如中债-企业债AAA指数（3-5年）指数:<br></td>
-        <td><input type="text" name="symbol_b" value="CBA04233.CS"><br></td></tr>
-    <tr><td>低久期品种，如中债-货币市场基金可投资债券总值指数: <br></td>
-        <td><input type="text" name="symbol_c" value="CBA02203.CS"><br></td></tr>
+    ##############################################################################
+    ### 
+    import json
+    import pandas as pd 
+    import numpy as np 
+    import math
+
+    import sys
+    sys.path.append("C:\\zd_zxjtzq\\RC_trashes\\temp\\ciss_web\\CISS_rc\\apps\\black_litterman\\")
+    from etf.engine_etf import ETF_manage
+    etf_manage0 = ETF_manage()
+
+    ##############################################################################
+    ### Import PCF file 
+    # path_etf = "C:\\zd_zxjtzq\\RC_trashes\\temp\\ciss_web\\CISS_rc\\apps\\black_litterman\\etf\\"
+    path_etf = "D:\\CISS_db\\etf\\"
+
+    #####################################################################
+    ### step 1 Get input parameters
+
+    # name_etf = request.POST.get("name_etf","510300")
+    # date_init= request.POST.get("date_init","0723")
+
+    name_etf = "510300"
+    date_init = "0723"
+    df_head,df_stocks = etf_manage0.get_pcf_file(date_init,name_etf,path_etf )
+    df_head.index = df_head.key
+    print("df_head ", df_head)
+    print( df_head.loc["TradingDay","value"] )
+    print("Head of df_stocks \n", df_stocks.head() )
+
+    context["df_head"]= df_head
+    context["df_stocks"]=df_stocks.T
+
+    ### 
+    ##################################################################
+    ### 获取近期分红送配数据，存入现有的CSV文件
+    # get_wind.py
+
+    ### Read existing file 
+    # path to save dividend and share_proportion
+    file_path0 = "D:\\data_Input_Wind\\temp\\"
+    file_name_800 = "Wind_csi800_bonus.csv"
+    file_name_1000 = "Wind_csi1000_bonus.csv"
+
+    list1= [ ["csi800","csi1000"],["a00103020a000000","1000012163000000"],[file_name_800,file_name_1000] ]
+    print("list \n", list1 )
+
+    ### Generate parameter for wind api 
+    '''
+    w.wset("bonus","orderby=股权登记日;startdate=2019-07-23;enddate=2019-07-23;sectorid=a00103020a000000")
+    '''
+    # date_start = input( "Starting date for 实施公告日: e.g.190724..." )
+    # date_end   = input( "Ending date for 实施公告日: e.g.190724..." )
+    date_start = "19"+date_init  # "190723"
+    date_end   = "19"+date_init  # "190724"
+    import datetime as dt 
+    date_start =dt.datetime.strftime( dt.datetime.strptime("20"+date_start,"%Y%m%d"),"%Y-%m-%d")
+    date_end   =dt.datetime.strftime( dt.datetime.strptime("20"+date_end,"%Y%m%d"),"%Y-%m-%d")
+
+    file_path0 
+    file_name =  "Wind_csi800_bonus.csv"
+    df0 = pd.read_csv(file_path0+file_name ,encoding="gbk")
+
+
+    datetime0 = date_end + " 00:00:00"
+    # "2019-07-23 00:00:00" column最后2列的值是一样的
+    ### return 
+    register_date =  df0[ df0["shareregister_date" ] == datetime0 ]
+    print(register_date.head(3)  )
+    print("股权登记日",datetime0 )
+    # print( register_date.columns)
+    print( register_date.loc[:,["wind_code","sec_name","scheme_des"] ] ) 
+
+    for temp_index in register_date.index :
+        wind_code = register_date.loc[temp_index,"wind_code" ]
+        register_date.loc[temp_index,"code_raw" ] =wind_code[:6]
+
+    df_stocks.index = df_stocks["code"]
+    print("6666======================")
+    list_code = list(register_date["code_raw"]) 
+
+    df_stocks2 =  df_stocks.loc[list_code,:] 
+    # axis=0 means delete by rows
+    df_stocks2 = df_stocks2.dropna( axis=0 )
+
+    import numpy as np 
+    for temp_i in df_stocks2.index :
+        temp_code =  df_stocks2.loc[temp_i, "code" ]
+        print(temp_code, temp_i)
+        print(  df_stocks2.loc[temp_i, :] )
+        temp_i2 = register_date[ register_date["code_raw"] == temp_code ].index[0] 
+        # df_stocks2.loc[temp_i, "scheme_des" ] =0
+        
+        df_stocks2.loc[temp_i, "scheme_des" ] =register_date.loc[temp_i2, "scheme_des"]
+
+        df_stocks2.loc[temp_i, "cash_per_share" ] =float( register_date.loc[temp_i2, "dividendsper_share_aftertax"] )
+
+        ### 计算分红的现金差额数据 | 有可能出现100股送 9.7的情况
+        df_stocks2.loc[temp_i, "cash_diff" ] =round( df_stocks2.loc[temp_i, "cash_per_share" ]*float( df_stocks2.loc[temp_i, "num" ]) ) 
+
+        ### 送股,float
+        df_stocks2.loc[temp_i, "share_div" ] =register_date.loc[temp_i2, "sharedividends_proportion"]
+
+        ### notes:由于 nan 本身无法被 np.NaN 识别，因此需要先用 -1 替代，
+        # if not df_stocks2.loc[temp_i, "share_div" ] == np.NaN :
+        if df_stocks2.loc[temp_i, "share_div" ]>0 :
+            df_stocks2.loc[temp_i, "num_new" ] = df_stocks2.loc[temp_i, "num"] *(1.0 + df_stocks2.loc[temp_i, "share_div" ] ) 
+        else :
+            df_stocks2.loc[temp_i, "num_new" ] =df_stocks2.loc[temp_i, "num" ] 
+        ### 转增股,float
+        df_stocks2.loc[temp_i, "share_increase" ] =register_date.loc[temp_i2, "shareincrease_proportion"]
+        # if not df_stocks2.loc[temp_i, "share_div" ] == np.NaN :
+        if df_stocks2.loc[temp_i, "share_div" ]>0 :
+            df_stocks2.loc[temp_i, "num_new" ] = df_stocks2.loc[temp_i, "num"] *(1.0 + df_stocks2.loc[temp_i, "share_increase" ] )
+        else :
+            df_stocks2.loc[temp_i, "num_new" ] =df_stocks2.loc[temp_i, "num" ] 
+
+        df_stocks2.loc[temp_i, "date_announce" ] =register_date.loc[temp_i2, "dividends_announce_date"]
+        df_stocks2.loc[temp_i, "date_register" ] =register_date.loc[temp_i2, "shareregister_date"]
+        df_stocks2.loc[temp_i, "date_share_pay" ] =register_date.loc[temp_i2, "exrights_exdividend_date"]
+        df_stocks2.loc[temp_i, "date_cash_pay" ] =register_date.loc[temp_i2, "dividend_payment_date"]
+
+
+    context["df_stocks2"]=df_stocks2.T
+
+
+
+    return render(request, 'ciss_exhi/etf/etf_data.html', context)
 
 
 
 
-
-
-
-
-'''
 
 
 
@@ -913,3 +1026,4 @@ def test_index(request):
 
 
     return response 
+
