@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<html>
+
+    <head>
+    <!-- 头部，内容的介绍展示区域 -->
+    <meta charset="utf-8">
+    <title>log</title>
+    
+    <style type="text/css">
+        /* h3 {color:steelblue;}  */ 
+        #menu_float{color:steelblue;
+            position:fixed;
+            bottom: 10%;
+            right:40px;
+            margin-left: 70% ; /*为左侧留出70\%的空间*/
+            font-size:12px;  /*字体设置小点*/ 
+            border: 1px solid black; /*  实线，dotted */
+            /* text-align:center;文字居中*/ 
+            border-radius:5px; /*倒角  */ 
+            background: white; /* #dddddd */
+            padding:3px 3px 3px 3px;/*元素所有内边距的宽度，上右，下左  */ 
+        } 
+        #left_frame{float: left;width: 70%; }
+        #sub_left{
+            width: 50%;
+            height: 350px;
+            background-color: #C5E9F3;
+            /*定义浮动，不定义的话，界面会乱*/
+            float: left;
+        }
+        #sub_right{
+            width: 50%;
+            height: 350px;
+            background-color: #F7575d;
+            float: right;
+        }
+    </style>
+    </head>
+
+    <body>
+    <nav> 
+    <!-- 导航链接 -->
+        <a href="./keti_admin_tash4paper">首页 Index-todo</a> |
+        <a href="./log_rC_1907.html">当前事项</a> |
+        <a href="./log_rC_1907.html">学习计划</a> |
+        <a href="./log_rC_1907.html">工作计划</a> |
+        <a href="./log_rC_1907.html">生活事项</a> |
+        <a href="./log_rC_1907.html">研究计划</a> |
+        <a href="./log_rC_1907.html">参考资料</a> |
+    </nav>     
+    
+    <div id="menu_float">
+    <ul>
+    <li><a href="#today">今日 today list</a></li>
+
+    <li><a href="#study">学习计划 study list</a></li>
+    <li><a href="#work">工作研究 work list</a></li>
+    <li><a href="#life">生活研究 life list</a></li>    
+
+    <li><a href="#ciss">中式策略平台 CISS_rc\\keti_DAA</a></li>
+    
+    <li><a href="#reference">参考资料reference</a></li>
+
+    <li><a href="#todo">短期计划 todo list</a></li>
+    <li><a href="#plan">长期计划 work plan</a></li>
+    <li><a href="#weekly">weekly</a></li>
+    <li><a href="#monthly">monthly</a></li>
+    <li><a href="#quarterly">quarterly</a></li>
+    <li><a href="#semi-annual">semi-annual</a></li>
+
+    </ul>
+    </div>
+    
+    <div id="left_frame"> 
+    <h1> rC 工作计划</h1>  
+    <section> 
+    <!-- 文档中的节（section、区段）。比如章节、页眉、页脚或文档中的其他部分 -->
+    <hr>
+    <h3><a name="summary">工作计划</h3>
+    <p>ETF研究，主动量化策略研究。</p>
+
+    <ul>
+    <li><a href="#today">今日事项 today list</a></li> 
+
+    <li><a href="#study">学习计划 study list</a></li>
+    <li><a href="#work">工作研究 work list</a></li>
+    <li><a href="#life">生活研究 life list</a></li>    
+    <li><a href="#plan">策略计划和规划 strategic plan</a></li>    
+
+    <li><a href="#ciss">中式策略平台 CISS_rc\\keti_DAA</a></li>
+    <li><a href="#reference">参考资料reference</a></li>
+
+    <li><a href="#weekly">weekly</a></li>
+    <li><a href="#monthly">monthly</a></li>
+    <li><a href="#quarterly">quarterly</a></li> 
+    </ul>
+    <hr>
+
+<h3><a name="today">今日事项 today list</a> </h3> 
+    <ol>  
+    <li>1210，sleep;1700,gym;1210,sleep;2030,go-home;2300,sleep;  </li>
+
+    <li>0808,xxxx_1130, wang,测算MSCI纳入A股因子权重变动。||Qs：可以和哪方面内容连起来？？||重点：对应的投资策略，形成一个清晰的故事。 || 券商观点一栏、历史研报梳理。||Notes：ask and must send to Feng as part of performance.</li>
+    <li>0808,1130_1530,测算中港主要资产和宏观经济指标的相关性。 stra:1天时间尽快做完，不要花太多精力</li>
+
+    
+    <li>0807,keti,机器学习：sklearn模型指标和特征贡献度查看; test_data_edb.py line 104</li>
+    <li>0809,完成课题大类资产配置研究报告：宏观经济数据的定量分析。 </li>
+    <li>0830,PMS组合分享+龙头锚CNHKUS工具；用quandl下载美股数据。\\其中quandl确定可以下载nasdaq市场数据，但纽交所还需要确认。 </li>
+
+
+    <li>stra-today:keti为主，休息时下载数据；19:00去健身，20:00回家。 </li>   
+    <li>0807，逐步维护本地的db_wind行情、权息、财务、预测数据：基于表和关键column键定期抓取数据。||
+    数据结构：建立{数据来源，如wind-api，wind_rdf等}{表单目录和表格列名称 }{表对应的文件名和地址} || 
+    test_oracle_wind.py </li>
+
+    <li>1300-2100，deadline-0905；1，整理课题中期汇报材料=制定8月份工作计划
+        info=\\中港美的股债资产配置\\资产配置优化、板块轮动、行业锚定个股及择时。
+        {中报业绩和一致预期值比较，细分板块业绩跟踪；现有行研大组分类-gics } </li>
+    <li>1.1, 注意：deadline是0810，要做出一份报告、初步模型描述和模拟组合。</li>
+    
+    <li>1630,2130,每日下载数据。 </li> 
+
+    <li>2200,2,找交易对手制度 | 运动，午睡，少吃，健身，背gre单词。</li>
+    <li>2230:3,weight,1周运动至少5*60min；月底目标81.5kg |称重 0/2 </li> 
+    </ol>
+
+<hr>
+<h3><a name="study">study list </a></h3> 
+    <ol>
+    <li>0817,工经所，计量经济学，论文题目，导师准备 </li>
+
+    <li>0817，北大入学准备-beida，O.R.预习；paper-topic：AI-行为决策最优化、基于对公司事件的股票交易决策仿真。 </li>    
+    <li>0817，北大开始准备迁户口，8-30前要交学费。|北大学号：1901221544;ps：123;email: cheng.ruoyu@pku.edu.cn</li>    
+    <li>0731，外语能力：Gre单词。</li>
+    <li>0530,补上英语阅读,Mint。 </li>
+    </ol>
+<hr>
+<h3><a name="work">工作研究 work list\\ETF </a></h3> 
+    <ol>
+    <p>0813,report_cs_19r01,strategy from MSCI Index. </p>
+
+    <li>0812,Wang, 价格数量策略放进PMS模拟组合。|增加资金容量指标、基本面财务指标等。 </li>
+    <li>0810，Idea：给予“行业集中度持续增加”的行业龙头锚策略。||Idea：对分析师预测能力建立学习模型打分、加权。 </li>
+    <li>1030，跟进ETF进展。</li>
+    <li>0805,如果内存不批，自己买金士顿2666，DDR4,16gb*2， 共1200. 但是要问IT型号对不对</li>
+
+    <li>0922,前一周，准备转正考试，考专业知识，制度，公司历史等。领导会看。</li>
+    <li>0815，基于课题，完成首个基本面量化报告or小工具 | CHU估值比较{瑞信咖啡，}。 </li>
+    <li>0815,基金半年和年报行业配置比例，跟踪行业或个股配置比例变动{影响因子：行业集中度，AH溢价，境内标的独特性等}
+    </li>
+
+    <li>个股深度模型{基本面量化}：万华化学、桐昆股份、荣盛石化；医药：复星医药 ； </li>
+    <li>0801,学习ETF系统手册 </li>    
+    <li>1,ETF相关\\pcf前后2日比较；T日停牌股票
+    1.2，学习O32相关说明书、 中etf文件；问各个部门要软件操作权限。
+    1.1，根据派息和组合调整导致的净现金变动，计算pcf中的现金变动；
+    1.3,除了搜集分红送配，还需要抓取“增发、配股”的公司行为</li>
+
+    <li>产业研究：行业、个股：参考gyrx-info |{如研发支出数据跟踪}</li>
+    </ol>
+<hr>
+<h3><a name="life">生活研究 life list </a></h3> 
+    <ol>    
+    <li>0801,跟踪601大门整改 </li>
+    <li>0519,0530,制定电子琴的学习计划</li>
+    <li>0802,CASH_IO;cs+income-8000?,zsyh-1400-done,ningbo-5500-done;gsyh-13500-todo</li>
+    <li>0810,宁波银行，延长消费贷时间。</li>
+    </ol>
+<hr>
+<h3><a name="plan">策略计划和规划 strategic plan </a></h3> 
+    <ol>    
+    <li>2022，age=35,jjjl. </li>
+    <li> </li> 
+    </ol>
+<hr>
+
+<h3><a name="ciss">CISS_rc\\keti_DAA,Dynamic Asset Allocatioin</a></h3> 
+<p>info: 中港美的股债资产配置\\资产配置优化、板块轮动、行业锚定个股及择时。
+        {中报业绩和一致预期值比较，细分板块业绩跟踪；现有行研大组分类-gics }</p>
+    <ol> 
+    <li>数据管理 Data manage\\确定需要的基本面数据；定期下载维护数据。</li>
+    <li>分析指标 Analysis\\滚动宏观指标分析 </li>
+    <li>策略信号 Strategy Signal\\ </li>
+    <li>单资产最优化配置 Optimal Allo.\\ </li>
+    <li>模拟组合 portfolio\\ 模拟组合结构 </li>
+    <li>组合交易管理 trade manage\\ </li>
+    <li>组合账户管理 account manage\\ </li>
+    <li>组合净值管理 unit manage\\ </li>
+    <li>可视化展示 exhi_visual\\ </li>
+    <li>报告写作 keti_writing\\ </li>
+    <li>参考资料 reference_list\\ </li>
+    </ol>
+<hr>
+
+<h4>keti_DAA\\应用 app\\数据管理 Data manage\auto download</h4> 
+<p>定期计划:网页监控更新情况；每日更新文件；  交易所PCF文件，指数权重，行情和停复牌信息{下载和更新分红送配数据：test_pcf_adj.py；test_Wind_19.py}
+定期下载交易所PCF文件，指数权重，行情和停复牌信息
+</p><hr>
+<h4>keti_DAA\\应用 app\\数据管理 Data manage\静态数据</h4> 
+<p>
+    1,完善中港美GICS分行业公司核心数据梳理，做成静态网页展示。如中证官网中的行业分类等。
+<br>2,宏观数据处理：按照季度末梳理，原始数据有很多按周的。这一部分不追求得到有超额收益的值，因为实践中需要叠加公司领导的主观观点。
+<br>3,机构持仓数据：长期视角，应该代表了机构整体能做的最优选择，并且往往受到股票池的影响。常见的限制是必须在沪深300指数成份股中选股。但是也有限制，例如数据只包括了前十大重仓股，只能看到大方向。
+</p><hr>
+
+<h4>keti_DAA\\分析指标 Analysis\\滚动宏观指标分析：</h4> 
+<p>1,改进定义“成长性”指标， A股 market growth 有问题
+</p><hr>
+
+<h4>keti_DAA\\策略信号 Strategy Signal\\SAA,TAA 战略型策略，战术性策略 </h4> 
+<p>1,SAA
+2,TAA
+
+</p><hr>
+
+<h4>keti_DAA\\模拟组合 portfolio\\ 模拟组合结构：改进现有组合更新时出错的问题。</h4> 
+<p>ciss在进行短时间组合更新(从181105更新到181231)时会报错；应该设计成通过网页模式跟踪、维护模拟组合。</p>
+<p>增加“单位组合”对象，对应ETF的“篮子”方便进行精细化的多组合管理。</p><hr>
+
+
+<h4>keti_DAA\\可视化展示 exhi_visual\\网站、展示</h4> 
+<p>1,原始数据可视化
+2, views.py 应尽量简化，控制单脚本的代码量
+</p><br>
+<p>10,策略开发和组合管理前端可视化：网页引导策略案例新建，参数调整，数据范围选择,不再策略脚本里设置。
+</p><hr>
+
+<h4>keti_DAA\\报告写作 keti_writing\\报告结构  </h4> 
+<p> 
+    1,SAA-长期:宏观经济数据建模继续，选取相关性最大的10个指标做回归
+<br>2,TAA-短期：锚策略
+
+</p><br>
+
+<h4>keti_DAA\\参考资料 reference_list\\  </h4> 
+<p> 1, 中金研报，多资产的书，yuwei的书，Wind,国家统计局
+    2，
+</p><br>
+
+
+
+<h3><a name="reference">参考资料reference</a></h3> 
+<h4>资产配置相关研究报告</h4> 
+<p>1，信用债：中证评级，每周更新。 </p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h3><a name="todo">短期计划 todo list</a></h3> 
+<p></p>
+<h3><a name="plan">长期计划 work plan</a></h3> 
+<p></p>
+<h3><a name="weekly">weekly</a></h3> 
+<h3><a name="monthly">monthly</a></h3> 
+<h3><a name="quarterly">quarterly</a></h3>  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h3></h3>
+<p></p>
+<h4></h4> 
+<p></p>
+<h5></h5>
+<p></p>
+
+<!-- <h4>长盛常用账户及密码</h4>
+<p>
+厕所密码：990326
+账号W5707909077 的密码已初始化为 65642052 。
+人力资源：http://10.10.11.59:8888/logon/logonService |    ps：123~
+2，笔记本电脑登录，网页登陆： CISS_rc19 
+3，基金从业，ps:CSrc123123 ; account:身份证号码；http://person.amac.org.cn/security.action
+</p>  -->
+
+<!--
+备用资料：相关文件位置 
+C:\zd_zxjtzq\ciss_web\CISS_rc\apps\rc_self\config_rc.py
+
+  -->
+    </div> 
+    </section> 
+
+
+</body>
+
+</html>

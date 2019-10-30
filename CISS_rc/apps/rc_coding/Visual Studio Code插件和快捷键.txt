@@ -1,0 +1,142 @@
+Visual Studio Code
+（1）插件
+前端常用：
+
+       1.HTML Snippets： 超级实用且初级的 H5代码片段以及提示
+
+       2.HTMLHint： html代码检测
+
+       3.HTML CSS Support : 让 html 标签上写class 智能提示当前项目所支持的样式。新版已经支持scss文件检索，这个也是必备插件之一
+
+       4.Auto Close Tag : 匹配标签，关闭对应的标签。很实用【HTML/XML】
+
+       5.Auto Rename Tag : 修改 html 标签，自动帮你完成尾部闭合标签的同步修改
+
+       6.Path Autocomplete : 路径智能补全
+
+       7.Path Intellisense ： 路径智能提示
+
+       8.JavaScript Snippet Pack： 针对js的插件，包含了js的常用语法关键字，很实用；
+
+       9.View InBrowser： 从浏览器中查看html文件，使用系统的当前默认浏览器
+
+      10.Class autocomplete for HTML： 编写html代码的朋友们对html代码的一大体现就是重复，如果纯用手敲不仅累还会影响项目进度，这款自动补全插件真的很棒；
+
+      11.beautify : 格式化代码的工具，可以格式化JSON|JS|HTML|CSS|SCSS,比内置格式化好用
+
+      12.Debugger for Chrome： 让 vscode 映射 chrome 的 debug功能，静态页面都可以用 vscode 来打断点调试，真666~
+
+      13.jQuery Code Snippets： jquery 重度患者必须品
+
+      14.vscode-icon： 让 vscode 资源树目录加上图标，必备良品！
+
+      15. VSCode Great Icons： 另一款资源树目录图标 
+
+      16. colorize : 会给颜色代码增加一个当前匹配代码颜色的背景，非常好
+
+      17. Color Info： 提供你在 CSS 中使用颜色的相关信息。你只需在颜色上悬停光标，就可以预览色块中色彩模型的（HEX、 RGB、HSL 和 CMYK）相关信息了。
+
+      18. Bracket Pair Colorizer： 让括号拥有独立的颜色，易于区分。可以配合任意主题使用。
+
+      19. vscode-fileheader： 顶部注释模板，可定义作者、时间等信息，并会自动更新最后修改时间
+
+      20. Document This : js 的注释模板 （注意：新版的vscode已经原生支持,在function上输入/** tab）
+
+      21. filesize： 在底部状态栏显示当前文件大小，点击后还可以看到详细创建、修改时间
+
+      22. Code Runner : 代码编译运行看结果，支持众多语言
+
+      23. GitLens： 丰富的git日志插件
+
+      24. vetur： vue语法高亮、智能感知、Emmet等
+
+      25. VueHelper： vue代码提示
+
+      26. Quokka:  是一个调试工具插件，能够根据你正在编写的代码提供实时反馈。它易于配置，并能够预览变量的函数和计算值结果。另外，在使用 JSX 或 TypeScript 项目中，它能够开箱即用。
+
+      27. Faker:  使用流行的 JavaScript 库 – Faker，能够帮你快速的插入用例数据。Faker 可以随机生成姓名、地址、图像、电话号码，或者经典的乱数假文段落，并且每个类别还包含了各种子类别，你可以根据自身的需求来使用这些数据。
+
+      28. CSS Peek:  使用此插件，你可以追踪至样式表中 CSS 类和 ids 定义的地方。当你在 HTML 文件中右键单击选择器时，选择“ Go to Definition 和 Peek definition ”选项，它便会给你发送样式设置的 CSS 代码。
+
+      29. HTML Boilerplate:  通过使用 HTML 模版插件，你就摆脱了为 HTML 新文件重新编写头部和正文标签的苦恼。你只需在空文件中输入 html，并按 Tab 键，即可生成干净的文档结构。
+
+      30.  Prettier:  Prettier 是目前 Web 开发中最受欢迎的代码格式化程序。安装了这个插件，它就能够自动应用 Prettier，并将整个 JS 和 CSS 文档快速格式化为统一的代码样式。如果你还想使用 ESLint，那么还有个 Prettier – Eslint 插件，你可不要错过咯！
+
+      31. Color Info:  这个便捷的插件，将为你提供你在 CSS 中使用颜色的相关信息。你只需在颜色上悬停光标，就可以预览色块中色彩模型的（HEX、 RGB、HSL 和 CMYK）相关信息了。
+
+      32. SVG Viewer:  此插件在 Visual Studio 代码中添加了许多实用的 SVG 程序，你无需离开编辑器，便可以打开 SVG 文件并查看它们。同时，它还包含了用于转换为 PNG 格式和生成数据 URI 模式的选项
+
+      33. TODO Highlight:  这个插件能够在你的代码中标记出所有的 TODO 注释，以便更容易追踪任何未完成的业务。在默认的情况下，它会查找 TODO 和 FIXME 关键字。当然，你也可以添加自定义表达式。
+
+      34. Icon Fonts:  这是一个能够在项目中添加图标字体的插件。该插件支持超过 20 个热门的图标集，包括了 Font Awesome、Ionicons、Glyphicons 和 Material Design Icons。
+
+      35. Change Case:  虽然 VSCode 内置了开箱即用的文本转换选项，但其只能进行文本大小写的转换。而此插件则添加了用于修改文本的更多命名格式，包括驼峰命名、下划线分隔命名，snake_case 命名以及 CONST_CAS 命名等。
+
+      36. Regex Previewer:  这是一个用于实时测试正则表达式的实用工具。它可以将正则表达式模式应用在任何打开的文件上，并高亮所有的匹配项。
+
+      37.Easy LESS:  less文档提供提示，错误警告，以及把less文档编译为css文件
+
+      38. Document This:  自动生成 JSDoc 注释，快捷键ctrl+alt+d ctrl+alt+d。 或者在function上输入/**然后tab键也可以生成注释。
+
+      39. NPM Instellisense:  NPM 依赖补全，在你引入任何 node_modules 里面的依赖包时提供智能提示和自动完成，会提示已安装的模块名
+
+(3)常用快捷键
+
+   编辑器与窗口管理
+打开一个新窗口： Ctrl+Shift+N
+关闭窗口： Ctrl+Shift+W
+同时打开多个编辑器（查看多个文件）
+新建文件 Ctrl+N
+文件之间切换 Ctrl+Tab
+切出一个新的编辑器（最多 3 个） Ctrl+\，也可以按住 Ctrl 鼠标点击 Explorer 里的文件名
+左中右 3 个编辑器的快捷键 Ctrl+1 Ctrl+2 Ctrl+3
+3 个编辑器之间循环切换 Ctrl+
+编辑器换位置， Ctrl+k然后按 Left或 Right
+  代码编辑
+  格式调整
+
+代码行缩进 Ctrl+[ 、 Ctrl+]
+Ctrl+C 、 Ctrl+V 复制或剪切当前行/当前选中内容
+代码格式化： Shift+Alt+F，或 Ctrl+Shift+P 后输入 format code
+上下移动一行： Alt+Up 或 Alt+Down
+向上向下复制一行： Shift+Alt+Up 或 Shift+Alt+Down
+在当前行下边插入一行 Ctrl+Enter
+在当前行上方插入一行 Ctrl+Shift+Enter
+  光标相关
+
+移动到行首： Home
+移动到行尾： End
+移动到文件结尾： Ctrl+End
+移动到文件开头： Ctrl+Home
+移动到定义处： F12
+定义处缩略图：只看一眼而不跳转过去 Alt+F12
+移动到后半个括号： Ctrl+Shift+]
+选择从光标到行尾： Shift+End
+选择从行首到光标处： Shift+Home
+删除光标右侧的所有字： Ctrl+Delete
+扩展/缩小选取范围： Shift+Alt+Left 和 Shift+Alt+Right
+多行编辑(列编辑)：Alt+Shift+鼠标左键，Ctrl+Alt+Down/Up
+同时选中所有匹配： Ctrl+Shift+L
+Ctrl+D 下一个匹配的也被选中 (在 sublime 中是删除当前行，后面自定义快键键中，设置与 Ctrl+Shift+K 互换了)
+回退上一个光标操作： Ctrl+U
+   重构代码
+
+找到所有的引用： Shift+F12
+同时修改本文件中所有匹配的： Ctrl+F12
+重命名：比如要修改一个方法名，可以选中后按 F2，输入新的名字，回车，会发现所有的文件都修改了
+跳转到下一个 Error 或 Warning：当有多个错误时可以按 F8 逐个跳转
+查看 diff： 在 explorer 里选择文件右键 Set file to compare，然后需要对比的文件上右键选择 Compare with file_name_you_chose
+   查找替换
+
+查找 Ctrl+F
+查找替换 Ctrl+H
+整个文件夹中查找 Ctrl+Shift+F
+   显示相关
+全屏：F11
+zoomIn/zoomOut：Ctrl +/-
+侧边栏显/隐：Ctrl+B
+显示资源管理器 Ctrl+Shift+E
+显示搜索 Ctrl+Shift+F
+显示 Git Ctrl+Shift+G
+显示 Debug Ctrl+Shift+D
+显示 Output Ctrl+Shift+U

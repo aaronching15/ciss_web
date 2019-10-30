@@ -29,6 +29,9 @@ w.wset("bonus","orderby=实施公告日;startdate=2019-07-23;enddate=2019-07-23;
 todo:
 
 Notes:
+
+exhi file 展示对应文件：views.py\\def etf_data()
+
 ##############################################
 '''
 
@@ -119,6 +122,9 @@ fields = para_dict["fields"]
 
 # 	### save para_dict to json file ,TODO
 
+######################################################################
+######################################################################
+
 file_name =  "Wind_csi800_bonus.csv"
 df0 = pd.read_csv(file_path0+file_name ,encoding="gbk")
 
@@ -188,7 +194,7 @@ for temp_i in df_stocks2.index :
 	### todo，计算调整后的股票数量。 
 
 
-sad
+### 对应网页： view.py\\def etf_data(request):
 
 print(  df_stocks2   )
 df_stocks2.to_csv("D:df_stocks_190723.csv")
@@ -197,16 +203,14 @@ df_stocks2.to_csv("D:df_stocks_190723.csv")
 
 
 ########################################################
-# Qs:1,Wind-navigator 有问题
-'''
-1,获取未来5个交易日的权息变动情况；
-2，对下一个交易日将发生的分红送配，在所有pcf中寻找持仓，设计组合调整计划
-
-
-
-
+### 比较前后2个交易日的差异
 '''
 
+'''
+path_pcf = "D:\\CISS_db\\etf\\"
+### 从输入端获取
+date_pre = 
+date = 
 
 
 

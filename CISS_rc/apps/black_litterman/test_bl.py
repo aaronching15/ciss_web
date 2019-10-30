@@ -263,7 +263,7 @@ print( ret_asset_np[:2] )
 
 
 ###################################################
-### method 2 use root() 
+### method 2 use root()  
 # from scipy.optimize import root,fsolve
 
 # def f1(x):

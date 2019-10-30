@@ -1,5 +1,27 @@
-from django.shortcuts import render
+###########################################################################
+'''
+list of def in this file 
+def index(request):
+def json_index(request):
 
+def data_index(request):
+def data_log(request):
+
+def stra_index(request):
+def stra_single(request):
+def stra_abm_rc(request):
+def stra_bond_jny(request):
+
+def etf_data(request):
+
+def port_index(request):
+def port_single(request):
+
+def docs_index(request):
+def docs_index(request):    
+'''
+
+from django.shortcuts import render
 from django.http import HttpResponse
 
 ### to exhibit static html file 
@@ -25,9 +47,38 @@ def data_index(request):
     #  
     return render_to_response("ciss_exhi/data/index_data.html")
 
+
+
+
 def data_log(request):
-    #  
-    return render_to_response("ciss_exhi/data/data_log.html")
+    '''
+    目前需要更新的信息：
+        1，三张表的最新更新日期；
+        2, 个股,ETF,指数的最新更新日期；
+        3，打印未正常更新的证券列表。
+
+    last 190730 | since 190730
+    derived from ..\\CISS_rc\\apps\\rc_stra\\test_Wind_19.py
+    '''
+    path_data = 'D:\\data_Input_Wind\\'
+    file_name = "rc_data_log.csv"
+
+    context = {}
+    temp_df = pd.read_csv(path_data+"rc_data_log.csv",index_col="Unnamed: 0")
+    context["data_log"] = temp_df.T()
+    ### columns = "table_name","symbol","last_update","file_name","file_path"
+
+
+
+
+
+
+
+
+
+
+
+    return render_to_response("ciss_exhi/data/data_log.html",context )
 ###########################################################################
 ### Index of strategy list 
 ### working on test strategy file
@@ -212,7 +263,7 @@ def stra_bond_jny(request):
     context['yrs_range_c'] = yrs_range_c   
 
 
-    path_index_1to1 = "C:\\zd_zxjtzq\\RC_trashes\\temp\\ciss_web\\static\\"
+    path_index_1to1 = "C:\\zd_zxjtzq\\\\ciss_web\\static\\"
     # ALIYUN | path_index_1to1 =  "C:\\ciss_web\\static\\"
     file_index_1to1 = "chinabond_index_1to1.csv"
     df_1to1 = pd.read_csv(path_index_1to1 + file_index_1to1,encoding = "gbk" )
@@ -381,7 +432,7 @@ def stra_bond_jny(request):
     # port_unit_list = list( df_full['port_unit'].round(decimals=3) )
     # context['port_unit'] = port_unit_list
     ### sub step 1 df to json 
-    # path4json = "C:\\zd_zxjtzq\\RC_trashes\\temp\\ciss_web\\static\\templates\\ciss_exhi\\strategy\\data\\"
+    # path4json = "C:\\zd_zxjtzq\\\\ciss_web\\static\\templates\\ciss_exhi\\strategy\\data\\"
     # df_full2 = df_full.loc[:,['date','port_unit'] ]
     # df_full2.T.to_json(path4json+"jny.json" ,orient="columns")
 
@@ -410,7 +461,7 @@ def stra_bond_jny(request):
     ####################################################################
     ### import list of commonly used index 
     # ALIYUUN |  path_index = "C:\\ciss_web\\static\\"
-    path_index = "C:\\zd_zxjtzq\\RC_trashes\\temp\\ciss_web\\static\\"
+    path_index = "C:\\zd_zxjtzq\\\\ciss_web\\static\\"
     file_index_s = "chinabond_name_short.csv"
     temp_df =pd.read_csv( path_index + file_index_s,encoding="gbk" )
     # name_short
@@ -449,7 +500,9 @@ def etf_data(request):
     import math
 
     import sys
-    sys.path.append("C:\\zd_zxjtzq\\RC_trashes\\temp\\ciss_web\\CISS_rc\\apps\\black_litterman\\")
+    print(sys.path)
+    sys.path.append("C:\\zd_zxjtzq\\ciss_web\\CISS_rc\\apps\\black_litterman\\")
+    # sys.path.append("C:\\zd_zxjtzq\\\\ciss_web\\CISS_rc\\apps\\black_litterman\\")
     from etf.engine_etf import ETF_manage
     etf_manage0 = ETF_manage()
 
@@ -461,11 +514,13 @@ def etf_data(request):
     #####################################################################
     ### step 1 Get input parameters
 
-    # name_etf = request.POST.get("name_etf","510300")
-    # date_init= request.POST.get("date_init","0723")
+    name_etf = request.POST.get("name_etf","510300")
+    date_init= request.POST.get("date_init","0724")
+    date_init_pre= request.POST.get("date_init_pre","0723")
 
-    name_etf = "510300"
-    date_init = "0723"
+    # name_etf = "510300"
+    # date_init = "0723"
+
     df_head,df_stocks = etf_manage0.get_pcf_file(date_init,name_etf,path_etf )
     df_head.index = df_head.key
     print("df_head ", df_head)
@@ -473,7 +528,7 @@ def etf_data(request):
     print("Head of df_stocks \n", df_stocks.head() )
 
     context["df_head"]= df_head
-    context["df_stocks"]=df_stocks.T
+    
 
     ### 
     ##################################################################
@@ -482,7 +537,7 @@ def etf_data(request):
 
     ### Read existing file 
     # path to save dividend and share_proportion
-    file_path0 = "D:\\data_Input_Wind\\temp\\"
+    file_path0 = "D:\\CISS_db\\bonus\\"
     file_name_800 = "Wind_csi800_bonus.csv"
     file_name_1000 = "Wind_csi1000_bonus.csv"
 
@@ -498,6 +553,7 @@ def etf_data(request):
     date_start = "19"+date_init  # "190723"
     date_end   = "19"+date_init  # "190724"
     import datetime as dt 
+    date_start_dt = dt.datetime.strptime("20"+date_start,"%Y%m%d")
     date_start =dt.datetime.strftime( dt.datetime.strptime("20"+date_start,"%Y%m%d"),"%Y-%m-%d")
     date_end   =dt.datetime.strftime( dt.datetime.strptime("20"+date_end,"%Y%m%d"),"%Y-%m-%d")
 
@@ -505,6 +561,20 @@ def etf_data(request):
     file_name =  "Wind_csi800_bonus.csv"
     df0 = pd.read_csv(file_path0+file_name ,encoding="gbk")
 
+    ### 分红送配信息按股权登记日排序
+    df0["date"] = pd.to_datetime( df0["shareregister_date"],format="%Y-%m-%d")
+    df0 = df0[ df0["date"]>=date_start_dt  ]
+    df0  = df0.sort_values(by="date" )
+    ### 设置输出的现实格式 
+    df0["date_register"] =df0["date"].apply(lambda x: dt.datetime.strftime(x ,"%Y-%m-%d")   )
+
+    df0["share_benchmark"] =df0["share_benchmark"].apply(lambda x: round( float( x ),2) )
+
+    df0["share_benchmark_date"] =df0["share_benchmark_date"].apply(lambda x: x[:10] )
+    df0["redchips_listing_date"] =df0["redchips_listing_date"].apply(lambda x: str(x)[:10] )  
+
+    print( df0.columns )
+    context["bonus_info"]= df0.T
 
     datetime0 = date_end + " 00:00:00"
     # "2019-07-23 00:00:00" column最后2列的值是一样的
@@ -520,6 +590,32 @@ def etf_data(request):
         register_date.loc[temp_index,"code_raw" ] =wind_code[:6]
 
     df_stocks.index = df_stocks["code"]
+    ### Set precision 设置小数点，设置精度 |notes:不能直接转换的原因是str格式下，有空格
+    ### 由于有 nan的存在，需要先替代为 0.0 
+
+    df_stocks['premium_pct' ] =df_stocks['premium_pct' ].str.replace(" ","") 
+    df_stocks['amount' ] =df_stocks['amount' ].str.replace(" ","") 
+    
+
+    for temp_i in df_stocks.index : 
+        if df_stocks.loc[temp_i,'mark' ] == "3" :
+            df_stocks.loc[temp_i,'mark' ] = "深市退补"
+        elif df_stocks.loc[temp_i,'mark' ] == "1" :
+            df_stocks.loc[temp_i,'mark' ] = "允许"
+        elif df_stocks.loc[temp_i,'mark' ] == "2" :
+            df_stocks.loc[temp_i,'mark' ] = "必须"
+
+
+        if len( df_stocks.loc[temp_i,'premium_pct' ] )<1  :
+            df_stocks.loc[temp_i,'premium_pct' ] = "-"
+        else :
+            df_stocks.loc[temp_i,'premium_pct' ] = round( float( df_stocks.loc[temp_i,'premium_pct' ] ),2)
+               
+        if len( df_stocks.loc[temp_i,'amount' ] )<1  :
+            df_stocks.loc[temp_i,'amount' ] = "-"
+        else :
+            df_stocks.loc[temp_i,'amount' ] = round( float( df_stocks.loc[temp_i,'amount' ] ), 1)
+
     print("6666======================")
     list_code = list(register_date["code_raw"]) 
 
@@ -530,17 +626,16 @@ def etf_data(request):
     import numpy as np 
     for temp_i in df_stocks2.index :
         temp_code =  df_stocks2.loc[temp_i, "code" ]
-        print(temp_code, temp_i)
-        print(  df_stocks2.loc[temp_i, :] )
+
         temp_i2 = register_date[ register_date["code_raw"] == temp_code ].index[0] 
         # df_stocks2.loc[temp_i, "scheme_des" ] =0
         
         df_stocks2.loc[temp_i, "scheme_des" ] =register_date.loc[temp_i2, "scheme_des"]
 
-        df_stocks2.loc[temp_i, "cash_per_share" ] =float( register_date.loc[temp_i2, "dividendsper_share_aftertax"] )
+        df_stocks2.loc[temp_i, "cash_per_share" ] =  round( float( register_date.loc[temp_i2, "dividendsper_share_aftertax"] )  ,3)
 
         ### 计算分红的现金差额数据 | 有可能出现100股送 9.7的情况
-        df_stocks2.loc[temp_i, "cash_diff" ] =round( df_stocks2.loc[temp_i, "cash_per_share" ]*float( df_stocks2.loc[temp_i, "num" ]) ) 
+        df_stocks2.loc[temp_i, "cash_diff" ] =round( df_stocks2.loc[temp_i, "cash_per_share" ]*float( df_stocks2.loc[temp_i, "num" ]),1 ) 
 
         ### 送股,float
         df_stocks2.loc[temp_i, "share_div" ] =register_date.loc[temp_i2, "sharedividends_proportion"]
@@ -559,66 +654,23 @@ def etf_data(request):
         else :
             df_stocks2.loc[temp_i, "num_new" ] =df_stocks2.loc[temp_i, "num" ] 
 
-        df_stocks2.loc[temp_i, "date_announce" ] =register_date.loc[temp_i2, "dividends_announce_date"]
-        df_stocks2.loc[temp_i, "date_register" ] =register_date.loc[temp_i2, "shareregister_date"]
-        df_stocks2.loc[temp_i, "date_share_pay" ] =register_date.loc[temp_i2, "exrights_exdividend_date"]
-        df_stocks2.loc[temp_i, "date_cash_pay" ] =register_date.loc[temp_i2, "dividend_payment_date"]
+        df_stocks2.loc[temp_i, "date_announce" ] =register_date.loc[temp_i2, "dividends_announce_date"][:10]
+        df_stocks2.loc[temp_i, "date_register" ] =register_date.loc[temp_i2, "shareregister_date"][:10]
+        df_stocks2.loc[temp_i, "date_share_pay" ] =register_date.loc[temp_i2, "exrights_exdividend_date"][:10]
+        df_stocks2.loc[temp_i, "date_cash_pay" ] =register_date.loc[temp_i2, "dividend_payment_date"][:10]
 
+    # qs:不知道为什么没用
+    # decimals = pd.Series([3], index=['cash_per_share' ])
+    # df_stocks2.round(decimals) 
 
     context["df_stocks2"]=df_stocks2.T
+
+    context["df_stocks"]=df_stocks[ df_stocks["mark"]=="必须" ].T
 
 
 
     return render(request, 'ciss_exhi/etf/etf_data.html', context)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ 
 
 
 
@@ -818,7 +870,7 @@ def port_single(request):
             df_as[temp_col]=(df_as[temp_col]*100).round(decimals=2)
         df_as = df_as.sort_values(["market_value"],ascending=False)
 
-        path_ind = "C:\\zd_zxjtzq\\RC_trashes\\temp\\ciss_web\\static\\"
+        path_ind = "C:\\zd_zxjtzq\\\\ciss_web\\static\\"
         file_ind_CN = "ind_wind_CN.csv"
         dict_ind = pd.read_csv(path_ind + file_ind_CN,encoding="gbk")
         for temp_i in df_as.index :
@@ -1013,7 +1065,7 @@ def docs_update(request):
 
 ###########################################################################
 ### working on test files 
-def test_index(request):
+def docs_index(request):
     # Ouputting CSV with Django
     # 190121
     import csv

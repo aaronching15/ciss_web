@@ -3,10 +3,15 @@ __author__ = " ruoyu.Cheng"
 
 '''
 Function：
+exhibition file: 
+    \\veiws.py\\def data_log(request): line 31 
+    \\static\\templates\\ciss_exhi\\data\\data_log.py
 
 derived from test_Wind.py
-last  | since 190718 
+last 190726 | since 190718 
 '''
+#########################################################################
+### Part 0, update log of data in json file and necessarily modules\parameters 
 import sys
 # 添加祖父目录
 sys.path.append("../..")
@@ -18,6 +23,12 @@ wind_api_1 = wind_api()
 import time
 temp_time1 = time.strftime('%y%m%d%H%M%S',time.localtime(time.time()))
 print( temp_time1 )
+
+import pandas as pd 
+temp_index = 0 
+df_log = pd.DataFrame(index= [temp_index],columns = ["table_name","symbol","last_update","file_name","file_path" ])
+
+
 #########################################################################
 ### Part 1,下载当日所有指数、ETF，股票{A,H}收盘数据
 #########################################################################
@@ -44,19 +55,28 @@ temp_predate = input('Please type in Pre Day,e.g.190717 : ')
 ### 根据 股票，指数+ETF，下载wind-WSQ数据 
 
 
-# j=0
-# for temp_f in  file_list :
-#     print('Working on Symbol List :', temp_f )
-#     # Get Wind-WSQ single day data
-#     # step 1 get SymbolList from : SL_path : path of SymbolList
-#     path_list = SP_path  + temp_f
+j=0
+for temp_f in  file_list :
+   
+    print('Working on Symbol List :', temp_f )
+    # Get Wind-WSQ single day data
+    # step 1 get SymbolList from : SL_path : path of SymbolList
+    path_list = SP_path  + temp_f
 
-#     list_name = list_names[j]
-#     quote_list = wind_api_1.Get_wsq(path_list,temp_date,path_data,list_name,temp_f ,  '')
+    list_name = list_names[j]
+    (quote_list,file_name ) = wind_api_1.Get_wsq(path_list,temp_date,path_data,list_name,temp_f ,  '')
 
-#     j=j+1
+    ### update log df 
+    df_log.loc[temp_index,"table_name"] = temp_f
+    df_log.loc[temp_index,"last_update"]= temp_date
+    df_log.loc[temp_index,"file_name" ]= file_name
+    df_log.loc[temp_index,"file_path"] = path_data
+    temp_index = temp_index + 1 
 
-# ASD
+    j=j+1
+
+df_log.to_csv(path_data + "rc_data_log.csv"  )
+
 
 #########################################################################
 ### Part 2 更新个股历史前复权行情和不复权行情。
@@ -106,7 +126,8 @@ import datetime as dt
 file_list = ['All_Index_ETF.csv',"cicslevel2_1907.csv" ,'H11164cons.csv']
 list_names =["Index-ETF","CN-stocks","HK-stocks"]
 
-for j in [1,2] :
+for j in [0,1,2] :
+# for j in [1,2] :
     list_name = list_names[j]
     file_name = file_list[j]
 
@@ -116,10 +137,19 @@ for j in [1,2] :
     for temp_code in df_quote_list.index :
         ###################################################################
         ### 拼接历史行情数据中未更新部分
-        df_stock = wind_api_1.quote_concat_csv(temp_code,temp_date,list_name,path_data)
+        df_stock,temp_file_2 = wind_api_1.quote_concat_csv(temp_code,temp_date,list_name,path_data,df_quote_list)
 
+        ### update log df 
+        df_log.loc[temp_index,"table_name"] = list_name
+        df_log.loc[temp_index,"symbol"] = temp_code
+        df_log.loc[temp_index,"last_update"]= temp_date
+        df_log.loc[temp_index,"file_name" ]= temp_file_2
+        df_log.loc[temp_index,"file_path"] = path_data
+        temp_index = temp_index + 1 
 
     j=j+1 
+
+df_log.to_csv(path_data + "rc_data_log.csv"  )
 asd
 
 ###################################################################

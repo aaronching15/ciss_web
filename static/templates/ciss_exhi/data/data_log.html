@@ -25,24 +25,60 @@
 
 
 {% block content %}
-<p>数据日志：管理数据的更新和维护过程。  </p>
 
 <h3>数据日志维护 | Data Log</h3>
 <hr>
-<!-- todo:1,维护 -->
+<p>数据日志：管理数据的更新和维护过程。  </p>
 <p>{......} </p>
+
+
+<br>
+<h4>1,Daily Quotation:{Equity,Index,ETF}*{CN,CNHK,US} </h4>
+<h5>中国、香港、美国权益类的股票、指数、ETF行情数据</h5>
+<br>
+<!-- 1,表格：跟踪每日的3个数据的最新更新日期 
+"table_name","symbol","last_update","file_name","file_path"  -->
+     
+    <table border="1">
+    <tr><td>序号</td><td>表格名称</td><td>代码</td><td>最后更新时间</td><td>文件名</td>
+    	<td>文件位置</td> </tr>
+    {% for temp_row,row_values in data_log.items %}
+        <tr>
+            <td>{{ temp_row }}</td>
+            <td>{{ row_values.table_name }}</td>
+        	<td>{{ row_values.symbol }}</td>
+            <td>{{ row_values.last_update }}</td>
+            <td>{{ row_values.file_name }}</td>
+            <td>{{ row_values.file_path }}</td>                        
+        </tr>
+    {% endfor %}
+
+    </table> 
+
+<hr>
+<h5>A股股票权息数据</h5>
+<p>todo,需要结合已有的tb_finance中20181231之前的数据，和wind定期下载跟踪的数据。</p>
+<br>
+<!-- todo:1,打印现有核心数据表的键值对 -->
+
 
 <h3>数据接口 | Data API</h3>
 <hr>
 <p>{......} </p>
+<h4> </h4>
+<p> </p>
 
 <h3>数据库 | Database</h3>
 <hr>
 <p>{......} </p>
-
+<h4> </h4>
+<p> </p>
 
 <h3>自定义数据 | Custom Data</h3>
 <hr>
 <p>{......} </p>
+<h4> </h4>
+<p> </p>
+
 
 {% endblock content %}

@@ -46,14 +46,16 @@
     {% csrf_token %}
 
     ETF code: <input type="text" name="name_etf"  value="510300"> <br>
-    日期，如:0723 <input type="text" name="date_init" value="0723"> <br>
+    当前日期，如:0724 <input type="text" name="date_init" value="0724"> <br>
+    上一日期，如:0723 <input type="text" name="date_init" value="0723"> <br>
     
-    
+    <!--
     最新更新日期|Lastest Update Date.: <input type="text" name="name_etf"  value="510300"> <br>
     策略分类：一级|Strategy Hierachy:1.: <input type="text" name="hier_1"   value="hier_1"> <br>
     策略分类：二级|Strategy Hierachy:2.: <input type="text" name="hier_2"   value="hier_2"> <br>
     策略分类：三级|Strategy Hierachy:3.: <input type="text" name="hier_3"   value="hier_3"> <br>
     策略分类：四级|Strategy Hierachy:4.: <input type="text" name="hier_4"   value="hier_4"> <br>
+    -->
          
     <input type="submit" value="提交">
     
@@ -68,10 +70,12 @@
     <section id="s1">  
     <h3><a name="stra_intro">1，导入pcf清单</a></h3>  
     <hr>
-    
-    <table border="0">
+
+    <h4><a>1，pcf清单-必须现金替代</a></h4>  
+    <hr>
+    <table border="0" >
     <tr>
-        <td>代码</td><td>证券名称</td><td>股票数量</td><td>标志</td><td>溢价比例</td><td>现金替代金额</td>
+        <td>序号</td><td>代码</td><td>证券名称</td><td>股票数量</td><td>标志</td><td>溢价比例</td><td>现金替代金额</td>
     </tr>
     {% for temp_index,temp_row in df_stocks.items %}
     <tr>
@@ -89,37 +93,74 @@
 
     </section> 
 
-
-
-
-
-    <section id="s2">  
-    <h3><a name="stra_theory">2，导入分红送配信息</a></h3>  
+    <section id="s3">  
+    <h4><a>1，比较和前一日差异</a></h4>  
     <hr>
     <p>  </p>
 
 
+
+    <section id="s2">  
+    <h3><a name="stra_theory">2，导入未来分红送配信息</a></h3>  
+    <hr>
+    <p>  </p>
+    
+    <table border="0" >
+    <tr>
+        <td>序号</td><td>代码</td><td>证券名称</td><td>分配方案</td><td>登记日</td><td>基准日</td><td>红股上市日</td><td>基准日股本</td>
+    </tr>
+    {% for temp_index,temp_row in bonus_info.items %}
+    <tr>
+        <td>{{ temp_index }}</td>
+        <td>{{ temp_row.wind_code }}</td>
+        <td id="td01">{{ temp_row.sec_name }}</td> 
+        <td>{{ temp_row.scheme_des }}</td>
+        <td>{{ temp_row.date_register }}</td>
+        <td>{{ temp_row.share_benchmark_date }}</td> 
+        <td>{{ temp_row.redchips_listing_date }}</td> 
+        <td>{{ temp_row.share_benchmark  }}</td>
+    </tr>
+    {% endfor %}
+    </table>
+
     </section> 
 
     <section id="s3">  
-    <h3><a name="stra_empirical">3，计算为了N日分红送配信息</a></h3>  
+    <h3><a name="stra_empirical">3，计算T日分红送配信息</a></h3>  
     <hr>
     <p>  </p>
     
 
     <table border="0">
     <tr>
-        <td>分配方案</td><td>每股现金</td><td>组合现金差额</td><td>每股转股</td><td>每股增股</td><td>调整后数量</td><td>公告日</td><td>注册登记日</td><td>红股分配日</td><td>现金分配日</td>
+        <td>股票名称</td><td>股票代码</td><td>分配方案</td><td>每股现金</td><td>组合现金差额</td><td>每股转股</td><td>每股增股</td><td>调整前数量</td><td>调整后数量</td>
     </tr>
     {% for temp_index,temp_row in df_stocks2.items %}
     <tr>
+        <td id="td01">{{ temp_row.name  }}</td>
         <td>{{ temp_index }}</td>
-        <td id="td01">{{ temp_row.scheme_des }}</td>
+        <td>{{ temp_row.scheme_des }}</td>
         <td>{{ temp_row.cash_per_share }}</td>
         <td>{{ temp_row.cash_diff }}</td> 
         <td>{{ temp_row.share_div }}</td>
         <td>{{ temp_row.share_increase }}</td>
+        <td>{{ temp_row.num }}</td>
         <td>{{ temp_row.num_new }}</td>
+        
+    </tr>
+    {% endfor %}
+    </table>
+    
+    <hr>
+    <table border="0">
+    <tr>
+        <td>股票名称</td><td>股票代码</td><td>公告日</td><td>注册登记日</td><td>红股分配日</td><td>现金分配日</td>
+    </tr>
+    {% for temp_index,temp_row in df_stocks2.items %}
+    <tr>
+        <td id="td01">{{ temp_row.name  }}</td>
+        <td>{{ temp_index }}</td>
+        
         <td>{{ temp_row.date_announce }}</td>
         <td>{{ temp_row.date_register }}</td>
         <td>{{ temp_row.date_share_pay }}</td> 
@@ -128,8 +169,6 @@
     </tr>
     {% endfor %}
     </table>
-
-
 
 
     </section> 

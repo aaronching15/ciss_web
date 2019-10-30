@@ -32,6 +32,7 @@ class wind_api():
         print("WSS | Get_wss: 获取多维数据。")
         print("TDAYS | Get_tdays: 获取交易日数据。")
         print("WSD | GetWindData:个股历史前复权数据。") 
+        print("WSD | GetWindData_q:个股历史季度前复权数据。") 
 
         print("    | Wind2Csv_indexconst：指数权重WindData保存至csv "  )
         print("Wset | GetWind_indexconst：T日指数成分股数据")
@@ -86,8 +87,9 @@ class wind_api():
             temp_pd_set.index = temp_Data.Codes
 
             # temp_f[:-4] = 'all_A_Stocks_wind' 
-            temp_pd_set.to_csv(path_data + 'Wind_' + list_name + '_' + temp_date+ '_updated' + '.csv')
-            print(path_data + '\\Wind_' + list_name + '_' + temp_date + '_updated' + '.csv')
+            file_name= 'Wind_' + list_name + '_' + temp_date+ '_updated' + '.csv'
+            temp_pd_set.to_csv(path_data + file_name )
+            print(path_data +   file_name)
             
         else :
             for j in range(temp_len + 1):
@@ -130,15 +132,16 @@ class wind_api():
 
                 quote_list = quote_list.append(temp_pd_set)  # todo 注意，这里不能 , ignore_index=1
                 # temp_f[:-4] = 'all_A_Stocks_wind' 
-                quote_list.to_csv(path_data + 'Wind_' + list_name + '_' + temp_date+ '_updated' + '.csv')
-                print(path_data + '\\Wind_' + list_name + '_' + temp_date + '_updated' + '.csv')
+                file_name= 'Wind_' + list_name + '_' + temp_date+ '_updated' + '.csv'
+                quote_list.to_csv(path_data + file_name)
+                print( path_data + file_name  )
                 # print( temp_pd.head(3) )
                 #       RT_DATE  RT_PRE_CLOSE  RT_OPEN  RT_HIGH  RT_LOW  RT_LAST  \   RT_VOL        RT_AMT  RT_PCT_CHG    RT_MKT_CAP  \RT_FLOAT_MKT_CAP
                 # 600734.SH  20170508.0         12.75     0.00     0.00    0.00     0.00         0.0  0.000000e+00      0.0000  7.949827e+09    4.476632e+09
                 # 600735.SH  20170508.0         20.74     0.00     0.00    0.00     0.00
                 # 600773.SH  20170508.0         12.32    12.35    12.44   11.49    11.55 
 
-        return quote_list 
+        return quote_list,file_name 
 
     def Get_tdays(self,date_start,date_end,mkt=""):
         ### 获取交易日数据
@@ -763,7 +766,7 @@ class wind_api():
         return file_path2
 
 
-    def quote_concat_csv(self,temp_code,temp_date,list_name,path_data):    
+    def quote_concat_csv(self,temp_code,temp_date,list_name,path_data,df_quote_list):    
         ### 导入个股历史行情数据,
         '''
         steps:
@@ -795,7 +798,12 @@ class wind_api():
         3,case2:
             3.1，wind抓取【T_end+1，T】期间的不复权行情数据，和前复权的收盘价数据。
             3.2，识别出存在“分红送配”的日期，可能有 1~n次的分红送配情况，并依次计算复权因子。
-            
+        ======
+        df_quote_list.columns = 
+        [['Unnamed: 0', 'RT_DATE', 'RT_PRE_CLOSE', 'RT_OPEN', 'RT_HIGH', 'RT_LOW',
+       'RT_LAST', 'RT_VOL', 'RT_AMT', 'RT_PCT_CHG', 'RT_MKT_CAP',
+       'RT_FLOAT_MKT_CAP'] ]
+
         reference:rC_Data_Initial.py\\Update_WSQ_Get_errorCodes
         '''
         items='open,high,low,close,volume,amt,pct_chg'
@@ -804,6 +812,7 @@ class wind_api():
         temp_dt = dt.datetime.strptime("20"+temp_date,"%Y%m%d")
         temp_dt_str = dt.datetime.strftime(temp_dt,"%Y%m%d")
 
+        temp_dt_str2 = dt.datetime.strftime(temp_dt,"%Y-%m-%d")
         ### s1,Get pre_close from day T list 
         # temp_file = "Wind_" + "all_A_Stocks_wind_"+ temp_date +"_updated.csv"
         temp_file = 'Wind_' + list_name  + '_' + temp_date+ '_updated' + '.csv'
@@ -828,20 +837,94 @@ class wind_api():
             wind_data0= self.GetWindData(temp_code, "","" ,items,1)
             # temperery wind to csv  
             result_path2 = self.Wind2Csv_wsd( wind_data0,path_data,temp_code  )
-            df_stock = pd.read_csv( result_path2 )
+        
+            df_stock = pd.read_csv( result_path2,index_col="Unnamed: 0"  )
+
         else :
-            df_stock = pd.read_csv(path_data+temp_file_2   )
+            try :
+                df_stock = pd.read_csv(path_data+temp_file_2 ,index_col="Unnamed: 0"  )
+            except:
+                df_stock = pd.read_csv(path_data+temp_file_2 ,index_col= "DATE"  )
+
+        if not "DATE" in df_stock.columns :
+            df_stock["DATE"] = df_stock.index
 
         # dt_str_hist = '2019-06-12'
+        print("6666==",  df_stock.columns)
+        print("6666==",  df_stock.tail(3)  )
+        print( df_stock["DATE"].iloc[-1]  )
+
         dt_str_hist = df_stock["DATE"].iloc[-1] 
         dt_hist = dt.datetime.strptime( dt_str_hist ,"%Y-%m-%d")
 
         dt_diff = temp_dt - dt_hist 
         print("Working on code ",temp_code )
-        print("dt_diff ", dt_diff, dt_diff> dt.timedelta(1) )
-        
+        # dt_diff  1 day, 0:00:00 True
+        print("dt_diff ", dt_diff, dt_diff == dt.timedelta(1) )
+        temp_if = ( temp_dt.isoweekday()==5 and dt_hist.isoweekday()==1 )
+        temp_if = ( temp_if and dt_diff == dt.timedelta(3) )
+        print("Check weekend,temp_if ", temp_if )
 
-        if dt_diff> dt.timedelta(1) :
+        '''
+        df_quote_list.columns = 
+        [['Unnamed: 0', 'RT_DATE', 'RT_PRE_CLOSE', 'RT_OPEN', 'RT_HIGH', 'RT_LOW',
+       'RT_LAST', 'RT_VOL', 'RT_AMT', 'RT_PCT_CHG', 'RT_MKT_CAP',
+       'RT_FLOAT_MKT_CAP'] ]'''
+
+        ### We do not want duplicate columns saved to csv 
+        col_out = [ "DATE", 'OPEN', 'HIGH', 'LOW', 'CLOSE', 'VOLUME', 'AMT','PCT_CHG' ]
+
+
+        if dt_diff == dt.timedelta(1) or temp_if :
+            # dt_diff  1 day, 0:00:00 True
+            ### locate code in df_quote_list,assign quote to historical file 
+            code_df = df_quote_list.loc[temp_code,:]
+            if len( code_df.index ) >= 1 :
+                close_pre = code_df["RT_PRE_CLOSE"]
+                close_last = code_df["RT_LAST"]
+            else :
+                print("ERROR: no quotes for code ", temp_code)
+                ads
+
+            ### Check for adjustment for historical data 
+            if abs(df_stock.loc[df_stock.index[-1],"CLOSE"]/close_pre - 1) >= 0.001 :
+                ### We need to make adjustment for listorical quotations  
+                ### 计算复权因子: T日前复权价格/T日真实收盘价
+                # from O,H,L,C to O',H',L' , o'=O * (C'/C)
+                adj_factor = close_pre/df_stock.loc[df_stock.index[-1],"CLOSE"]
+                ### todo 
+                # 依次调整df_stock中的 OPEN,HIGH,LOW,CLOSE,VOLUME
+                # 
+                df_stock["CLOSE" ] = df_stock["CLOSE" ]*adj_factor
+                df_stock["LOW" ]   =df_stock["LOW" ]*adj_factor
+                df_stock["HIGH" ]  = df_stock["HIGH" ]*adj_factor
+                df_stock["OPEN" ]   = df_stock["OPEN" ]*adj_factor
+                df_stock["VOLUME" ] = df_stock["VOLUME" ] /adj_factor
+
+            ### Append lastest date quotes to df 
+            temp_list = [temp_dt_str2 ]
+            temp_list = temp_list + [ code_df["RT_OPEN"] ]
+            temp_list = temp_list + [ code_df["RT_HIGH"] ]
+            temp_list = temp_list + [ code_df["RT_LOW"] ]
+            temp_list = temp_list + [ code_df["RT_LAST"] ]
+            temp_list = temp_list + [ code_df["RT_VOL"] ]
+            temp_list = temp_list + [ code_df["RT_AMT"] ]
+            temp_list = temp_list + [ code_df["RT_PCT_CHG"] ]
+
+            temp_df =pd.DataFrame( temp_list     ).T
+            temp_df.columns = df_stock.columns 
+
+            #else case means  no adjustment during period,we just add to df_stock and save to csv           
+            df_stock =df_stock.append( temp_df,ignore_index=True)
+            # df_stock.to_csv(path_data+temp_file_2   )
+
+            df_stock = df_stock.loc[:,col_out ]
+
+            df_stock.to_csv(path_data + temp_file_2   )
+
+
+        elif dt_diff > dt.timedelta(1) :
+
             ### get period quotation data using wind\\WSD
             # dt_0 = dt.datetime.strftime( dt_hist + dt.timedelta(1),"%Y-%m-%d")
             # note:由于存在“分红送配”的可能，因此也要再次抓取dt_hist当日数据，和本地历史行情数据作对比。
@@ -887,9 +970,12 @@ class wind_api():
             
             df_stock =df_stock.append( temp_df,ignore_index=True)
             # df_stock.to_csv(path_data+temp_file_2   )
+            df_stock = df_stock.loc[:,col_out ]
             df_stock.to_csv(path_data + temp_file_2   )
 
-        return df_stock 
+        ### else case means file has been updated to latest date, we do not need to adjust 
+
+        return df_stock,temp_file_2
 
 
     def Wind2Csv_wset(self, WindData,file_path0,para_dict ):

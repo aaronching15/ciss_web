@@ -13,7 +13,7 @@ urlpatterns = [
     path('strategy/index_stra.html', views.stra_index ),
     path('strategy/stra_single.html', views.stra_single,name="stra_single" ),
     path('strategy/stra_abm_rc.html', views.stra_abm_rc,name="stra_abm_rc" ),
-    ### working on personal strategy
+    ### working on personal strategy 
     # path('strategy/stra_abm.html', views.stra_abm,name="stra_abm" ),
     path('strategy/stra_bond_jny.html', views.stra_bond_jny,name="stra_bond_jny" ),
     # path('strategy/stra_multi_cryjny.html', views.stra_multi_cryjny,name="stra_multi_cryjny" ),
@@ -50,7 +50,7 @@ urlpatterns = [
 
     ##################################################################
     ### working urls for testing 
-    path('test/test.html', views.test_index ),
+    # path('test/test.html', views.test_index ),
 
     ##################################################################
     ### working ETF files

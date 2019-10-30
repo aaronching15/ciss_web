@@ -24,6 +24,8 @@ SECRET_KEY = ')ub9ce*jaq#49i#nm=5026tm)ge25uvsj1z6m1_+3@*js8)%00'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+# sub 克隆静态文件到根目录
+# reference website：https://github.com/newpanjing/simpleui/blob/master/QUICK.md
 
 ALLOWED_HOSTS = []
 
@@ -34,7 +36,13 @@ ALLOWED_HOSTS = []
 ### learning django-rest-framework | source http://hao.jobbole.com/django-rest-framework/
 
 INSTALLED_APPS = [
-    'django_admin_bootstrapped',
+    #######################################################
+    ###  https://github.com/newpanjing/simpleui
+    "simpleui",
+    ### 旧版的admin美化插件
+    #'django_admin_bootstrapped',
+    
+    ### Original part
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -46,7 +54,9 @@ INSTALLED_APPS = [
     #######################################################
     ### Include app ciss_exhi | 190107 rc
     'ciss_exhi.apps.CissExhiConfig',
-
+    #######################################################
+    ### 
+    
 ]
 
 # REST_FRAMEWORK = {
