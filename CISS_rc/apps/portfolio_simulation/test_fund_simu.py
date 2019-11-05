@@ -20,29 +20,32 @@ todo：
 from fund_simulation import fund_simu
 fund_simu_1 = fund_simu("")
 
-file_path = "C:\\zd_zxjtzq\\rc_reports_cs\\行业量化_医疗保健\\"
-file_name_csv = "data_raw_w_rebal.csv"
+
 
 #################################################################################
 ### Choice 1：根据分析指标ana1~anaN，以及前期权重w_pre，计算调整后权重w_adj
 ### format1 : columns= ["date_ann","ana1","ana2","ana3","ana4","w_pre"]
 
-if_ana = 1
-if if_ana == 1 :
-    print("Use format1 : columns= [ date_ann , ana1 ana2 ana3 ana4 w_pre ]")
-else :
-    print("Adjust weight by *0.94/100; use format1 : columns= [ date_ann , w_pre ]")
-### format2 : ["date_ann","w_pre"]
-para_ana={}
-para_ana["ana1"] = 1 
-# notes：为了避免如工商银行这样的股票盈利能力巨大影响权重，需要减少“盈利能力”的权重
-para_ana["ana2"] = 0.5
-para_ana["ana3"] = 1 
-para_ana["ana4"] = 1 
+# file_path = "C:\\zd_zxjtzq\\rc_reports_cs\\行业量化_医疗保健\\"
+# file_name_csv = "data_raw_w_rebal.csv"
 
-df_out = fund_simu_1.weight_rebalance(para_ana, file_name_csv,file_path,if_ana )
+# if_ana = 1
+# if if_ana == 1 :
+#     print("Use format1 : columns= [ date_ann , ana1 ana2 ana3 ana4 w_pre ]")
+# else :
+#     print("Adjust weight by *0.94/100; use format1 : columns= [ date_ann , w_pre ]")
+# ### format2 : ["date_ann","w_pre"]
+# para_ana={}
+# para_ana["ana1"] = 1 
+# # notes：为了避免如工商银行这样的股票盈利能力巨大影响权重，需要减少“盈利能力”的权重
+# para_ana["ana2"] = 0.5
+# para_ana["ana3"] = 1 
+# para_ana["ana4"] = 1 
 
-asd
+# df_out = fund_simu_1.weight_rebalance(para_ana, file_name_csv,file_path,if_ana )
+
+# asd
+
 #################################################################################
 ### Choice 2：半年报累加权重计算,并剔除持仓比例小于 0.3%的，这里对应的值应该是 0.3
 '''
@@ -59,19 +62,22 @@ info:基金半年度报告：基金管理人应当在上半年结束之日起六
 办法：如果1、7月出现了某天更新，合计权重加上一次调整权重之和小于1.00，
     且股票单票最大权重小于上一次调整的平均权重，则判定为部分权重信息，此时进行加总计算权重。
 '''
-file_path = "C:\\zd_zxjtzq\\rc_reports_cs\\行业量化_医疗保健\\"
-file_name_csv = "data_raw_w_adj_anndate.csv"
 
-df_output=fund_simu_1.weight_adj_anndate( file_name_csv,file_path  )
+# file_path = "C:\\zd_zxjtzq\\rc_reports_cs\\行业量化_医疗保健\\"
+# file_name_csv = "data_raw_w_adj_anndate.csv"
 
-asd
+# df_output=fund_simu_1.weight_adj_anndate( file_name_csv,file_path  )
+
+# asd
+
 #################################################################################
-### Initialization 
+### Choice 3：将时间顺序的交易记录或事件记录转化成每一期的配置权重 
 
+file_path = "C:\\zd_zxjtzq\\rc_reports_cs\\机构研究_国家队\\大基金\\"
+file_name_csv = "rawdata_views_bigfund.csv"
+col_list = ["code","date","amount"]
 
-
-
-
+df_output=fund_simu_1.weight_list_event( file_name_csv,file_path,col_list   )
 
 
 

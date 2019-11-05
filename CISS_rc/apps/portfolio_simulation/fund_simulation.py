@@ -204,3 +204,70 @@ class fund_simu():
 
         return df_output
 
+    def weight_list_event(self,file_name_csv,file_path,col_list  ) :
+        ###  Choice 3：将时间顺序的交易记录或事件记录转化成每一期的配置权重 
+        ###  sicne 191105
+        
+        #################################################################################
+        ### Initialization 
+        import pandas as pd  
+        df_raw = pd.read_csv(file_path + file_name_csv   )
+        df_raw = df_raw.sort_values(by="date")
+
+        df_raw["weight"] = 0  
+        ### i= 0 means we have no previous portfolio 
+        i = 0  
+        done_index_list= []
+
+        for temp_i in df_raw.index :
+            if i == 0 :
+                temp_df = pd.DataFrame( df_raw.loc[temp_i,:] ).T                 
+                temp_df.loc[temp_i,"weight"] = 0.95 
+                df_output = temp_df
+                i= i+1 
+                print( temp_df )
+                done_index_list= done_index_list + [temp_i ]
+            else :
+                ### append event row to temp_df 
+                temp_date = df_raw.loc[temp_i,"date"] 
+
+                if temp_i in done_index_list :
+                    ### pass because we have done 
+                    pass ;
+                else :
+
+                    ### 如果同一日期有多个股票事件，则统一加入temp_df                
+                    ### 检查持仓中是否已经有这个股票，如果有，增加amount的金额
+                    temp_df_date = df_raw[df_raw["date"]== temp_date]  
+                    print("temp_df_date \n",temp_df_date )
+
+                    for temp_i2 in temp_df_date.index :
+                        temp_code = temp_df_date.loc[temp_i2,"code"]
+                        
+                        df_samecode = temp_df[ temp_df["code"] ==temp_code  ]
+                        print("df_samecode \n",df_samecode , len( df_samecode.index) )
+                        if len( df_samecode.index) ==1 :
+                            ### update amount and date 
+                            temp_df.loc[ df_samecode.index[0], "amount" ] =temp_df.loc[ df_samecode.index[0], "amount" ]+temp_df_date.loc[temp_i2,"amount"] 
+                            temp_df.loc[ df_samecode.index[0], "date" ] = temp_df_date.loc[temp_i2,"amount"]
+                        else :
+                            ### update only date
+                            temp_df = temp_df.append( temp_df_date.loc[temp_i2,:] )
+
+                        done_index_list= done_index_list + [temp_i2 ]
+                    ### 改变日期
+                    temp_df["date"] = temp_date 
+
+                    temp_df.loc[:,"weight"] = temp_df.loc[:,"amount"] /temp_df["amount"].sum()* 0.95 
+                    print(temp_df)
+                    ### debug
+                    # input2= input("Continue")
+                    
+                    ### append temp_df to df_output 
+                    df_output = df_output.append( temp_df, ignore_index = True  )
+
+        ### save output to csv file 
+        file_data_out = "weight_list_event_out.csv"
+        df_output.to_csv(  file_path + file_data_out ) 
+
+        return df_output
