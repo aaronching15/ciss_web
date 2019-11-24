@@ -73,19 +73,146 @@ info:基金半年度报告：基金管理人应当在上半年结束之日起六
 #################################################################################
 ### Choice 3：将时间顺序的交易记录或事件记录转化成每一期的配置权重 
 
-file_path = "C:\\zd_zxjtzq\\rc_reports_cs\\机构研究_国家队\\大基金\\"
-file_name_csv = "rawdata_views_bigfund.csv"
-col_list = ["code","date","amount"]
+# file_path = "C:\\zd_zxjtzq\\rc_reports_cs\\机构研究_国家队\\大基金\\"
+# file_name_csv = "rawdata_views_bigfund.csv"
+# col_list = ["code","date","amount"]
 
-df_output=fund_simu_1.weight_list_event( file_name_csv,file_path,col_list   )
-
-
-
+# df_output=fund_simu_1.weight_list_event( file_name_csv,file_path,col_list   )
+# asd
 
 #################################################################################
-### Initialization 
+### Choice 4：给定时期，对list中不同行业的股票分别计算标准分值，并控制异常值的影响
+'''
+功能说明：
+1，根据输入的指数成分，对于每个行业x：
+2，对于行业x内每个风格y：对
+3，对于风格y内每个指标z：计算标准分值，并谨慎去除异常值(最大值或三倍标准差)；加总合成y的分值
+注意：要按初始的no升序排列，要不会乱
+'''
 
+### vip input
+code_index = "000906.SH"
 
+# date_list= []
+# # temp_date=input("Type in date such as 20160301:   ")
+# for temp_y in ["2014","2015","2016","2017","2018","2019"]:
+#     for temp_m in ["0301","0601","0901","1201"] :
+#         temp_date = temp_y +temp_m
+        
+#         temp_date = input("type in date 20150301 :")
+        
+#         print( temp_date  ) 
+#         if temp_date not in ["20191201"] :
+#             date_list= date_list +[temp_date ]
+#             print("Check for code_index and temp_date"+code_index+"  "+temp_date+" :")
+#             file_path = "D:\\CISS_db\\db_bl\\data\\"
+#             file_path_input = "D:\\CISS_db\\db_bl\\data\\input\\"
+#             # file_name_csv = "in_estimates2weights_000906.SH_20140601.csv"
+#             file_name_csv = "in_estimates2weights_"+code_index +"_"+temp_date+".csv"
+#             col_name = "ind"
+#             ### paramater for x,y,z
+#             para_w= [0.2,0.4,0.4]
+#             # from x1	x2	y1	y2	z1	z2	ind，to  sum	x	y	z	
+
+#             df_output=fund_simu_1.indicators2score_1p(code_index,temp_date,file_name_csv,file_path,col_name ,para_w ) 
+
+#             ### 计算后验指标 P,Q,Omega from q_raw, omega_raw and df_output
+#             df_output["P"] = df_output["weight_ind1"]
+#             df_output["Q"] = df_output["q_raw"]
+#             df_output["Omega"] = df_output["omega_raw"]
+
+#             ### 计算先验部分:分行业的w_mkt from w_csi800 |、 ret_hist,sigma_hist在excel里有了
+#             col_name = "ind"
+#             df_output=fund_simu_1.weight2weight_sub2(df_output,col_name,code_index,temp_date,file_path   )
+
+#             ### 把下一步BL计算需要的列保存到对应文件 
+#             # code，ind，weight_sub=w_mkt，P=weight_ind1,Q=ret，Omega=sigma^2	                                       
+#             # TO  ：code，ind	w_mkt	，  	ret	sigma
+#             # in_stock_all_views_000906.SH_20140901 ||  D:\CISS_db\db_bl\data\input
+#             df_views = df_output.loc[:,["code","ind"]]
+#             # df_views["ind"] = df_output["ind"]
+#             df_views["w_mkt"] = df_output["weight_sub"]
+#             df_views["ret"] = df_output["Q"]
+#             df_views["w_view"] = df_output["weight_ind1"]
+#             import math
+
+#             df_views["sigma"] = df_output["Omega"].apply(lambda x: math.sqrt(x) )
+#             df_views.to_csv(file_path_input+ "in_stock_all_views_"+code_index+"_"+temp_date +".csv" ,encoding="gbk"  )
+#         asd
+
+# asd
+#################################################################################
+### Choice 5：根据给定行业或日期column，按细分组合计算细分类别里的权重
+'''
+功能说明：
+1，
+'''
+
+# file_path = "D:\\CISS_db\\db_bl\\"
+# file_name_csv = "weight2weight_sub.csv"
+# col_name = "ind"
+# para_w =0.1 
+# df_output=fund_simu_1.weight2weight_sub(file_name_csv,file_path,col_name ,para_w )
+
+# asd
+
+#################################################################################
+### Choice 6：导入季度调整的BL行业组合权重，生成Wind可以识别的季度调整文件
+
+# file_path = "D:\\CISS_db\\db_bl\\data\\output\\"
+# file_name_csv = "w_20190901_000906.SH.csv"
+
+# code_index="000906.SH"
+# df_output = fund_simu_1.weight2wind_pms(code_index)
+
+# asd
+
+#################################################################################
+### Choice 7：对所有行业，生成和保存 P_views的权重
+import pandas as pd 
+file_path_input = "D:\\CISS_db\\db_bl\\data\\output\\"
+
+code_index = "000906.SH"
+
+date_list= []
+# temp_date=input("Type in date such as 20160301:   ")
+for temp_y in ["2014","2015","2016","2017","2018","2019"]:
+    for temp_m in ["0301","0601","0901","1201"] :
+        temp_date = temp_y +temp_m
+        # temp_date = input("type in date 20150301 :")
+        print( temp_date  ) 
+        ### "20140301","20140601","20191201"
+        if temp_date not in ["20191201"] :
+            date_list =date_list+[temp_date]
+
+ind_list =["能源","材料","工业","可选消费","日常消费","医疗保健","金融","信息技术","电信服务","公用事业","房地产"]
+for temp_ind in ind_list :
+    temp_i = 0 
+    for temp_date in date_list :
+        ### 
+        df_views =pd.read_csv(file_path_input+ "output_esti2w_"+code_index+"_"+temp_date +".csv" ,encoding="gbk"  )
+        df_views = df_views[ df_views["ind"]==temp_ind ]
+        temp_df= df_views.loc[:,[ "code","weight_ind1" ] ]
+        temp_df["weight_ind1"] = temp_df["weight_ind1"]/temp_df["weight_ind1"].sum() *95
+        
+        temp_df.columns = ["证券代码","持仓权重" ]
+        temp_df["调整日期"] = temp_date
+        temp_df["成本价格" ] ="" 
+        temp_df["证券类型"] = "股票"
+
+        if temp_i <1 :
+            df_ind= temp_df
+        else :
+            df_ind= df_ind.append(temp_df,ignore_index=True)
+        
+        temp_i=temp_i+1
+    ### save to csv file 
+    # path_temp= "D:\\CISS_db\\db_bl\\data\\output\\PMS_view\\"
+    path_temp= "D:\\CISS_db\\db_bl\\data\\output\\191115update\\"
+    file_temp = "PMS_bl_000906.SH_"+ temp_ind + "_20140901_20190901"+".csv"
+    df_ind.to_csv(path_temp+file_temp,encoding="gbk"  )
+
+asd
 
 
 

@@ -20,9 +20,13 @@ def port_single(request):
 def docs_index(request):
 def docs_index(request):    
 '''
-
+###########################################################################
+### Initialization
 from django.shortcuts import render
 from django.http import HttpResponse
+
+### Import haystack
+from haystack.views import SearchView
 
 ### to exhibit static html file 
 from django.shortcuts import render_to_response
@@ -42,14 +46,12 @@ def json_index(request):
     return render_to_response("ciss_exhi/json/tree_stra_s.json")
 
 ###########################################################################
-### Index of data list  | 数据清单
+### Index of data list  | 数据主页，包括主要数据库链接
 def data_index(request):
     #  
     return render_to_response("ciss_exhi/data/index_data.html")
 
-
-
-
+### Index of data log  | 数据日志
 def data_log(request):
     '''
     目前需要更新的信息：
@@ -67,18 +69,24 @@ def data_log(request):
     temp_df = pd.read_csv(path_data+"rc_data_log.csv",index_col="Unnamed: 0")
     context["data_log"] = temp_df.T()
     ### columns = "table_name","symbol","last_update","file_name","file_path"
-
-
-
-
-
-
-
-
-
-
-
     return render_to_response("ciss_exhi/data/data_log.html",context )
+
+### Index of data list  | 数据清单
+def data_db_wind_wds(request):
+    # last | since 191118  
+    return render_to_response("ciss_exhi/data/db_wind_wds/log_191118.html")
+
+### 数据库学习的相关知识
+def data_study_postgresql(request):
+    # last | since 191123 
+    return render_to_response("ciss_exhi/data/knowledge/data_study_postgresql.html")
+
+###########################################################################
+### Index of event list  | 事件主页，包括主要事件库链接
+def event_index(request):
+    #  
+    return render_to_response("ciss_exhi/event/index_event.html")
+
 ###########################################################################
 ### Index of strategy list 
 ### working on test strategy file
@@ -87,14 +95,20 @@ from .models import Strategy,Portfolio
 import pandas as pd 
 
 def stra_index(request):
+    ### last 191119 | since 181101
     ### define latest strategy list  
     latest_stra_list = Strategy.objects.order_by('-stra_date_last')[:5]
     ### todo define core strategy list 
-    core_stra_list = Strategy.objects.filter(stra_supervisor='du')
+    core_stra_list_gy = Strategy.objects.filter(stra_supervisor='du')
+
+    ### todo define core strategy list 
+    core_stra_list_cs = Strategy.objects.filter(stra_client='cs')
+    
     # 上下文(context)。这个上下文是一个字典，它将模板内的变量映射为 Python 对象。
     # type of context is  <class 'dict'>
     context = {'latest_stra_list': latest_stra_list}
-    context["core_stra_list"]= core_stra_list
+    context["core_stra_list_gy"]= core_stra_list_gy
+    context["core_stra_list_cs"]= core_stra_list_cs
     # render() 「载入模板，填充上下文，再返回由它生成的 HttpResponse 对象」
     return render(request, 'ciss_exhi/strategy/index_stra.html', context)
 
@@ -107,13 +121,38 @@ def stra_single(request):
     # create page for single strategy 
     # last | since 190111
     # todo 
-    context={"info":"none"}
-
+    context={"info":"none"} 
 
     return render(request, 'ciss_exhi/strategy/stra_single.html', context)
 
 #####################################################################
 ### working on personal strategy
+#####################################################################
+### strategy at csfunds  | author rC 
+@csrf_protect
+@requires_csrf_token
+@csrf_exempt
+def stra_cs_index_enhance3(request):
+    ### 设计领导Feng要求和自选的3个指数增强策略：csi300，csi500，中国1000-csi800
+    # last | since 191119
+    # todo 
+    context={"info":"none"} 
+
+    return render(request, 'ciss_exhi/strategy/stra_cs_index_enhance3.html', context)
+
+@csrf_protect
+@requires_csrf_token
+@csrf_exempt
+def stra_cs_institute_insurance_holdings(request):
+    ### 保险资金重仓股跟踪和制作模拟组合
+    # last | since 191121
+    # todo 
+    context={"info":"none"} 
+
+    return render(request, 'ciss_exhi/strategy/stra_cs_institute_insurance_holdings_1911.html', context)
+
+
+
 #####################################################################
 ### Active benchmark model  | author rC 
 @csrf_protect

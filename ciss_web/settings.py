@@ -55,7 +55,9 @@ INSTALLED_APPS = [
     ### Include app ciss_exhi | 190107 rc
     'ciss_exhi.apps.CissExhiConfig',
     #######################################################
-    ### 
+    ### todo items 
+    # haystack要放在应用的上面
+    'haystack',
     
 ]
 
@@ -110,7 +112,18 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    },
+    ############################################
+    ### Add a second db: Postgresql
+    "ciss_db":{
+        'ENGINE':'django.db.backends.postgresql_psycopg2',
+        'NAME':'ciss_db',# 数据库名字
+        'USER':'ciss_rc',# 登录用户名
+        'PASSWORD':'ciss_rc',
+        'HOST':'127.0.0.1',# 随便设的,127.10.0.1
+        'PORT':'5432', # 随便设的，ideal 178
+    },
+
 }
 
 
@@ -161,8 +174,17 @@ STATICFILES_DIRS = (
     os.path.join(os.path.join(BASE_DIR, 'static')),
 )
 
-
-
+###########################################################################
+### 3rd party modules | since 191122
+###########################################################################
+### 安装搜索插件 haystack | 
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+        'PATH': os.path.join(os.path.dirname(__file__), 'whoosh_index'),
+    },
+    
+}
 
 
 

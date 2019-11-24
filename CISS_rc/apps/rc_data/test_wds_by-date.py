@@ -21,7 +21,8 @@ MENU :
 ### 按季度末日期 F_PRT_ENDDATE 下载 中国共同基金投资组合——资产配置[ChinaMutualFundAssetPortfolio]
 ### 按公告日 公告日期 ANN_DT 下载 中国共同基金资产负债表[CMFBalanceSheet]
 
-
+todo：
+1,数据管理
 
 '''
 #################################################################################
@@ -35,6 +36,8 @@ wind_wds1.print_info()
 
 import pandas as pd 
 import numpy as np 
+
+
 
 #################################################################################
 ### Given table name 

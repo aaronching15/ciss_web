@@ -1,0 +1,21 @@
+col_name_CN,col_name,example,note
+对应表名称,name_table,AIndexEODPrices,表格名称
+更新频率,freq,day,对于按发布日期的数据，用day
+关键词_发布日期,keyword_anndate_CN,交易日期,
+key_word_anndate,keyword_anndate,TRADE_DT,
+关键词1,keyword1_CN,,发布日期之外，首先关键词，例如按股票代码获取的表格
+key_word1,keyword1,,
+关键词2,keyword2_CN,,
+key_word2,keyword2,,
+关键词3,keyword3_CN,,
+key_word3,keyword3,,
+关键词4,keyword4_CN,,
+key_word4,keyword4,,
+notes,notes,,
+是否第一次下载数据,if_1st_download,0,例子：0:表示下载过0次，1表示下载过0次
+数据开始日期,date_begin,20050101,
+数据完整的最新日期,date_last_complete,20050110,若050101开始下载数据，到150101之间按发布日期算是完整的；但当前时间可能是191101
+数据最新更新日期,date_lastupdate,20191115,若050101开始下载数据，到150101之间按发布日期算是完整的；但也有161203，170804等片段日期，取最后一个有日期的值。当前时间可能是191101
+数据是否完整,if_date_complete,0,判断按最新更新日期算数据是否完整：1：已有；0：未下载；2：当日无数据；
+下载地址,data_source,wds_oracle,如果是wind本地数据库：wds_oracle;如果是wind-api: wind_api_py
+数据输出格式,output_type,csv,取值例子：csv、pgsql、h5

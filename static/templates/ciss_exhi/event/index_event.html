@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+<meta charset="UTF-8"> <!-- for HTML5 -->
+<!-- The block items for this base html file is: {nav_sub, left_frame,menu,content } -->
+
+
+{% block nav_sub %}
+
+    <a id="a_nav" href="./event/event_api.html">事件接口 | event API</a> >>
+    <a id="a_nav" href="./event/event_api.html">事件库 | eventbase </a> >>
+    <a id="a_nav" href="./event/event_api.html">自定义事件 | Custom event</a> >>
+    <br>
+    <a>Event type：</a>
+    <a id="a_nav" href="./temp/log_macro.html">宏观大事 | Macro Event</a> >>
+    
+    
+{% endblock nav_sub %}
+
+{% block left_frame %}
+
+
+
+
+{% endblock left_frame %}
+
+{% block menu %}
+
+
+{% endblock menu %}
+
+
+{% block content %}
+   
+<h3>目标、功能 | </h3>
+<hr>
+<p>跟踪宏观经济、股票市场、债券市场、资产管理、基金产品等事件。
+例如宏观经济领域的重大事件，或者重要个股的 </p>
+
+
+<h3>事件库 | eventbase</h3>
+<hr>
+<p>{......} </p>
+
+<h4>1,关键事件梳理：宏观政治经济事件  |  </h4>
+<p>
+todo:参考 东方证券：朱剑涛的A股大事记梳理 <br>
+例：
+1，事件日志文件及位置：./db_wind_wds/log_191118.html
+<br>
+2,2020年，source：兴业证券
+1，20191212，美国12月FOMC会议,美联储货币政策，美国利率
+2，20200101，中央一号文件发布
+3，2020-323，FTSE纳入A股，第三批。
+
+</p>
+
+<h4>2,关键事件梳理：量化研究跟踪  |  </h4>
+<p>
+todo:量化研究方向和体系梳理 <br>
+例：
+1，事件日志文件及位置：./db_wind_wds/log_191118.html
+<br>
+2,2020年，source：兴业证券
+1，20191212，美国12月FOMC会议,美联储货币政策，美国利率
+2，20200101，中央一号文件发布
+3，2020-323，FTSE纳入A股，第三批。
+
+</p>
+
+<h3>自定义事件 | Custom Data</h3>
+<hr>
+<p>{......} </p>
+
+{% endblock content %}
+

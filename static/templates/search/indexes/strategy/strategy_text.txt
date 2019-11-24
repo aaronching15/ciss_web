@@ -1,0 +1,4 @@
+{{ object.stra_name }}
+{{ object.stra_intro }}
+{{ object.stra_link }}
+{{ object.stra_link }}

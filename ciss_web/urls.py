@@ -19,8 +19,14 @@ from django.urls import path
 ##################################################################################
 ### include for app ciss_exhi
 from django.urls import include
+from . import views
 
 urlpatterns = [
+    ### Define index from ciss_exhi 
+    path('index.html', views.index, name='index'),
+    
+    
+    ### admin page 
     path('admin/', admin.site.urls),
     ### For app ciss_exhibition
     path('ciss_exhi/', include("ciss_exhi.urls") ),

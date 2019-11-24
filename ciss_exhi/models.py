@@ -74,13 +74,15 @@ class Strategy(models.Model):
     last | since 190114
     '''
     ### 包括了策略的生命周期：设计阶段，模型阶段，模拟实盘，实盘，...
-    stra_name = models.CharField(max_length=200,default="rc_abm_01")
+    stra_client = models.CharField(max_length=200,default="cs")
+    stra_name = models.CharField(max_length=200,default="cs_name")
     stra_code = models.CharField(max_length=200,default="port_symbol_01")
     stra_intro = models.CharField(max_length=200,default="intro")
-    stra_target = models.CharField(max_length=200,default="price_or_return")
+    stra_target = models.CharField(max_length=200,default="return")
     stra_link = models.CharField(max_length=200,default="stra_abm_rc")
 
     stra_report_type = models.CharField(max_length=200,default="funda")
+    
     stra_hier_1 = models.CharField(max_length=200,default="hier_1")
     stra_hier_2 = models.CharField(max_length=200,default="hier_2")
     stra_hier_3 = models.CharField(max_length=200,default="hier_3")
@@ -89,8 +91,18 @@ class Strategy(models.Model):
 
     stra_author = models.CharField(max_length=200,default="rc")
     stra_supervisor = models.CharField(max_length=200,default="rc")
-    stra_client = models.CharField(max_length=200,default="gy")
+    ### Links to directory or links
+    ## 策略文件链接,策略数据链接,策略展示链接,策略文件目录,策略数据目录
+    link_stra_files = models.CharField(max_length=200,default="link to startegy related html")
+    link_stra_data = models.CharField(max_length=200,default="link to startegy data html")
+    link_stra_exhi = models.CharField(max_length=200,default="link to startegy exhibition html")
+    dir_stra_files = models.CharField(max_length=200,default="G:\\zd_zxjtzq\\rc_reports_cs\\")
+    dir_stra_data = models.CharField(max_length=200,default="G:\\CISS_db\\data_applications\\")
 
+    ###########################################
+    ### 策略研究开始日期
+    stra_date_begin = models.DateTimeField('Date Start',default=timezone.now)
+    ### 策略发布日期
     stra_date_pub = models.DateTimeField('Date published',default=timezone.now)
     stra_date_last = models.DateTimeField('Last update',default=timezone.now)
     ### notes:下边这种是Django在migrations里的标准写法。

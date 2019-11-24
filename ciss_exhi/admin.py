@@ -33,8 +33,11 @@ admin.site.register(Membership)
 # 模型管理器
 
 class Stra_Admin(admin.ModelAdmin):
-    list_display=('stra_name', 'stra_code', 'stra_hier_1', 'stra_hier_2', 'stra_hier_3', 'stra_hier_4','stra_author',"stra_supervisor","stra_date_last","stra_link" )
-     
+    ### Before 20191118
+    # list_display=('stra_name', 'stra_code', 'stra_hier_1', 'stra_hier_2', 'stra_hier_3', 'stra_hier_4','stra_author',"stra_supervisor","stra_date_last","stra_link" )
+    ###
+    list_display=('stra_name', 'stra_intro', 'stra_hier_1', 'stra_date_begin',"stra_date_last","stra_link","dir_stra_files","dir_stra_data" )
+
 #在admin中注册绑定
 admin.site.register(Strategy, Stra_Admin)
 

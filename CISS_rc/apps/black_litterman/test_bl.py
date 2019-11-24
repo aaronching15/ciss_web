@@ -3,6 +3,8 @@ __author__ = " ruoyu.Cheng"
 
 '''
 ===============================================
+Notes:20191114开始功能转移到 test_bl_rc.py,bl_rc.py,
+
 需求：
 实现black litterman模型
 
@@ -12,8 +14,6 @@ Function:
 功能：
 
 todo:
-
-Notes:
 ##############################################
 变量：
 Blended ecpected return miu
@@ -417,7 +417,7 @@ sharp_ratio = miu_mkt/std_mkt
 ###例： sharp= 0.2 , std=0.013, 如果std日波动率不乘100转化成百分比的单位，delta算出来的值15.35 
 # sharp_ratio  0.2005808082542644
 # value of delta is  0.1535597734348625
-delta = sharp_ratio/ (std_mkt  )
+delta = sharp_ratio/ (std_mkt )
 
 print("miu_mkt ", miu_mkt )
 print("std_mkt ", std_mkt )
@@ -708,7 +708,7 @@ if np.linalg.matrix_rank( cov_bl2 ) ==len(mu_asset_df) :
 # max  ret_port/std_port  equals to min -1*ret_port/std_port
 
 obj_fun2 = lambda x: -1* ( math.pow( (np.matmul( mu_bl,x)+1),len_date) -1) 
-cons2 = ({'type': 'ineq', 'fun': lambda x: -1*np.sum(x) +1 },
+cons2 = ({'type': 'ineq', 'fun': lambda x: -1*np.sum(x) +0.95 },
         {'type': 'ineq', 'fun': lambda x:  -1*np.matmul( x,np.matmul(cov_bl2 ,x) )+ var_bench  } ) 
 
 # obj_fun2 = lambda x: -1* (np.cumprod( np.matmul( ret_asset_np,x).sum()+1 )[-1]-1) /(np.sqrt( np.matmul( x,np.matmul(cov_asset_df,x) ) ) ) 

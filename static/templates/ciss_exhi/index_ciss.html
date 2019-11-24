@@ -31,67 +31,329 @@
 {% block content %}
     <section>
     <hr>
-    <div id="main" style="width: 800px;height:1200px;"></div> 
-    <script type="text/javascript" >
-    //横版有利于展示所有策略，竖版情况对末端策略数量有限制，过多会有显示不全的问题。
-    var myChart = echarts.init(document.getElementById('main'));
-    myChart.showLoading();
+    <h3>TODO List1: 代办事项,update 191122</h3>
+    <ol>
+    <li>2019Q4 | CISS_db\stock主观观点数据：定期维护个股的标准化预测数据，并引入指标和策略计算；目前还需要在models.py增加 指标indicator 类。</li>
+    <li>201911，指数增强和BL配置；用更大比例的观点，设置评估期；评估是因为市场还是策略因素</li>
+    <li>201911，基本面量化；行业基本面：1，医药的剩下2个组合做出来；2，tmt行业个性化指标提取{例如个股的特殊产品竞争打分};3，科创板和科技增强组合；4，特斯拉产业链；5，大消费；6，银行和非银金融</li>
+    <li>201912，拆基仿真：8*3个公募基金、私募、保险。 </li>
+    <!-- <li><a href="G:/zd_zxjtzq/ciss_web/CISS_rc/apps/rc_self/log_rC_1911.html">日志log_1911</a> >>  </li> -->
+    <li>从新建策略开始，把逻辑、研究报告，数据、指标、策略、组合都放进网页和数据库里方便跟踪。  </li>
+    <li>临时的信息和想法：“rc_基本面边际信息.xlsx”，C:\zd_zxjtzq\rc_reports_cs\</li>
+    <li>策略html里加上对应的wind-PMS组合信息；对2019年跟踪的组合做一个汇总。 </li>
+    </ol>
+    <hr>
+    
+    <h3>策略任务：</h3>
+    <ol>
+    <li><a href="./ciss_exhi/strategy/stra_cs_index_enhance3.html">cs\feng\3个指数增强组合设计</a> >>  </li>
+    <li>数据研究，html，数据库，数据位置</li>
+    <li>模型</li>
+    <li>展示，反馈</li>
+    </ol>
+    <hr>
 
-    $.getJSON('./json/tree_stra_s.json', function (data) {
-        myChart.hideLoading();
-        echarts.util.each(data.children, function (datum, index) {
-            index % 2 === 0 && (datum.collapsed = true);
-        });
+    <h3>策略开发过程：</h3>
+    <ol>
+    <li>想法、理论、草稿，html链接文件夹</li>
+    <li>数据研究，html，数据库，数据位置</li>
+    <li>模型</li>
+    <li>展示，反馈</li>
+    </ol>
 
-        myChart.setOption(option = {
-            tooltip: {
-                trigger: 'item',
-                triggerOn: 'mousemove'
-            },
-            series: [
-                {
-                type: 'tree',
+    <h3>TODO List1: 代办事项2：短期不那么重要</h3>
+    <ol>
+    <li>数据：增加网页，提取wind-wds数据维护表格，跟踪数据表格的更新情况 </li>
+    <li>  </li>
+    </ol>
+    <hr>
 
-                data: [data],
+    <h3>main directory files：</h3>
+    <ol>
+    <li>system: .\ciss_web\ </li>
+    <li>strategy files: .\rc_reports_cs\  </li>
+    <li>data4ciss : .\CISS_db\  </li>
+    <li>data_wind : .\db_wind\  </li>
+    <li>data_others : .\db_dzh_dfw\,   </li>
+    <li>python modules : .\py_modules\,   </li>
+    <li>3rd party reposts: .\TOUYAN\,   </li>
+    <li>sci. papers: .\paper\,   </li>
+    </ol>
 
-                top: '1%',
-                left: '7%',
-                bottom: '1%',
-                right: '18%',
-
-                symbolSize: 7,
-
-                label: {
-                    normal: {
-                        position: 'left',
-                        verticalAlign: 'middle',
-                        align: 'right',
-                        fontSize: 11
-                    }
-                },
-
-                leaves: {
-                    label: {
-                        normal: {
-                            position: 'right',
-                            verticalAlign: 'middle',
-                            align: 'left'
-                        }
-                    }
-                },
-
-                expandAndCollapse: true,
-                animationDuration: 550,
-                animationDurationUpdate: 750
-                }
-            ]
-            });
-        }) 
-    </script>
-
-
+    <hr>
+    <h3>Last：</h3>
 
     </section>
+
+<section>
+    <h3>策略研究任务，近期课题：</h3>
+    <h4>1，BL资产配置课题：  </h4>
+    <p>
+    1.1，问题：国家平准基金投资策略设计：保险资金/国资/社保养老等大资金组合管理研究：国家队角度的最优投资策略、初始规模100e甚至500e更高，设置组合调整的成交价和调整金额的负相关关系。————好处是同规模的基金数量急剧减少，可以更好地进行比较
+        file_name =  国家队重仓流通股_19q2.xlsx
+        file_path = C:\zd_zxjtzq\rc_reports_cs\机构研究_国家队
+    1.5，观点：公募基金除了基金持仓，还可以看官网和财富号里基金经理访谈观点，
+        1.5.1，易方达：http://query2.efunds.com.cn/view?oid=morenews&news_type=-38.0
+    
+    1.2，宏观经济指标：月度跟踪；
+        file：20191008_海通证券*量化投资*冯佳睿 郑雅斌 姚石*大类资产择时及行业观点月报(2019.10).pdf
+        path：G:\TOUYAN\宏观macro
+        指标-社融：“盛松成：社会融资规模指标的意义究竟何在”，2010开始披露。
+    1.3，国有资本如何实现维护实体企业经营稳定、风险控制、投资收益三者的有机结合。
+    1.4，衍生课题：
+    1.4.1，复杂系统-群体博弈-演化；王龙是长江学者，这个topic得到国家自然科学二等奖；
+        path:F:\1_paper\复杂网络上的演化博弈_王龙 ;
+    </p>    <br>
+
+    <h4>2，行业基本面指标梳理：金融行业；将部分行业量化策略组合备份至wind里跟踪</h4>
+    <p>
+    2.6，医疗保健行业：选择基金，选择行业研究报告；|idea：找行业研究员合作。
+    2.5，行业顺序：医疗保健、大消费、现代服务业、金融
+    2.4，17,行业龙头锚改进
+    2.3，MSCI组合：跟踪主要海外资产价格，特别是欧洲+英国股市，美股、美国中概股、香港大小盘��主要分类是大小盘，价值/成长。——半年或季度调整一次。
+    2.1，主动基准锚：目标比行业做的好，作为新的基准，方便领导跟踪；
+    2.2，产品方案要完善，组合分为季度调整和季度内周度调整，做好产品的调整记录；
+    2.5，notes：vip，对财务数据不确定性、管理层不确定性、行业经营不确定性进行打分！~另外还要关注股东不确定性-是否要减持。
+    2.7，201911，华为产业链产品维护：参考pdf：20190916-国泰君安-国泰君安总量研究：复盘苹果产业链黄金十年，看华为产业链投资机会-000001.pdf
+    </p><br>
+
+    <h4>4，事件驱动：投资机会组合：</h4>
+    <p>
+    4.4，量化、智能机器人主题的深度研究报告
+    4，1101，发现“员工人均薪酬”和公司股价趋势有强相关性，特别是公司通常经营转好时才会增加员工薪酬；人均薪酬/人均利润主要受行业影响，永辉的数据就很差，银行都很好看。
+        相关的栏目：“现金流表：支付给职工及为职工支付的现金”
+    1，港股破净&行业内重要公司& AH：中信建投6066，中国人寿，中国人保，东方证券3958，郑州银行6196；海通证券6837；新华保险1336
+    2，负面因素：港股龙头有配置溢价，非龙头长期估值压制但长期会证明自己。
+    3，看20-21预测EPS，低于8；看现金流。
+    4，中国还没有娱乐经济学教材，相关领域有：地下经济学、色情经济学、酒店业经济学、传媒经济学。        
+        4.2，如何和现有的网红经济区分；网红解决的是广度，浅层娱乐，soft-porn；
+        4.1，中层hard-porn视频idea：境外porn的拍摄，注入国产化元素或艺术视频；例如白男国女、白女国男等；难点是如何合规？
+        4.3，深层需求：sex toy、sex hotel等。
+        4.4，路线图：0，开始跟踪资讯，研究和规划；1，21年中境外拍一部，这一行摄影师、社团天然有优势；2，提高收入
+        4.5，为什么海外没有中国版的pornhub。国内有消费能力的人如何支付？
+    5，A股市值提升主要靠银行股，做一个银行股估值增长的策略和组合；
+    6，医药股即将迎来下跌，做一个策略。   </p><br>
+
+    <h4>3，明星主动基金/主动基金经理跟踪组合；  </h4>
+    <p>
+    3.0，下一个主动基金经理：曹名长？| 新生代牛人找一个from二鸟说、交银施罗德；易方达中小盘-张坤。
+
+    3.1，业务拟合模块——需要行业指数or龙头锚作为构建组件
+    3.2首期跟踪基金经理：冯柳-高毅资产、林波-滚雪球、胡鲁滨-大禾&易方达
+        zhong
+        file：胡鲁滨-顺鑫农业-去年底胡鲁滨以大禾掘金5号全部4亿资金，先预埋伏顺鑫农业1.6亿左右。一季度拉高。。。||wind-F9里看，大禾是2017H2+18H1进入顺鑫农业的，和分析的非常匹配。
+        source：http://guba.eastmoney.com/news,000860,785199222.html 
+        file：胡鲁滨-现金流
+        source:http://www.360doc.com/content/18/0810/10/29856588_777163695.shtml
+        file：滚雪球投资林波：炒股低买高卖很轻松 2019年满仓搞
+        source:http://finance.sina.com.cn/money/smjj/2018-12-07/doc-ihprknvt6274898.shtml
+        key：股神巴菲特认识芒格之后，高位就不空仓了，一直是重仓。所以他认识芒格之前复利是26%，认识之后复利剩13%。后来更糟糕，股神巴菲特又认识了约翰伯格，约翰伯格既不选时也不选股，天天满仓买所有指标股。指数基金大发展主要赢在销售，收费极低，薄利多销，巴菲特现在很推崇约翰伯格，但约翰伯格复利也只有9%
+        file：冯柳“机构化”后的首次大考
+        source:https://xueqiu.com/2994748381/119201051
+        key:东方财富网的统计，高毅邻山1号远望基金在2018年三季度末的A股持股市值约为36.55亿元，考虑到其中的大部分股票是逆向投资的，披露时盈利的很少，再加上很可能还有一些没有进入前十大流通股股东的标的，以及冯柳本人无论牛熊几乎满仓操作的习惯，高毅邻山1号在A股的规模大概在40亿-50亿之间。因此，到2018年三季度末，高毅邻山1号远望基金在A股持有的医药股仓位占其A股总体仓位的比例大概在40%-50%之间 
+        file：冯柳的高毅邻山
+        source:http://blog.sina.com.cn/s/blog_9dac06ac0102zg1p.html
+        key:冯柳把自己的投资风格总结为：不择时、不对冲、不用杠杆、不做空、不做复杂的衍生品，始终保持高仓位单边做多，逆向为主，赔率优先情况下的分散潜伏，以及在概率与赔率统一时的重点突破。在具体操作中，首先要满足满仓原则。冯柳解释是，人类社会要发展，资本必然要获得回报，长期拿着现金肯定亏，长期看股权投资肯定回报更大，要用满仓来抵御系统上行时的踏空风险，用选股来抵御系统下行的风险。高毅邻山1号基金的仓位到底有多重？从渠道了解的信息显示，规模近百亿的基金，除了调仓阶段偶尔持有现金以外，绝大部分都是满仓运行。对于2018年的收益来源，在半年前接受上证报记者专访时，冯柳透露关注了能源、化工、公用事业、零售、医药、汽车、设备制造、原料中间体、互联网等。上述行业都不是他此前做过的行业，原因是他熟悉的行业从2017年开始就处于中高位，市场已经演绎过了。冯柳喜欢没有被市场演绎过的品种
+        file：邱国鹭:价值投资宁数月亮不数星星 ||
+        source:http://finance.sina.com.cn/focus/duihuasimuqgl/
+        key:高毅资产董事长邱国鹭认为，真正好��股票是能在低点和黑天鹅的时候加仓的。“我们不参与主题炒作，因为那种都是博弈的钱。我们做基本面的研究，不去做那种割韭菜的钱。”同时，邱国鹭表示，坚持价值投资，宁数月亮不数星星，所谓“月亮”，是指在门槛较高的行业里，经过激烈的市场竞争与行业洗牌后笑到最后的企业。
+        path:C:\zd_zxjtzq\rc_reports_cs\主动基金仿真研究\私募基金_wind导出数据
+        file:阳光私募基金净值表现_20191009.xlsx
+        file：冯柳眼中的术
+        source https://xueqiu.com/1242628991/123119765
+        key 冯柳作为一名草根出身的大师，厉害之处在于他的完整体系，这其中有对价值的系统理解、有对A股市场独特的认知、有不贴标签的包容并收、有资金体量增大后不断进化的模式等。任何方法都具有相对性，不可能普泽大众。所有讲述投资赚钱技巧的书都犯了一个致命的错误：以为自己是在跟上帝博弈，而现实是读者之间在博弈。上帝怎么可能在保佑追击者的同时，又保佑被追击者？
+        file 散户出身基金经理冯柳：股市里最不值钱的是时间
+        source https://baijiahao.baidu.com/s?id=1608284284696013653&wfr=spider&for=pc
+    </p><br>
+
+    <h4>其他课题</h4>
+    <p>5，基准研究；寻找公募基金地隐含基准和隐含alpha。
+    topic：Brinson方法地改进。
+    source：20190510_海通证券*金融工程专题*冯佳睿 吕丽颖 吴其右*偏股类公募基金的隐含基准挖掘探究.pdf
+
+    6，ETF研究
+    6.1，ETF与美股：“现象是，太多人把他们的资产投入到ETF基金，导致ETF基金已经成为了政治正确，谁要是破坏了指数的大好局面，就得承受巨大的压力，甚至下台走人。无论是川普还是鲍威尔，都对指数战战兢兢，以维护指数作为自己的政策核心目标之一。去年底美股稍微一下跌，川普在贸易战中怂了，鲍威尔吓得赶紧改口，说要宽松。，鲍威尔时不时的那些鹰派表态，都是在阻拦投资者的疯狂，用数次中小规模下跌，防止大规模崩盘。然后用时间换空间，通过几年的经济发展，消化掉美股的高估值，使ETF的内在投资价值恢复到一个合理状态。这就是市场与美联储之间的博弈。中国的市场与央行之间也存在这种博弈”
+        comments:用投资影视剧说明了最求热点“因子”是没有用的。
+        file：Michael Burry看空ETF的逻辑解读
+        source：https://xueqiu.com/4097105650/133215571?page=1
+    8,群智算法：
+    8.1，群体智能优化算法之粒子群优化算法 | source https://blog.csdn.net/o4dc8ojo7zl6/article/details/78849676
+    8.2，人工蜂群算法（Artifical Bee Colony） | https://blog.csdn.net/u013927464/article/details/82722471
+    8.3，教程 | 用人工蜂群算法求解k-分区聚类问题 | http://www.sohu.com/a/235071060_129720
+    8.4 | http://www.sohu.com/a/127524196_465915
+9，CS工作改进：
+    9.1，制定模拟组合管理办法，研究员日初发送交易指令——交易员记录并填写日均价，统一存档——风控测算收益归因
+    </p><br>
+
+    <h4>CISS网站维护</h4>
+    <p>内容：量化体系梳理和研究进度跟踪：量化体系梳理和研究进度跟踪：量化产品和研究方向跟踪表格，看看产品、策略、数据、人员等方面和市场前沿的差异情况。
+    1，ciss轻量化网站架构设计；admin管理数据模型。参考kaggle网站模式，让数据可以直接观察和下载
+    2，vue构建ciss网站admin和前端 
+    3，不断跟踪新的、好用的Django网站相关开源插件，模块。    </p><br>
+
+
+
+</section>
+
+
+<section>
+    
+    <h3>数据准备</h3>
+    <p>
+    需要的数据——简要版本
+    1，股票基础和配置信息
+    2，股票行情信息：日行情够了，但是需要成交金额    
+    3，股票财务信息：财务报告    
+    4，股票事件信息：财务预告、分红送配等    
+    5，股票预测数据：滚动预测、一致预测等    
+    6，基金持仓：
+        季度报告披露信息：十大重仓、行业分布、交易的股票等
+        ETF申购赎回清单：每个季度末抓取一次即可。    
+    7，债券主体信息：企业角度、企业股东角度、地方政府角度；评级     
+    N，数据保存方式：
+        1,按“id_wind表名_关键词_时间”保存成csv文件
+        2,按照wind大表，确定表格大小设计维护表格，定期更新整个表格；
+    </p>
+    <h3>指数和基金研究</h3>
+    <ol>
+    <li>参考MSCI研究报告: path= D:\TOUYAN\MSCI_海外指数机构reports </li>
+    <li>参考ETF.com 介绍主流ETF品种、交易和投资策略。
+    每周ETF流入  https://www.etf.com/etfanalytics/etf-fund-flows-tool</li>
+    <li>iShares：
+    发达市场ETF https://www.blackrock.com/ca/individual/en/products/239697/ishares-msci-world-index-etf    
+    全球配置 https://www.blackrock.com/us/individual/products/227675/blackrock-global-allocation-class-a-fund
+    多资产ETF  https://etfdb.com/etfs/asset-class/multi-asset/
+    Alpha ETF：https://www.etf.com/channels/alpha-seeking-etfs</li>
+    <li>ETF准备，找一个较为复杂的ETF练手，比如中证800，在测试环境中操作。把相应的测试匹配脚本写出来
+
+    </li>
+    </ol>
+
+    <h3>行业配置和基本面因子择时：基于MSCI指数体系</h3>
+    <p>sub_topic:MSCI指数变动梳理及投资策略(三) 投资策略研究：策略建模、模拟组合实证。</p>
+    <ol>
+    <li>数据准备：</li>
+
+    <li>2，理论模型和系统架构
+    2.1，样本空间，参考MSCI：{1，全球覆盖，跟踪海外不同市场、行业、因子多维分类，做大类资产配置；
+        2，必须配置海外中国股票，单列也行；
+        3，参考各类公开披露持仓的ETF、基金持仓（如Top50主动股票基金） }</li>
+    <li>
+    2.2，分析指标：{ 0，基准：csi300，msci268为基准；
+        1，行业和个股视角策略：产品护城河/壁垒/相对毛利率；
+        2，基本面：细分龙头、业绩稳定、新项目
+        3，交易面：外资是否会买？靠近指数成分门槛的好股票，如1908时中顺洁柔不属于csi300或500，可能只是因为指数每次20%调整比例的问题需要再等等   }
+        4，风格面：大盘股角度：中国50增强：咬住top20，在剩余股票中寻找超额收益，MSCI的top10权重明显大于csi300      ，那我们是否可以更集中？ ；中小盘角度：分散化掘金，追求规模、收益、低回撤
+        5，因子计算参考MSCI和中证公开的算法
+        6，定量数据准备：wind；7，定性数据：中美核心权重股，未来个股基本面特征，大事件等
+        8，机构行为跟踪指标：买了啥，卖了啥，准备买啥；被动主要看计算规则和实施日前一段时间的抢跑，主动看投资管    理人偏好，行为金融：强者恒强和某种对标 }
+        9，行业锚个股:行业的龙头锚定个股</li>
+    <li>    
+    2.3，策略：{    }
+    2.4，权重优化：{  }
+    2.5，组合维护：{基于MSCI和中证的优化  }
+    </li>
+    <li>资产配置：
+        1，中港美市场的中国股票的资产配置：境内外行业、市场锚个股进行对比；
+        2，将市场组合或多因子组合作为基础模块，用个性化地短期动量（择时）识别预期差
+        3，指数化、模块化地投资。 
+        4，固定收益类资产配置：要找一下有木有股债混合型的指数或ETF
+        5，机构博弈：参考“二鸟说”“主动权益50人”中的主动基金，跟踪每个季度持仓变动，构建模拟组合+择时。
+            Idea：以各个机构重仓股为基础池子，标记各自在当年细分行业地位，识别基本面风险和龙头锚风险，进行择时配置。 todo：模拟这50个jjjl的AI-pm
+    </li>
+    <li>3，实证模拟组合
+        3.0，数据
+        1，wind-oracle：拉数据，分行业、风格建立多个组合矩阵
+        2，朝阳永续：一致预期数据，或者用wind的反正现在也可以了；</li>
+    <li>
+    2.2，主观判断、新的基本面数据等作为边际模块；
+    2.3，组合调整的目标比例要用优化器--BL；
+    2.4，每个行业、风格要有anchor stock，对其他股票进行定价，集中化投资；</li>
+    <li>绩效分析：将模拟组合逐期权重导入Wind-PMS</li>
+    <li>产品和投资者分析：{假设保险资金买入国内发行的投资于海外权益资产的公募基金，就可以实现全球配置。}
+        亮点：模仿MSCI体系，为投资者实现一个跟踪全球资产的主动配置体系，实现模块化的主动投资（可以自设参数）
+    </li>
+    </ol>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <section>
+<hr>
+<div id="main" style="width: 800px;height:1200px;"></div> 
+<script type="text/javascript" >
+//横版有利于展示所有策略，竖版情况对末端策略数量有限制，过多会有显示不全的问题。
+var myChart = echarts.init(document.getElementById('main'));
+myChart.showLoading();
+
+$.getJSON('./json/tree_stra_s.json', function (data) {
+    myChart.hideLoading();
+    echarts.util.each(data.children, function (datum, index) {
+        index % 2 === 0 && (datum.collapsed = true);
+    });
+
+    myChart.setOption(option = {
+        tooltip: {
+            trigger: 'item',
+            triggerOn: 'mousemove'
+        },
+        series: [
+            {
+            type: 'tree',
+
+            data: [data],
+
+            top: '1%',
+            left: '7%',
+            bottom: '1%',
+            right: '18%',
+
+            symbolSize: 7,
+
+            label: {
+                normal: {
+                    position: 'left',
+                    verticalAlign: 'middle',
+                    align: 'right',
+                    fontSize: 11
+                }
+            },
+
+            leaves: {
+                label: {
+                    normal: {
+                        position: 'right',
+                        verticalAlign: 'middle',
+                        align: 'left'
+                    }
+                }
+            },
+
+            expandAndCollapse: true,
+            animationDuration: 550,
+            animationDurationUpdate: 750
+            }
+        ]
+        });
+    }) 
+</script>
+
+</section> -->
 
 
 

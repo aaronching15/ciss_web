@@ -31,12 +31,18 @@ class fund_simu():
 
     def print_info(self) :
         ### Print infomation for all modules 
-
+        print("按照季度日期，将原有权重转化为总和为0.95的权重")
+        print("weight_rebalance(self,para_ana,file_name_csv,file_path ,if_nan ) ")
+        
+        print()
+        print("Choice 4：按给定column名字将内部的指标分别计算标准分值，并控制异常值的影响")
+        print("indicators2score_1p(self,file_name_csv,file_path,col_name ,para_w ) :")
+        ###  
 
         return 1 
     
     def weight_rebalance(self,para_ana,file_name_csv,file_path ,if_nan ) :
-        ###  需要把权重调整计算的部分用python模块实现，可以节省大量时间
+        ###  按照季度日期，将原有权重转化为总和为0.95的权重
         ###  sicne 191021
         '''
         需求分析：1，对本步骤内的指标进行打分；2，根据上一步骤权重和本步骤分值，计算新的权重
@@ -270,4 +276,238 @@ class fund_simu():
         file_data_out = "weight_list_event_out.csv"
         df_output.to_csv(  file_path + file_data_out ) 
 
+        return df_output
+
+    def indicators2score_1p(self,code_index,temp_date,file_name_csv,file_path,col_name ,para_w ) :
+        ###  Choice 4：按给定column名字将内部的指标分别计算标准分值，并控制异常值的影响
+        ###  sicne 191112
+        
+        # from x1	x2	y1	y2	z1	z2	ind，to  sum	x	y	z	
+        #################################################################################
+        ### Initialization 
+        import pandas as pd  
+        df_raw = pd.read_csv(file_path + file_name_csv ,encoding="gbk"  )
+        # df_raw = df_raw.sort_values(by=col_name)
+        print(df_raw.head()  )
+        df_raw["weight"] = 0  
+        ### preperation,将指标列潜在的str转换为数值格式
+        col_list = ["x1","x2","y1","y2","z1","z2"]
+        # df_raw[ col_list]
+        df_raw[ col_list ]= df_raw[ col_list ].apply(pd.to_numeric)
+        ### i= 0 means we have no previous portfolio 
+        i = 0    
+        # col_name = "ind"
+        list_ind= df_raw[col_name].drop_duplicates().values
+        for temp_ind in list_ind : 
+            temp_df = df_raw[ df_raw["ind"]== temp_ind ]
+            ### function for extreme value 
+            for temp_x in ["x1","x2","y1","y2","z1","z2"] :
+                ### 判断数值里是否有超过3倍标准差的，如果有要换成3倍标准差
+                # temp_x ="x"
+                temp_s = "s_" + temp_x 
+                
+                df_raw.loc[temp_df.index, temp_s] = 0.0
+                # print("DEBUG=============",temp_x)
+                # print( df_raw.describe() )
+                temp_std =df_raw.loc[temp_df.index, temp_x].std()
+                temp_mean =df_raw.loc[temp_df.index, temp_x].mean()
+                temp_max =min( df_raw.loc[temp_df.index, temp_x].max(),temp_mean +3*temp_std )
+                temp_min =max(df_raw.loc[temp_df.index, temp_x].min(),temp_mean -3*temp_std )
+
+                for temp_i in temp_df.index :
+                    if df_raw.loc[temp_i, temp_x] > temp_mean +3*temp_std :
+                        df_raw.loc[temp_i, temp_x] = temp_mean +3*temp_std
+                    elif df_raw.loc[temp_i, temp_x] < temp_mean -3*temp_std :
+                        df_raw.loc[temp_i, temp_x] = temp_mean -3*temp_std
+                    ### 计算标准分值
+                    temp_v =(df_raw.loc[temp_i, temp_x] - temp_min)/( temp_max- temp_min)
+                    df_raw.loc[temp_i, temp_s] =temp_v
+                
+            ### Calculate x,y,z
+            # print("asd==========\n", df_raw.columns )
+            
+            temp_s = "s_x"
+            df_raw.loc[temp_df.index,temp_s] =  df_raw.loc[temp_df.index,"s_x1"] +df_raw.loc[temp_df.index,"s_x2"]  
+            temp_s = "s_y"
+            df_raw.loc[temp_df.index,temp_s] =  df_raw.loc[temp_df.index,"s_y1"] +df_raw.loc[temp_df.index,"s_y2"]  
+            temp_s = "s_z"
+            df_raw.loc[temp_df.index,temp_s] =  df_raw.loc[temp_df.index,"s_z1"] +df_raw.loc[temp_df.index,"s_z2"]  
+            ### summary
+            temp_s = "s_total"
+            df_raw.loc[temp_df.index,temp_s] =df_raw.loc[temp_df.index,"s_x"]*para_w[0] +df_raw.loc[temp_df.index,"s_y"]*para_w[1]+df_raw.loc[temp_df.index,"s_z"]*para_w[2]    
+            ### weight 
+            df_raw.loc[temp_df.index,"weight_ind1"] =  df_raw.loc[temp_df.index,temp_s]/df_raw.loc[temp_df.index,temp_s].sum()
+
+        ### weight 
+        df_raw["weight"] =  df_raw[temp_s]/df_raw[temp_s].sum()
+
+        ### Saved to csv 
+        df_raw = df_raw.sort_values(by= "no")
+        df_raw.to_csv(file_path+"output_esti2w_"+code_index+"_"+temp_date+".csv",encoding="gbk"  )
+
+        df_output = df_raw
+        return df_output
+    def weight2weight_sub2(self,df_output,col_name ,code_index,temp_date ,file_path) :
+        ### Choice 5：根据给定行业或日期column，按指数成分里的细分组合计算细分类别里的权重
+        ### sicne 191114
+        
+        #################################################################################
+        ### Initialization 
+        import pandas as pd   
+        
+        print(df_output.head()  )
+        df_output["weight_sub"] = 0  
+        # col_name = "ind"
+        list_ind= df_output[col_name].drop_duplicates().values
+        print("ind ",list_ind)
+        for temp_ind in list_ind : 
+            
+            temp_df = df_output[ df_output["ind"]== temp_ind ]
+            print(df_output.loc[temp_df.index,"w_csi800"].sum() )
+            
+            df_output.loc[temp_df.index,"weight_sub"]=df_output.loc[temp_df.index,"w_csi800"]/df_output.loc[temp_df.index,"w_csi800"].sum()
+            # print(df_output.loc[temp_df.index,"weight_sub"] )
+        ### save to csv 
+        
+        df_output = df_output.sort_values(by= "no")
+        df_output.to_csv(file_path+"output\\"+"output_esti2w_"+code_index+"_"+temp_date+".csv",encoding="gbk"  )
+
+        return df_output
+
+    def weight2weight_sub(self,file_name_csv,file_path,col_name ,para_w ) :
+        ### Choice 5：根据给定行业或日期column，按细分组合计算细分类别里的权重
+        ### sicne 191113
+        # col_name = "ind"
+        #################################################################################
+        ### Initialization 
+        import pandas as pd  
+        df_raw = pd.read_csv(file_path + file_name_csv ,encoding="gbk"  )
+        
+        print(df_raw.head()  )
+        df_raw["weight_sub"] = 0  
+
+        list_ind= df_raw[col_name].drop_duplicates().values
+        for temp_ind in list_ind : 
+            
+            temp_df = df_raw[ df_raw["ind"]== temp_ind ]
+            print("ind ", df_raw.loc[temp_df.index,"weight"].sum() )
+            
+            df_raw.loc[temp_df.index,"weight_sub"]=df_raw.loc[temp_df.index,"weight"]/df_raw.loc[temp_df.index,"weight"].sum()
+            # print(df_raw.loc[temp_df.index,"weight_sub"] )
+        ### save to csv 
+        df_output= df_raw 
+        df_output.to_csv(file_path+"output.csv",encoding="gbk"    )
+
+        return df_output
+    
+    def weight2wind_pms(self,code_index ) :
+        ### 6：导入季度调整的BL行业组合权重，生成Wind可以识别的季度调整文件
+        import os
+        
+        import pandas as pd 
+        ''' 需要匹配 test_bl_rc.py 里的顺序
+        0 能源
+        1 材料
+        2 工业
+        3 可选消费
+        4 日常消费
+        5 医疗保健
+        6 金融
+        7 信息技术
+        8 电信服务
+        9 公用事业
+        10 房地产'''
+
+        ind_list =["能源","材料","工业","可选消费","日常消费","医疗保健","金融","信息技术","电信服务","公用事业","房地产"]
+        file_path = "D:\\CISS_db\\db_bl\\data\\output\\"
+        date_list = []
+        for temp_y in ["2014","2015","2016","2017","2018","2019"]:
+            for temp_m in ["0301","0601","0901","1201"] :
+                temp_date = temp_y +temp_m
+
+                if temp_date not in ["20140301","20140601","20191201"] :
+                    date_list = date_list + [temp_date ]                
+        
+        print( date_list  ) 
+        for temp_i in range( len(ind_list)) :
+            temp_ind = ind_list[temp_i]
+            i=0
+            for temp_date in date_list :
+                print(temp_date )
+                file_name_csv = "w_"+  temp_date+"_"+str(temp_i)+".csv"
+                ### csv文件名有中文时要加 "rb", 报错提示增加 engine="python" ，只有1个column
+                ### 而且str在split(",")时会因为有的数值0,0 导致取数有问题。最好从源头上避免中文。
+                # df_raw = pd.read_csv( file_path + file_name_csv ,"rb",encoding="gbk",engine="python"  )               
+                # ### 注意：导入的是只有1个columns的文件
+                # col_list = df_raw.columns[0].split(",")
+                
+                # for temp_i in df_raw.index :
+                #     for j in range(len(col_list )) :
+                #         temp_list = df_raw.loc[temp_i,df_raw.columns[0] ].split(",")
+                #         df_raw.loc[temp_i,col_list[j] ] = temp_list[j]
+                
+                df_raw = pd.read_csv( file_path + file_name_csv  ,encoding="gbk"  )
+
+                df_raw["date"] = temp_date 
+                ### change from str to float 
+                print("debug========" )
+                print( df_raw.head()  )
+                
+
+                df_raw["w_bl"]= df_raw["w_bl"].astype("float")
+                df_raw["w_mkt"]= df_raw["w_mkt"].astype("float64")
+                ### Notes:剔除权重小于0.003，且权重之和等于0.95
+                df_raw =df_raw[ df_raw["w_bl"]>=0.003 ]
+                df_raw["w_bl"] = df_raw["w_bl"]/df_raw["w_bl"].sum() 
+                df_raw["w_bl"] = df_raw["w_bl"] *100
+                df_raw["w_bl"] = df_raw["w_bl"]/df_raw["w_bl"].sum() *95
+                ### 导入wind-PMS需要百分位的数值
+                
+                
+                df_raw =df_raw[ df_raw["w_mkt"]>=0.003 ]
+                df_raw["w_mkt"] = df_raw["w_mkt"]/df_raw["w_mkt"].sum() 
+                df_raw["w_mkt"] = df_raw["w_mkt"] *100
+                df_raw["w_mkt"] = df_raw["w_mkt"]/df_raw["w_mkt"].sum() *95
+
+                if i<1 :
+                    df_ind = df_raw
+                else :
+                    df_ind = df_ind.append(df_raw, ignore_index=True) 
+                
+                i=i+1  
+            
+
+            # print("debug========",len(df_ind.index) )
+            # print(df_ind.head(2)  )
+            # print(df_ind.tail(2)  )
+            
+            ### save single allocation plan of single industry to csv and in wind-PMS format
+            df_wind_pms_bl = df_ind.loc[:,["code","w_bl","date"] ]
+            df_wind_pms_mkt = df_ind.loc[:,["code","w_mkt","date"] ]
+
+            df_wind_pms_bl = df_wind_pms_bl.sort_values(by="date",axis=0 )
+            df_wind_pms_mkt = df_wind_pms_mkt.sort_values(by="date",axis=0 )
+
+            df_wind_pms_bl.columns= ["证券代码","持仓权重","调整日期"]
+            df_wind_pms_mkt.columns= ["证券代码","持仓权重","调整日期"]
+
+            df_wind_pms_bl["成本价格" ] ="" 
+            df_wind_pms_bl["证券类型"] = "股票"
+            df_wind_pms_mkt["成本价格" ] ="" 
+            df_wind_pms_mkt["证券类型"] = "股票"
+
+            ### 
+            file_name_pms_bl = "PMS_bl_"+code_index+"_"+temp_ind+"_"+date_list[0]+"_"+date_list[-1]+ ".csv"
+            file_name_pms_mkt = "PMS_mkt_"+code_index+"_"+temp_ind+"_"+date_list[0]+"_"+date_list[-1]+ ".csv"
+            file_name_w = "w_"+code_index+"_"+temp_ind+"_"+date_list[0]+"_"+date_list[-1]+ ".csv"
+            
+            df_wind_pms_bl.to_csv(file_path+ file_name_pms_bl )
+            df_wind_pms_mkt.to_csv(file_path+ file_name_pms_mkt )
+            df_ind.to_csv(file_path+file_name_w)
+
+
+
+
+
+        df_output=file_name_w 
         return df_output

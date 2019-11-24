@@ -61,7 +61,7 @@ class wind_wds():
         print("data_fetch |get_table_full_input:get_table_full带参数版本")
         print("data_fetch |get_table_primekey_input:get_table_primekey带参数版本")
 
-        print("data_manage |  ")
+        print("data_manage |   ")
         return 1 
 
     def get_table_full(self ) :
