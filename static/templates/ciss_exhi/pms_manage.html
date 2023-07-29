@@ -1,0 +1,588 @@
+{% extends "base.html" %}
+<meta charset="UTF-8">
+<!-- for HTML5 -->
+<!-- The block items for this base html file is: {nav_sub, left_frame,menu,content } -->
+<!-- 设置标题 -->
+{% block title0 %} 
+    PMS组合管理|pms_manage
+{% endblock title0 %}
+
+{% block nav_sub %}
+<!-- layui定义左侧工具栏：第一部分目录 -->
+<li style="text-align: center;"><a href="#location_title">PMS组合管理|pms manage </a></li>
+<!-- notes:class="layui-nav-item"默认是收起的， 加上" layui-nav-itemed"后内容是展开的;  -->
+<li class="layui-nav-item">
+    <a class="" href="#port_manage">PMS组合管理1-5</a>
+    <dl class="layui-nav-child"> 
+        <dd><a href="#port_ddst">1-查询组合列表 </a></dd>
+        <dd><a href="#port_monitor">2-PMS组合日内监控</a></dd>
+        <dd><a href="#port_period_unit_ret">3-组合净值和区间收益率 </a></dd>
+        <dd><a href="#port_unit_perf">4-组合净值和绩效 </a></dd>
+        <dd><a href="#port_holdings_from_PMS">5-1-PMS提取组合持仓：股票、基金、债券、指数 </a></dd>
+        <dd><a href="#port_holdings_from_stra_file">5-2-本地提取组合持仓：股票、基金、债券、指数</a></dd> 
+    </dl>
+</li>
+<li class="layui-nav-item">
+    <a class="" href="#pms_multi_stra">6，PMS多策略组合调整</a>
+    <dl class="layui-nav-child"> 
+        <dd><a href="#port_stra_weight">6.1，查询组合的策略配置比例 </a></dd>
+        <dd><a href="#stra_by_port">6.2，查询策略被哪些组合配置 </a></dd>
+        <dd><a href="#pms_multi_stra_cal">6.3，根据策略配置，计算组合持仓权重 </a></dd>
+    </dl>
+</li>
+<li class="layui-nav-item"><a href="#pms_upload_adjust">7，PMS上传组合调整 </a></li>
+<li class="layui-nav-item"><a href="#pms_steps_adjust">8，PMS组合更新流程 </a></li>
+
+
+<li>当前日期:{{ time_now_str }}</li>
+{% endblock nav_sub %}
+
+<!--- ################################################################## --->
+<!--- ################################################################## --->
+{% block left_frame %}
+<h1><a id="location_title">PMS组合管理|pms manage</a> </h1>
+<h3>目录</h3>
+<ul>
+    <li><a href="#port_manage">PMS组合管理 </a></li>
+    <li><a href="#port_list">1，查询组合列表 </a></li>
+    <li><a href="#port_monitor">2,PMS组合日内监控</a></li>
+    <li><a href="#port_period_unit_ret">3，获取组合净值和区间收益率 </a></li>
+    <li><a href="#port_unit_perf">4，组合净值和绩效 </a></li>
+    <li><a href="#port_holdings_from_PMS">5-1，PMS提取组合持仓：股票、基金、债券、指数 </a></li>
+    <li><a href="#port_holdings_from_stra_file">5-2，本地策略文件提取组合持仓：股票、基金、债券、指数</a></li> 
+    <li><a href="#pms_multi_stra">6，PMS多策略组合调整 </a></li>
+    <ul>
+        <li><a href="#port_stra_weight">6.1，查询组合的策略配置比例 </a></li>
+        <li><a href="#stra_by_port">6.2，查询策略被哪些组合配置 </a></li>
+        <li><a href="#pms_multi_stra_cal">6.3，根据策略配置，计算组合持仓权重 </a></li>
+    </ul>
+    <li><a href="#pms_upload_adjust">7，PMS上传组合调整 </a></li>
+    <li><a href="#pms_steps_adjust">8，PMS组合更新流程 </a></li>
+
+</ul>
+{% endblock left_frame %} {% block menu %} {% endblock menu %} {% block content %}
+<hr>
+
+<!--- ################################################################## --->
+<form action="{% url 'pms_manage' %}" method="post" accept-charset="utf-8"> 
+<!--- ################################################################## --->
+<!--- ################################################################## --->
+<hr>
+<h3 id="port_manage">PMS组合管理</h3>
+<p>file=test_pms_manage.py ;path= C:\rc_HUARONG\rc_HUARONG\ciss_web\CISS_rc\apps\portfolio_simulation
+    <br>1，下载PMS持仓; 2，导入最新PMS持仓数据;8，多策略组合：大类资产; 6，组合调整，自动上传到PMS组合
+<br>Notes:导出基金时，只选择“可购买基金”，可以避免有些基金是特定资产或者有持有期限制、规模过小没有可复制性。
+
+</p>
+
+
+<hr>
+<!--- ################################################################## --->
+<h4 id="port_list">1，查询组合列表 </h4> 
+
+{% csrf_token %}
+<table border="1">
+    <!-- <tr>指数类型：<input type="text" name="index_type" value="A股"></tr> -->
+    <tr>组合类型：<select name="port_type" value="stock">
+            <option value ="stock">股票组合</option> <option value ="fund">FOF基金</option>
+            <option value ="bond">债券组合</option><option value ="hedge">股票对冲</option><option value ="all">所有</option>
+          </select></tr>
+    <input type="submit" name="input_port_type" value="提交"> 
+    <!--  todo 在方框中查询数据,<textarea>标签会保留用户的预定义格式   -->
+
+</table>
+<!-- match：1，table id="ciss_table；2，function tableToExcel,base64；3，button，tableToExcel -->
+<table id="ciss_table">
+    <tr>
+        <td>组合ID</td>
+        <td>组合名称</td>
+        <td>组合类型</td>
+        <td>策略类型</td>
+        <td>开始日期</td>
+    </tr>
+
+    {% for temp_i,temp_v in df_p.items %}
+    <tr>
+        <td>{{ temp_v.port_id }}</td>
+        <td>{{ temp_v.port_name }}</td>
+        <td>{{ temp_v.port_type }}</td>
+        <td>{{ temp_v.port_class }}</td>
+        <td>{{ temp_v.date_init }}</td>
+    </tr>
+    {% endfor %}
+</table>
+<button type="button" onclick="tableToExcel('ciss_table')">导出Excel</button> <br>
+
+
+<!--- ################################################################## --->
+<!--- ################################################################## --->
+<hr>
+<h4 id="#port_monitor">2，PMS组合日内监控 </h4>
+<p>给定前一交易日日期，下载持仓文件，导入持仓文件；2，展示日内涨跌幅度和持仓盈亏幅度，最新持仓权重百分比。 </p>
+
+
+
+
+<!--- ################################################################## --->
+<hr>
+<h4 id="port_period_unit_ret">3，获取组合净值和区间收益率 </h4> 
+<h5>获取组合净值和区间收益率：PMS组合区间df_perf涨跌幅、回撤、Alpha、Sharpe等绩效指标。</h5>
+<p>本周收益率 本月收益率 本年收益率 近1个月收益率 近3个月收益率 近6个月收益率 Alpha成立至今 Sharpe成立至今 最大回撤：成立至今 最大回撤：近6个月 最大回撤：本年 月胜率</p>
+<table border="1">
+    <!-- <tr>指数类型：<input type="text" name="index_type" value="A股"></tr> -->
+    <tr>组合类型：<select name="port_type_name" value=""> 
+            <option value ="stock">股票组合</option> <option value ="fund">FOF基金</option>
+            <option value ="bond">债券组合</option><option value ="hedge">股票对冲</option><option value ="all">所有</option>
+            {% for temp_i,temp_v in df_pms_list.items %}
+                <option value ="{{ temp_v.port_name }}"> {{ temp_v.port_name }} </option>  
+            {% endfor %}
+          </select></tr>
+    <input type="submit" name="input_port_type_perf" value="提交">
+    <!--  todo 在方框中查询数据,<textarea>标签会保留用户的预定义格式   -->
+</table>
+<!-- match：1，table id="ciss_table；2，function tableToExcel,base64；3，button，tableToExcel  -->
+<table id="ciss_table">
+    <tr class="hover">
+        <td>组合名称</td>
+        <td>组合类型</td>
+        <td>本周收益</td>
+        <td>本月收益率</td>
+        <td>本年收益率</td>
+        <td>近1个月收益率</td>
+        <td>近3个月收益率</td>
+        <td>近6个月收益率</td>
+        <td>Alpha成立至今</td>
+        <td>Sharpe成立至今</td>
+        <td>最大回撤：成立至今</td>
+        <td>最大回撤：近6个月</td>
+        <td>最大回撤：本年</td>
+        <td>月胜率</td>
+    </tr>
+
+    {% for temp_i,temp_v in df_perf.items %}
+    <tr>
+        <td>{{ temp_v.port_name }}</td>
+        <td>{{ temp_v.port_type }}</td>
+        <td id="table_td_number">{{ temp_v.exhi_Return_w }}</td>
+        <td id="table_td_number">{{ temp_v.exhi_Return_m }}</td>
+        <td id="table_td_number">{{ temp_v.exhi_Return_y }}</td>
+        <td id="table_td_number">{{ temp_v.exhi_Return_1m }}</td>
+        <td id="table_td_number">{{ temp_v.exhi_Return_3m }}</td>
+        <td id="table_td_number">{{ temp_v.exhi_Return_6m }}</td>
+        <td id="table_td_number">{{ temp_v.exhi_Alpha_std }}</td>
+        <td id="table_td_number">{{ temp_v.exhi_Sharpe_std }}</td>
+        <td id="table_td_number">{{ temp_v.exhi_MaxDrawdown_std }}</td>
+        <td id="table_td_number">{{ temp_v.exhi_MaxDrawdown_6m }}</td>
+        <td id="table_td_number">{{ temp_v.exhi_MaxDrawdown_y }}</td>
+        <td id="table_td_number">{{ temp_v.exhi_Winning_Rate_m }}</td>
+
+    </tr>
+    {% endfor %}
+</table>
+<button type="button" onclick="tableToExcel('ciss_table')">导出Excel</button> <br>
+
+
+<!--- ################################################################## --->
+<h4 id="port_unit_perf">2，组合净值 </h4> 
+<p>组合监控：给定组合x：画出历史净值，并且和基准比较
+    <br>基准应该可以自由设置：指数、基金、股票、债券、wind基准 
+    <br>885001.WI	偏股混合型基金指数；885003.WI	偏债混合型基金指数；885005.WI	债券型基金指数
+
+</p>
+<table border="1">
+    <!-- <tr>指数类型：<input type="text" name="index_type" value="A股"></tr> -->
+    <tr>选择PMS组合：
+        <select name="port_name" value=""> 
+            {% for temp_i,temp_v in df_pms_list.items %}
+                <option value ="{{ temp_v.port_name }}"> {{ temp_v.port_name }} </option>  
+            {% endfor %}
+            </tr>
+            <tr>基准代码：指数\基金\个股<input type="text" name="benchmark_code" value="885001.WI"></tr>
+            <tr>开始日期<input type="text" name="date_begin" value="20211231"></tr>
+            <tr>结束日期 <input type="text" name="date_end" value="{{ time_now_str_pre1d }}"></tr>
+            <tr>净值频率：<select name="unit_type" value="week">
+            <option value ="day">交易日</option> <option value ="week">周</option>   </select></tr>
+    </select>
+
+    </tr>
+    <input type="submit" name="input_port_name_unit" value="提交">
+    <!--  todo 在方框中查询数据,<textarea>标签会保留用户的预定义格式   -->
+</table>
+
+<p>notes:如果是周week，只会返回结束日期；如果是交易日day，会正常返回序列</p>
+<table id="ciss_table">
+    <tr class="hover">
+        <td>日期</td>
+        <td>组合净值</td>
+        <td>基准净值</td>
+        <td>组合收益率</td>
+        <td>基准收益率</td>
+        <td>组合净资产</td>
+        <td>总盈亏</td>
+    </tr>
+
+    {% for temp_i,temp_v in df_port_tail10.items %}
+    <tr>
+        <td>{{ temp_i }}</td>
+        <td id="table_td_number">{{ temp_v.exhi_unit_port }}</td>
+        <td id="table_td_number">{{ temp_v.exhi_unit_bench }}</td>
+        <td id="table_td_number">{{ temp_v.exhi_pct_chg }}</td>
+        <td id="table_td_number">{{ temp_v.exhi_pct_chg_bench }}</td>
+        <td id="table_td_number">{{ temp_v.exhi_NetAsset }}</td>
+        <td id="table_td_number">{{ temp_v.exhi_TotalPL }}</td>
+
+    </tr>
+    {% endfor %}
+</table>
+
+<div id="div_chart" style="width: 800px;height:500px;">
+    <div id="chart_port_unit" style="width: 800px;height:500px;">
+    </div>
+</div>
+<hr> {% csrf_token %}
+<script type="text/javascript">
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('chart_port_unit'));
+
+    option = {
+        title: {
+            text: "PMS组合：" + "{{ port_name }}" + " vs" + "基准：" + "{{ benchmark_code }}",
+            left: "center"
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            orient: "vertical",
+            right: 10,
+            top: "center",
+            data: ['fund', "bench"]
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        toolbox: {
+            feature: {
+                saveAsImage: {}
+            }
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: [{% for temp_i,  temp_v in df_port.items %} "{{ temp_i }}", {% endfor %} ]
+
+        },
+        yAxis: {
+            type: 'value',
+            max: 'dataMax',
+            min: 'dataMin',
+        },
+        series: [{
+            name: '组合净值',
+            type: 'line',
+            data: [{% for temp_i, temp_v in df_port.items %}  "{{ temp_v.exhi_unit_port }}", {% endfor %} ]
+        }, {
+            name: '基准净值',
+            type: 'line',
+            data: [{% for temp_i, temp_v in df_port.items %}  "{{ temp_v.exhi_unit_bench }}", {% endfor %} ]
+        }, ]
+    };
+    // data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    //data: [120, 132, 101, 134, 90, 230, 210]
+    //   var obj_rc = {
+    //         // obj_rc是对应option里的dataset对象
+    //         // 用 dimensions 指定了维度的顺序。直角坐标系中，如果 X 轴 type 为 category，
+    //         // 默认把第一个维度映射到 X 轴上，后面维度映射到 Y 轴上。
+    //         dimensions : ["date,unit_fund,unit_bench" ],
+    //         source : [
+    //             {% for temp_i,temp_v in df_unit.items %} 
+    //                 { date: {{ temp_i }} ,unit_fund: {{ temp_v.exhi_unit_fund }},unit_bench : {{ temp_v.exhi_unit_bench }} },
+    //             {% endfor %} 
+    //         ]
+    //   } 
+    // 使用刚指定的配置项和数据显示图表。
+    //  
+    myChart.setOption(option);
+</script>
+
+<!--- ################################################################## --->
+<hr>
+<h4 id="port_holdings_from_PMS">5-1，PMS提取组合持仓：股票、基金、债券、指数 </h4>
+<p>用Wind-API提取PMS数据；给定组合名称，提取最近1个月末的组合持仓；  
+   <br>可选部分：1，提取股票当月涨跌幅；2，提取基本面指标和概要
+   <br>notes:开始和结束日期是月末交易日，周末假期会报错
+</p>
+
+<table border="1">
+    <!-- step1：输入组合代码或组合名称，月末日期；选择是否行情涨跌幅数据、是否提取基本面核心指标，如PE_ttm、roe、净利润同比增长率  -->
+    <tr>选择PMS组合：<select name="pms_name_holdings_from_PMS" value=""> 
+        {% for temp_i,temp_v in df_pms_list.items %}
+            <option value ="{{ temp_v.port_name }}"> {{ temp_v.port_name }}  </option>  
+        {% endfor %}
+        </select></tr> 
+        <tr>开始日期|月末交易日<input type="text" name="date_begin_holdings_from_PMS" value="20211231"></tr>
+        <tr>结束日期|交易日 <input type="text" name="date_end_holdings_from_PMS" value="{{ time_now_str_pre1d }}"></tr>
+        <br>
+        <tr>是否提取行情涨跌幅<input type="checkbox" name="if_quote_holdings_from_PMS"  value="1"> </tr>
+        <tr>是否提取估值和预期指标<input type="checkbox" name="if_indicator_holdings_from_PMS"  value="1"> </tr>
+        <br>
+        <input type="submit" name="input_port_holdings_from_PMS" value="提交"> 
+    </tr>
+
+</table>
+
+<!-- match：1，table id="ciss_table；2，function tableToExcel,base64；3，button，tableToExcel  -->
+<div class="div_table" style="overflow-x: auto; overflow-y: auto; height: 800px; width:1200px;">
+<table id="ciss_table">
+    <tr id="table_tr_text">
+        <td>资产类型</td>
+        <td>证券代码</td>
+        <td>证券名称</td>
+        <td>最新权重%</td>
+        <td>起初权重%</td>
+        <td>浮动盈亏%</td>
+        <td>最新持仓市值|万</td>
+        <td>总成本|万</td>
+        <td>浮动收益|万</td>
+        <td>持仓数量|万</td>
+        <td>组合名称</td>
+    </tr> 
+    {% for temp_i,temp_v in df_pms_holding.items %}
+    <tr id="table_tr_text">
+        <td>{{ temp_v.AssetClass }}</td>
+        <td>{{ temp_v.Windcode }}</td>
+        <td>{{ temp_v.AssetName }}</td>
+        <td id="table_td_number">{{ temp_v.weight }}</td>
+        <td id="table_td_number">{{ temp_v.weight_init }}</td>
+        <td id="table_td_number">{{ temp_v.pnl_pct }}</td>
+        <td id="table_td_number">{{ temp_v.mv_exhi }}</td>
+        <td id="table_td_number">{{ temp_v.mv_init }}</td>
+        <td id="table_td_number">{{ temp_v.pnl_exhi }}</td>
+        <td id="table_td_number">{{ temp_v.num_exhi }}</td>
+        <td>{{ temp_v.port_name }}</td>
+
+    </tr>
+    {% endfor %}
+</table>
+<button type="button" onclick="tableToExcel('ciss_table')">导出Excel</button> <br>
+</div>
+
+
+
+
+
+<!--- ################################################################## --->
+<hr>
+<h4 id="port_holdings_from_stra_file">5-2，本地策略文件提取组合持仓：股票、基金、债券、指数 </h4>
+<p>用本地策略文件中提取PMS数据；给定组合名称，提取最近1个月末的组合持仓；  
+    <br>可选部分：1，提取股票当月涨跌幅；2，提取基本面指标和概要。
+ </p>
+
+
+
+
+
+    
+
+
+<hr>
+<!--- #######################--------------------------------------- -->
+<h4 id="pms_multi_stra">6，PMS多策略组合调整  </h4>
+<p>steps:1,选择组合，导入组合的不同策略配置比例；
+    <br>2，分别导入单个策略配置文件；
+    <br>3，对组合内所有策略的持仓做合并同类权重；
+    <br>4，实盘组合需要和现有持仓比较，计算差额数量、生成交易指令。5，生成组合配置文件。
+</p>
+<h5 id="port_stra_weight">6.1，查询组合的策略配置比例</h5>
+<p>需要用到sheet=组合列表，组合策略配置，file= pms_manage.xlsx 
+    <br>最新配置权重 sheet=组合策略配置，需要在 sheet=log_port_allo 中记录调整日期
+</p>
+<table border="1">
+    <!-- <tr>指数类型：<input type="text" name="index_type" value="A股"></tr> -->
+    <tr>组合的策略配置：<select name="port_stra_weight" value="all">
+        <option value ="all">所有</option>
+        <option value ="stock">股票组合</option> <option value ="fund">FOF基金</option>
+        <option value ="bond">债券组合</option><option value ="hedge">股票对冲</option>
+        {% for temp_i,temp_v in df_pms_list.items %}
+            <option value ="{{ temp_v.port_name }}"> {{ temp_v.port_name }} </option>  
+        {% endfor %}
+        </select></tr>
+    <input type="submit" name="input_port_stra_weight" value="提交">
+    <!--  todo 在方框中查询数据,<textarea>标签会保留用户的预定义格式   -->
+</table>
+<table id="ciss_table">
+    <tr class="hover">
+        <td>组合名称</td>
+        <td>总比例</td>
+        <td>权益总比例</td>
+        <td>固收总比例</td>
+        <td>股票行业研究</td>
+        <td>股票量化策略</td>
+        <td>基金池-主动股票</td>
+        <td>基金池-偏股混</td>
+        <td>基金池-偏债混</td>
+        <td>基金池-纯债</td> 
+        <td>机构重仓-主动股票</td>
+        <td>机构重仓-偏股混</td>
+        <td>机构重仓-偏债混</td>
+        <td>机构重仓-纯债</td>
+        <td>主动行业轮动</td>
+        <td>市场风格趋势</td>
+        <td>利率债动量</td>
+        <td>股票期权对冲</td>
+        <td>基金重仓股-主动股票</td>
+        <td>基金重仓股-偏股混</td>
+        <td>基金重仓股-偏债混</td>       
+
+    </tr>
+
+    {% for temp_i,temp_v in df_port_stra_weight.items %}
+    <tr>
+        <td id="table_td_number">{{ temp_v.port_name }}</td>               
+        <td id="table_td_number">{{ temp_v.weight }}</td>
+        <td id="table_td_number">{{ temp_v.weight_equity }}</td>
+        <td id="table_td_number">{{ temp_v.weight_bond }}</td> 
+        <td id="table_td_number">{{ temp_v.stockpool_active }}</td> 
+        <td id="table_td_number">{{ temp_v.stock_indi }}</td>
+        <td id="table_td_number">{{ temp_v.fundpool_activestock }}</td>
+        <td id="table_td_number">{{ temp_v.fundpool_stock_mixed }}</td>
+        <td id="table_td_number">{{ temp_v.fundpool_bond_mixed }}</td>
+        <td id="table_td_number">{{ temp_v.fundpool_bond }}</td>
+        <td id="table_td_number">{{ temp_v.fof_fund_stock }}</td>
+        <td id="table_td_number">{{ temp_v.fof_fund_mixed_stock }}</td>
+        <td id="table_td_number">{{ temp_v.fof_fund_mixed_bond }}</td>
+        <td id="table_td_number">{{ temp_v.fof_fund_bond }}</td>
+        <td id="table_td_number">{{ temp_v.fund_ind_active }}</td>
+        <td id="table_td_number">{{ temp_v.fund_market_trend }}</td> 
+        <td id="table_td_number">{{ temp_v.bond_gov }}</td>
+        <td id="table_td_number">{{ temp_v.option }}</td>
+        <td id="table_td_number">{{ temp_v.fund_stock_fund_stock }}</td>
+        <td id="table_td_number">{{ temp_v.fund_stock_fund_mixed_stock }}</td>
+        <td id="table_td_number">{{ temp_v.fund_stock_fund_mixed_bond }}</td> 
+    </tr>
+    {% endfor %}
+</table>
+
+<h5 id="stra_by_port">6.2，查询策略被哪些组合配置</h5>
+<table border="1">
+    <!-- <tr>指数类型：<input type="text" name="index_type" value="A股"></tr> -->
+    <tr>选择策略：<select name="stra_name" value="stockpool_active"> 
+        {% for temp_i,temp_v in df_stra_port_list.items %}
+            <option value ="{{ temp_i }}"> {{ temp_i }} </option>  
+        {% endfor %}
+        </select></tr>
+    <input type="submit" name="input_stra_by_port" value="提交">
+    <!--  todo 在方框中查询数据,<textarea>标签会保留用户的预定义格式   -->
+</table>
+<table id="ciss_table">
+    <tr class="hover">
+        <td>组合名称</td>
+        <td>总比例</td>
+        <td>权益总比例</td>
+        <td>固收总比例</td>
+        <td>股票行业研究</td>
+        <td>股票量化策略</td>
+        <td>基金池-主动股票</td>
+        <td>基金池-偏股混</td>
+        <td>基金池-偏债混</td>
+        <td>基金池-纯债</td> 
+        <td>机构重仓-主动股票</td>
+        <td>机构重仓-偏股混</td>
+        <td>机构重仓-偏债混</td>
+        <td>机构重仓-纯债</td>
+        <td>主动行业轮动</td>
+        <td>市场风格趋势</td>
+        <td>利率债动量</td>
+        <td>股票期权对冲</td>
+        <td>基金重仓股-主动股票</td>
+        <td>基金重仓股-偏股混</td>
+        <td>基金重仓股-偏债混</td>  
+    </tr>
+
+    {% for temp_i,temp_v in df_stra_weight_port.items %}
+    <tr>
+        <td id="table_td_number">{{ temp_v.port_name }}</td>               
+        <td id="table_td_number">{{ temp_v.weight }}</td>
+        <td id="table_td_number">{{ temp_v.weight_equity }}</td>
+        <td id="table_td_number">{{ temp_v.weight_bond }}</td> 
+        <td id="table_td_number">{{ temp_v.stockpool_active }}</td> 
+        <td id="table_td_number">{{ temp_v.stock_indi }}</td>
+        <td id="table_td_number">{{ temp_v.fundpool_activestock }}</td>
+        <td id="table_td_number">{{ temp_v.fundpool_stock_mixed }}</td>
+        <td id="table_td_number">{{ temp_v.fundpool_bond_mixed }}</td>
+        <td id="table_td_number">{{ temp_v.fundpool_bond }}</td>
+        <td id="table_td_number">{{ temp_v.fof_fund_stock }}</td>
+        <td id="table_td_number">{{ temp_v.fof_fund_mixed_stock }}</td>
+        <td id="table_td_number">{{ temp_v.fof_fund_mixed_bond }}</td>
+        <td id="table_td_number">{{ temp_v.fof_fund_bond }}</td>
+        <td id="table_td_number">{{ temp_v.fund_ind_active }}</td>
+        <td id="table_td_number">{{ temp_v.fund_market_trend }}</td> 
+        <td id="table_td_number">{{ temp_v.bond_gov }}</td>
+        <td id="table_td_number">{{ temp_v.option }}</td>
+        <td id="table_td_number">{{ temp_v.fund_stock_fund_stock }}</td>
+        <td id="table_td_number">{{ temp_v.fund_stock_fund_mixed_stock }}</td>
+        <td id="table_td_number">{{ temp_v.fund_stock_fund_mixed_bond }}</td> 
+
+    </tr>
+    {% endfor %}
+</table>
+
+<h5 id="pms_multi_stra_cal">6.3，根据策略配置，计算组合持仓权重</h5>
+<p>根据策略配置比例、分别导入单策略、合并生成组合持仓权重,如file=port_躺赢纯债基_20220308.xlsx 
+    <br>notes:“利率债投资、FOF期权9901”两个组合目前没有自动组合权重文件，不用选。
+</p>
+
+<tr>计算部分组合： 
+    <p>
+        {% for temp_i,temp_v in df_pms_list.items %} 
+           <input type="checkbox" name="port_name_list"  value="{{ temp_v.port_name }}"> {{ temp_v.port_name }} <br>
+        {% endfor %}
+    </p>    
+</tr>
+<br><input type="checkbox" name="if_all_port_pms_multi_stra"  value="1">计算全部组合
+<tr>调整日期<input type="text" name="date_pms_multi_stra" value="{{ time_now_str_pre1d }}"></tr> 
+<input type="submit" name="input_pms_multi_stra" value="提交"> 
+
+
+
+<hr>
+<!--- #######################--------------------------------------- -->
+<h4 id="pms_upload_adjust">7，PMS上传组合调整  </h4>
+<p>steps:1,获取组合配置文件；2，上传至PMS；3，更新组合日志文件
+    <br>notes:“利率债投资、FOF期权9901”两个组合目前没有自动组合权重文件，不用选。
+</p>
+<tr>计算部分组合：
+    <p> 
+        {% for temp_i,temp_v in df_pms_list.items %} 
+           <input type="checkbox" name="port_name_list_upload"  value="{{ temp_v.port_name }}"> {{ temp_v.port_name }}  <br>
+        {% endfor %}
+    </p>    
+</tr>
+<br><input type="checkbox" name="if_all_port_pms_upload_adjust"  value="1">计算全部组合
+<tr>调整日期<input type="text" name="date_pms_adjust" value="{{ time_now_str_pre1d }}"></tr> 
+<input type="submit" name="input_pms_upload_adjust" value="提交"> 
+
+
+<hr>
+<!--- #######################--------------------------------------- -->
+<h4 id="pms_steps_adjust">8，PMS组合更新流程  </h4>
+<p>PMS组合更新流程：
+<br>PMS组合更新步骤：1，更新组合的策略配置，sheet=组合策略配置,file=pms_manage.xlsx;
+<br>2,更新部分需要主观判断的单策略，如基金类的“市场风格趋势、主动行业轮动”，sheet=stra_weight，数据来源file=rc_个股推荐行业事件.xlsx\sheet=行业...  ；
+<br>3，将个股股票池贴到sheet=股票池 ; 
+<br>4,股票：在quick.html里【导出Wind股票列表、提取api个股数据、动量和行业统计、计算量化、行业股票策略】；
+<br>5，基金：依次完成【3，股票和基金策略】各个策略更新；html=quick.html
+<br>6, 生成组合更新文件， ； html=pms_manage.html
+</p>
+
+
+
+
+
+</form>
+
+
+{% endblock content %}

@@ -1,0 +1,742 @@
+{% extends "base.html" %}
+<meta charset="UTF-8">
+<!-- for HTML5 -->
+<!-- The block items for this base html file is: {nav_sub, left_frame,menu,content } -->
+
+
+{% block nav_sub %}
+<a id="a_nav" href="./data_wind.html">Wind数据 | Wind Data</a> >>
+<a id="a_nav" href="./data_wind.html">ciss_web数据 | </a> >>
+<a id="a_nav" href="./data_wind.html">rc_report_cs：我的研报 | </a> >>
+<a id="a_nav" href="./data_wind.html">TOUYAN:卖方研报 </a> >>
+<a id="a_nav" href="./data_wind.html">CISS_db数据库 |</a> >>
+<br>子目录：
+<a href="#wds_data_monitor">WDS数据监控 | </a> >>
+<a href="#wds_task_scheduler">定时下载和转换任务 |</a> >>
+<a href="#wds_data_get">WDS数据获取 |</a> >>
+<a href="#wds_data_transform">WDS数据信息转换 |</a> >>
+<a href="#wds_data_intro">WDS数据信息介绍 |</a> >>
+<br> {% endblock nav_sub %} {% block right_frame %}
+
+<!-- Menu in right frame -->
+<!-- ---------------------------------------------------------- -->
+<h1><a href="#title"> Wind数据管理 </a></h1>
+<h3>目录</h3>
+<ul>
+    <li><a href="#wds_data_intro">0,WDS数据信息介绍 </a></li>
+    <li><a href="#wds_data_monitor">1，WDS数据监控|wds_data_monitor </a></li>
+    <li><a href="#wds_data_get">2，WDS数据获取|wds_data_get </a></li>
+    <li><a href="#wds_data_transform">3，WDS数据转换和管理|wds_data_transform </a></li>
+    <li><a href="#wds_task_scheduler">4，定时下载和转换任务|task scheduler </a></li>
+    <li><a href="#wds_data_csv">5，Excel|数据表格信息维护 | Data csv</a></li>
+    <li><a href="#wds_db_oracle_pgsql">6，Wind-Oracle,Postgresql数据库</a></li>
+    <li><a href="#wind_api">7,wind api python </a></li>
+    <li><a href="#pandas">8,Pandas 技巧 </a></li>
+</ul>
+<h4><a href="#wds_data_intro">子目录：0,WDS数据信息介绍</a></h4>
+<ul>
+    <li><a href="#intro_intro_basic">基础信息：时间、股票、基金、指数、分类等 </a></li>
+    <li><a href="#intro_intro_stock">股票数据 </a></li>
+    <li><a href="#intro_intro_stock_index">股票指数数据 </a></li>
+    <li><a href="#intro_intro_stock_fund">股票基金数据 </a></li>
+    <li><a href="#intro_intro_bond">债券数据 </a></li>
+
+</ul>
+
+<h4><a href="#wds_data_monitor">子目录：1,WDS数据监控</a></h4>
+<ul>
+    <li><a href="#check_anndates_all">查询Wind-wds全部数据表更新情况 </a></li>
+    <li><a href="#check_wds_single_table">查询Wind-wds单个数据表更新情况 </a></li>
+    <li><a href="#get_wds_single_table">下载Wind-wds单个数据表，或根据关键值下载</a></li>
+    <li><a href="#get_wds_all_daily">每个交易日：下载和维护Wind-wds数据表</a></li>
+    <li><a href="#transform_stocks_ind_class">每周/月：下载和维护个股行业分类</a></li>
+    <li><a href="#cal_stock_ind_class">计算个股历史行业分类</a></li>
+    <li><a href="#get_stock_indclass_latest">查询个股最新行业分类</a></li>
+    <li><a href="#test_cal_index">指数和模拟组合相关计算|test_cal_index.py </a></li>
+    <li><a href="#get_index_period_diff">查询指数、个股或基金的区间涨跌幅： </a></li>
+</ul>
+<h4><a href="#wds_task_scheduler">子目录：4,定时下载和转换任务</a></h4>
+<ul>
+    <li><a href="#task_scheduler_get_daily">每个交易日下载数据：如指数日行情</a></li>
+    <li><a href="#task_scheduler_trans_daily">每个交易日或周数据转换 </a></li>
+    <li><a href="#task_scheduler_get_weekily">每周或月下载数据：如股票基础信息</a></li>
+
+</ul>
+
+<h4><a href="#wds_data_transform">子目录：3,WDS数据转换和管理</a></h4>
+<ul>
+    <li><a href="#tran_print_info"> 所有脚本的介绍信息打印：Print_info:</a></li>
+    <li> <a href="#tran_batch_process">2.1,文件目录、文件名、csv文件列名称批量处理</a> </li>
+    <li> <a href="#tran_stock_ind_class">2.2,A股股票行业分类处理</a></li>
+    <li> <a href="#tran_import_stock_date">2.3,导入历史交易日数据和交易日数据填入单证券数据</a></li>
+    <li> <a href="#tran_import_stock_fund">2.4,导入基金历史交易日数据：如持仓数据</a></li>
+    <li> <a href="#cal_diff_stockport">2.5,计算基金持仓股票行业和价量等维度变动</a></li>
+    <li> <a href="#cal_index_consti_adj">2.6,计算指数定期调整</a> </li>
+    <li> <a href="#cal_stock_period_change">2.7,计算个股区间变动数据</a> </li>
+</ul>
+
+
+<h4><a href="#test_cal_index">指数和模拟组合相关计算|test_cal_index.py</a></h4>
+
+{% endblock right_frame %} {% block left_frame %}
+
+<!-- Menu in left frame -->
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h1 id="title">Wind数据管理 </h1>
+<p>获取、转换、管理从Wind数据库wds、API获取的数据。</p>
+<p>TODO： 把wds数据下载从基于公告日改为基于数据更新时间"OPDATE";
+    <br> 思路是捕捉表格内最新"OPDATE"值t1，并抓取远程数据表里t1之后的值
+</p>
+<hr>
+<h3>目录</h3>
+<ul>
+    <li><a href="#wds_data_monitor">1，WDS数据监控|wds_data_monitor </a></li>
+    <li><a href="#wds_data_get">2，WDS数据获取|wds_data_get </a></li>
+    <li><a href="#wds_data_transform">3，WDS数据转换和管理|wds_data_transform </a></li>
+    <li><a href="#wds_task_scheduler">4，定时下载和转换任务|task scheduler </a></li>
+    <li><a href="#wds_data_csv">5，Excel|数据表格信息维护 | Data csv</a></li>
+    <li><a href="#wds_db_oracle_pgsql">6，Wind-Oracle,Postgresql数据库</a></li>
+    <li><a href="#wind_api">7,wind api python </a></li>
+    <li><a href="#pandas">8,Pandas 技巧 </a></li>
+</ul>
+
+{% endblock left_frame %} {% block menu %} {% endblock menu %} {% block content %}
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="wds_data_monitor">1，WDS数据监控|wds_data_monitor </h3>
+<p>主要流程：连接数据库、抓取数据表、储存原始数据表。
+    <br> 案例脚本：test_wds_manage.py
+    <br> python脚本：get_wind_wds.py
+    <br> 脚本位置：..\ciss_web\CISS_rc\db\db_assets
+    <br> 数据来源： Wind-wds 万得落地数据库
+    <br> last update 20200211 | since 190830
+
+</p>
+<h4>运行对应脚本 </h4>
+
+<h4>1.1，连接wds数据库| __init__ </h4>
+<p>import cx_Oracle
+    <br>connection = cx_Oracle.connect("wind", "wind", "10.10.232.197:1521/wind",encoding = "UTF-8", nencoding = "UTF-8") self.cursor = connection.cursor()
+</p>
+<p>cx_Oracle 常见问题
+    <br>Qs：下载wds数据时，提示无法定位程序输入点...动态链接库oralocei19.dll;位置： C:\Users\chengry\AppData\Roaming\Python\Python37\site-packages
+    <br>把C:\rc\softs\instantclient-basic-windows.x64-19.3.0.0.0dbru\ 里有关dll的文件都重新复制过去。
+    <br>
+</p>
+
+<h4>1.2，获取wds数据表| data_fetch </h4>
+<p>
+    print("data_fetch |get_table_columns: 只获取表格的列信息")
+    <br>print("data_fetch |get_table_full: 获取整张表格，无参数")
+    <br>print("data_fetch |get_table_primekey:根据主键primekey和日期范围等获取表格")
+    <br>print("data_fetch |get_table_full_input:get_table_full带参数版本")
+    <br>print("data_fetch |get_table_primekey_input:get_table_primekey带参数版本")
+</p>
+<h4>1.3,管理数据表| data_manage </h4>
+<p>
+    print("data_manage |manage_data_check_anndates:根据给定的核对表格(index:公布日期,columns:wds表格) ")
+    <br>
+</p>
+<hr>
+
+<h4 id="check_anndates_all">查询Wind-wds全部数据表更新情况：</h4>
+<form action="{% url 'data_wind' %}" method="post" accept-charset="utf-8">
+    <input type="submit" name="input_check_table_anndates" value="提交"><br>
+    <!--  todo 在方框中查询数据,<textarea>标签会保留用户的预定义格式    -->
+    <textarea rows="10" cols="80">目录{{ wds_table_name }}下最新修改的5个文件{2:正常下载；1，无数据；0|na，未下载}：
+{{ df_check_anndates }}
+</textarea>
+
+</form>
+
+<h4 id="check_wds_single_table">查询Wind-wds单个数据表更新情况：</h4>
+<!--  1,输入要查询的表格信息 -->
+<form action="{% url 'data_wind' %}" method="post" accept-charset="utf-8">
+    {% csrf_token %}
+    <table border="0">
+        <tr>Wind-wds表格名称: <input type="text" name="search_wds_table_name" value="AShareEODPrices"></tr>
+        <tr>关键指标列名:<input type="text" name="search_key_word" value="S_INFO_WINDCODE"></tr>
+        <tr>指标匹配值:<input type="text" name="search_key_value" value="688389.SH"></tr>
+    </table>
+    <input type="submit" name="input_check_single_table" value="提交"><br>
+    <!--  todo 在方框中查询数据,<textarea>标签会保留用户的预定义格式   -->
+    <textarea rows="8" cols="60">目录{{ wds_table_name }}下最新修改的5个文件：
+{{ search_file_list_latest5 }}</textarea>
+    <textarea rows="8" cols="100">
+表关键词{{ search_key_word }}={{ search_key_value }}对应的文件最后3行：
+{{  search_df_tail3 }}</textarea>
+
+</form>
+<!--由于每个表格列名称不一样，因此不适合预先设定好要显示的columns {% for temp_index,temp_row in df_tail3.items %}
+{{ temp_index }},{{ temp_row.S_INFO_WINDCODE }}{{ temp_row.TRADE_DT }}{{ temp_row.S_DQ_ADJCLOSE }}{{ temp_row.S_DQ_PCTCHANGE }}
+{% endfor %} -->
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="wds_data_get">2，WDS数据获取|wds_data_get </h3>
+
+
+<h4 id="get_wds_single_table">下载Wind-wds单个数据表，或根据关键值下载：</h4>
+<!--  1,输入要下载的表格信息 -->
+<form action="{% url 'data_wind' %}" method="post" accept-charset="utf-8">
+    {% csrf_token %}
+    <table border="0">
+        <tr>Wind-wds表格名称: <input type="text" name="get_wds_table_name" value="AShareEODPrices"></tr>
+        <tr>是否下载整张表格:
+            <select type="text" name="get_if_whole_table" value="0">
+                <option value ="0">否</option>     <option value ="1">是</option>   </select> </tr>
+        <tr>关键指标列名:<input type="text" name="get_key_word" value="S_INFO_WINDCODE"></tr>
+        <tr>指标匹配值:<input type="text" name="get_key_value" value="688389.SH"></tr>
+    </table>
+    <input type="submit" name="input_get_single_table" value="提交"><br>
+    <!--  todo 在方框中查询数据,<textarea>标签会保留用户的预定义格式   -->
+    <textarea rows="8" cols="60">Head info 结果：
+是否报错：{{ get_error }}
+file_name:{{ get_file_name }}
+file_path:{{ get_file_path }}</textarea>
+    <textarea rows="8" cols="100">
+表关键词{{ key_word }}={{ key_value }}对应的csv文件最后3行：
+{{ get_df_tail3 }}</textarea>
+
+</form>
+<h4 id="get_wds_all_daily">每个交易日：下载和维护Wind-wds数据表：</h4>
+<!--  1,输入要查询的表格信息 -->
+<form action="{% url 'data_wind' %}" method="post" accept-charset="utf-8">
+    {% csrf_token %}
+    <input type="submit" name="input_get_table_anndates" value="提交"><br>
+    <!--  todo 在方框中查询数据,<textarea>标签会保留用户的预定义格式   -->
+    <textarea rows="8" cols="60">Head info 结果：
+是否报错：{{ get_error }}
+file_name:{{ get_file_name }}
+file_path:{{ get_file_path }}</textarea>
+    <textarea rows="8" cols="100">
+表关键词{{ key_word }}={{ key_value }}对应的csv文件最后3行：
+{{ get_df_tail3 }}</textarea>
+
+</form>
+
+
+<h4 id="transform_stocks_ind_class">每周/月：下载和维护个股行业分类：</h4>
+<!--  1,输入要查询的表格信息 -->
+<form action="{% url 'data_wind' %}" method="post" accept-charset="utf-8">
+    {% csrf_token %}
+    <input type="submit" name="input_transform_stocks_ind_class" value="提交"><br>
+    <!--  todo 在方框中查询数据,<textarea>标签会保留用户的预定义格式   -->
+    <textarea rows="8" cols="60">Head info 结果：
+是否报错：{{ get_error }}
+file_name:{{ get_file_name }}
+file_path:{{ get_file_path }}</textarea>
+    <textarea rows="8" cols="100">
+表关键词{{ key_word }}={{ key_value }}对应的csv文件最后3行：
+{{ get_df_tail3 }}</textarea>
+
+</form>
+
+<h4 id="get_stock_indclass_latest">查询个股最新行业分类：</h4>
+<!--  1,输入要查询的表格信息 -->
+<form action="{% url 'data_wind' %}" method="post" accept-charset="utf-8">
+    {% csrf_token %}
+    <table border="0">
+        <tr>Wind股票代码:<input type="text" name="get_stock_indclass_windcode" value="688389.SH"></tr>
+    </table>
+    <input type="submit" name="input_get_stock_indclass" value="提交"><br>
+    <!--  todo 在方框中查询数据,<textarea>标签会保留用户的预定义格式   -->
+    <textarea rows="8" cols="60">Wind股票代码{{ get_stock_indclass_windcode }}对应的最新行业分类：
+{{ df_stock_indclass_windcode }}</textarea>
+</form>
+
+<h4 id="get_index_period_diff">查询指数、个股或基金的区间涨跌幅：</h4>
+<!--  1,输入要查询的表格信息 -->
+<form action="{% url 'data_wind' %}" method="post" accept-charset="utf-8">
+    {% csrf_token %}
+    <table border="0">
+        <tr><select name="period_diff_asset_type" value="index">
+            <option value ="stock">A股股票</option><option value ="index">股票指数</option> 
+            <option value="fund">股票基金</option> 
+          </select></tr>
+        <tr>Wind股票代码:<input type="text" name="get_index_period_diff_windcode" value="000300.SH"></tr>
+        <tr>开始日期:<input type="text" name="get_index_period_diff_date_start" value="20200101"></tr>
+        <tr>结束日期:<input type="text" name="get_index_period_diff_date_end" value="20200323"></tr>
+    </table>
+    <input type="submit" name="submit_get_index_period_diff" value="提交"><br>
+    <!--  todo 在方框中查询数据,<textarea>标签会保留用户的预定义格式   -->
+    <textarea rows="8" cols="60">
+资产类别{{ period_diff_asset_type }}:Wind股票代码 {{ get_index_period_diff_windcode }}对应的区间涨跌幅：
+{{ index_period_chg }} % </textarea>
+</form>
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="wds_data_transform">3，WDS数据转换和管理|wds_data_transform</h3>
+<hr>
+<p>功能： 每日/每周数据下载更新好后，需要及时地转化成带有列名称的csv文件。对每个股票/基金/指数，用交易日数据维护个券的记录。<br> 案例脚本：test_wds_data_transform.py [1,历史个股行业分类，2, 基金持仓变动，3, 行业内个股的定性和定量数据；]| 案例脚本：test_wds_data_transform_fund.py |[专门处理基金持仓变动数据 || 2, 基金持仓变动， ] <br> python脚本：transform_wind_wds.py
+    <br> 脚本位置：..\ciss_web\CISS_rc\db\db_assets
+    <br> last update 20200320 | since 190830<br>
+</p>
+
+<ul>
+    <li><a href="#tran_print_info"> 所有脚本的介绍信息打印：Print_info:</a></li>
+    <li> <a href="#tran_batch_process">2.1,文件目录、文件名、csv文件列名称批量处理</a> </li>
+    <li> <a href="#tran_stock_ind_class">2.2,A股股票行业分类处理</a></li>
+    <li> <a href="#tran_import_stock_date">2.3,导入历史交易日数据和交易日数据填入单证券数据</a></li>
+    <li> <a href="#tran_import_stock_fund">2.4,导入基金历史交易日数据：如持仓数据</a></li>
+    <li> <a href="#cal_diff_stockport">2.5,计算基金持仓股票行业和价量等维度变动</a></li>
+    <li> <a href="#cal_index_consti_adj">2.6,计算指数定期调整</a> </li>
+    <li> <a href="#cal_stock_period_change">2.7,计算个股区间变动数据</a> </li>
+</ul>
+<h3 id="test_cal_index">指数和模拟组合相关计算|test_cal_index.py </h3>
+
+<p>Print_info:
+    <br>2.1,文件目录、文件名、csv文件列名称批量处理
+    <br>rename_folder |按命名规则对文件夹内满足条件的文件改名,并对columns赋值
+    <br>add_columns2table | 对文件夹内文件名字进行统一处理，并讲列名称赋值
+
+    <br>2.2,A股股票行业分类处理
+    <br>import_df_ind | 导入行业分类必备的数据文件
+    <br>match_ind_name | 根据行业代码匹配行业分类表格内的行业名称、行业级数和是否弃用
+    <br>get_ind_period |根据期初和期末日期获取股票所属行业
+    <br>get_ind_date |给定交易日获取股票所属行业
+    <br>cal_stock_indclass |计算个股历史行业分类
+
+    <br>2.3,导入历史交易日数据和交易日数据填入单证券数据
+    <br>import_df_dates | 导入历史交易日数据数据文件
+    <br>update_date_pass_code |给定table,对于现有个券文件，用WDS_TRADE_DT_20200210_ALL.csv 填入 WDS_S_INFO_WINDCODE_000001.SZ_ALL.csv
+    <br>update_newcode_from_date |对于给定交易日内，若有新股票无个券csv文件则新建该文件
+    <br>trans_ALL_to_1date | 从一次性下载的表格按单个交易日转存数据
+
+    <br>2.4,导入基金数据和持仓数据
+    <br>import_fund_list | 根据季末日期获取基金基础信息列表
+    <br>import_df_fund | 给定基金，导入与基金数据相关的数据表格
+
+    <br>2.5,计算基金持仓股票多维度变动
+    <br>cal_diff_stockport | 计算基金持仓股票与前一季度之间的差异值，但不进行分析
+    <br> manage_fund_sp_change | 导入基金持仓列表,计算持仓股票与上季度同比的变动
+    <br>get_fund_period_diff | 获取区间基金净值价格、涨跌幅、成交额等变动
+
+    <br>2.6,计算指数定期调整
+    <br>cal_index_constituents_adjustment| 计算指数调整
+    <br>get_index_period_diff | 获取区间指数价格、涨跌幅、成交额等变动
+
+    <br>2.7,计算个股区间变动数据
+    <br>get_stock_period_diff | 获取区间股票价格、市值股本、财务指标变动和涨跌幅
+
+</p>
+
+
+<h4 id="tran_batch_process">2.1,文件目录、文件名、csv文件列名称批量处理 </h4>
+<p>print("rename_folder |按命名规则对文件夹内满足条件的文件改名,并对columns赋值 ")
+    <br>print("add_columns2table | 对文件夹内文件名字进行统一处理，并讲列名称赋值")
+
+</p>
+
+<p>Function： 1，把给定时间区间的原始wds数据保存成标准化格式，加列名称和加_adj后缀； 把列名是1，2...的数据文件改成对应的列名，并重新命名csv文件 2，path_rc = "C:\\db_wind\\data_adj\\" 3,把原始表格中一些不常用的列删去、把历史期间数据有问题的行删去可以显著减小数据大小 output: 1,df_1d:每个交易日所有股票的行业归属 2,df_1s:每个股票的历史行业归属
+</p>
+
+<h4 id="tran_date_update_code">2.1,用单个交易日csv文件更新单个证券代码csv文件 </h4>
+<p>print("update_date_pass_code |给定table,对于现有个券文件，用WDS_TRADE_DT_20200210_ALL.csv 填入 WDS_S_INFO_WINDCODE_000001.SZ_ALL.csv")
+    <br>print("update_newcode_from_date |对于给定交易日内，若有新股票无个券csv文件则新建该文件")
+</p>
+
+
+<h4 id="tran_stock_ind_class">2.2,A股股票行业分类处理 </h4>
+<p>print("import_df_ind | 导入行业分类必备的数据文件")
+    <br>print("match_ind_name | 根据行业代码匹配行业分类表格内的行业名称、行业级数和是否弃用")
+    <br>print("get_ind_period |根据期初和期末日期获取股票所属行业 ")
+    <br>print("get_ind_date |给定交易日获取股票所属行业 ")
+
+</p>
+<p>
+    计算逻辑： 1，对于20050601开始到20200114的每个交易日： 2，对于第一个交易日，导入股票信息df_A_des、按照3个行业分类计算所属行业。 2.1,寻找在20050601前已经上市的且 未退市的公司，并计算上市的时间； 3，对每个股票，用行业数据生成全历史行业分类数据 3.1，对于Wind行业，获取在20050601前已经上市的公司，并计算当日的行业分类； 3.2，匹配中信行业分类； 3.3，匹配申万行业分类； 4,对于每个行业分类，匹配新旧2种行业分类 4.1，Wind：1~4级行业代码、行业名称、
+    4.2，citics：1~3级新行业代码、新行业名称、旧行业代码、旧行业。 4.3，sw:1~3 级行业代码、行业名称、行业名称英文。
+    <br> notes:600061.SH国投资本发生行业分类变化时， 中信、Wind在20150127变更行业、但申万竟然在20160630才变更，说明了申万行业分类的不靠谱。
+    <br> 行业代码[AShareIndustriesCode] ： 62：万得全球行业分类标准 04：证监会行业分类 61：申万行业分类 67：GICS(全球行业分类标准) 66：中证行业分类 b1：中信行业分类 12: 证监会行业分类(2012版)03: 地域板块02: 概念板块a0: 股票板块 72: 中证行业分类(2016) 74: 国民经济行业分类 2001: 万得基金分类 0808: 中债分类 2003: 银河基金分类</p>
+<p>def cal_stock_indclass(self,output="list") :
+    <br> output="list" or "":仅计算全部股票进出表，不计算和保存个股全历史数据
+    <br> output="by_dates" :计算全部股票进出表，也计算和保存个股全历史数据
+</p>
+<p>使用说明：
+    <br>1，完成了对行业分类脚本的修订，分成2种情况:"list":仅仅匹配股票行业分类进出记录对应的不同行业level代码和中文； 默认情况不计算每只股票的历史纪录，而是只计算最新日期的股票行业分类和所有历史进出记录对应的行业分类。
+    <br> "by_dates":对所有交易日保存个股行业分类，计算时间慢且数据IO太大；
+    <br>其他程序只需要引用 df_ind_code_stock_io和历史date_list 即可倒推某个交易日的行业分类：
+    <br>object_wds = transform_wds1.cal_stock_indclass(output)
+    <br> 定义所有股票在不同行业分类进出表中的记录: object_wds["df_ind_code_stock_io"] = df_ind_code_stock_io
+    <br> 定义最新日期所有股票的不同级别行业分类 :object_wds["df_ind_code_stock_last"] = df_ind_code_stock_last
+
+</p>
+<p>计算个股历史行业分类 derived from test_wds_data_transform.py line 176-425 对3个行业分类计算1~4级的代码，并单独保存成列值
+    <br> output: 1,df_stock_indclass:将3种行业分类代码和中文值赋给对应的股票 2,df_1d:每个交易日所有股票的行业归属 3,df_1s:每个股票的历史行业归属;3,df_ind_ALL:所有股票的行业归属
+    <br> 逻辑： 1，对于20050601开始到20200114的每个交易日： 2，对于第一个交易日，导入股票信息df_A_des、按照3个行业分类计算所属行业。 2.1,寻找在20050601前已经上市的且 未退市的公司，并计算上市的时间； 3，对每个股票，用行业数据生成全历史行业分类数据 3.1，对于wind行业，获取在20050601前已经上市的公司，并计算当日的行业分类； 3.2，匹配中信行业分类； 3.3，匹配申万行业分类； 4,对于每个行业分类，匹配新旧2种行业分类 4.1，Wind：1~4级行业代码、行业名称、
+    4.2，citics：1~3级新行业代码、新行业名称、旧行业代码、旧行业。 4.3，sw:1~3 级行业代码、行业名称、行业名称英文。
+    <br> notes:output="list" or "":仅计算全部股票进出表，不计算和保存个股全历史数据 output="by_dates" :计算全部股票进出表，也计算和保存个股全历史数据 notes:600061.SH国投资本发生行业分类变化时， 中信、Wind在20150127变更行业、但申万竟然在20160630才变更，说明了申万行业分类的不靠谱。 '''
+</p>
+
+<p>计算逻辑： 1，对于20050601开始到20200114的每个交易日： 2，对于第一个交易日，导入股票信息df_A_des、按照3个行业分类计算所属行业。 2.1,寻找在20050601前已经上市的且 未退市的公司，并计算上市的时间； 3，对每个股票，用行业数据生成全历史行业分类数据 3.1，对于Wind行业，获取在20050601前已经上市的公司，并计算当日的行业分类； 3.2，匹配中信行业分类； 3.3，匹配申万行业分类； 4,对于每个行业分类，匹配新旧2种行业分类 4.1，Wind：1~4级行业代码、行业名称、
+    4.2，citics：1~3级新行业代码、新行业名称、旧行业代码、旧行业。 4.3，sw:1~3 级行业代码、行业名称、行业名称英文。
+</p>
+<p>行业代码[AShareIndustriesCode] ： 62：万得全球行业分类标准 04：证监会行业分类 61：申万行业分类 67：GICS(全球行业分类标准) 66：中证行业分类 b1：中信行业分类 </p>
+
+<h4 id="tran_import_stock_date">2.3,导入历史交易日数据和交易日数据填入单证券数据 </h4>
+<p>print("import_df_dates | 导入历史交易日数据数据文件")
+    <br>update_date_pass_code |给定table,对于现有个券文件，用WDS_TRADE_DT_20200210_ALL.csv 填入 WDS_S_INFO_WINDCODE_000001.SZ_ALL.csv
+    <br>update_newcode_from_date |对于给定交易日内，若有新股票无个券csv文件则新建该文件
+    <br>trans_ALL_to_1date | 从一次性下载的表格按单个交易日转存数据")
+</p>
+<p>trans_ALL_to_1date 可以实现把一次性下载的表格按单个交易日转存成csv文件
+
+</p>
+
+<h4 id="tran_import_stock_fund">2.4,导入基金历史交易日数据：如持仓数据 </h4>
+<p>print("import_fund_list | 根据季末日期获取基金基础信息列表")
+    <br>print("import_df_fund | 导入基金数据相关的数据表格 ") </p>
+
+<h4 id="cal_diff_stockport">2.5,计算基金持仓股票行业和价量等维度变动 </h4>
+<p>
+</p>
+
+
+<h4 id="cal_index_consti_adj">2.6,计算指数定期调整 </h4>
+<p>
+</p>
+
+<h4 id="cal_stock_period_change">2.7,计算个股区间变动数据 </h4>
+<p>
+    <br>print("get_stock_period_diff | 获取区间股票价格、市值股本、财务指标变动和涨跌幅 ")
+    <br>Input: 1,需要读取个股的日行情数据和日衍生行情数据；背后是从基于交易日到基于个股的数据表的及时转换计算。
+    <br> Steps: 1,读取日期序列数据，date_list 2,获取date_start 之后的最近交易日；获取date_end之前的最近交易日 3,
+    <br> notes: 1,未来可能会遇到在日期区间内股票代码或行业发生变动的情况，例如股票的收购兼并或流动性受限的情况 date_start should be "20150331" object_code["cols_rc"]自定义了相关wds列名 2,001872.SZ因发生过合并事件，日衍生数据初始日是20171225，但日行情数据从1993年就有了 3,个股历史数据里，可能并不是按照"TRADE_DT"交易日升序排列，有可能非常杂乱，导入时需要ascending '''
+    <br>涉及的wds表格：
+    <br> ### import historical price for single stock
+    <br> table_name = "AShareEODPrices"
+    <br> file_name = "WDS_S_INFO_WINDCODE_"+code_stock+"_ALL.csv"
+    <br>### import historical derivative indicators
+    <br> table_name_deriv = "AShareEODDerivativeIndicator"
+    <br> file_name = "WDS_S_INFO_WINDCODE_"+code_stock+"_ALL.csv"
+
+</p>
+
+
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="test_cal_index">指数和模拟组合相关计算|test_cal_index.py </h3>
+<p>function ： 1，计算逐年指数成分股，根据历史调入调出记录。 2，根据输入信息和指标，计算指数成分 last 200320| since 20200313
+    <br>### 2，根据输入信息和指标，计算指数成分 ### 根据输入csv，计算打分和权重
+    <br>### 1，计算逐年指数成分股，根据历史调入调出记录。 ### function 计算逐年指数成分股，根据历史调入调出记录。
+</p>
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="wds_task_scheduler">4，定时下载和转换任务|task scheduler</h3>
+<p>
+    <br> 1,按日下载数据 | test_wds_manage_auto.py
+    <br> 2，按周or任意时间下载：比如股票基础信息和基金基础信息
+    <br> 3，数据转换：按日保存的数据转成按个股名称的。
+    <br>3.1，股票日行情、日衍生行情转成个股历史行情；指数、基金等
+    <br>test_wds_data_transform.py
+    <br> 给定交易日至最新交易日，若有新股票无个券csv文件则新建该文件
+    <br> 按最新交易日行情对个股日行情内的交易日进行更新
+    <br>3.2，个股行业分类数据转换：test_wds_data_transform.py
+    <br>3.3，基金数据转换|每个季度：test_wds_data_transform_fund.py
+
+</p>
+
+<h4 id="task_scheduler_get_daily">每个交易日下载数据：如指数日行情</h4>
+
+
+
+<h4 id="task_scheduler_trans_daily">每个交易日或周数据转换</h4>
+
+
+
+<h4 id="task_scheduler_get_weekily">每周或月下载数据：如股票基础信息</h4>
+<p>基础信息：
+    <br>股票和基金 AShareDescription AShareIndustriesClass ChinaMutualFundDescription
+    <br>指数：中国A股指数基本资料[AIndexDescription]
+
+    <br>其他：债券：一次性下载，表格：list_table_wds_FICC.csv | .\ciss_web\CISS_rc\apps\rc_data
+</p>
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="wds_data_transform">子目录：WDS数据转换和管理</h3>
+<p>
+
+</p>
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="transform_basic">基础信息：时间、股票、基金、指数、分类等 </h3>
+<p>当前交易日的计算主要根据上交所日期。
+
+</p>
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="transform_stock">股票数据 </h3>
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="transform_fund">基金数据 </h3>
+<p>当前基金季度前十大持仓股票的数据文件保存格式是 “代码+季末日期+披露日期”。
+
+</p>
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="wds_data_intro">WDS数据信息介绍</h3>
+<p>WDS指的是Wind落地数据库，里边有所在机构采购的不同表格。使用过程主要涉及的几个文件及位置
+    <br>1，wds落地数据库的连接信息：cx_Oracle.connect("wind", "wind", "10.10.232.197:1521/wind")
+    <br>2，wds数据表的官方介绍网站：http://wds.wind.com.cn/rdf/?#/main；部分表没采购，部分表的介绍过时。
+    <br>3，ciss_web模块连接和获取wds数据：.\ciss_web\CISS_rc\db\db_assets\get_wind_wds.py;
+    <br>4,wds原始数据保存位置，保存在数据表名称目录下：C:\db_wind\data_wds\
+    <br>5,ciss_web模块分析和转换wds数据：.\ciss_web\CISS_rc\db\db_assets\transform_wind_wds.py;
+    <br>6，wds转换后的数据保存位置，保存在数据表名称目录下：C:\db_wind\data_adj\
+    <br>7,用户跟踪和维护的wds表格清单、表格获取的关键词、表格内列名、股票列表、股票交易日列表等对应的文件：
+    <br>file_list=[0wds_MANAGE.xlsx,log_data_wds_tables.csv,log_data_wds_tables_columns.csv,code_list.csv,date_list.csv]
+    <br>path=.\ciss_web\CISS_rc\apps\rc_data
+</p>
+
+
+<h4 id="intro_intro_basic">基础信息：时间、股票、基金、指数、分类等</h4>
+
+
+<h4 id="intro_intro_stock">股票数据 </h4>
+
+
+<h4 id="intro_intro_stock_index">股票指数数据 </h4>
+
+
+<h4 id="intro_intro_stock_fund">股票基金数据</h4>
+<p>
+
+</p>
+<p>
+
+</p>
+
+
+<h4 id="intro_intro_bond">债券数据</h4>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="wds_data_csv">5，Excel|数据表格信息维护 | Data csv</h3>
+<p>1，管理wds相关表格和关键词<br> 数据来源：手工维护和 http://wds.wind.com.cn/rdf/?#/main <br> wds表格信息文件xlsx ：0wds_191120.xlsx <br> 文件位置：.\ciss_web\CISS_rc\apps\rc_data
+    <br> 2，用于程序读取的wds相关表格和关键词 <br> 数据来源：0wds_191120.xlsx <br> wds表格信息文件csv ： log_data_wds_tables.csv<br> 文件位置：.\ciss_web\CISS_rc\apps\rc_data
+    <br> wds表格列名信息文件csv ： log_data_wds_tables_columns.csv<br> 文件位置：.\ciss_web\CISS_rc\apps\rc_data
+    <br> 3，wds债券信息表文件 <br> wds表格信息文件xlsx ：list_table_wds_FICC.csv <br> 文件位置：.\ciss_web\CISS_rc\apps\rc_data
+    <br>
+</p>
+<h4>csv文件转换成html里table格式</h4>
+<p>
+    file_name=test_data_html.py
+    <br>file_path=C:\ciss_web\CISS_rc\apps\rc_data
+
+</p>
+<hr>
+<!-- TODO---------------------------------------------------------- -->
+<h3 id="wds_db_oracle_pgsql">6，Wind-Oracle,Postgresql数据库 | wds Postgresql</h3>
+<p>保存通过Wind-Oracle，wind-api接口等方式获取的数据文件。 </p>
+<p>TODO：尝试用postgresql插件 oracle_fdw连接wind-wds。
+    <br> Qs:PLSQL无法连接数据库；Ana:把数据库实例db_wind删了；
+    <br> 用用户名在net configuration assistant里配置本地服务时，用ciss_rc和wind用户名都失败了。
+    <br>配置“服务名”：db_wind不行； oracle_rc也不行。
+    <br>设想的通过dblink连接远程数据库后，用sql语言里的merge into 方法同步数据库，
+    <br> 也许这个方法 可以直接通过python模块实现。
+
+</p>
+<p>创建数据库：Database Configuration Assistant,(20200330)
+    <br> 1,全局数据库名 db_wind；SID=dnwind
+    <br>
+    <br>
+    <br>
+    <br>
+</p>
+<p>基本配置：数据库实例名称和地址、地址配置、监听配置、等
+    <br> 链接本地Oracle数据库db_wind，用户名 wind;ps:wind,数据库位置：10.10.69.124:1521\db_wind
+    <br>本地服务器对应tnsnames.ora ；(HOST = 10.10.69.124)(PORT = 1521))
+    <br>远程服务器对应listener.ora ；(HOST = 10.10.232.197(PORT = 1521))
+</p>
+<p>创建用户：
+    <br> 用sys as sysdba登录后创建用户wind/wind过程出错：
+    <br>SQL> create user wind identified by wind;
+    <br>SQL> grant resource,connect,sysdba to wind; ||这时还是受限制的，无法用wind用户登录；
+    <br>grant restricted session to wind;
+    <br> || 数据库修改为正常模式（即退出限制模式）
+    <br>sysdba用户登录到sqlplus后切换到普通用户一般使用conn方式
+    <br> sqlplus用户切换:普通用户切换到sysdba用户：SQL> conn sys as sysdba
+</p>
+
+
+<h4>Oracle目录</h4>
+<ul>
+    <li>Oracle安装、配置软件、创建数据库 </li>
+    <li>Oracle数据表操作 </li>
+    <li>Oracle数据表同步 </li>
+    <li>Oracle常见问题 </li>
+</ul>
+<h4>1，Oracle安装、配置软件、创建数据库</h4>
+<p>Oracle数据库设置：管理员Admin的ps：123~；数据库名=db_wind;数据库文件位置：D:\db_wind_oracle；恢复文件位置：D:\db_wind_oracle_recover；ps：123
+    <br>1，首次创建：Database Configuration Assistant:
+    <br>SID=dbwind;
+    <br> Oracle创建数据库报错：ORA-28547的解决办法
+    <br>修改oracle的网络配置文件，具体做法是：在oracle安装目录下搜索sqlnet.ora文件，一般在$\NETWORK\ADMIN目录下， 用记事本打开把文件中的一行： SQLNET_AUTHENTICATION_SERVICES= (NTS) 修改为： SQLNET_AUTHENTICATION_SERVICES= (NONE)
+    <br>修改监听器配置文件，具体做法是： 在oracle安装目录下搜索listener.ora文件，一般在$\NETWORK\ADMIN目录下，把主机名用ip地址代替，例如(ADDRESS = (PROTOCOL = TCP)(HOST = HBONLINE1)(PORT = 1523))改为(ADDRESS = (PROTOCOL = TCP)(HOST = 168.168.168.42)(PORT = 1523))。
+    <br>首次创建数据库的配置时间：17：45——18：12，进度=45%。19：19，在Oracle创建实例卡在46%约2小时后退出，再打开assistant配置之后发现居然是已经安装好了的。默认用户名是SYS as sysdba
+    <br>打开sql命令行，在CMD中输入 sqlplus后输入用户名sys as sysdba和密码:
+    <br>2，首次连接：“请输入用户名: sys as sysdba”，然后输入创建时设置的密码；urls=https://www.cnblogs.com/luodaxia/p/12021141.html
+    <br>3,CREATE USER语句创建一个新用户{ciss_rc}:create user ciss_rc identified by 123~; 注意都别忘了分号；
+    <br>4，授予用户权限：grant connect,resource ,dba to ciss_rc;
+    <br>5,在用PLSQL连接前要先配置本都网络服务，运行Net Configuration Assistant ； url=https://zhidao.baidu.com/question/437635136201078364.html
+    <br>主机名=10.10.69.124，用本地ipconfig查的，选ipv4；
+    <br>5，配置监听程序：Qs:.ORA-12541: TNS: 无监听程序;需要用Net Configuration Assistant配置监听程序
+    <br>Qs:ORA-12526: TNS: 监听程序: 所有适用例程都处于受限模式;在SQL> 状态下输入 ALTER SYSTEM DISABLE RESTRICTED SESSION; 显示已更改后ok
+    <br>19：55，正在连接...测试成功。
+</p>
+<p>相关文件目录：
+    <br>压缩包文件：C:\rc\softs\Oracle_19.3_x64_200325.zip
+    <br>Oracle19.3-x64压缩包解压目录：C:\rc\softs\Oracle_19.3_x64 ；.exe文件都在这里；tnsnames.ora 配置文件在这里。
+    <br>数据库管理目录？：D:\oracle_rc
+    <br>数据库文件目录：D:\db_wind_oracle
+    <br>数据库恢复文件目录：D:\db_wind_oracle_recover
+</p>
+<h4>2，Oracle数据表操作</h4>
+<p>1，oracle创建表空间、创建用户；url=https://blog.csdn.net/weixin_42451919/article/details/90643374
+    <br>一般分四步： 第一步：创建临时表空间（可选） 第二步：创建数据表空间 第三步：创建用户并制定表空间 第四步：给用户授予权限
+    <br>1,创建临时表空间:SQL &lt CREATE TEMPORARY TABLESPACE temp_space_rc ;
+    <br>查看表空间：select name from v$datafile;
+    <br>output:NAME --------------------------------------------------------------------------------
+    <br> D:\DB_WIND_ORACLE\DB_WIND\DATAFILE\O1_MF_SYSTEM_H7PBT7QK_.DBF ······
+    <br>2,创建数据表空间： create tablespace db_wind
+    <br>output:这时会多出一个数据文件：D:\DB_WIND_ORACLE\DB_WIND\DATAFILE\O1_MF_DB_WIND_H7R0SFOP_.DBF
+    <br>3,创建用户:create user wind identified by wind;
+    <br>Qs:创建用户时出错：oracle ORA-01920: 用户名与另外一个用户名或角色名发生冲突，说明已经有用户了。
+    <br>4,授权给新建的用户：grant connect,resource to wind; 或者 grant connect,resource，dba to wind;
+    <br>
+    <br>SQL语句基本功能：通过表的日期格式列获取时间区间内更新的数据：
+    <br>1，日期转字符串，需要先了解OPDATE的格式，例如to_char():将日期转按一定格式换成字符类型 ， SQL> select to_char(sysdate,'yyyy-mm-dd hh24:mi:ss') time from dual;
+    <br> 2，字符串转日期，SELECT TO_DATE('2006-05-01 19:25:34', 'YYYY-MM-DD HH24:MI:SS') FROM DUAL
+    <br>我的版本：temp_date="TO_DATE('2020-04-08 16:00:00', 'YYYY-MM-DD HH24:MI:SS')" ; temp_sql = "SELECT * FROM windn." + table_name +" WHERE "+ prime_key + ">= "+temp_date
+    <br>或者 temp_date="TO_DATE('20200409', 'YYYYMMDD')"；
+    <br>url = https://www.cnblogs.com/macT/p/10214944.html ;https://www.cnblogs.com/kuangwong/p/6192480.html
+
+</p>
+
+<h4>3，Oracle数据表同步</h4>
+<p>oracle远程数据库同步,url=https://blog.csdn.net/u012280953/article/details/45075505
+    <br>1,DBlink常用于在两个Oracle数据库之间相互连接，如手工同步数据时，DBLink是最方便快捷的手段之一。
+    <br>创建dblink：
+    <textarea name="" id="" cols="30" rows="10">注意：用户名和密码都是wind：
+create database link link_rc_remoteWind connect to wind identified by wind using
+ '(DESCRIPTION =    
+    (ADDRESS_LIST =      
+        (ADDRESS = (PROTOCOL = TCP)(HOST = 10.10.232.197(PORT = 1521))  
+        )  
+    (CONNECT_DATA =      
+        (SERVICE_NAME = wind)    
+        )  )';
+</textarea>
+    <br>删除dblink： drop database link link_rc_remoteWind
+    <br>在plsql里设置dblink：界面左侧Objects里找到database link，鼠标邮件new，注意不要设置"Authenticated by"部分； 在object目录里刷新以下就有了。
+    <br>测试是否创建成功 select * from dual@link_rc_remotewind;
+    <br>output：
+    <br>检查Oracle的版本是否支持同步功能: select * from v$option where PARAMETER='Advanced replication'
+    <br>output：Advanced replication =FALSE
+
+    <br>
+    <br>
+    <br>
+
+
+</p>
+
+
+<p>Oracle连接远程数据库的四种方法；url=https://blog.csdn.net/czh500/article/details/89632790
+    <br>1、配置tnsnames.ora，修改其中的数据库连接串。
+    <br>文件位置：C:\rc\softs\Oracle_19.3_x64\network\admin\
+    <br>STARTUP MOUNT：MOUNT数据库，仅仅给DBA进行管理操作，不允许数据库的用户访问。仅仅只是当前实例的控制文件被打开，数据文件未打开。
+    <br>output：ORA-01078: failure in processing system parameters LRM-00109: ???????????????? 'C:\RC\SOFTS\ORACLE_19.3_X64\DATABASE\INITDBWIND.ORA'
+
+</p>
+
+
+<h4>Oracle常见问题 </h4>
+<p>Qs:Oracle显示中文出现问号（乱码）:win+R，输入regedit，在Oracle的设置中NLS_lang改为：SIMPLIFIED CHINESE_CHINA.ZHS16GBK
+    <br>测试能否链接至远程服务器：telnet 10.10.232.197 1521
+    <br>Qs：发现cmd里无法使用telnet，原来要在控制面板——程序——打开Windows功能里开启，包括Hyper-v等虚拟机功能也是在这里开启。
+    <br>查看本地数据库db_wind是否注册为服务，在windows——服务里查找OracleJobSchedulerDBWIND，如果发现禁用则改为自动；
+    <br>另外，OracleOraDb11g_home1TNSListener 也必须时启动的；
+    <br>url：https://blog.csdn.net/czh500/article/details/89630225
+    <br>打开windows服务：services.msc
+    <br>输入sqlplus wind/wind@10.10.69.124:1521/db_wind 后，遇到
+    <br>Qs:“正在连接...ORA-12541: TNS: 无监听程序”
+    <br>发现listener.ora.txt里HOST = LH-CHENGRY-DT-1.CS.csfunds.com.cn，改成 HOST = 10.10.69.124
+</p>
+<p>sqlplus登录后，显示"已连接到空闲例程。"
+    <br>输入startup后，output：ORA-01078: failure in processing system parameters LRM-00109: ???????????????? 'C:\RC\SOFTS\ORACLE_19.3_X64\DATABASE\INITDBWIND.ORA'
+    <br>解决方法参考 url=https://www.cnblogs.com/linyfeng/p/7231603.html
+    <br>把 D:\oracle_rc\admin\db_wind\pfile\init.ora
+    <br>保存至 C:\rc\softs\Oracle_19.3_x64\database\initdbwind.ora
+    <br>再次输入startup后，output：Total System Global Area 5133827232 bytes ；数据库装载完毕。 数据库已经打开。
+    <br>
+
+</p>
+
+<h4>Postgresql数据库</h4>
+<p>TODO：用postgresql插件 oracle_fdw连接wind-wds。
+    <br>Psycopg是Python编程语言中最流行的PostgreSQL数据库适配器。url=https://blog.csdn.net/u012325865/article/details/82563744
+    <br>oracle_fdw的使用：从PostgreSQL中访问Oracle数据库，实现数据库数据的同步;url=https://blog.csdn.net/ljinxin/article/details/77896295
+
+
+
+
+</p>
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="wind_api">7,wind api python </h3>
+<p>保存通过wds，wind-api接口等方式获取的数据文件。 </p>
+
+<h4>主要数据介绍。</h4>
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="pandas">8,Pandas 技巧 </h3>
+<p>
+    <br>pandas series to df, df_out.to_frame()
+
+</p>
+
+
+
+
+<h3>自定义数据 | Custom Data</h3>
+<hr>
+<p>{......} </p>
+<hr>
+<!-- ---------------------------------------------------------- -->
+{% endblock content %}

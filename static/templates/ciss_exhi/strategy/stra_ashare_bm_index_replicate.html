@@ -1,0 +1,470 @@
+{% extends "base.html" %}
+<meta charset="UTF-8">
+<!-- for HTML5  -->
+<!-- The block items for this base html file is: {nav_sub, left_frame,menu,content } -->
+<!-- ref:sra_abm_rc.html } -->
+
+{% block nav_sub %} A股策略分类：
+<a id="a_nav" href="./stra_ashare_bm_index_replicate.html">基准和指数策略</a> >>
+<a id="a_nav" href="#ashare_funda_industry">基本面：行业和主题</a> >>
+<a id="a_nav" href="#ashare_single_stock">个股模型</a> >>
+<a id="a_nav" href="#ashare_asset_allocation">资产配置</a> >>
+<br>
+<a id="a_nav" href="./core_stra">核心策略 |Core strategy</a> >>
+<a id="a_nav" href="./last_stra">最新策略 |Lastest strategy</a> >>
+<br> {% endblock nav_sub %} {% block right_frame %}
+<h1><a href="#title">基准和指数策略 </a> </h1>
+<h3>目录</h3>
+<ul>
+    <li><a href="#stra_intro">1,策略介绍| Introduction </a></li>
+    <li><a href="#stra_theory">2,经典理论和模型| Theory and model</a></li>
+    <li><a href="#stra_empirical">3,策略实证| Empirical </a></li>
+    <li><a href="#stra_empirical_data">3.1,策略实证-数据 </a></li>
+    <li><a href="#stra_empirical_indicator">3.2,策略实证-分析指标 </a></li>
+    <li><a href="#stra_empirical_stra_factor">3.3,策略实证-策略和因子 </a></li>
+    <li><a href="#stra_empirical_opt_weight">3.4,策略实证-最优化加权 </a></li>
+    <li><a href="#stra_empirical_portfolio">3.5,策略实证-组合 </a></li>
+    <li><a href="#stra_conclusion">4,策略结论| Conclusion</a></li>
+    <li><a href="#stra_operation">5,策略运作 | Operation and Maintainance</a></li>
+
+</ul>
+<h4><a href="#stra_operation"> 策略日常运作 | Operation</a></h4>
+<ul>
+    <li><a href=""> 1，WDS基础数据维护</a></li>
+
+</ul>
+
+{% endblock right_frame %} {% block left_frame %}
+<!-- Menu in left frame -->
+<h1>基准和指数策略</h1>
+<p>管理从A股投资组合基准和指数类策略</p>
+<p>TODO：以50只股票复制沪深300指数收益和波动特诊。</p>
+<hr>
+<h3>目录</h3>
+<ul>
+    <li><a href="#stra_intro">1,策略介绍| Introduction </a></li>
+    <li><a href="#stra_theory">2,经典理论和模型| Theory and model</a></li>
+    <li><a href="#stra_empirical">3,策略实证| Empirical </a></li>
+    <li><a href="#stra_empirical_data">3.1,策略实证-数据 </a></li>
+    <li><a href="#stra_empirical_indicator">3.2,策略实证-分析指标 </a></li>
+    <li><a href="#stra_empirical_stra_factor">3.3,策略实证-策略和因子 </a></li>
+    <li><a href="#stra_empirical_opt_weight">3.4,策略实证-最优化加权 </a></li>
+    <li><a href="#stra_empirical_portfolio">3.5,策略实证-组合 </a></li>
+    <li><a href="#stra_conclusion">4,策略结论| Conclusion</a></li>
+    <li><a href="#stra_operation">5,策略运作 | Operation and Maintainance</a></li>
+</ul>
+
+<hr> {% endblock left_frame %} {% block content %}
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="stra_intro">1,策略介绍| Introduction </h3>
+<hr>
+<p>{......}
+    <br>
+</p>
+
+
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="stra_theory">2,经典理论和模型| Theory and model</h3>
+<hr>
+<p>1,多因子基础模型:构建沪深300与中证500增强基准策略。
+    <br>参考资料：file=结合行业轮动的指数增强策略.pdf，path=D:\TOUYAN\天风证券金工合集\行业与风格轮动
+    <br>天风， 金融工程-多因子模型的业绩归因评价体系.pdf
+    <br>20190226_西南证券_金融工程专题_邓璎函王挺_BARRA中国市场模型（CNE6）解读——因子选股系列；
+    <br> 20190410_财通证券_金融工程_【财通金工】“星火”多因子专题报告（四）：基于持仓的基金业绩归因：始于Brinson，归于Barra_陶勤英
+</p>
+
+<h4>多因子基础模型</h4>
+<table id="ciss_table">
+    <caption>多因子基础模型：天风证券版本</caption>
+    <tr id="table_tr">
+        <th>序号</th>
+        <th>因子大类</th>
+        <th>因子名称</th>
+        <th>因子明细 </th>
+        <th>算法</th>
+        <th>变量</th>
+        <th>参数</th>
+        <th width="15%">备注：历史or预测值</th>
+    </tr>
+    <tr>
+        <th>1 </th>
+        <th>规模</th>
+        <th>市值类</th>
+        <th>流通市值对数</th>
+        <th>log( mv_float )</th>
+        <th>mv_float</th>
+        <th> </th>
+        <th> </th>
+    </tr>
+    <tr>
+        <th>2 </th>
+        <th>规模</th>
+        <th>市值类</th>
+        <th>总市值对数</th>
+        <th>log( mv_total )</th>
+        <th>mv_total</th>
+        <th> </th>
+        <th> </th>
+    </tr>
+    <tr>
+        <th>3</th>
+        <th>行业</th>
+        <th>中信行业类</th>
+        <th>中信一级行业</th>
+        <th>ind_citic_1</th>
+        <th>ind_citic_1</th>
+        <th> </th>
+        <th> </th>
+    </tr>
+    <tr>
+        <th>17</th>
+        <th>行业</th>
+        <th>rc行业类</th>
+        <th>rc行业分类</th>
+        <th>ind_rc_1</th>
+        <th>ind_rc_1</th>
+        <th> </th>
+        <th>在中信一级的基础上，拆分或合并部分市值过大和过小的行业；如银行、白酒 </th>
+    </tr>
+    <tr>
+        <th>4</th>
+        <th>价值</th>
+        <th>资产类</th>
+        <th>净资产比总市值</th>
+        <th>net_asset/mv_total</th>
+        <th>net_asset,mv_total</th>
+        <th> </th>
+        <th> </th>
+    </tr>
+
+    <tr>
+        <th>5</th>
+        <th>价值</th>
+        <th>盈利类</th>
+        <th>扣非净利润比总市值</th>
+        <th>deducted_profit/mv_total</th>
+        <th>deducted_profit,mv_total</th>
+        <th> </th>
+        <th> </th>
+    </tr>
+    <tr>
+        <th>6</th>
+        <th>价值</th>
+        <th>收入类</th>
+        <th>总收入比总市值</th>
+        <th>revenue/mv_total</th>
+        <th>revenue,mv_total</th>
+        <th> </th>
+        <th> </th>
+    </tr>
+    <tr>
+        <th>7</th>
+        <th>价值</th>
+        <th>现金流类</th>
+        <th>经营性现金流净额比总市值</th>
+        <th>cf_oper/mv_total</th>
+        <th>cf_oper,mv_total</th>
+        <th> </th>
+        <th> </th>
+    </tr>
+    <tr>
+        <th>8</th>
+        <th>价量</th>
+        <th>流动性</th>
+        <th>近1个月日均成交额比近6个月日均成交额均值</th>
+        <th>amt_ave_1m/amt_ave_6m</th>
+        <th>amt_ave_1m,amt_ave_6m</th>
+        <th> </th>
+        <th>默认都是日均，避免月内多个停牌日等情况 </th>
+    </tr>
+    <tr>
+        <th>9</th>
+        <th>价量</th>
+        <th>流动性</th>
+        <th>近1个月日均换手率比近6个月日均换手率均值</th>
+        <th>turnover_ave_1m/turnover_ave_6m</th>
+        <th>turnover_ave_1m,turnover_ave_6m</th>
+        <th> </th>
+        <th> </th>
+    </tr>
+    <tr>
+        <th>10</th>
+        <th>价量</th>
+        <th>波动率</th>
+        <th>近1个月日均波动率比近6个月日均波动率均值</th>
+        <th>volatility_ave_1m/volatility_ave_6m</th>
+        <th>volatility_ave_1m,volatility_ave_6m</th>
+        <th> </th>
+        <th> </th>
+    </tr>
+    <tr>
+        <th>11</th>
+        <th>价量</th>
+        <th>趋势</th>
+        <th>20天移动平均价格比120天移动平均价格</th>
+        <th>ma_20d/ma_120d</th>
+        <th>ma_20d,ma_120d</th>
+        <th> </th>
+        <th>趋势=momentum </th>
+    </tr>
+    <tr>
+        <th>12</th>
+        <th>价量</th>
+        <th>收益率</th>
+        <th>20天平均涨跌幅比120天平均涨跌幅</th>
+        <th>ret_averet_ave_20d/ret_averet_ave_120d</th>
+        <th>ret_averet_ave_20d,ret_averet_ave_120d</th>
+        <th> </th>
+        <th>趋势=momentum </th>
+    </tr>
+    <tr>
+        <th>13</th>
+        <th>价量</th>
+        <th>收益率</th>
+        <th>20天累计涨跌幅比120天累计涨跌幅</th>
+        <th>ret_accumu_20d/ret_accumu_120d</th>
+        <th>ret_accumu_20d,ret_accumu_120d</th>
+        <th> </th>
+        <th>趋势=momentum </th>
+    </tr>
+    <tr>
+        <th>14</th>
+        <th>价量</th>
+        <th>收益率</th>
+        <th>20天内最大回撤比120天内最大回撤</th>
+        <th>ret_mdd_20d/ret_mdd_120d</th>
+        <th>ret_mdd_20d,ret_mdd_120d</th>
+        <th> </th>
+        <th>趋势=momentum </th>
+    </tr>
+    <tr>
+        <th>13</th>
+        <th>成长</th>
+        <th>季度营业收入增速</th>
+        <th>最近一季度营业收入比上年同期季度营业收入增速</th>
+        <th>revenue_q_1q/revenue_q_1q-1</th>
+        <th>revenue_q_1q,revenue_q_1q-1</th>
+        <th> </th>
+        <th> </th>
+    </tr>
+    <tr>
+        <th>14</th>
+        <th>成长</th>
+        <th>季度营业利润增速</th>
+        <th>最近一季度营业利润比上年同期季度营业利润增速</th>
+        <th>profit_q_1q/profit_q_1q-1</th>
+        <th>profit_q_1q,profit_q_1q-1</th>
+        <th> </th>
+        <th> </th>
+    </tr>
+    <tr>
+        <th>15</th>
+        <th>成长</th>
+        <th>ROE_ttm</th>
+        <th>净资产收益率</th>
+        <th>roe_ttm</th>
+        <th>roe_ttm</th>
+        <th> </th>
+        <th> </th>
+    </tr>
+    <tr>
+        <th>16</th>
+        <th>成长</th>
+        <th>ROA_ttm</th>
+        <th>总资产收益率</th>
+        <th>roa_ttm</th>
+        <th>roa_ttm</th>
+        <th> </th>
+        <th> </th>
+    </tr>
+    <tr>
+        <th>18</th>
+        <th>预期</th>
+        <th>一致预期PE</th>
+        <th>当年一致预期pe</th>
+        <th>pe_esti</th>
+        <th>pe_esti</th>
+        <th> </th>
+        <th> </th>
+    </tr>
+    <tr>
+        <th>19</th>
+        <th>价值</th>
+        <th>股息率</th>
+        <th>近1年股息率</th>
+        <th>当年一致预期pe</th>
+        <th>pe_esti</th>
+        <th>pe_esti</th>
+        <th> </th>
+    </tr>
+</table>
+
+<h4>经典多因子模型计算过程</h4>
+<ol>
+    <li>给定交易日,给定选样空间，例如沪深300指数成分；</li>
+    <li>给定交易日，计算以上因子指标，并进行行业标记、极值处理、标准化；</li>
+    <li>所有因子做行业中性化，市值以外因子做市值中性化；</li>
+    <li>因子做对称正交处理 |参考《因子正交全攻略 —— 理论、框架与实践【天风金工因子选股系列之六】》</li>
+    <li>个股超额行业收益滚动计算各因子12个月ICIR，作为各因子权重 </li>
+    <li>手续费双边千三</li>
+</ol>
+<p>因子的标准化处理。我们采用MAD（Median Absolute Deviation绝对中位数法）方法来对每个因子进行边界压缩处理，以剔除异常值。计算过程为，首先计算当期所有股票在因子𝑓上的中位数𝑚𝑓，然后计算绝对中位数𝑀𝐴𝐷=𝑚𝑒𝑑𝑖𝑎𝑛(|𝑓−𝑚𝑓|)采用与3σ法等价的方法，保留（𝑚𝑓−3∙1.483∙𝑀𝐴𝐷，𝑚𝑓+3∙1.483∙𝑀𝐴𝐷）之间的因子值，两端的其他值为异常值，并将异常值对应地压缩为两端极值𝑚𝑓−3∙1.483∙𝑀𝐴𝐷或𝑚𝑓+3∙1.483∙𝑀𝐴𝐷。边界压缩后对因子值有缺失的股票视情况补其因子值为均值或0，然后在每个横截面上对因子进行中信一级行业（通过引入哑变量）和市值对数的中性化回归，将中性化回归后的残差项做Z-Score标准化处理后作为每只股票在该因子上的取值。
+    <br>天风； file=金融工程-半衰IC加权在多因子选股中的应用.pdf
+
+</p>
+
+
+<p>TODO：</p>
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="stra_empirical">3,策略实证| Empirical </h3>
+<hr>
+<p>{......}
+    <br>
+</p>
+
+
+
+
+
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="stra_empirical_data">3.1,策略实证-数据 </h3>
+<hr>
+<p>
+
+</p>
+
+
+
+
+
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="stra_empirical_indicator">3.2,策略实证-分析指标 </h3>
+<hr>
+<p>测试脚本：test_2003.py ；path=C:\ciss_web\CISS_rc\apps\active_bm
+    <br>计算模块： analysis_indicators.py ；path=C:\ciss_web\CISS_rc\db
+    <br>
+    <br>
+    <br>
+    <br>
+</p>
+
+
+
+
+
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="stra_empirical_stra_factor">3.3,策略实证-策略和因子 </h3>
+<hr>
+<p>{......}
+    <br>
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="stra_empirical_opt_weight">3.4,策略实证-最优化加权 </h3>
+<hr>
+<p>{......}
+    <br>
+</p>
+
+
+
+
+
+
+
+
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="stra_empirical_portfolio">3.5,策略实证-组合 </h3>
+<hr>
+<p>{......}
+    <br>
+</p>
+
+
+
+
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="stra_conclusion">4,策略结论| Conclusion</h3>
+<hr>
+<p>{......}
+    <br>
+</p>
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="stra_operation">5,策略运作 | Operation and Maintainance </h3>
+<hr>
+<p>策略运作主要包括：基础数据维护、指标计算、策略指标计算、最优权重模型、组合调整等步骤。
+</p>
+
+<ul>
+    <li>1,WDS基础数据维护：</li>
+    <li></li>
+</ul>
+
+<h4><a href="">1,WDS基础数据维护：</a></h4>
+<p>1,WDS需要的表格信息管理：file=0wds_MANAGE.xlsx
+    <br>2,WDS表格下载，每个交易日维护：脚本=test_wds_manage_auto.py；输入表格=log_data_wds_tables.csv;输出表格=data_check_anndates.csv
+    <br>3，WDS表格下载，一次性维护：脚本=test_wds_manage_1shot_auto.py；输入表格=log_data_wds_tables_1shot.csv
+    <br>4，维护最新A股代码：脚本= ？？？ ；输入表格=；输出表格=code_list.csv
+    <br>5，A股历史交易日：脚本=？？？；输入表格=；输出表格=date_list_tradingdate_ashares.csv
+    <br>6，数据转换？？？：脚本=test_wds_data_transform.py；功能：1，按一定的命名规则对文件夹内满足条件的文件改名；2，给定指数最新成分和历史成分调整，计算指数历史成分，如纳斯达克；3，对于给定交易日至最新交易日，若有新股票无个券csv文件则新建该文件；
+    <br> 功能：4，按最新交易日行情对个股日行情内的交易日进行更新,5，给定交易日，计算当日所有股票行业分类，基于已经计算好了的数据；6，获取所有文件名称 |需要对每张表进行匹配分析
+    <br>7,基金数据转换？？？：脚本=test_wds_data_transform_fund.py；输入表格=；输出表格=
+
+
+    <br>临时类：
+    <br>1，按交易日下载特定表格 ：脚本=test_wds_by-date.py；
+
+    <br>其他：
+    <br>6，临时功能{1,获取指数区间收益率 ;2,文件夹内批量改名；3，从一次性下载的csv表格数据文件中，依次按交易日/公告日保存csv数据；4，通过"OPDATE"下载增量数据；}：脚本=test_wds_manage.py；输入表格=；输出表格=
+    <br>7，简易指数计算{1，根据指标数据计算模拟组合PMS模板；2，计算逐年指数成分股，根据历史调入调出记录}：脚本=test_cal_index.py；
+    <br>8，数据csv转html：脚本=test_data_html.py；csv转sql=test_db_sql_manage.py；
+    <br>Wind-API相关：脚本=test_Wind_single.py，test_Wind.py，rC_Data_Initial.py；
+</p>
+
+
+<hr> {% endblock content %}

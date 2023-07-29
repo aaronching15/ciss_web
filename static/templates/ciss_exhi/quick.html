@@ -1,0 +1,678 @@
+{% extends "base.html" %}
+<meta charset="UTF-8">
+<!-- for HTML5 -->
+{% block head_content %} 
+
+{% endblock head_content %}
+<!-- The block items for this base html file is: {nav_sub, left_frame,menu,content } -->
+<!-- 设置标题 -->
+{% block title0 %} 
+    快速功能|QUICK
+{% endblock title0 %}
+
+{% block nav_sub %}
+<!-- layui定义左侧工具栏：第一部分目录 -->
+<li style="text-align: center;">快速功能| Quick</li>
+<!-- notes:class="layui-nav-item"默认是收起的， 加上" layui-nav-itemed"后内容是展开的;  -->
+<li class="layui-nav-item">
+    <a class="" href="#monitor">1，市场和组合监控</a>
+    <dl class="layui-nav-child">
+        <dd><a href="#check_market_index">查询市场指数和区间收益率 </a></dd>
+        <dd><a href="#check_stock">个股动量和区间收益率   </a></dd>
+        <dd><a href="#check_stock_ind">股票行业分组动量和区间收益率  </a></dd>
+        <dd><a href="#check_fund_period_ret">基金区间收益率、回撤、绩效指标  </a></dd>
+        <dd><a href="#check_fund_period_chart">基金区间净值图和相对收益收益率  </a></dd>
+    </dl>
+</li>
+
+<!-- notes:class="layui-nav-item"默认是收起的， 加上" layui-nav-itemed"后内容是展开的;  -->
+<li class="layui-nav-item">
+    <a class="" href="#data_calculate">4，数据下载、分析、统计和指标计算</a>
+    <dl class="layui-nav-child">
+        <dd><a href="#data_get_AH_mom">2，下载AH股的价量数据 </a></dd>         
+        <dd><a href="#data_cal_AH_mom_ind">3，计算AH股的动量趋势和行业统计 </a></dd> 
+    </dl>
+</li>
+
+
+<li>当前日期:{{ time_now_str }}</li>
+
+{% endblock nav_sub %}
+
+<!--- ################################################################## --->
+<!--- ################################################################## --->
+{% block left_frame %}
+
+<h1><a id="location_title">快速功能| Quick</a> </h1>
+<h3>目录</h3>
+<ul>
+    <li><a href="#monitor">1，市场和组合监控 </a></li>
+    <ul>
+        <li><a href="#check_market_index">查询市场指数和区间收益率 </a></li>
+        <li><a href="#check_stock">个股动量和区间收益率   </a></li>
+        <li><a href="#check_stock_ind">股票行业分组动量和区间收益率  </a></li> 
+        <li><a href="#check_fund_period_ret">基金区间收益率、回撤、绩效指标  </a></li>
+        <li><a href="#check_fund_period_chart">基金区间净值图和相对收益收益率  </a></li>
+    </ul>
+    <li><a href="./pms_manage.html">2，PMS组合管理 </a></li>
+    <li><a href="#data_calculate">4，数据下载、分析、统计和指标计算</a></li>
+    <ul>
+        <li>1,Wind终端导出A股、港股、基金数据 </a></li> 
+        <li><a href="#data_get_AH_mom">2，下载AH股的价量数据 </a></li>         
+        <li><a href="#data_cal_AH_mom_ind">3，计算AH股的动量趋势和行业统计 </a></li> 
+    </ul> 
+     
+</ul>
+{% endblock left_frame %} {% block menu %} {% endblock menu %} 
+
+{% block content %}
+<!--- ################################################################## --->
+
+<form action="{% url 'quick' %}" method="post" accept-charset="utf-8">
+
+<hr>
+
+<!--- ################################################################## --->
+<!--- 用于表格排序的js，但是截至20220221没成功 --->
+
+<!-- <script type="text/javascript">
+    $(function() {
+        // Jquery对Table表格排序(方法一)
+        // 主要思想是：获取鼠标点击的表头单元格的列号，遍历数据行，获取每个<tr>中的html，同时获取每个<tr>标签下对应获取到的列号的<td>标签中的内容，并取得<th>标签的type属性值，将获取<tr>的html、<td>的内容和<th>的type属性值拼接成字符串添加到数组array中，然后将表格<tr>中的html全部置空，根据type属性值的不同采用不同的方法对<td>的内容进行比较，根据比较结果对数组array进行排序，然后将排序后的数组元素重新赋值给已经置空的<tr>。如果已经对该列排序过了，则直接对数组进行倒置。
+        //获取id为t ciss_table 的table对象
+        var tableObject = $('#ciss_table'); //获取id为t ciss_table 的table对象
+        var tbHead = tableObject.children('thead'); //获取table对象下的thead
+        var tbHeadTh = tbHead.find('tr th'); //获取thead下的tr下的th
+        var tbBody = tableObject.children('tbody'); //获取table对象下的tbody
+        var tbBodyTr = tbBody.find('tr'); //获取tbody下的tr
+
+        var sortIndex = -1;
+
+        tbHeadTh.each(function() { //遍历thead的tr下的th
+            var thisIndex = tbHeadTh.index($(this)); //获取th所在的列号
+            //给表态th增加鼠标位于上方时发生的事件
+            $(this).mouseover(function() {
+                tbBodyTr.each(function() { //编列tbody下的tr
+                    var tds = $(this).find("td"); //获取列号为参数index的td对象集合
+                    $(tds[thisIndex]).addClass("hover"); //给列号为参数index的td对象添加样式
+                });
+            }).mouseout(function() { //给表头th增加鼠标离开时的事件
+                tbBodyTr.each(function() {
+                    var tds = $(this).find("td");
+                    $(tds[thisIndex]).removeClass("hover"); //鼠标离开时移除td对象上的样式
+                });
+            });
+
+            $(this).click(function() { //给当前表头th增加点击事件
+                var dataType = $(this).attr("type"); //点击时获取当前th的type属性值
+                checkColumnValue(thisIndex, dataType);
+            });
+        });
+
+        $("tbody tr").removeClass(); //先移除tbody下tr的所有css类
+        //table中tbody中tr鼠标位于上面时添加颜色,离开时移除颜色
+        $("tbody tr").mouseover(function() {
+            $(this).addClass("hover");
+        }).mouseout(function() {
+            $(this).removeClass("hover");
+        });
+
+        //对表格排序
+        function checkColumnValue(index, type) {
+            var trsValue = new Array();
+
+            tbBodyTr.each(function() {
+                var tds = $(this).find('td');
+                //获取行号为index列的某一行的单元格内容与该单元格所在行的行内容添加到数组trsValue中
+                trsValue.push(type +".separator" + $(tds[index]).html() +".separator" + $(this).html());
+                $(this).html("");
+            });
+
+            var len = trsValue.length;
+
+            if (index == sortIndex) {
+                //如果已经排序了则直接倒序
+                trsValue.reverse();
+            } else {
+                for (var i = 0; i < len; i++) {
+                    //split() 方法用于把一个字符串分割成字符串数组
+                    //获取每行分割后数组的第一个值,即此列的数组类型,定义了字符串\数字\Ip
+                    type = trsValue[i].split(".separator")[0];
+                    for (var j = i + 1; j < len; j++) {
+                        //获取每行分割后数组的第二个值,即文本值
+                        value1 = trsValue[i].split(".separator")[1];
+                        //获取下一行分割后数组的第二个值,即文本值
+                        value2 = trsValue[j].split(".separator")[1];
+                        //接下来是数字\字符串等的比较
+                        if (type =="number") {
+                            value1 = value1 =="" ? 0 : value1;
+                            value2 = value2 =="" ? 0 : value2;
+                            if (parseFloat(value1) > parseFloat(value2)) {
+                                var temp = trsValue[j];
+                                trsValue[j] = trsValue[i];
+                                trsValue[i] = temp;
+                            }
+                        } else if (type =="ip") {
+                            if (ip2int(value1) > ip2int(value2)) {
+                                var temp = trsValue[j];
+                                trsValue[j] = trsValue[i];
+                                trsValue[i] = temp;
+                            }
+                        } else {
+                            if (value1.localeCompare(value2) > 0) { //该方法不兼容谷歌浏览器
+                                var temp = trsValue[j];
+                                trsValue[j] = trsValue[i];
+                                trsValue[i] = temp;
+                            }
+                        }
+                    }
+                }
+            }
+
+            for (var i = 0; i < len; i++) {
+                $("tbody tr:eq(" + i +")").html(trsValue[i].split(".separator")[2]);
+            }
+
+            sortIndex = index;
+        }
+
+        //IP转成整型
+        function ip2int(ip) {
+            var num = 0;
+            ip = ip.split(".");
+            num = Number(ip[0]) * 256 * 256 * 256 + Number(ip[1]) * 256 * 256 + Number(ip[2]) * 256 + Number(ip[3]);
+            return num;
+        }
+
+    })
+</script> -->
+
+<!--- ################################################################## --->
+<!--- ################################################################## --->
+<hr>
+<h3 id="monitor">1，市场和组合监控</h3>
+<p>todo：VIP:快速、批量获取PMS模拟组合历史净值，不需要在Wind终端里1个1个弄。
+
+    <br> 1，市场基础组合：对主要市场or行业指数，和组合，列出近1、5、20、60、120天涨跌；
+    <br>Part1：日内股票指数、A股、港股、基金、债券指数、衍生品的实时价格；点击按钮后刷新
+    <br>Part2：区间涨跌幅和个股分组的统计
+    <br>Part3：特定行业、风格主题的区间涨跌幅和个股分组的统计
+
+    <br>2，给定组合，列出持仓明细和日内涨跌幅。
+    <br>part1：组合列表-绩效分析：近1、5、20、60、120天涨跌；和市场基础组合比较
+    <br>part2：给定组合-持仓股票：列出持仓股票和基金的日内涨跌、持仓盈亏率。
+    <br>3，策略跟踪：1，量化策略绩效；2，主动观点:个股价格和预测区间比较、市场趋势和观点
+</p>
+
+
+<hr>
+<h4 id="check_market_index">查询市场指数 </h4>
+<p>查询主要市场指数的区间涨跌幅：A股、港股、美股、基金、债券、商品 </p>
+
+{% csrf_token %}
+<table border="0">
+    <!-- <tr>指数类型：<input type="text" name="index_type" value="A股"></tr> -->
+    <tr>指数类型：<select name="index_type" value="A股">
+        <option value ="A股">A股指数</option> <option value ="债券">债券指数</option> 
+    <option value ="港股">港股指数</option> <option value ="美股">美股指数</option>
+    <option value ="all">所有</option><option value ="商品">商品指数</option> 
+        </select></tr>
+    <input type="submit" name="input_index_type" value="提交">
+    <!--  todo 在方框中查询数据,<textarea>标签会保留用户的预定义格式   -->
+</table>
+<!-- match：1，table id="ciss_table；2，function tableToExcel,base64；3，button，tableToExcel  -->
+<div class="ciss_table" style="overflow-x: auto; overflow-y: auto; height: 800px; width:1200px;">
+<table id="ciss_table">
+    <tr>
+        <td>指数代码</td>
+        <td>指数名称</td>
+        <td>指数类型</td>
+        <td>备注</td>
+    </tr>
+
+    {% for temp_i,temp_v in df_index_list.items %}
+    <tr>
+        <td>{{ temp_v.code }}</td>
+        <td>{{ temp_v.name }}</td>
+        <td>{{ temp_v.type }}</td>
+        <td>{{ temp_v.notes }}</td>
+    </tr>
+    {% endfor %}
+</table>
+</div>
+<button type="button" onclick="tableToExcel('ciss_table')">导出Excel</button> <br>
+<!--  查询区间涨跌幅数据  -->
+<tr>指数类型：<select name="index_type2" value="A股">
+    <option value ="A股">A股指数</option> <option value ="债券">债券指数</option> 
+    <option value ="港股">港股指数</option> <option value ="美股">美股指数</option>
+    <option value ="all">所有</option><option value ="商品">商品指数</option> 
+</select></tr>
+<tr>开始日期<input type="text" name="date_begin" value="20211231"></tr>
+<tr>结束日期 <input type="text" name="date_end" value="{{ time_now_str_pre1d }}"></tr>
+<input type="submit" name="input_index_type_period" value="提交日期"><br>
+<div class="ciss_table" style="overflow-x: auto; overflow-y: auto; height: 800px; width:1200px;">
+<table id="ciss_table_chg">
+    <tr class="hover">
+        <td>指数代码</td>
+        <td>指数名称</td>
+        <td>指数类型</td>
+        <td>区间涨跌幅</td>
+        <td>近1周涨跌幅</td>
+        <td>近1月涨跌幅</td>
+        <td>近3月涨跌幅</td>
+        <td>近6月涨跌幅</td>
+        <td>近1年涨跌幅</td>
+
+    </tr>
+    {% for temp_i,temp_v in df_chg.items %}
+    <tr>
+        <td>{{ temp_v.code }}</td>
+        <td>{{ temp_v.name }}</td>
+        <td>{{ temp_v.type }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_period }}</td>
+        <td id="table_td_right">{{ temp_v.1w }}</td>
+        <td id="table_td_right">{{ temp_v.1m }}</td>
+        <td id="table_td_right">{{ temp_v.3m }}</td>
+        <td id="table_td_right">{{ temp_v.6m }}</td>
+        <td id="table_td_right">{{ temp_v.1y }}</td>
+    </tr>
+    {% endfor %}
+
+
+</table>
+</div>
+<!-- match：1，table id="ciss_table；2，function tableToExcel,base64；3，button，tableToExcel  -->
+<button type="button" onclick="tableToExcel('ciss_table_chg')">导出Excel</button>
+<br>
+
+<!--- ################################################################## --->
+<!--- ################################################################## --->
+<hr>
+<h4 id="check_stock">个股动量和区间收益率 todo</h4>
+
+<!--- ################################################################## --->
+<!--- ################################################################## --->
+<hr>
+<h4 id="check_stock_ind">股票行业分组动量和区间收益率 todo</h4>
+
+<!--- ################################################################## --->
+<!--- ################################################################## --->
+<hr>
+<h4 id="check_fund_period_ret">基金区间收益率、回撤、绩效指标 </h4> 
+<p> </p>
+{% csrf_token %}
+<table border="1">
+    <tr>基金代码：<input type="text" name="fund_code" value="720001.OF"></tr>
+    <tr>开始日期<input type="text" name="date_begin" value="20211231"></tr>
+    <tr>结束日期 <input type="text" name="date_end" value="{{ time_now_str_pre1d }}"></tr>
+    <tr>是否提取基金经理简历 <select name="if_jjjl_resume" value="0">
+    <option value ="0">否</option><option value ="1">是</option></select>
+        <input type="submit" name="input_fund_perf" value="提交"> </tr>
+    <br>
+    <tr>基金经理简历：{{ fund_manager_resume }}</tr>
+    <tr>基金业绩情况：{{ str_perf }} </tr><br>
+    
+</table>
+<div class="ciss_table" style="overflow-x: auto; overflow-y: auto; height: 800px; width:1200px;">
+<table id="ciss_table_chg">
+    <tr class="hover">
+        <td>基金名称</td>
+        <td>基金经理</td>
+        <td>区间收益率</td>
+        <td>区间最大回撤</td>
+        <td>本年收益率</td>
+        <td>近1月收益率</td>
+        <td>近3月收益率</td>
+        <td>近6月收益率</td>
+        <td>本年排名</td>
+        <td>近1月排名</td>
+        <td>近3月排名</td>
+        <td>近6月排名</td>
+
+        <td>几何年化回报率</td>
+        <td>基金总规模|亿</td>
+        <td>任期最大回撤</td>
+    </tr>
+
+    {% for temp_i,temp_v in df_perf.items %}
+    <tr>
+        <td>{{ temp_v.name_official }}</td>
+        <td>{{ temp_v.fund_fundmanager }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_NAV_adj_return }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_risk_maxdownside }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_return_ytd }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_return_1m }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_return_3m }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_return_6m }}</td>
+        <td id="table_td_right">{{ temp_v.periodreturnranking_ytd }}</td>
+        <td id="table_td_right">{{ temp_v.periodreturnranking_1m }}</td>
+        <td id="table_td_right">{{ temp_v.periodreturnranking_3m }}</td>
+        <td id="table_td_right">{{ temp_v.periodreturnranking_6m }}</td>
+
+        <td id="table_td_right">{{ temp_v.exhi_fund_manager_geometricannualizedyield }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_fund_manager_totalnetasset }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_fund_manager_maxdrawdown }}</td>
+
+        {% endfor %}
+</table>
+</div>
+
+
+<!--------------------------------------->
+<h4 id="check_fund_period_chart">基金区间净值图和相对收益率</h4>
+{% csrf_token %}
+<table border="1">
+    <tr>基金代码：<input type="text" name="fund_code_2" value="720001.OF"></tr>
+    <tr>基准代码：指数\基金\个股<input type="text" name="benchmark_code" value="885001.WI"></tr>
+    <tr>开始日期<input type="text" name="date_begin" value="20211231"></tr>
+    <tr>结束日期 <input type="text" name="date_end" value="{{ time_now_str_pre1d }}""></tr>
+    <tr>净值频率：<select name="unit_type" value="week">
+    <option value ="week">周</option> <option value ="day">交易日</option>  </select></tr>
+    <tr><input type="submit" name="input_fund_unit" value="提交"> </tr>
+</table> 
+    <table id="ciss_table_chg">
+    <tr> 
+        <td>日期</td>
+        <td>基金净值 </td>
+        <td>基准净值 </td> 
+    </tr>
+
+    {% for temp_i,temp_v in df_unit.items %}
+    <tr>
+        <td>{{ temp_i }}</td>      
+        <td id="table_td_right">{{ temp_v.exhi_unit_fund }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_unit_bench }}</td>  
+    {% endfor %}
+    </table>
+
+<hr>
+
+
+<div id="div_chart" style="width: 800px;height:500px;">
+    <div id="main2" style="width: 800px;height:500px;">
+    </div>
+</div>
+<hr>
+{% csrf_token %}
+<script type="text/javascript">
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('main2'));
+    
+    option = {
+    title: {
+        text:"基金组合："+"{{ fund_code }}" +" vs"+"基准："+"{{ benchmark_code }}",
+        left:"center"
+    },
+    tooltip: {
+        trigger: 'axis'
+    },
+    legend: {
+        orient:"vertical",
+        right:10,
+        top:"center" ,
+        data: ['fund',"bench"]
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+    },
+    toolbox: {
+        feature: {
+        saveAsImage: {}
+        }
+    },
+    xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        data : [  {% for temp_i,temp_v in df_unit.items %}"{{ temp_i }}" , {% endfor %} ] 
+        
+    },
+    yAxis: {
+        type: 'value',
+        max: 'dataMax' ,
+        min:  'dataMin' ,
+    },
+    series: [
+        {
+        name: '组合净值',
+        type: 'line', 
+        data:  [ {% for temp_i,temp_v in df_unit.items %}"{{ temp_v.exhi_unit_fund }}" ,  {% endfor %} ]
+        },
+        {
+        name: '基准净值',
+        type: 'line', 
+        data: [ {% for temp_i,temp_v in df_unit.items %}"{{ temp_v.exhi_unit_bench }}" ,  {% endfor %} ]
+        }, 
+    ]
+    };
+    // data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    //data: [120, 132, 101, 134, 90, 230, 210]
+        //   var obj_rc = {
+//         // obj_rc是对应option里的dataset对象
+//         // 用 dimensions 指定了维度的顺序。直角坐标系中，如果 X 轴 type 为 category，
+//         // 默认把第一个维度映射到 X 轴上，后面维度映射到 Y 轴上。
+//         dimensions : ["date ,unit_fund ,unit_bench" ],
+//         source : [
+//             {% for temp_i,temp_v in df_unit.items %} 
+//                 { date: {{ temp_i }} ,unit_fund: {{ temp_v.exhi_unit_fund }},unit_bench : {{ temp_v.exhi_unit_bench }} },
+//             {% endfor %} 
+
+//         ]
+
+//   } 
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+</script>
+
+
+
+
+
+<!--- ################################################################## --->
+<!--- ################################################################## --->  
+
+<!--- #######################--------------------------------------- -->
+<!--- #######################--------------------------------------- -->
+<hr>
+<h4 id="stra_fof_fund">FOF-fund,FOF重仓基金分类优选</h4>
+<p>步骤：1，数据：需要在每个季度末次月，基金披露十大持仓基金数据后，下载“基金--专题统计--资产配置--基金组合--重仓基金(明细) ”
+<br>2，计算FOF基金池筛选，在【2,细分基金池筛选：主动股票、股票指数、偏债混合、纯债、美股港股、FOF、对冲reits、商品等】
+<br>notes:2022H2开始，导出重仓基金是全部品种，导出重仓股票是分类的。港股美股还比较少基金持有
+</p>
+<tr>选择基金类型：<select name="fof_fund_type" value="activestock">
+    <option value ="fund_stock">主动股票</option><option value ="fund_mixed_stock">偏股混合</option>
+    <option value ="fund_mixed_bond">偏债混合</option><option value ="fund_bond">纯债</option>
+    <option value ="fund_hkus">QDII港股美股</option> 
+</select></tr>
+
+<tr>输入FOF基金业绩日期<input type="text" name="date_fof_activestock" value="{{ time_now_str_pre1d }}"></tr>
+输入持仓季末日期 <input type="text" name="date_fof_q_end" value="20220630"></tr>
+<input type="submit" name="input_stra_fof_fund" value="FOF重仓基金优选"><br>
+
+
+<!--- 将选出的基金显示出来 --------------------------------------- -->
+<table id="ciss_table_chg">
+    <tr class="hover">
+        <td>代码</td>
+        <td>名称</td>
+        <td>权重</td>
+        <td>持仓份额|万</td>
+        <td>持仓变动百分比</td> 
+        <td>持仓市值</td>
+        <td>占基金净值比</td> 
+    </tr>
+    {% for temp_i,temp_v in df_funds.items %}
+    <tr>
+        <td>{{ temp_v.code }}</td>
+        <td>{{ temp_v.名称 }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_weight }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_持仓份额 }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_持仓变动百分比 }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_持仓市值 }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_占基金净值比 }}</td> 
+    </tr>
+    {% endfor %}
+
+
+</table>
+
+<!--- #######################--------------------------------------- -->
+<!--- #######################--------------------------------------- -->
+<hr>
+<h4 id="stra_fund_stock">fund-stock,基金重仓股票分类优选</h4>
+<p>notes:2022H2开始，导出重仓基金是全部品种，导出重仓股票是分类的。
+    <br>file=重仓持股(明细)-普通股票型基金-20220630.xlsx
+</p>
+
+<tr>选择基金类型：<select name="fund_type_stock" value="fund_stock">
+    <option value ="fund_stock">主动股票</option>
+    <option value ="fund_mixed_stock">偏股混合</option>
+    <option value ="fund_mixed_bond">偏债混合</option>
+    <option value ="fund_hkus">QDII港股美股</option> 
+</select></tr>
+
+<tr>输入基金业绩日期<input type="text" name="date_fund_type_stock" value="{{ time_now_str_pre1d }}"></tr>
+输入持仓季末日期 <input type="text" name="date_q_end_fund_type_stock" value="20220630"></tr>
+<input type="submit" name="input_stra_fund_type_stock" value="基金重仓股票优选"><br>
+
+
+<!--- 将选出的基金显示出来 --------------------------------------- -->
+<table id="ciss_table_chg">
+    <tr class="hover">
+        <td>代码</td>
+        <td>名称</td>
+        <td>权重</td>
+        <td>持仓份额|万</td>
+        <td>持仓变动百分比</td> 
+        <td>持仓市值</td>
+        <td>占基金净值比</td> 
+    </tr>
+    {% for temp_i,temp_v in df_stocks.items %}
+    <tr>
+        <td>{{ temp_v.code }}</td>
+        <td>{{ temp_v.名称 }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_weight }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_持股数量_万股 }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_持仓变动百分比 }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_持股总市值_万元 }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_持股市值占基金股票投资市值比 }}</td> 
+    </tr>
+    {% endfor %}
+
+
+</table>
+
+
+
+
+<hr>
+<h4 id="stra_fund_ind_active">行业轮动-股票基金-主动行业轮动 </h4>
+<p>需要主观更新行业、市场主题的权重，sheet=3市场行业风格;file=rc_股票策略风格行业.xlsx
+    <br>notes:202305开始，file=rc_股票策略风格行业.xlsx 代替rc_个股推荐行业事件.xlsx
+    <br>对应策略数据位置：sheet=stra_weight , file=pms_manage.xlsx                   
+</p>
+<!--- #######################--------------------------------------- -->
+<tr>输入策略调整日期<input type="text" name="date_fund_ind_active" value="{{ time_now_str_pre1d }}"></tr> 
+<tr>行业、主题、策略类型筛选：<select name="stra_type4weight" value="用策略类型筛选策略的持仓权重">
+    <option value ="ind1">一级行业</option><option value ="ind3">三级行业</option> 
+    </select></tr>
+<input type="submit" name="input_stra_fund_ind_active" value="行业轮动-股票基金-主动行业轮动"><br>
+
+<hr>
+<h4 id="stra_fund_market_trend">风格轮动-股票基金-市场风格动量趋势 </h4>
+<p>需要主观更新行业、市场主题的权重，sheet=3市场行业风格;file=rc_股票策略风格行业.xlsx
+    <br>notes:202305开始，file=rc_股票策略风格行业.xlsx 代替rc_个股推荐行业事件.xlsx
+    <br>对应策略数据位置：sheet=stra_weight , file=pms_manage.xlsx    
+</p>
+
+<!--- #######################--------------------------------------- -->
+<tr>输入策略调整日期<input type="text" name="date_fund_market_trend" value="{{ time_now_str_pre1d }}"></tr> 
+<tr>行业、主题、策略类型筛选：<select name="stra_type4weight_market" value="用策略类型筛选策略的持仓权重">
+    <option value ="market_style">市场风格趋势</option>        
+    </select></tr>
+<input type="submit" name="input_stra_fund_market_trend" value="风格轮动-股票基金-市场风格动量趋势"><br>
+
+
+<hr>
+<!--- 将选出的基金显示出来 --------------------------------------- -->
+<table id="ciss_table_chg">
+    <tr class="hover">
+        <td>资产类型</td>
+        <td>行业或主题类型</td>
+        <td>行业或主题</td>
+        <td>代码</td>
+        <td>名称</td>
+        <td>权重</td>
+    </tr>
+    {% for temp_i,temp_v in df_stra_weight.items %}
+    <tr>
+        <td>{{ temp_v.type_asset }}</td>
+        <td>{{ temp_v.type_ind_style }}</td>
+        <td>{{ temp_v.name_ind_style }}</td>
+        <td>{{ temp_v.code }}</td>
+        <td>{{ temp_v.名称 }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_weight }}</td> 
+    </tr>
+    {% endfor %}
+
+
+</table>
+
+
+
+<hr>
+<!--- #######################--------------------------------------- -->
+<!--- #######################--------------------------------------- -->
+<h3 id="data_calculate">4，数据下载、分析、统计和指标计算 </h3>
+<p>file=test_pms_manage.py ;path= C:\rc_HUARONG\rc_HUARONG\ciss_web\CISS_rc\apps\portfolio_simulation
+    <br>每周五steps：1，Wind终端获取所有A股、港股、公募基金、FOF基金收盘数据excel
+    <br>2，下载AH股的价量数据；3，计算AH股的动量趋势和行业统计：
+</p>
+<h4 >1，每周五Wind终端获取所有A股、港股、基金收盘数据excel</h4>
+
+<h4  id="data_get_AH_mom">2，下载AH股的价量数据</h4>
+<p>TODO:1,部分指标无数据："avg_MV_per";2,每个月末交易日要下载
+
+</p>
+<tr>输入日期 <input type="text" name="date_windapi_shares" value="{{ time_now_str_pre1d }}"></tr>
+<input type="submit" name="input_date_windapi_shares" value="提交日期"><br>
+<textarea rows="3" cols="60">
+    path=C:\rc_202X\rc_202X\data_pms\data_adj
+    file=a_shares.xlsx;h_shares.xlsx;a_shares_{{ date_data_terminal }}.xlsx
+    PY:get_wind_api.py\\def get_wss_ma_amt_mv()
+    </textarea>
+
+<h4  id="data_cal_AH_mom_ind">3，计算AH股的动量趋势和行业统计：</h4>
+<tr>输入日期 <input type="text" name="date_cal_shares_trend" value="{{ time_now_str_pre1d }}"></tr>
+<input type="submit" name="input_cal_shares_trend" value="提交日期"><br>
+<textarea rows="3" cols="60">
+    path=C:\rc_202X\rc_202X\data_pms\data_adj
+    file=ah_shares_{{date_cal_shares_trend}}.xlsx;a_shares_ind1.xlsx；a_shares_ind3.xlsx
+    h_shares_ind1.xlsx;h_shares_ind3.xlsx
+    </textarea>
+<hr>
+<!--- #######################--------------------------------------- --> 
+
+
+
+<hr>
+<h4>End ......</h4>
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+</form>
+
+
+{% endblock content %}

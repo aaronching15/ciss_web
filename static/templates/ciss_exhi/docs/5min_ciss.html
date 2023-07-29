@@ -18,7 +18,7 @@
     <li><a href="#port_simu">模拟组合 |Portfolio Simulation</a></li>  
     <li><a href="#multi_asset">多资产管理 |Multi-Asset Investment</a></li>  
     <li><a href="#stra_eval">策略评估及可视化 |Strategy Evaluation and Visualization</a></li>  
-    <li><a href="#web_platform.html">策略平台网站 |Strategy Platform as Website</a></li>  
+    <li><a href="#web_platform">策略平台网站 |Strategy Platform as Website</a></li>  
     <li><a href="#update_coop_opensource">更新，协作，和开源 |Update,Cooperation and Open source</a></li>  
     </ul>
     </div>
@@ -27,6 +27,28 @@
 {% endblock left_frame %}
 
 {% block menu %}
+
+    <h1 >中式投资策略系统模块 |CISS </h1> 
+    <p>A strategy platform supportting 24 hours strategy development for professional investment</p>
+    <hr>       
+    <div id="menu_float">
+    <ul>
+    <li><a href="#5min_ciss">5分钟入手 |5 Minutes to CISS</a></li> 
+    <li><a href="#esse_func">核心功能 |Essential Functions</a></li>  
+    <li><a href="#data_manage">数据管理 |Data Management</a></li>  
+    <li><a href="#stra_ana">策略分析 |Strategy Analysis</a></li>  
+    <li><a href="#port_simu">模拟组合 |Portfolio Simulation</a></li>  
+    <li><a href="#multi_asset">多资产管理 |Multi-Asset Investment</a></li>  
+    <li><a href="#stra_eval">策略评估及可视化 |Strategy Evaluation and Visualization</a></li>  
+    <li><a href="#web_platform">策略平台网站 |Strategy Platform as Website</a></li>  
+        <ul>
+        <li><a href="#html2excel">网页数据和Excel数据导入导出</a></li> 
+        <li><a href="#html2excel">网页数据和Excel数据导入导出</a></li>  
+        </ul>
+    <li><a href="#update_coop_opensource">更新，协作，和开源 |Update,Cooperation and Open source</a></li>  
+    </ul>
+    </div>
+
 
 {% endblock menu %}
 
@@ -50,6 +72,22 @@
 
 <p>从“db\db_assets\”目录可以导入A股市场所有个股对应的GICS一级至四级行业分类归属。模拟组合的初始资产规模本例中设定为3亿元。从目录“bin\abm_engine”主动基准引擎中导入主动基准模型Abm_model，首先导入所有相关股票的样本空间。样本空间主要包括基于季度的财务、股东变动数据及不定期调整的权息变动数据。脚本中给定3种简便的模拟组合股票池设定方式：单个特定行业或细分行业、1至3级行业分类下所有行业组合、不分行业的全市场组合。风格角度可以选择价值“value”或成长“growth”。最后一步是设置组合的名称“port_name”。</p>
 <p>以上数据导入及参数初始化步骤完成后，使用组合引擎“engine_portfolio”内的测试脚本函数“test_abm_1port_Nperiods_ind_x”可以获得给定行业和风格的主动基准模拟组合。默认的输出文件位置是“D:\CISS_db”，若设置的组合名称为“port_rc_w_allo_growth_999”，则可以在目录“D:\CISS_db\ port_rc_w_allo_growth_999”内查阅从策略应用到账户明细变动等数据文件目录。另外，用户还可以通过在测试脚本“CISS_out\apps\test_ushk.py”进行类似设定，实现对港股或美股的全市场主动基准组合一键式计算。</p>
+
+<h4><a name="esse_func">核心功能 |Essential Functions</a></h4>  
+<p>Django网页显示变量的逻辑MVC=Model View Controller ：
+<br>1，html网页代码里Request引用变量core_stra_list_cs；
+<br>2，urls.py文件里用path(html,views.xxx,name="" )连接html和views里的变量；urls.py也可以再include包括别的urls_sub.py文件；除了views.py，也可以是veiws_sub.py。
+<br>3，views.py文件里的function，从数据库模型提取数据入core_stra_list_cs，保存到输出的context。
+
+
+
+</p>
+
+<h3><a name="web_platform">策略平台网站 |Strategy Platform as Website</a></h3>  
+<hr>
+
+
+
 
 
 

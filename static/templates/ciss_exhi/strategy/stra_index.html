@@ -1,0 +1,443 @@
+{% extends "base.html" %}
+<meta charset="UTF-8">
+<!-- for HTML5 -->
+<!-- The block items for this base html file is: {nav_sub, left_frame,menu,content } -->
+<!-- 设置标题 -->
+{% block head_content %}
+    <!-- 引入layui，也可以本地导入：C:\rc_202X\rc_202X\ciss_web\static\layui  | 20221014 -->
+    <link rel="stylesheet" type="text/css" href="https://www.layuicdn.com/layui/css/layui.css" />
+    <script src="https://www.layuicdn.com/layui/layui.js"></script>
+    
+    
+
+{% endblock head_content %}
+
+{% block title0 %} 
+    策略开发管理|Strategy Develop
+{% endblock title0 %}
+
+
+{% block nav_sub %} 
+<!-- layui定义左侧工具栏：第一部分目录 -->
+<li style="text-align: center;">策略管理</li>
+<!-- notes:class="layui-nav-item"默认是收起的， 加上" layui-nav-itemed"后内容是展开的;  -->
+<li class="layui-nav-item layui-nav-itemed">
+    <a class="" href="#stra_manage">策略权重管理</a>
+    <dl class="layui-nav-child">
+        <dd><a href="#stra_w_search">1，时点策略权重查询</a></dd>
+        <dd><a href="#stra_w_update">2，excel导入策略权重</a></dd>
+        <dd><a href="#stra_w_export">3，生成策略文件</a></dd>
+    </dl>
+</li>
+<li class="layui-nav-item layui-nav-itemed">
+    <a class="" href="#stra_fund">基金策略</a>
+    <dl class="layui-nav-child">
+        <dd><a href="#stra_fundpool">基金池-股/债/混合等 </a></dd>
+        <dd><a href="#stra_fof_fund">FOF重仓基金分类</a></dd>
+        <dd><a href="#stra_fund_stock">基金重仓股票 </a></dd>
+        <dd><a href="#stra_fund_ind_active">主动行业基金轮动 </a></dd>
+        <dd><a href="#stra_fund_market_trend">市场风格动量趋势|fund_market_trend </a></dd>
+        <dd><a href="#stra_fund_option">量化策略-衍生品-股票期权对冲|option </a></dd>
+    </dl>
+</li>
+<li class="layui-nav-item layui-nav-itemed">
+    <a class="" href="#stra_stock">股票策略</a>
+    <dl class="layui-nav-child">
+        <dd><a href="#stra_stock_quant">量化股票策略|stockpool_active </a></dd>
+        <dd><a href="#stra_stock_ind">股票池-行业研究选股|stock_indi </a></dd>
+    </dl>
+</li>
+<li class="layui-nav-item layui-nav-itemed">
+    <a class="" href="#stra_ficc">债券和衍生品策略</a>
+    <dl class="layui-nav-child">
+        <dd><a href="#stra_bond_gov">利率债动量|bond_gov </a></dd>
+    </dl>
+</li>
+
+
+<li>当前日期:{{ time_now_str }}</li>
+
+{% endblock nav_sub %} 
+
+<!--- ################################################################## --->
+<!--- ################################################################## --->
+{% block left_frame %}
+<!-- Menu in left frame -->
+<h3><a name="stra_manage">策略权重管理</a> </h3>
+{% endblock left_frame %} 
+
+{% block content %}
+<!--- ################################################################## --->
+<form action="{% url 'stra_index' %}" method="post" accept-charset="utf-8"> 
+ 
+<!------------------------------------------------------------------------------------->
+<!-------------------------------------------------------------------------------------> 
+<h4><a name="stra_w_search">1,特定时点策略权重查询 TODO </a> </h4>
+<p>1，给定策略组合和日期，从sql查询最新的组合权重；
+</p>
+
+<!--- ################################################################## --->
+<!--按条件查询数据-->
+<!-- <div>
+    <input type="text" id="date_search" placeholder="日期|20230315" class="layui-input-inline" value="">
+    <!-- <input type="text" id="strategy_CN_search" placeholder="策略名称" class="layui-input-inline" value=""> 
+     -->
+    <select id="strategy_CN_search" name="strategy_CN_search" placeholder="策略名称" lay-filter="aihao">
+        <option value ="股票行业研究">股票行业研究</option><option value ="量化股票策略">量化股票策略</option>
+        <option value ="市场风格趋势">市场风格趋势</option> <option value ="基金行业轮动">基金行业轮动</option>
+        <option value ="利率债">利率债</option><option value ="信用债双利">信用债双利</option>
+    </select> 
+    <input type="text" id="ind_search" placeholder="行业todo" class="layui-input-inline" value="">
+    <input type="text" id="weight1_search" placeholder="权重区间-左" class="layui-input-inline" value="">
+    <input type="text" id="weight2_search" placeholder="权重区间-右" class="layui-input-inline" value="">
+    <!--button方法 layui-btn 是自己改写的，用来代替class="layui-icon layui-icon-search  -->
+    <button class="layui-btn layui-inline" type="button" id="reload_search" data-type="reload">查询组合权重</button> 
+    <!-- derived from stra_weight.html -->
+</div> -->
+
+<hr>
+<!-------------------------------------------------------------------------------------> 
+<!-- <table class="layui-table" id="table_01" lay-filter="table-data" ></table> -->
+
+<!--- ################################################################## --->
+<!--- ################################################################## --->
+<h4><a name="stra_w_update">2，excel导入策略权重</a> </h4>
+<p>sheet表格内至少需要4列：pool_name,code,weight,name
+   <br> notes:需要确保退出持仓的品种在更新时有 0.0%的调整记录</p>
+<tr>选择组合名称：<select name="strategy_CN_update" value="">
+    <option value ="股票行业研究">股票行业研究</option><option value ="量化股票策略">量化股票策略</option>
+    <option value ="市场风格趋势">市场风格趋势</option> <option value ="基金行业轮动">基金行业轮动</option>
+    <option value ="利率债">利率债</option><option value ="信用债双利">信用债双利</option>
+</select></tr>
+<tr>输入更新日期<input type="text" name="date_update" value="{{ time_now_str_pre1d }}"></tr> 
+<tr>文件目录<input type="text" name="path_update" value="D:\\"></tr> 
+<tr>文件名称<input type="text" name="file_update" value="temp.xlsx"></tr> 
+<tr>sheet名称<input type="text" name="sheet_update" value="data"></tr> 
+<br>
+<input type="submit" name="input_stra_w_update" value="导入策略组合权重文件"><br>
+
+
+<!--- ################################################################## --->
+<!--- ################################################################## --->
+<h4><a name="stra_w_export">3，生成策略文件，导出excel</a> </h4>
+<p>从sqlite导出组合权重；|notes:功能在 quick.html\ s-2，行业研究策略和股票池 </p> 
+
+<tr>选择组合名称：<select name="strategy_CN_export" value="">
+    <option value ="股票行业研究">股票行业研究</option><option value ="量化股票策略">量化股票策略</option>
+    <option value ="市场风格趋势">市场风格趋势</option> <option value ="基金行业轮动">基金行业轮动</option>
+    <option value ="利率债">利率债</option><option value ="信用债双利">信用债双利</option>
+</select></tr>
+<tr>输入日期 <input type="text" name="date_export" value="{{ time_now_str_pre1d }}"></tr>
+<br>
+<input type="submit" name="input_stra_w_export" value="导出策略组合权重文件"><br>
+
+
+
+<hr>
+<h4><a name="stra_fund">基金策略-市场风格</a> </h4>
+<p> 
+</p>
+
+
+<!------------------------------------------------------------------------------------->
+<!--- ################################################################## --->
+<!--- ################################################################## --->
+<hr>
+<h3><a name="stra_fund">基金策略</a> </h3>
+<p> 
+</p>
+  
+<!--- ################################################################## --->
+<h4><a name="stra_fundpool">基金池-股/债/混合等</a></h4>
+<p>stra_fundpool ：筛选基金池内绩优基金；
+<br>主动股票、偏股混合
+<br>偏债混合 :偏债混合型基金,混合债券型二级基金
+<br>纯债 :中长期纯债型基金,短期纯债型基金,混合债券型一级基金,被动指数型债券基金,增强指数型债券基金 
+<br> notes：是否最新基金池：可选，对应"file_name_output"，有值的时候才会导出最新基金池数据 </p>
+<tr>输入季末日期 <input type="text" name="date_stra_fundpool" value="{{ time_now_str_pre1d }}"></tr>
+<br> 
+<tr>选择基金池： 
+    {% for temp_v in fundpool_list_CN %} 
+        <input type="checkbox" name="fundpool_list_CN"  value="{{ temp_v }}"> {{ temp_v }} <br>
+    {% endfor %}
+</tr>
+<tr>是否可申购：<select name="if_purchase" value="0"> 
+    <option value ="1">可申购</option><option value ="0">无限制</option>
+    </select></tr>
+<tr>是否最新基金池：<select name="if_latest_fundpool" value="0"> 
+    <option value ="0">否</option><option value ="1">是</option>
+    </select></tr>
+<input type="submit" name="input_stra_fundpool" value="基金池-绩优基金优选"><br>
+
+<hr>
+<!--- ################################################################## --->
+<h4><a name="stra_fof_fund">fof-fund,FOF重仓基金分类优选 |fof_stockfund</a></h4>
+<p>下一次操作时间：2023：0731,1031;2024:0131,0430,0731,1031
+<br>步骤：1，数据来源：需要在每个季度末次月，基金披露十大持仓基金数据后，下载“基金--专题统计--资产配置--基金组合--重仓基金(明细) ”
+<br>文件名称例子：file_name=重仓基金(明细)-20221231.xlsx
+<br>2，计算FOF基金池筛选，选择细分基金池：主动股票、股票指数、偏债混合、纯债、美股港股、FOF、对冲reits、商品等
+<br>notes:1,需要确定“data_pms\fund\” 目录下有FOF基金数据 ;2,2022H2开始，导出重仓基金是全部品种，导出重仓股票是分类的。港股美股还比较少基金持有
+</p>
+<tr>选择基金类型：<select name="fof_fund_type" value="activestock">
+    <option value ="fund_stock">主动股票</option><option value ="fund_mixed_stock">偏股混合</option>
+    <option value ="fund_mixed_bond">偏债混合</option><option value ="fund_bond">纯债</option>
+    <!-- <option value ="fund_hkus">QDII港股美股</option>  -->
+</select></tr>
+<tr>是否FOF-可申购基金池：<select name="if_purchase_fof" value="0"> 
+    <option value ="1">可申购</option><option value ="0">无限制</option>
+    </select></tr><br>
+    <tr>FOF基金池文件日期<input type="text" name="date_fof_activestock" value="{{ time_now_str_pre1d }}"></tr>
+    输入持仓季末日期 <input type="text" name="date_fof_q_end" value="{{ date_pre_1q_end_str }}"></tr>
+<input type="submit" name="input_stra_fof_fund" value="FOF重仓基金优选"><br>
+
+
+<!--- 将选出的基金显示出来 --------------------------------------- -->
+<table id="ciss_table_chg">
+    <tr class="hover">
+        <td>代码</td>
+        <td>名称</td>
+        <td>权重</td>
+        <td>持仓份额|万</td>
+        <td>持仓变动百分比</td> 
+        <td>持仓市值</td>
+        <td>占基金净值比</td> 
+    </tr>
+    {% for temp_i,temp_v in df_funds.items %}
+    <tr>
+        <td>{{ temp_v.code }}</td>
+        <td>{{ temp_v.名称 }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_weight }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_持仓份额 }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_持仓变动百分比 }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_持仓市值 }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_占基金净值比 }}</td> 
+    </tr>
+    {% endfor %}
+
+
+</table>
+
+<hr>
+<!--- ################################################################## --->
+<h4><a name="stra_fund_stock">fund-stock,基金重仓股票分类优选</a></h4>
+<p>下一次操作时间：2023：0731,1031;2024:0131,0430,0731,1031
+<br>步骤：1，数据来源：需要在每个季度末次月，基金披露十大持仓基金数据后，下载“基金--专题统计--资产配置--基金组合--重仓持股(明细) ”
+    <br>从Wind终端导出-分基金类型：文件名称例子：file=重仓持股(明细)-普通股票型基金-20220630.xlsx
+    <br>2，计算好最新的基金池文件，例如“fund\\基金池rc_主动股票-开放申购_20230529.xlsx”
+    <br>notes:2022H2开始，导出重仓基金是全部品种，导出重仓股票是分类的。
+</p>
+
+<tr>选择基金类型：<select name="fund_type_stock" value="fund_stock">
+    <option value ="fund_stock">主动股票</option>
+    <option value ="fund_mixed_stock">偏股混合</option>
+    <option value ="fund_mixed_bond">偏债混合</option>
+    <option value ="fund_hkus">QDII港股美股</option> 
+</select></tr>
+<tr>是否FOF-可申购基金池：<select name="if_purchase_stock" value="0"> 
+    <option value ="1">可申购</option><option value ="0">无限制</option>
+    </select></tr><br>
+<tr>FOF基金池文件日期=基金业绩日期<input type="text" name="date_fund_type_stock" value="{{ time_now_str_pre1d }}"></tr>
+输入持仓季末日期 <input type="text" name="date_q_end_fund_type_stock" value="{{ date_pre_1q_end_str }}"></tr>
+<input type="submit" name="input_stra_fund_type_stock" value="基金重仓股票优选"><br>
+
+
+<!--- 将选出的基金显示出来 --------------------------------------- -->
+<table id="ciss_table_chg">
+    <tr class="hover">
+        <td>代码</td>
+        <td>名称</td>
+        <td>权重</td>
+        <td>持仓份额|万</td>
+        <td>持仓变动百分比</td> 
+        <td>持仓市值</td>
+        <td>占基金净值比</td> 
+    </tr>
+    {% for temp_i,temp_v in df_stocks.items %}
+    <tr>
+        <td>{{ temp_v.code }}</td>
+        <td>{{ temp_v.名称 }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_weight }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_持股数量_万股 }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_持仓变动百分比 }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_持股总市值_万元 }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_持股市值占基金股票投资市值比 }}</td> 
+    </tr>
+    {% endfor %}
+
+
+</table>
+
+
+<hr>
+<!--- ################################################################## --->
+<h4><a name="stra_fund_ind_active">行业轮动-股票基金-主动行业轮动|fund_ind_active</a></h4>
+<p>根据行业基本面定性研究更新行业、市场配置主题的权重，
+    <br>一、分析确定一级、三级行业权重：sheet=3市场行业风格;测算行业和市场策略配置的比例；file=rc_股票策略风格行业.xlsx
+    <br>notes:202305开始，file=rc_股票策略风格行业.xlsx 代替rc_个股推荐行业事件.xlsx
+    <br>二、确认最优行业指数基金
+    <br>三、权重记录：sheet=log_stra_weight,记录权重变动，sheet=stra_weight,更新最新权重；file=pms_manage.xlsx                   
+</p>
+<tr>从pms_manage.xlsx直接提取</tr>
+<tr>输入策略调整日期<input type="text" name="date_fund_ind_active" value="{{ time_now_str_pre1d }}"></tr> 
+<tr>行业、主题、策略类型筛选：<select name="stra_type4weight" value="用策略类型筛选策略的持仓权重">
+    <option value ="ind1">一级行业</option><option value ="ind3">三级行业</option> 
+    </select></tr>
+<input type="submit" name="input_stra_fund_ind_active" value="行业轮动-股票基金-主动行业轮动"><br>
+
+
+<hr>
+<!--- ################################################################## --->
+<h4 id="stra_fund_market_trend">风格轮动-股票基金-市场风格动量趋势 </h4>  
+<tr>从pms_manage.xlsx直接提取</tr>
+<tr>输入策略调整日期<input type="text" name="date_fund_market_trend" value="{{ time_now_str_pre1d }}"></tr> 
+<tr>行业、主题、策略类型筛选：<select name="stra_type4weight_market" value="用策略类型筛选策略的持仓权重">
+    <option value ="market_style">市场风格趋势</option>        
+    </select></tr>
+<input type="submit" name="input_stra_fund_market_trend" value="风格轮动-股票基金-市场风格动量趋势"><br> 
+
+<hr>
+<!--- 将选出的基金显示出来 --------------------------------------- -->
+<table id="ciss_table_chg">
+    <tr class="hover">
+        <td>资产类型</td>
+        <td>行业或主题类型</td>
+        <td>行业或主题</td>
+        <td>代码</td>
+        <td>名称</td>
+        <td>权重</td>
+    </tr>
+    {% for temp_i,temp_v in df_stra_weight.items %}
+    <tr>
+        <td>{{ temp_v.type_asset }}</td>
+        <td>{{ temp_v.type_ind_style }}</td>
+        <td>{{ temp_v.name_ind_style }}</td>
+        <td>{{ temp_v.code }}</td>
+        <td>{{ temp_v.名称 }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_weight }}</td> 
+    </tr>
+    {% endfor %}
+
+
+</table>
+
+<hr>
+<!--- ################################################################## --->
+<h4><a name="stra_fund_market_trend">f-2,风格轮动-股票基金-市场风格动量趋势|fund_market_trend</a></h4>
+
+<hr>
+<!--- ################################################################## --->
+<h4><a name="stra_fund_option">f-4,量化策略-衍生品-股票期权对冲|option</a></h4> 
+
+
+<hr>
+<!--- ################################################################## --->
+<!--- ################################################################## --->
+<h3><a name="stra_stock">股票策略</a> </h3>
+<p>1,量化股票策略；2，行业研究和股票池；3，基金重仓股
+    <br>notes:需要在PMS_manage.xlsx 里更新股票池
+</p>
+
+<h4><a name="stra_stock_quant">s-1，量化股票策略|stockpool_active</a></h4>
+<p>Output:file=stra_fundpool_activestock_20220308.xlsx;path=..\data_pms\data_adj
+        </p>
+<tr>输入日期 <input type="text" name="date_stra_stock_quant" value="{{ time_now_str_pre1d }}"></tr>
+<input type="submit" name="input_stra_stock_quant" value="量化股票策略"><br>
+
+
+<h4><a name="stra_stock_ind">s-2，股票池-行业研究选股|stock_indi</a></h4>
+<p>股票行业策略的权重，目前已经改为由sql数据库table=fundpool_stockpool_weight，结合最新的指标文件ah_shares.xlsx 计算
+    导入股票数据，初步筛选股票池;保存股票池文件。notes：日期不重要，  
+<br>Excel-Sheet文件位置：需要将数据贴入sheet=股票池；file=pms_manage.xlsx
+<br>Sqlite数据库位置：db_name=db_funda.slite3 ;table=fundpool_stockpool_weight
+</p>
+<tr>输入日期 <input type="text" name="date_stra_stock_ind" value="{{ time_now_str_pre1d }}"></tr>
+<input type="submit" name="input_stra_stock_ind" value="行业研究策略"><br>
+
+
+
+<!-- notes:量化和行业策略公用1个表格 -->
+<table id="ciss_table_chg">
+    <tr class="hover">
+        <td>代码</td>
+        <td>名称</td>
+        <td>weight</td>
+        <td style="width: 50px">20日涨跌幅</td>
+        <td style="width: 50px">60日涨跌幅</td>
+        <td style="width: 50px">120日涨跌幅</td>
+        <td style="width: 50px">总市值1</td>
+        <td style="width: 50px">市盈率ttm</td>
+        <td style="width: 50px">基金持股比例</td>
+        <td style="width: 50px">净资产收益率ttm</td>
+        <td style="width: 50px">归母净利润同比增长率</td>
+        <td>中信一级行业</td>
+        <td>中信三级行业</td>
+    </tr>
+    {% for temp_i,temp_v in df_port_weight.items %}
+    <tr>
+        <td>{{ temp_v.代码 }}</td>
+        <td>{{ temp_v.名称 }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_weight }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_20日涨跌幅 }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_60日涨跌幅 }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_120日涨跌幅 }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_总市值 }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_市盈率ttm }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_基金持股比例 }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_净资产收益率ttm }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_归母净利润同比增长率 }}</td>
+        <td id="table_td_right">{{ temp_v.中信一级行业 }}</td>
+        <td id="table_td_right">{{ temp_v.中信三级行业 }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<table id="ciss_table_chg">
+    <tr class="hover">
+        <td>中信一级行业</td>
+        <td>weight</td>
+    </tr>
+    {% for temp_i,temp_v in df_port_ind.items %}
+    <tr>
+        <td>{{ temp_i }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_weight }}</td>
+    </tr>
+    {% endfor %}
+
+
+</table>
+
+
+<!------------------------------------------------------------------------------------->
+<!--- ################################################################## --->
+<!--- ################################################################## --->
+<hr>
+<h3><a name="stra_ficc">债券和衍生品策略</a> </h3>
+<p>TODO，
+<br>债券分类文件：sheet=债券分类 ,file=rc_债券数据和分类.xlsx,path=C:\rc_2023\rc_202X
+   <br>数据来源:1,提取季度重仓债券和债券券种分类；file=持有债券(明细)-20230331.xlsx
+   <br>筛选规则：1，只选 "短期纯债型基金","中长期纯债型基金","混合债券型一级基金","混合债券型二级基金","偏债混合型基金"；
+   <br>2，基金净值计算，筛选规模大于1.5亿的，23Q1为例大概剩1700个证券，去除重复项后720个，其中289个可转债，其他主要是 金融债、银行二级永续债、证券和保险债、企业债、公司债、地方城投债、
+   <br>3，获取债券类型，可转债可以直接判断，其他用b_info_chinabondl1type(wind代码)，b_info_windl2type(Wind代码)
+
+</p>
+
+<h4><a name="stra_bond_gov">f-3,量化策略-债券-利率债动量|bond_gov</a></h4>
+<p>在根据动量策略配置利率债；
+
+</p>
+
+<h4><a name="stra_bond_gov">f-3,量化策略-债券-信用债双利|bond_credit</a></h4>
+<p>在利率债和信用债之间合理配置
+
+</p>
+
+
+
+<!------------------------------------------------------------------------------------->
+<!--- ################################################################## --->
+
+
+
+</form>
+
+{% endblock content %}

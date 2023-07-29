@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+<meta charset="UTF-8">
+<!-- for HTML5 -->
+<!-- The block items for this base html file is: {nav_sub, left_frame,menu,content } -->
+
+
+{% block nav_sub %}
+<a id="a_nav" href="./data_wind.html">Wind数据 | db_wind</a> >>
+<a id="a_nav" href="./data_ciss_web.html">ciss_web数据 | </a> >>
+<a id="a_nav" href="./data_ciss_db.html">CISS_db数据库 |</a> >>
+<a id="a_nav" href="./data_rc_report.html">rc_report_cs：我的研报 | </a> >>
+<a id="a_nav" href="./data_touyan.html">TOUYAN:卖方研报 </a> >>
+
+<br>子目录：
+<a href="#db_basic">基础数据 |basic </a> >>
+<a href="#db_asset">资产数据 |asset </a> >>
+<a href="#db_analysis_indicators">分析计算和指标数据 |analysis_indicators.py </a> >>
+<a href="#db_func_stra">方程和策略 |func_stra.py </a> >>
+<a href="#db_signals">交易信号 |signals.py</a> >>
+<a href="#db_stockpool">股票池 |stockpool </a> >>
+<a href="#db_algo_opt">算法和最优化 |Algorithm and Optimization </a> >>
+<br> {% endblock nav_sub %} {% block right_frame %}
+
+<!-- Menu in right frame -->
+<!-- ---------------------------------------------------------- -->
+<h1><a href="#title">ciss_web相关数据 .\CISS_rc\db </a></h1>
+<h3>目录</h3>
+<ul>
+    <li><a href="#db_basic">基础数据 |basic </a></li>
+    <li><a href="#db_asset">资产数据 |asset </a></li>
+    <li><a href="#db_analysis_indicators">分析计算和指标数据 |analysis_indicators.py </a></li>
+    <li><a href="#db_func_stra">方程和策略 |func_stra.py </a></li>
+    <li><a href="#db_signals">交易信号 |signals.py</a></li>
+    <li><a href="#db_stockpool">股票池 |stockpool </a></li>
+    <li><a href="#db_algo_opt">算法和最优化 |Algorithm and Optimization </a></li>
+</ul>
+<h4><a href="#db_analysis_indicators">分析计算和指标数据</a></h4>
+<ul>
+    <li><a href="#intro_intro_basic">基础信息：时间、股票、基金、指数、分类等 </a></li>
+    <li><a href="#intro_intro_stock">股票数据 </a></li>
+    <li><a href="#intro_intro_stock_index">股票指数数据 </a></li>
+    <li><a href="#intro_intro_stock_fund">股票基金数据 </a></li>
+    <li><a href="#intro_intro_bond">债券数据 </a></li>
+
+</ul>
+
+{% endblock right_frame %} {% block left_frame %}
+
+<!-- Menu in left frame -->
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h1 id="title">ciss_web相关数据 .\CISS_rc\db </h1>
+<p>获取、转换、管理从ciss_web内的数据。</p>
+<p>TODO
+    <br> 思路
+</p>
+<hr>
+<h3>目录</h3>
+<ul>
+    <li><a href="#db_basic">基础数据 |basic </a></li>
+    <li><a href="#db_asset">资产数据 |asset </a></li>
+    <li><a href="#db_analysis_indicators">分析计算和指标数据 |analysis_indicators.py </a></li>
+    <li><a href="#db_func_stra">方程和策略 |func_stra.py </a></li>
+    <li><a href="#db_signals">交易信号 |signals.py</a></li>
+    <li><a href="#db_stockpool">股票池 |stockpool </a></li>
+    <li><a href="#db_algo_opt">算法和最优化 |Algorithm and Optimization </a></li>
+</ul>
+
+{% endblock left_frame %} {% block menu %} {% endblock menu %} {% block content %}
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="db_analysis_indicators">分析计算和指标数据 |analysis_indicators.py </h3>
+<p>主要流程：连接数据库、抓取数据表、储存原始数据表。
+
+</p>
+
+
+
+
+
+
+
+
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="wind_api">7,wind api python </h3>
+<p>保存通过wds，wind-api接口等方式获取的数据文件。 </p>
+
+<h4>主要数据介绍。</h4>
+
+
+
+
+
+
+<h3>自定义数据 | Custom Data</h3>
+<hr>
+<p>{......} </p>
+<hr>
+<!-- ---------------------------------------------------------- -->
+{% endblock content %}

@@ -1,9 +1,11 @@
+################################################################################
+### Head
+### 在app=ciss_exhi中定义models的class时，要指定表名字=app_label，否则对应默认数据库default。
+
 from django.db import models
 
-# Create your models here.
 ################################################################################
-### Head dictionary
-################################################################################
+### Default Database
 ### try sample model for ciss_web model | source https://docs.djangoproject.com/zh-hans/2.0/intro/tutorial02/
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -153,6 +155,7 @@ class Stra_Port_links(models.Model):
 
 
 ################################################################################
+### 下边三个没什么用，可能是以前的模板
 class Person(models.Model):
     name = models.CharField(max_length=128)
 
@@ -171,8 +174,9 @@ class Membership(models.Model):
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
     date_joined = models.DateField()
     invite_reason = models.CharField(max_length=64)
-################################################################################
 
+################################################################################
+### 下边2个也没用
 class Multi_asset(models.Model):
     ### Multi Asset Allocation,多资产配置
     
@@ -190,20 +194,13 @@ class DB(models.Model):
     ### No clear ideas yet 
     name_db = models.CharField(max_length=200)
     init_date = models.DateTimeField('date initialization')
-
-
-
+ 
 ################################################################################
 # class Choice(models.Model):
 #     question = models.ForeignKey(Question, on_delete=models.CASCADE)
 #     choice_text = models.CharField(max_length=200)
 #     votes = models.IntegerField(default=0)
-
-
-
-
-
-
+ 
 
 
 ################################################################################
@@ -217,6 +214,7 @@ class Basics(models.Model):
     date_published = models.DateTimeField('date published')
     date_last = models.DateTimeField('date last traded')
 
+### 填空时链接到其他对象的
 class Stock(models.Model):
     ### Define asset infomation 
     stock_asset = models.ForeignKey('Asset', on_delete=models.CASCADE  )
@@ -272,3 +270,72 @@ class Index_derivative(models.Model):
 
     deriv_stra = models.ForeignKey( 'Strategy', on_delete=models.CASCADE  )
     derive_port = models.ForeignKey( 'Portfolio', on_delete=models.CASCADE  )
+
+################################################################################
+### Database db_funda | 基本面数据库
+
+################################################################################
+### fund_analysis | 定义基金定性分析表：主要是主动判断的columns
+class fund_analysis(models.Model):
+    ##########################################
+	### "username"
+    username = models.CharField(max_length=100,default="rc")
+    ### def __str__ 会报错，不知道为什么
+	# def __str__(self) :
+    #     return print("ciss_exhi %s" % self.username)
+	# class Meta:
+	# 	app_label = "ciss_exhi"
+    ##########################################
+    ### 基金代码	基金名称 跟踪时间，"code","name","date"
+    code = models.CharField(max_length=200,default="")
+    name = models.CharField(max_length=200,default="") 
+    date = models.DateTimeField('Date Start',default=timezone.now)
+    ################################################################################
+    ### 成长价值风格	主题	擅长行业1	擅长行业2	擅长行业3	行业集中度
+    ### "style_fund","theme_fund","ind_1","ind_2","ind_3","ind_num" 
+    style_fund = models.CharField(max_length=200,default="")
+    theme_fund = models.CharField(max_length=200,default="")
+    ind_1 = models.CharField(max_length=200,default="")
+    ind_2 = models.CharField(max_length=200,default="")
+    ind_3 = models.CharField(max_length=200,default="")
+    ind_num = models.IntegerField(default=0)
+
+    ################################################################################
+    ### 熊市防御能力	震荡行情能力	牛市进攻能力 "s_down_market","s_flat_market","s_up_market"
+    s_down_market = models.IntegerField(default=0)
+    s_flat_market = models.IntegerField(default=0)
+    s_up_market = models.IntegerField(default=0)
+    
+    ################################################################################
+    ### 概要|行业配置、重点个股及观点 基金经理|时点 "abstract_analysis","fund_namager"
+    abstract_analysis = models.CharField(max_length=20000,default="") 
+    fund_namager = models.CharField(max_length=200,default="") 
+
+    ################################################################################
+    ### 定义该表格使用特定数据库 ciss_db
+    class Meta :
+        app_label = "ciss_exhi"
+        db_table = "fund_analysis"
+    
+
+######################################################################################
+######################################################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

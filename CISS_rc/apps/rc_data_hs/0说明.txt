@@ -1,0 +1,3 @@
+dir=C:\rc_HUARONG\rc_HUARONG\ciss_web\CISS_rc\apps\rc_data_hs
+since 20211220；
+恒生数据api脚本； 

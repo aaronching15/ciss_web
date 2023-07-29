@@ -21,15 +21,16 @@ from django.urls import path
 from django.urls import include
 from . import views
 
-urlpatterns = [
+urlpatterns = [ 
     ### Define index from ciss_exhi 
     path('index.html', views.index, name='index'),
     
     
     ### admin page 
     path('admin/', admin.site.urls),
-    ### For app ciss_exhibition
+    ### urls.py from ciss_exhi
     path('ciss_exhi/', include("ciss_exhi.urls") ),
+    path('ciss_exhi/', include("ciss_exhi.urls_log") ),
 
 ]
 

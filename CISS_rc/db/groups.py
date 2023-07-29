@@ -5,7 +5,9 @@ __author__ = " ruoyu.Cheng"
 ===============================================
 Function:
 功能：
-last update 181104 | since  181104
+1，按照资产管理机构投资研究团队、投委会、分组等分类进行数据管理。
+
+last update 200614 | since  181104
 Menu :
 THREE COMPONENTS:
 1,class A:

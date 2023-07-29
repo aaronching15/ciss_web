@@ -10,6 +10,7 @@ admin.site.register(Asset)
 admin.site.register(Stock)
 admin.site.register(Bond)
 admin.site.register(Index)
+# 后边会用上
 # admin.site.register(Strategy)
 # admin.site.register(Portfolio)
 admin.site.register(Stra_Port_links)
@@ -24,7 +25,6 @@ from .models import Person,Group,Membership
 admin.site.register(Person)
 admin.site.register(Group)
 admin.site.register(Membership)
-
 
 
 #####################################################################################

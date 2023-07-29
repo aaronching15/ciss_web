@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+<meta charset="UTF-8">
+<!-- for HTML5 -->
+<!-- The block items for this base html file is: {nav_sub, left_frame,menu,content } -->
+
+
+{% block nav_sub %}
+<a id="a_nav" href="./data_wind.html">Wind数据 | db_wind</a> >>
+<a id="a_nav" href="./data_ciss_web.html">ciss_web数据 | </a> >>
+<a id="a_nav" href="./data_ciss_db.html">CISS_db数据库 |</a> >>
+<a id="a_nav" href="./data_rc_report.html">rc_report_cs：我的研报 | </a> >>
+<a id="a_nav" href="./data_touyan.html">TOUYAN:卖方研报 </a> >>
+
+<br>子目录：
+<a href="#wds_data_monitor">WDS数据监控 | </a> >>
+<a href="#wds_task_scheduler">定时下载和转换任务 |</a> >>
+<a href="#wds_data_get">WDS数据获取 |</a> >>
+<a href="#wds_data_transform">WDS数据信息转换 |</a> >>
+<a href="#wds_data_intro">WDS数据信息介绍 |</a> >>
+<a href="#wds_db_oracle">6，Wind-Oracle数据库|</a> >>
+<a href="#wds_db_pgsql">6，Postgresql数据库|</a> >>
+<br> {% endblock nav_sub %} {% block right_frame %}
+
+<!-- Menu in right frame -->
+<!-- ---------------------------------------------------------- -->
+<h1><a href="#title"> Wind数据管理 </a></h1>
+<h3>目录</h3>
+<ul>
+    <li><a href="#wds_data_intro">0,WDS数据信息介绍 </a></li>
+    <li><a href="#wds_data_monitor">1，WDS数据监控|wds_data_monitor </a></li>
+    <li><a href="#wds_data_get">2，WDS数据获取|wds_data_get </a></li>
+    <li><a href="#wds_data_transform">3，WDS数据转换和管理|wds_data_transform </a></li>
+    <li><a href="#wds_task_scheduler">4，定时下载和转换任务|task scheduler </a></li>
+    <li><a href="#wds_data_csv">5，Excel|数据表格信息维护 | Data csv</a></li>
+    <li><a href="#wds_db_oracle">6，Wind-Oracle数据库</a></li>
+    <li><a href="#wds_db_pgsql">6，Postgresql数据库</a></li>
+    <li><a href="#wind_api">7,wind api python </a></li>
+</ul>
+<h4><a href="#wds_data_intro">子目录：0,WDS数据信息介绍</a></h4>
+<ul>
+    <li><a href="#intro_intro_basic">基础信息：时间、股票、基金、指数、分类等 </a></li>
+    <li><a href="#intro_intro_stock">股票数据 </a></li>
+    <li><a href="#intro_intro_stock_index">股票指数数据 </a></li>
+    <li><a href="#intro_intro_stock_fund">股票基金数据 </a></li>
+    <li><a href="#intro_intro_bond">债券数据 </a></li>
+
+</ul>
+
+<h4><a href="#wds_data_monitor">子目录：1,WDS数据监控</a></h4>
+<ul>
+    <li><a href="#check_anndates_all">查询Wind-wds全部数据表更新情况 </a></li>
+    <li><a href="#check_wds_single_table">查询Wind-wds单个数据表更新情况 </a></li>
+    <li><a href="#get_wds_single_table">下载Wind-wds单个数据表，或根据关键值下载</a></li>
+    <li><a href="#get_wds_all_daily">每个交易日：下载和维护Wind-wds数据表</a></li>
+    <li><a href="#transform_stocks_ind_class">每周/月：下载和维护个股行业分类</a></li>
+    <li><a href="#cal_stock_ind_class">计算个股历史行业分类</a></li>
+    <li><a href="#get_stock_indclass_latest">查询个股最新行业分类</a></li>
+    <li><a href="#test_cal_index">指数和模拟组合相关计算|test_cal_index.py </a></li>
+    <li><a href="#get_index_period_diff">查询指数、个股或基金的区间涨跌幅： </a></li>
+</ul>
+
+{% endblock right_frame %} {% block left_frame %}
+
+<!-- Menu in left frame -->
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h1 id="title">Wind数据管理 </h1>
+<p>获取、转换、管理从Wind数据库wds、API获取的数据。</p>
+<p>TODO： 把wds数据下载从基于公告日改为基于数据更新时间"OPDATE";
+    <br> 思路是捕捉表格内最新"OPDATE"值t1，并抓取远程数据表里t1之后的值
+</p>
+<hr>
+<h3>目录</h3>
+<ul>
+    <li><a href="#wds_data_monitor">1，WDS数据监控|wds_data_monitor </a></li>
+    <li><a href="#wds_data_get">2，WDS数据获取|wds_data_get </a></li>
+    <li><a href="#wds_data_transform">3，WDS数据转换和管理|wds_data_transform </a></li>
+    <li><a href="#wds_task_scheduler">4，定时下载和转换任务|task scheduler </a></li>
+    <li><a href="#wds_data_csv">5，Excel|数据表格信息维护 | Data csv</a></li>
+    <li><a href="#wds_db_oracle">6，Wind-Oracle数据库</a></li>
+    <li><a href="#wds_db_pgsql">6，Postgresql数据库</a></li>
+    <li><a href="#wind_api">7,wind api python </a></li>
+</ul>
+
+{% endblock left_frame %} {% block menu %} {% endblock menu %} {% block content %}
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="wds_data_monitor">1，WDS数据监控|wds_data_monitor </h3>
+<p>主要流程：连接数据库、抓取数据表、储存原始数据表。
+    <br> 案例脚本：test_wds_manage.py
+    <br> python脚本：get_wind_wds.py
+    <br> 脚本位置：..\ciss_web\CISS_rc\db\db_assets
+    <br> 数据来源： Wind-wds 万得落地数据库
+    <br> last update 20200211 | since 190830
+
+</p>
+<h4>运行对应脚本 </h4>
+
+<h4>1.1，连接wds数据库| __init__ </h4>
+<p>import cx_Oracle
+    <br>connection = cx_Oracle.connect("wind", "wind", "10.10.232.197:1521/wind",encoding = "UTF-8", nencoding = "UTF-8") self.cursor = connection.cursor()
+</p>
+
+<h4>1.2，获取wds数据表| data_fetch </h4>
+<p>
+    print("data_fetch |get_table_columns: 只获取表格的列信息")
+    <br>print("data_fetch |get_table_full: 获取整张表格，无参数")
+    <br>print("data_fetch |get_table_primekey:根据主键primekey和日期范围等获取表格")
+    <br>print("data_fetch |get_table_full_input:get_table_full带参数版本")
+    <br>print("data_fetch |get_table_primekey_input:get_table_primekey带参数版本")
+</p>
+<h4>1.3,管理数据表| data_manage </h4>
+<p>
+    print("data_manage |manage_data_check_anndates:根据给定的核对表格(index:公布日期,columns:wds表格) ")
+    <br>
+</p>
+<hr>
+
+
+
+
+
+
+
+
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="wind_api">7,wind api python </h3>
+<p>保存通过wds，wind-api接口等方式获取的数据文件。 </p>
+
+<h4>主要数据介绍。</h4>
+
+
+
+
+
+
+<h3>自定义数据 | Custom Data</h3>
+<hr>
+<p>{......} </p>
+<hr>
+<!-- ---------------------------------------------------------- -->
+{% endblock content %}

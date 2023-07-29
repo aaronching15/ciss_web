@@ -1,0 +1,14 @@
+column,value,name_CN,notes_备注
+path_index_csi,D:\\db_wind\\data_index_constitutes\\,指数公司文件目录,指数公司成分文件
+path_o32,D:\\CISS_db\\o32_port_trade\\,o32文件目录,O32导出的持仓文件
+path_o32_output,D:\\CISS_db\\o32_port_trade\\output\\,o32导出目录,O32生成的指令文件
+path_py,,python脚本目录,计算的python脚本目录
+date,20200629,当前交易日,
+date_pre,20200628,前一交易日,
+readme,readme,na,默认config.csv和python脚本在同一目录下
+file_format_index_csi,"""000906weightnextday""+ date +"".xls""",指数公司文件,"文件命名格式，""000906weightnextday""+ date_pre +"".xls"""
+file_format_o32,"""o32_"+fund_name_o32+"_"+ date +"".xls""",o32文件,文件命名格式
+para_stock_mv_nav_max,0.98,股票市值占净值最大比例,股票市值占净值最大比例
+nav_latest,345000000,最新净值,
+fund_name_o32,tongqin800,,
+index_name_csi,000906,,

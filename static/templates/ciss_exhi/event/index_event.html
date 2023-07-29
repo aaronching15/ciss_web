@@ -4,31 +4,179 @@
 
 
 {% block nav_sub %}
-
-    <a id="a_nav" href="./event/event_api.html">事件接口 | event API</a> >>
-    <a id="a_nav" href="./event/event_api.html">事件库 | eventbase </a> >>
-    <a id="a_nav" href="./event/event_api.html">自定义事件 | Custom event</a> >>
-    <br>
-    <a>Event type：</a>
-    <a id="a_nav" href="./temp/log_macro.html">宏观大事 | Macro Event</a> >>
-    
-    
+<a id="a_nav" href="./monitor_market_data.html">XXX |XXX</a> >>
+<br> 
 {% endblock nav_sub %}
+<!--- ################################################################## --->
+<!--- ################################################################## --->
+{% block right_frame %}
+<h1><a href="#location_title">基本面事件和观点|Fundamental Events and View </a> </h1>
+<h3>目录</h3>
+<ul>
+    <li><a href="#event_manage">事件分类和管理 </a></li>
+    <li><a href="#event_multiasset">1，大类资产、投资观点和宏观 </a></li>
+    <li><a href="#event_">2,市场行业风格</a></li>
+    <li><a href="#event_period_unit_ret">3，获取组合净值和区间收益率 </a></li>
+    <li><a href="#event_unit_perf">4，组合净值和绩效 </a></li>
+    <li><a href="#event_holdings_stock">5，组合持仓-股票 todo</a></li>
+    <li><a href="#event_holdings_fund">5，组合持仓-基金 todo</a></li>
+    <li><a href="#pms_get_holding">5，PMS查询组合持仓 todo</a></li>
+    <li><a href="#pms_multi_stra">6，PMS多策略组合调整 </a></li>
+    <ul>
+        <li><a href="#event_stra_weight">6.1，查询组合的策略配置比例 </a></li>
+        <li><a href="#stra_by_port">6.2，查询策略被哪些组合配置 </a></li>
+        <li><a href="#pms_multi_stra_cal">6.3，根据策略配置，计算组合持仓权重 </a></li>
+    </ul>
+    <li><a href="#pms_upload_adjust">7，PMS上传组合调整 </a></li>
 
+
+    <li>当前日期:{{ time_now_str }}</li>
+</ul>
+
+{% endblock right_frame %}
+<!--- ################################################################## --->
+<!--- ################################################################## --->
 {% block left_frame %}
+<h1><a id="location_title">基本面事件和观点|Fundamental Events and View</a> </h1>
+<h3>目录</h3>
+<ul>
+    <li><a href="#event_manage">PMS组合管理 </a></li>
+    <li><a href="#event_list">1，查询组合列表 </a></li>
+    <li><a href="#event_monitor">2,PMS组合日内监控</a></li>
+    <li><a href="#event_period_unit_ret">3，获取组合净值和区间收益率 </a></li>
+    <li><a href="#event_unit_perf">4，组合净值和绩效 </a></li>
+    <li><a href="#event_holdings_stock">5，组合持仓-股票 todo</a></li>
+    <li><a href="#event_holdings_fund">5，组合持仓-基金 todo</a></li>
+    <li><a href="#pms_get_holding">5，PMS查询组合持仓 todo</a></li>
+    <li><a href="#pms_multi_stra">6，PMS多策略组合调整 </a></li>
+    <ul>
+        <li><a href="#event_stra_weight">6.1，查询组合的策略配置比例 </a></li>
+        <li><a href="#stra_by_port">6.2，查询策略被哪些组合配置 </a></li>
+        <li><a href="#pms_multi_stra_cal">6.3，根据策略配置，计算组合持仓权重 </a></li>
+    </ul>
+    <li><a href="#pms_upload_adjust">7，PMS上传组合调整 </a></li>
+
+</ul>
+{% endblock left_frame %} {% block menu %} {% endblock menu %} {% block content %}
+<hr>
+
+<!--- ################################################################## --->
+<form action="{% url 'pms_manage' %}" method="post" accept-charset="utf-8"> 
+<!--- ################################################################## --->
+<!--- ################################################################## --->
+<hr>
+<h3 id="event_manage">PMS组合管理</h3>
+<p>file=test_pms_manage.py ;path= C:\rc_HUARONG\rc_HUARONG\ciss_web\CISS_rc\apps\portfolio_simulation
+    <br>1，下载PMS持仓; 2，导入最新PMS持仓数据;8，多策略组合：大类资产; 6，组合调整，自动上传到PMS组合
+<br>Notes:导出基金时，只选择“可购买基金”，可以避免有些基金是特定资产或者有持有期限制、规模过小没有可复制性。
+</p>
+
+
+<hr>
+<!--- ################################################################## --->
+<h4 id="event_list">1，查询组合列表 </h4> 
+
+{% csrf_token %}
+<table border="1">
+    <!-- <tr>指数类型：<input type="text" name="index_type" value="A股"></tr> -->
+    <tr>组合类型：<select name="event_type" value="stock">
+            <option value ="stock">股票组合</option> <option value ="fund">FOF基金</option>
+            <option value ="bond">债券组合</option><option value ="hedge">股票对冲</option><option value ="all">所有</option>
+          </select></tr>
+    <input type="submit" name="input_event_type" value="提交"> 
+    <!--  todo 在方框中查询数据,<textarea>标签会保留用户的预定义格式   -->
+
+</table>
+<!-- match：1，table id="ciss_table；2，function tableToExcel,base64；3，button，tableToExcel -->
+<table id="ciss_table">
+    <tr>
+        <td>组合ID</td>
+        <td>组合名称</td>
+        <td>组合类型</td>
+        <td>策略类型</td>
+        <td>开始日期</td>
+    </tr>
+
+    {% for temp_i,temp_v in df_p.items %}
+    <tr>
+        <td>{{ temp_v.event_id }}</td>
+        <td>{{ temp_v.event_name }}</td>
+        <td>{{ temp_v.event_type }}</td>
+        <td>{{ temp_v.event_class }}</td>
+        <td>{{ temp_v.date_init }}</td>
+    </tr>
+    {% endfor %}
+</table>
+<button type="button" onclick="tableToExcel('ciss_table')">导出Excel</button> <br>
+
+
+<!--- ################################################################## --->
+<!--- ################################################################## --->
+<hr>
+<h4 id="#event_monitor">2，PMS组合日内监控 </h4>
+<p>给定前一交易日日期，下载持仓文件，导入持仓文件；2，展示日内涨跌幅度和持仓盈亏幅度，最新持仓权重百分比。 </p>
 
 
 
 
-{% endblock left_frame %}
+<!--- ################################################################## --->
+<hr>
+<h4 id="event_period_unit_ret">3，获取组合净值和区间收益率 </h4> 
+<h5>获取组合净值和区间收益率：PMS组合区间df_perf涨跌幅、回撤、Alpha、Sharpe等绩效指标。</h5>
+<p>本周收益率 本月收益率 本年收益率 近1个月收益率 近3个月收益率 近6个月收益率 Alpha成立至今 Sharpe成立至今 最大回撤：成立至今 最大回撤：近6个月 最大回撤：本年 月胜率</p>
+<table border="1">
+    <!-- <tr>指数类型：<input type="text" name="index_type" value="A股"></tr> -->
+    <tr>组合类型：<select name="event_type_name" value=""> 
+            <option value ="stock">股票组合</option> <option value ="fund">FOF基金</option>
+            <option value ="bond">债券组合</option><option value ="hedge">股票对冲</option><option value ="all">所有</option>
+            {% for temp_i,temp_v in df_pms_list.items %}
+                <option value ="{{ temp_v.event_name }}"> {{ temp_v.event_name }} </option>  
+            {% endfor %}
+          </select></tr>
+    <input type="submit" name="input_event_type_perf" value="提交">
+    <!--  todo 在方框中查询数据,<textarea>标签会保留用户的预定义格式   -->
+</table>
+<!-- match：1，table id="ciss_table；2，function tableToExcel,base64；3，button，tableToExcel  -->
+<table id="ciss_table">
+    <tr class="hover">
+        <td>组合名称</td>
+        <td>组合类型</td>
+        <td>本周收益</td>
+        <td>本月收益率</td>
+        <td>本年收益率</td>
+        <td>近1个月收益率</td>
+        <td>近3个月收益率</td>
+        <td>近6个月收益率</td>
+        <td>Alpha成立至今</td>
+        <td>Sharpe成立至今</td>
+        <td>最大回撤：成立至今</td>
+        <td>最大回撤：近6个月</td>
+        <td>最大回撤：本年</td>
+        <td>月胜率</td>
+    </tr>
 
-{% block menu %}
+    {% for temp_i,temp_v in df_perf.items %}
+    <tr>
+        <td>{{ temp_v.event_name }}</td>
+        <td>{{ temp_v.event_type }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_Return_w }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_Return_m }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_Return_y }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_Return_1m }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_Return_3m }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_Return_6m }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_Alpha_std }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_Sharpe_std }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_MaxDrawdown_std }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_MaxDrawdown_6m }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_MaxDrawdown_y }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_Winning_Rate_m }}</td>
 
+    </tr>
+    {% endfor %}
+</table>
+<button type="button" onclick="tableToExcel('ciss_table')">导出Excel</button> <br>
 
-{% endblock menu %}
-
-
-{% block content %}
    
 <h3>目标、功能 | </h3>
 <hr>
@@ -69,6 +217,11 @@ todo:量化研究方向和体系梳理 <br>
 <h3>自定义事件 | Custom Data</h3>
 <hr>
 <p>{......} </p>
+
+
+
+</form>
+
 
 {% endblock content %}
 

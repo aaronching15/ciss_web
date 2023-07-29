@@ -2,12 +2,16 @@
 __author__=" ruoyu.Cheng"
 
 '''
+功能：实现不同参数的wds数据获取功能
+
+todo
+1，必须在下载时就给table对应好列名columns
+2，解决部分更新日期数据是float格式导致 "20191202.0"的情况
 # 中国A股日行情 || AShareEODPrices || 交易日期 TRADE_DT,20190805
 # 香港股票日行情|| HKshareEODPrices || TRADE_DT
-last 191124 | since 191119
+last 20201019 | since 20191119 
 
 MENU :
-
 wds数据需求|具体整理见0wds_191120.xlsx  ：
 1,app应用\\中证指数增强和BL数据表需求，201911：
 1.1，原始数据表的需求：
@@ -17,7 +21,7 @@ wds数据需求|具体整理见0wds_191120.xlsx  ：
 	序号 | 数据需要 | 对应表-CN | 对应表 | 
 	0，基础数据
 		0.1,交易日：市场*资产
-		0.2，证券代码表：
+		0.2，证券代码表：中国A股基本资料[AShareDescription]
 		0.N, 其他：
 			中国A股科创板所属新兴产业分类[AShareSTIBEmergingIndustries]
 		0.1，指数定期更新{全A，csi300，csi500等}}
@@ -47,6 +51,9 @@ wds数据需求|具体整理见0wds_191120.xlsx  ：
 	3，基金数据
 		2.1，基金基础数据：品质、分类风格、净值-排名
 		2.2，持仓数据
+	4，指数数据
+	4.1，AIndexDescription
+
 
 1.2，主要功能和对应的方程、数据：
    序号  |	功能方程 | 功能 | 数据 | 数据表
@@ -54,55 +61,9 @@ wds数据需求|具体整理见0wds_191120.xlsx  ：
 	2，下载和保存外部数据，下载给定区间的表格更新数据，
 	3，读取外部数据，根据内部数据库形式转存，
 
-
-'''
-#################################################################################
-### Initialization 
-import sys
-sys.path.append( "C:\\zd_zxjtzq\\ciss_web\\CISS_rc\\db\\db_assets\\" )
-
-# from get_wind_wds import wind_wds
-# wind_wds1 = wind_wds()
-# ### Print all modules 
-# wind_wds1.print_info()
-
-import pandas as pd 
-import numpy as np 
-
-
-
-#################################################################################
-### data admin : main function 
-'''
-func-Download: 
-	input  :获取需要更新的表格名称，关键字，更新的日期范围
-	cal    : ~
-	output :保存直接数据至特定表格，更新数据维护表格。
-fundc-data_operation：
-	input  ：按日期排序的表格
-	cal    ：根据给定关键词或特定规则，计算需要的指标数据等中间数据表格
-	output ：保存中间数据表格到特定文件夹。
-last | since 191119
-'''
-
-#################################################################################
-### get input: 导入需要维护的数据表格
-## 先在家把要下载的数据表格设置好，根据网址 http://wds.wind.com.cn/rdf/?#/main
-file_name = ""
-file_path = ""
-
-
-
-file_name = ""
-file_path = ""
- 
-#################################################################################
-### ciss_web\data\wds wind数据运维：| test_wds_manage.py
-### 1.1，wds_raw --> df --> csv;
-
-#################################################################################
-### 1.2, csv --> df --> pgsql;
-'''Steps:
+功能规划：
+csv --> df --> pgsql;
+Steps:
 1,初始化；2,输入需要更新的区间或最新日期；
 3，读取目标文件夹内csv；
 4，按交易日添加到数据库内表格，分基础和应用表{针对特定策略或组合优化过的表格}；
@@ -130,76 +91,161 @@ TODO：
 	历史数据完整性：可以接受不完整{估计难以避免}，但是需要有标识；
 	2.2，
 
+notes：
+必须在下载时就给table对应好列名columns
+
+'''
+
+
+#################################################################################
+### Initialization 
+import os 
+# 获取当前目录 os.getcwd() =: G:\zd_zxjtzq\ciss_web
+import sys
+sys.path.append(os.getcwd()[:2] + "\\zd_zxjtzq\\ciss_web\\CISS_rc\\db\\db_assets\\" )
+sys.path.append(os.getcwd()[:2] + "\\ciss_web\\CISS_rc\\db\\db_assets\\" )
+
+from get_wind_wds import wind_wds
+wind_wds1 = wind_wds()
+### Print all modules 
+wind_wds1.print_info()
+
+import pandas as pd 
+import numpy as np 
+
+#################################################################################
+### data admin : main function 
+'''
+func-Download: 
+	input  :获取需要更新的表格名称，关键字，更新的日期范围
+	cal    : ~
+	output :保存直接数据至特定表格，更新数据维护表格。
+fundc-data_operation：
+	input  ：按日期排序的表格
+	cal    ：根据给定关键词或特定规则，计算需要的指标数据等中间数据表格
+	output ：保存中间数据表格到特定文件夹。
+last | since 191119
 '''
 #################################################################################
-### Import log_columns,tables,tables_columns, 
-file_path_wds_manage = "I:\\zd_zxjtzq\\ciss_web\\CISS_rc\\apps\\rc_data\\"
+###
 
-file_log_columns ="log_data_wds_columns.csv"
-file_tables ="log_data_wds_tables.csv"
-file_tables_columns ="log_data_wds_tables_columns.csv"
-file_data_check_anndates = "data_check_anndates.csv"
+count  =0 
+while count < 100 :
+	get_wds_type = input("Type of data method:\n1 for given keyword \n2 for full hist. table\n3 for opdate periods \n4 for columns ofspecific table\n ")
+#################################################################################
+### Choice 1 下载特定表格-给定关键词
+# 中国A股指数日行情[AIndexEODPrices]
+# 关键词：Wind代码 S_INFO_WINDCODE 000300.SH
+# or:  ChinaMutualFundStockPortfolio || F_PRT_ENDDATE
 
-file_path_wds = "I:\\db_wind\\"
-file_path_wds_log = "I:\\db_wind\\wds_log\\"
-
-### 读取要跟踪的wds表格
-df_tables = pd.read_csv( file_path_wds_manage+ file_tables,encoding="gbk"  )
-print("df_tables \n" ,df_tables.head(5) )
-
-### 下载交易日期，更新"data_check_anndates.csv" 表格 | 
-### notes:all values in int type, 判断按最新更新日期算数据是否完整：1：已有；0：未下载；2：当日无数据；
-# 暂时先用已有的交易日列表 
-# 交易日：   rc_WDS_indexdates_200501_20190831_ANN-DT.csv | col="2"
-# month:    rc_WDS_indexdates_200501_20190831_month.csv
-# quarter : rc_WDS_indexdates_200501_20190831_quarter.csv
-file_dates = "rc_WDS_indexdates_200501_20190831_ANN-DT.csv"
-df_dates = pd.read_csv( file_path_wds+ file_dates   )
-print(" df_dates \n", df_dates["2"].head(5) )
-
-date_list = df_dates["2"]
-
-###  
-import os
-if os.path.exists( file_path_wds_manage + file_data_check_anndates ) :
-	df_data_check_anndates = pd.read_csv(file_path_wds_manage + file_data_check_anndates ,encoding="gbk" )
-	# check if it contains all column in df_tables.name_table
-	for temp_col in df_tables.name_table :
-		if not temp_col in df_data_check_anndates.columns :
-			### notes:all values in int type, 判断按最新更新日期算数据是否完整：1：已有；0：未下载；2：当日无数据；
-			df_data_check_anndates[temp_col] = 0 
-	# check if it contains all date(index) in df_tables.name_table
-	for temp_index in date_list :
-		if not temp_index in df_data_check_anndates.index :
-			### notes:all values in int type, 判断按最新更新日期算数据是否完整：1：已有；0：未下载；2：当日无数据；
-			df_data_check_anndates.loc[temp_index,:] = 0 
+	if get_wds_type == "1" :
+		print("AShareConsensusRollingData;EST_DT;AShareProfitNotice;公告日期S_PROFITNOTICE_DATE:  ")
+		(temp_df,df_log_table)= wind_wds1.get_table_primekey()
 	
-else :
-	### 读取要跟踪的表格、日期，构建csv文件
-	df_data_check_anndates = pd.DataFrame(columns=df_tables.name_table,index=date_list  )
-	print( df_data_check_anndates.head(3) )
-	print( df_data_check_anndates.tail(3) )
-	df_data_check_anndates.to_csv( file_path_wds_manage + file_data_check_anndates ,encoding="gbk"  )
+	
 
+#############################################################################
+### Choice 2 下载多个完整表格-一次性 || Wind兼容代码[WindCustomCode]
+	if  get_wds_type == "2" :
+
+		if_CN= 1 # 决定导出数据时是否要用 gbk格式
+		table_name = input("Type in table name for whole history,such as:ChinaMutualFundNAV: ")
+		# result =wind_wds1.get_table_full(table_name,if_CN) 
+		result =wind_wds1.get_table_full(table_name) 
+
+#############################################################################
+### Choice 3 按opdate下载区间表格
+	if  get_wds_type == "3" :
+
+		obj_in={}
+		obj_in["dict"]={}
+		obj_in["dict"]["table_name"] =  input("Type in table name，such as 中国A股盈利预测明细[AShareEarningEst]:  ")
+		# "datetime_key"有3种选择："OPDATE" ，"TRADE_DT"，
+		obj_in["dict"]["datetime_key"] = input("Type in keyword name,such as OPDATE,TRADE_DT,ANN_DT,EST_DT:  ")
+		
+		obj_in["dict"]["df2csv"] = input("Type in 1 if want to save opdate period data file and 0 else :  ")  
+		# if df2csv == "1" :
+		# 	obj_in["dict"]["df2csv"] = 1
+		# else :
+
+		### sub Choice 1 单一时间区间 
+		obj_in["dict"]["datetime_value_lb"] = input("Type in date start,such as 20200801:  ")
+		obj_in["dict"]["datetime_value_ub"] = input("Type in date end  ,such as 20201019:  ")
+		obj_in["dict"]["if_opdate_2_prime_key"] = input("Type 1 if save opdate to prime_key files :")
+		
+		obj_in =wind_wds1.get_table_opdate(obj_in )
+
+		### sub Choice 2 多年时间区间,
+		# for year in range(2000,2021) :
+		# 	obj_in["dict"]["datetime_value_lb"] = str(year) +"0101"
+		# 	obj_in["dict"]["datetime_value_ub"] =  str(year) +"1231"
+		# 	print("Debug=== ",obj_in["dict"]["datetime_value_lb"], obj_in["dict"]["datetime_value_ub"])
+		# 	obj_in =wind_wds1.get_table_opdate(obj_in )
+
+
+#################################################################################
+### 只获取表格的列信息 |输入特定表格和关键词
+# if_opdate_2_prime_key=1 意味着要转存成csv文件，0意味着不需要
+
+	if  get_wds_type == "4" :
+		temp_cols = wind_wds1.get_table_columns() 
+		print(temp_cols )
+	
+	### 
+	count = count+1 
+
+
+asd
+
+
+
+#################################################################################
+### Choice 1 定期维护下载wds的数据表格
+'''1,下载交易日期，更新交易日rc_WDS_indexdates_20050101_anndate.csv表格  
+2,获取最新交易日和需要跟踪的tables，用df_dates更新表格 data_check_anndates.csv 
+3,按照 df_data_check_anndates内的更新记录下载表格数据；cell values:1：已有；0：未下载；2：当日无数据
+'''
+sub_table = input("Type 1 if wants to download specific tables...")
+if sub_table == "1" :
+	file_data_check_anndates = "data_check_anndates_specific.csv"
+else :
+	file_data_check_anndates = "data_check_anndates.csv"
+
+result = wind_wds1.manage_data_check_anndates(file_data_check_anndates )
+
+asd
+
+
+
+#################################################################
+#################################################################
 ### Save table df_data_check_anndates into postgresql
 ### step 1 连接postgresql
+
 import psycopg2
 conn = psycopg2.connect(database="ciss_db", user="ciss_rc", password="ciss_rc", host="127.0.0.1", port="5432")
 # 创建表格
 cur = conn.cursor()  
 
 ###  新建create_engine：
-# from sqlalchemy import create_engine
-# engine = create_engine('postgresql://ciss_rc@localhost:5432/ciss_db')
+from sqlalchemy import create_engine
+# 例子：engine = create_engine('postgresql+psycopg2://scott:tiger@localhost/mydatabase')
+# source：https://blog.csdn.net/P01114245/article/details/89918197
+engine = create_engine('postgresql+psycopg2://ciss_rc@localhost:5432/ciss_db')
 
-# table_name = "data_check_anndates"
-# df_data_check_anndates.to_sql( table_name, engine,index=False,if_exists='append')
+### Save to pgsql
+table_name = "data_check_anndates" 
+
+# if_exists : {‘fail’, ‘replace’, ‘append’}, default ‘fail’
+# 下边这行会报错
+print(df_data_check_anndates.head(2)  )
+df_data_check_anndates.to_sql( table_name, engine,index=False,if_exists='append')
 
 ### temp看看table是否成功新建
 #编写Sql，只取前两行数据
 table_name = "data_check_anndates"
-sql = "select * from "+table_name+" limit 2"
- 
+sql = "select * from "+table_name+" where date>20190825 limit 20"
+
 #数据库中执行sql命令
 cur.execute(sql)
  

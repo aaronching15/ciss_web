@@ -1,134 +1,459 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Stict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+<!DOCTYPE html PUBLIC"-//W3C//DTD XHTML 1.0 Stict//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-
 strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang = "zh-CN">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
 
 <html>
 <!-- The block items for this base html file is: {nav_sub, left_frame,menu,content } -->
 
 
-    <head>
-    <!-- 头部，内容的介绍展示区域 -->
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<head>
+    <!-- ############################################################################ -->
+    <!-- SCRIPT:基本的js方程 -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdn.bootcss.com/echarts/4.2.0-rc.2/echarts.js"></script> 
+    <!-- url= https://www.bootcdn.cn/echarts/-->
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.3.0/echarts.common.min.js"></script>
+    <!--引用表格工具 url= cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js-->
+    <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+    <!-- layui相关 -->
+    <link rel="stylesheet" type="text/css" href="https://www.layuicdn.com/layui/css/layui.css" />
+    <script src="https://www.layuicdn.com/layui/layui.js"></script>
 
-    <title>Index of CISS module</title>
-    <!--
+    {% block head_content %} {% endblock head_content %}
+    
+    <!-- ############################################################################ -->
+    <!-- sub 自建的script -->
+    <script>
+        function startTime() {
+            var today = new Date(); //定义日期对象   
+            var yyyy = today.getFullYear(); //通过日期对象的getFullYear()方法返回年    
+            var MM = today.getMonth() + 1; //通过日期对象的getMonth()方法返回年    
+            var dd = today.getDate(); //通过日期对象的getDate()方法返回年     
+            var hh = today.getHours(); //通过日期对象的getHours方法返回小时   
+            var mm = today.getMinutes(); //通过日期对象的getMinutes方法返回分钟   
+            var ss = today.getSeconds(); //通过日期对象的getSeconds方法返回秒   
+            // 如果分钟或小时的值小于10，则在其值前加0，比如如果时间是下午3点20分9秒的话，则显示15：20：09   
+            MM = checkTime(MM);
+            dd = checkTime(dd);
+            mm = checkTime(mm);
+            ss = checkTime(ss);
+            var day; //用于保存星期（getDay()方法得到星期编号）
+            if (today.getDay() == 0) day = "星期日"
+            if (today.getDay() == 1) day = "星期一"
+            if (today.getDay() == 2) day = "星期二"
+            if (today.getDay() == 3) day = "星期三"
+            if (today.getDay() == 4) day = "星期四"
+            if (today.getDay() == 5) day = "星期五"
+            if (today.getDay() == 6) day = "星期六"
+            
+            document.getElementById('nowDateTimeSpan').innerHTML = yyyy +"-" + MM +"-" + dd +"" + hh +":" + mm +":" + ss +"  " + day; 
+            document.getElementById('nowDate_yyyymmdd').innerHTML = yyyy + MM + dd ; 
+            // document.getElementById('nowDate').innerHTML = yyyy +"" + MM +"" + dd
+            setTimeout('startTime()', 1000); //每一秒中重新加载startTime()方法 
+        }
+        // 如果分钟或小时的值小于10，则在其值前加0，比如如果时间是下午3点20分9秒的话，则显示15：20：09   
+        function checkTime(i) {
+            if (i < 10) {
+                i = "0" + i;
+            }
+            return i;
+        }
+        // 显示当前时间;用法 <span id="getTime"> </span> | 显示：2022/2/22
+        // setInterval("getTime.innerHTML=new Date().toLocaleString()", 1000);
+    </script>
+
+    <!-- ############################################################################ -->
+    <script language="JavaScript" type="text/javascript">
+        // data协议可以将网页中的table转化为excel下载
+        //编码后的html内容增加前缀 data:application/vnd.ms-excel; ，即可使浏览器将其中的数据当做excel来处理，浏览器将提示下载或打开excel文件
+        // match：1，table id="ciss_table；2，function tableToExcel,base64；3，button，tableToExcel 
+        function base64(content) {
+            return window.btoa(unescape(encodeURIComponent(content)));
+        }
+
+        function tableToExcel(tableID) {
+            // var type = 'doc';
+            var type = 'excel';
+            var table = document.getElementById(tableID);
+            var excelContent = table.innerHTML;
+
+            var excelFile = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:x='urn:schemas-microsoft-com:office:" + type + "' xmlns='http://www.w3.org/TR/REC-html40'>";
+            excelFile += "<head>";
+            excelFile += "<!--[if gte mso 9]>";
+            excelFile += "<xml>";
+            excelFile += "<x:ExcelWorkbook>";
+            excelFile += "<x:ExcelWorksheets>";
+            excelFile += "<x:ExcelWorksheet>";
+            excelFile += "<x:Name>";
+            excelFile += "{worksheet}";
+            excelFile += "</x:Name>";
+            excelFile += "<x:WorksheetOptions>";
+            excelFile += "<x:DisplayGridlines/>";
+            excelFile += "</x:WorksheetOptions>";
+            excelFile += "</x:ExcelWorksheet>";
+            excelFile += "</x:ExcelWorksheets>";
+            excelFile += "</x:ExcelWorkbook>";
+            excelFile += "</xml>";
+            excelFile += "<![endif]-->";
+            excelFile += "</head>";
+            excelFile += "<body><table>";
+            excelFile += excelContent;
+            excelFile += "</table></body>";
+            excelFile += "</html>";
+            var base64data = "base64," + base64(excelFile);
+            switch (type) {
+                case 'excel':
+                    window.open('data:application/vnd.ms-' + type + ';' + base64data);
+                    break;
+                case 'powerpoint':
+                    window.open('data:application/vnd.ms-' + type + ';' + base64data);
+                    break;
+            }
+        }
+    </script>
+
+    <!-- ############################################################################ -->
+    <!-- title:设置网页标签 -->
+    <div>
+        <title>{% block title0 %} {% endblock title0 %}</title>
+        
+    </div>
+    <!-- <title>Index of CISS module</title> -->
+
+    <!-- ############################################################################ -->
+    <!-- 设置样式 style  -->
     <style type="text/css">
-        tr > th{ text-align: left;background:black;color:yellow; }
-        tr > th:only-of-type {text-align: right;background:lightgrey;color:grey}
-    </style>*/
-    -->
-    <style type="text/css">
-        /* h3 {color:steelblue;}  */
-        #menu_float{color:steelblue;
-            position:fixed;
-            bottom: 10%;
-            right:40px;
-            margin-left: 70% ; /*为左侧留出70\%的空间*/
-            font-size:12px;  /*字体设置小点*/ 
-            border: 1px solid black; /*  实线，dotted */
-            /* text-align:center;文字居中*/ 
-            border-radius:5px; /*倒角  */ 
-            background: white; /* #dddddd */
-            padding:3px 3px 3px 3px;/*元素所有内边距的宽度，上右，下左  */ 
-        } 
-        #left_frame{float: left;width: 70%; }
-        #sub_left{
+      
+        /* div_up 上边导航区域 */
+        
+        #div_up {
+            position: relative;
+            top: 0%;
+            bottom: 85%;
+        }
+        /* div_down 下边内容区域 */
+        
+        #div_down {
+            background: rgb(4, 25, 32);
+            color: #FFF;
+            position: relative; 
+        }
+        
+        nav {
+            background: rgb(4, 25, 32);
+            color: #FFF;
+            float: left;
+            width: 100%;
+        }
+        
+        #down_left {
+            color: white;
+            background-color: rgb(4, 25, 32);
+            float: left;
+            width: 75%;
+        }
+
+        /* 子目录左右部分设置 */
+        #down_right {
+            color: white;
+            /* rgb(255, 170, 0) */
+            background: rgb(200, 128, 0);
+            float: right;
+            width: 25%;
+            position: fixed;
+            top: 12.5%;
+            bottom: 0%;
+            right: 0%;
+            font-size: 12px;
+            /*字体设置小点*/
+            border: 1px solid black;
+            /*  实线，dotted */
+            /* text-align:center;文字居中*/
+            border-radius: 3px;
+            /*倒角  */
+            padding: 1px 1px 1px 1px;
+            /*元素所有内边距的宽度，上右，下左  */
+            overflow: scroll;
+        }
+        /* 子目录左右部分设置 */
+        
+        #sub_left {
+            color: white;
             width: 50%;
             height: 350px;
             background-color: #C5E9F3;
             /*定义浮动，不定义的话，界面会乱*/
             float: left;
         }
-        #sub_right{
+        
+        #sub_right {
+            color: white;
             width: 50%;
             height: 350px;
             background-color: #F7575d;
             float: right;
         }
+        /* 小组件设置 */
+        
+        a {
+            color: white;
+        }
+        
+        #a_nav {
+            color: rgb(255, 255, 255)
+        }
+        #a_nav_sub {
+            color: rgb(0, 0, 0)
+        }
+        /*目录类型*/
+        
+        #ciss_menu {
+            color: #FFF
+        }
+        /*表格类型设置：表格整体、表头列信息tr、 */
+        /* text-align: left 列标题的文字左对齐 */
+        /* 单元格内换行：word-break: break-all; word-wrap似乎没啥用 word-wrap: break-word;*/
+        
+        #ciss_table {
+            background-color: rgb(0, 0, 0);
+            color: white;
+            border: 1px  solid #ffffff;
+            max-width: 800;
+            text-align: left;
+            word-break: break-all;
+        }
 
-        #a_nav{color:#FFF}
-        nav{background:black; color:#FFF}
+        /* table_tr_text：文字类的格式 */        
+        #table_tr_text {
+            background-color: rgb(0, 0, 0);
+            color: white;
+            text-align: left;
+            border:1px solid #ffffff;
+        }
+
+
+        /* table_td_number：数字一般需要靠右对齐。 |text-align: right , */
+        #table_td_number {
+            text-align: right;
+            border:1px solid #ffffff;
+        }
+
+        /* div_table ;设置表格的格式，例如总大小 */
+        #div_table { 
+            overflow-x: auto; 
+            overflow-y: auto; 
+            height: 800px; 
+            width:1200px;
+            border: 1px  solid #ffffff;;
+        }
+
+        /* div_chart ;设置图表背景为白色*/
+        #div_chart {
+            background-color: rgb(255, 255, 255);
+        }
     </style>
 
-    </head>
+</head>
 
 <body>
-<nav  > 
-<!-- 导航链接 -->
-    <a id="a_nav" href="/ciss_exhi/index.html">首页|INDEX</a> |
-    <a id="a_nav" href="/ciss_exhi/strategy/index_stra.html">策略开发|Strategy Dev.</a> |
-    <a id="a_nav" href="/ciss_exhi/portfolio/index_port.html">组合管理|Portfolio Management </a> |
-    <a id="a_nav" href="/ciss_exhi/data/index_data.html">数据清单|Data List</a> |
-    <a id="a_nav" href="/ciss_exhi/docs/index_ciss.html">平台文档|CISS documents</a> | 
-    --- | <br><br>
+    <div class="layui-layout layui-layout-admin">
+        <div class="layui-header">
+          <div class="layui-logo layui-hide-xs layui-bg-black">ciss_exhi</div>
+          <!-- ############################################################################ -->
+          <!-- 头部区域（可配合layui 已有的水平导航） -->
+          <ul class="layui-nav layui-layout-left">
+            <!-- 移动端显示 -->
+            <li class="layui-nav-item layui-show-xs-inline-block layui-hide-sm" lay-header-event="menuLeft">
+              <i class="layui-icon layui-icon-spread-left"></i>
+            </li>
+            
+            <!-- 导航链接 -->
+            <li class="layui-nav-item layui-hide-xs"><a id="a_nav" href="/ciss_exhi/index.html">首页|INDEX</a></li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">快速功能</a>
+                <dl class="layui-nav-child">
+                  <dd><a id="a_nav_sub" href="/ciss_exhi/quick.html">快速功能|Quick</a></dd>
+                  <dd><a id="a_nav_sub" href="/ciss_exhi/event/index_event_view.html">基本面事件和股票池</a></dd>
+                  <dd></dd>
+                </dl>
+            </li> 
+            <li class="layui-nav-item">
+                <a href="javascript:;">量化</a>
+                <dl class="layui-nav-child">
+                  <dd><a id="a_nav_sub" href="/ciss_exhi/strategy/stra_weight/">策略组合权重|stra_weight</a></dd> 
+                  <dd><a id="a_nav_sub" href="/ciss_exhi/strategy/stra_index.html">策略开发首页-策略权重管理</a></dd> 
+                  <dd><a id="a_nav_sub" href="/ciss_exhi/monitor_market_data.html">市场数据监控 |Monitor_market_data</a></dd>
+                  <dd><a id="a_nav_sub" href="/ciss_exhi/pms_manage.html">PMS组合管理|pms manage</a></dd>
+                  <dd><a id="a_nav_sub" href="/ciss_exhi/strategy/index_stra_allocation.html">股债配置策略首页</a></dd> 
+                  <dd><a id="a_nav_sub" href="/ciss_exhi/data/index_data.html">数据管理-old-nouse</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item" >
+              <a href="javascript:;">基金和FOF研究</a>
+              <dl class="layui-nav-child">
+                <dd><a id="a_nav_sub" href="/ciss_exhi/fund_analysis/">基金和FOF研究layui</a></dd>
+                <dd><a id="a_nav_sub" href="/ciss_exhi/fund_allocation/">基金股债配置策略</a></dd> 
+                <dd><a id="a_nav_sub" href="/ciss_exhi/fund_data_manage/">基金数据-基金筛选策略fp、净值</a></dd> 
+                <dd><a id="a_nav_sub" href="/ciss_exhi/fund_indi_template/">月基金池指标和入池模板</a></dd> 
+              </dl>
+            </li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">ciss_web</a>
+                <dl class="layui-nav-child">
+                  <dd><a id="a_nav_sub" href="/ciss_exhi/ai/ai_index.html">人工智能模型|AI</a></dd>
+                  <dd><a id="a_nav_sub" href="/ciss_exhi/docs/index_ciss.html">平台文档|CISS documents</a></dd>
+                  <dd><a href="">test</a></dd>
+                </dl>
+            </li> 
+            <li class="layui-nav-item layui-hide-xs"><a id="a_nav" href="/ciss_exhi/test/">test测试</a></li>    
+            <li class="layui-nav-item layui-hide-xs"><a id="a_nav" href="/ciss_exhi/ppt.html">展示PPT</a></li>              
+          </ul>
+          <!-- ############################################################################ -->
+          <!-- 用户信息管理部分；右侧的隐藏的导航部分 -->
+          <ul class="layui-nav layui-layout-right" >            
+            <li class="layui-nav-item layui-hide layui-show-md-inline-block">
+              <a href="javascript:;">
+                <img src="//tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" class="layui-nav-img">
+                Ruoyu.C 
+              </a>
+              <dl class="layui-nav-child">
+                <dd><a href="/admin">系统管理Admin</a></dd>
+                <dd><a href="">Settings</a></dd>
+                <dd><a href="">Sign out</a></dd>
+              </dl>
+            </li>
+            <li class="layui-nav-item" lay-header-event="menuRight" lay-unselect>
+              <a href="javascript:;">
+                <i class="layui-icon layui-icon-more-vertical"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+        
+        <!-- ############################################################################ -->
+        <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+        <div class="layui-side layui-bg-black">
+          <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree" lay-filter="test">
+              
+                {% block nav_sub %}
+                <!-- nav_sub放置左侧导航目录 -->
+                <!-- notes:class="layui-nav-item"默认是收起的， 加上" layui-nav-itemed"后内容是展开的;  -->
 
-    {% block nav_sub %}
-    {% endblock nav_sub %}
-    --- | <br>
+                {% endblock nav_sub %} 
+                
+                <li>{% now "Ymd" %}
+                      <button type="button" onclick="startTime('nowDateTimeSpan')">time</button> <span id="nowDateTimeSpan"></span>|<span id="nowDate"></span>
+                </li>
+                <!-- 下边是layui的模板 -->
+                <!-- <li class="layui-nav-item layui-nav-itemed">
+                    <a class="" href="javascript:;">子目录内容</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;">功能 1</a></dd>
+                        <dd><a href="javascript:;">func 2</a></dd>
+                        <dd><a href="javascript:;">func 3</a></dd>
+                        <dd><a href="">the links</a></dd>
+                    </dl>
+                </li>
+              <li class="layui-nav-item">
+                <a href="javascript:;">页面内定位</a>
+                <dl class="layui-nav-child">
+                  <dd><a href="javascript:;">list 1</a></dd>
+                  <dd><a href="javascript:;">list 2</a></dd>
+                  <dd><a href="">超链接</a></dd>
+                </dl>
+              </li>
+              <li class="layui-nav-item"><a href="javascript:;">click menu item</a></li>
+              <li class="layui-nav-item"><a href="">the links</a></li> -->
+            </ul>
+          </div>
+        </div>
 
-</nav> 
+        <!-- ############################################################################ -->
+        <!-- 内容主体区域 -->
+        <div class="layui-body"  >
+          <!-- 内容主体区域 --> 
+          <div id="div_down">
+            <!-- left_frame放置页面内的目录 -->
+            {% block left_frame %} {% endblock left_frame %}  
 
-<div id="left_frame" > 
+            <div id="ciss_menu">
+              <!-- menu基本不用 -->
+              {% block menu %} {% endblock menu %}
+            </div> 
+            
+            
+            <div id="content"> 
+              <!-- 核心内容主体区域 --> 
+              {% block content %} {% endblock content %}
+
+          </div>
+            
+          
+          
+            <!-- down_right 之前是放置目录的，在layui框架下用不上了 -->
+            <!-- <div id="down_right"> </div> -->
+            <!-- right_frame 是放置目录的，layui框架下转移到左侧 -->
+            <!-- {% block right_frame %} {% endblock right_frame %} -->
+            
+        </div>
+
+           
+        <!-- END of 内容主体区域 -->
+        <!-- ############################################################################ -->
+        </div>
+        
+        <!-- ############################################################################ -->
+        <!-- 底部固定区域 -->
+        <!-- <div class="layui-footer"> 
+          {% block bottom_zone %} {% endblock bottom_zone %}
+          
+        </div> -->
+    </div>
+      
+    <!-- ############################################################################ -->
+    <!-- 菜单导航对应的界面 -->
+    <script>
+      //JS 
+      layui.use(['element', 'layer', 'util'], function(){
+        var element = layui.element
+        ,layer = layui.layer
+        ,util = layui.util
+        ,$ = layui.$;
+        
+        //头部事件 打开右侧导航栏
+        util.event('lay-header-event', {
+          //左侧菜单事件
+          menuLeft: function(othis){
+            layer.msg('展开左侧菜单的操作', {icon: 0});
+          }
+          ,menuRight: function(){
+            layer.open({
+              type: 1
+              ,content: '<div style="padding: 15px;" >处理右侧面板的操作</div>' 
+              ,area: ['300px', '50%']
+              ,offset: 'rt' //'rt'右上角，'rb'右下角
+              ,anim: 5 //  弹出动画 anim: 5	渐显;anim: 0	平滑放大,默认
+              ,shadeClose: true 
+              // skin - 样式类名:不仅允许你传入layer内置的样式class名，还可以传入您自定义的class名;class=橙色"layui-bg-orange",'layui-layer-lan',"layui-layer-molv"
+              ,skin: "layui-bg-orange"
+            });
+          }
+        });
+        
+      });
+      </script>
 
 
-{% block left_frame %}
-{% endblock left_frame %}
-
-
-<section id="menu"> 
-
-
-{% block menu %}
-{% endblock menu %}
-
-</section> 
-
-
-
-<section id="s1"> 
-    
-{% block content %}
-{% endblock content %}
-
-
-
-</section>
+    <!-- ############################################################################ -->
+    <!--  -->
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-<hr> 
-<blockquote cite="www.bsstrde.top:8089\index.html">
-    <!--引用内容 -->
-</blockquote>
  
-
-<footer> 
-    by rC
-    <!--尾部，页脚通常包含文档的作者，著作权信息，链接的使用条款，联系信息等 -->
-</footer> 
-<hr>
-
-</div> 
 
 </body>
 

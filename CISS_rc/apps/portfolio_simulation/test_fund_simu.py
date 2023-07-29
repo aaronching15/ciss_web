@@ -20,6 +20,7 @@ todo：
 from fund_simulation import fund_simu
 fund_simu_1 = fund_simu("")
 
+import pandas as pd 
 
 
 #################################################################################
@@ -142,19 +143,136 @@ code_index = "000906.SH"
 
 # asd
 #################################################################################
-### Choice 5：根据给定行业或日期column，按细分组合计算细分类别里的权重
+### Choice 5：根据给定行业或日期column，按细分组合计算权重和PMS格式文件
 '''
 功能说明：
 1，
 '''
+### parameter
+### Logic：第一名持股市值100亿的假设下，0.3%对应3千万
+para_mv = 10000000.0
+para_w = 0.003
+file_path = "G:\\zd_zxjtzq\\rc_reports_cs\\机构研究_陆股通\\rawdata_wind_terminal\\"
 
-# file_path = "D:\\CISS_db\\db_bl\\"
-# file_name_csv = "weight2weight_sub.csv"
+
+tradingdate_list= ["20161230","20170331","20170630","20170929","20171229"]
+tradingdate_list= tradingdate_list +["20180329","20180629","20180928","20181231"]
+tradingdate_list= tradingdate_list +["20190329","20190628","20190930"]
+# temp_date=input("Type in date such as 20160301:   ")
+# "2014","2015","2016","2017","2018","2019"
+
+i_df = 0 
+for temp_date in tradingdate_list :
+    temp_date_s = temp_date[2:]
+    file_name_csv = "沪深港通持股_sh_"+ temp_date_s +".xlsx"
+    temp_df = pd.read_excel(file_path+ file_name_csv,encoding="gbk"  )   
+
+    file_name_csv = "沪深港通持股_sz_"+ temp_date_s +".xlsx"
+    temp_df2 = pd.read_excel(file_path+ file_name_csv,encoding="gbk"  )
+    temp_df = temp_df.append(temp_df2, ignore_index= True)
+    
+    temp_df = temp_df.fillna( value= -1.0) 
+    temp_df = temp_df[temp_df["持股市值"]> para_mv   ]  
+    temp_df["weight_raw"] = temp_df["持股市值"]/temp_df["持股市值"].sum()
+    
+    temp_df = temp_df.sort_values(by=["weight_raw"])
+    print( temp_df.head() )
+    print( temp_df.tail() )
+
+    '''
+    三种方案：
+    1，总市值排名：占全部持仓市值比例大于0.3%的，201612看有50只；
+        PMS=陆股通季1911v0300to1000
+    2，总市值排名，选前30至80名的股票
+        PMS=陆股通季1911vTop30to80
+    3，和上一期比较，取差额
+        PMS=陆股通季1911vTop30to80
+    '''  
+    ### Method 1 
+    # para_w = 0.003 
+    # temp_df= temp_df[ temp_df["weight_raw"] >= para_w ] 
+    # name_method = "0003to1000"
+    # temp_df["weight"] =  temp_df["weight_raw"]*0.95/temp_df["weight_raw"].sum()
+
+    ### Method 2
+    # 重新设置index ：1,2,3
+    # temp_df = temp_df.sort_values(by=["weight_raw"],ascending=False ) 
+    # temp_df= temp_df.head(80)
+    # temp_df= temp_df.tail(50)
+    # name_method = "w_top31to80"
+    # temp_df["weight"] =  temp_df["weight_raw"]*0.95/temp_df["weight_raw"].sum()
+
+    ### Method 3 
+    name_method = "w_diff_top"
+    if i_df > 0 : 
+        for temp_i in temp_df.index :
+            ### find if code in previous period 
+            temp_code = temp_df.loc[temp_i,"证券代码" ] 
+            temp_w =    temp_df.loc[temp_i,"weight_raw" ]
+             
+            df_check = temp_df_pre[ temp_df_pre[ "证券代码" ]== temp_code  ]
+            
+            if len( df_check.index ) > 0 :
+                ### 方式一：比较的是相对于当期全部持仓市值的比例，这个更好地反映组合内的配置比例。
+                ### 方式二：计算持仓市值的变动，这个容易忽视市场整体和个股的涨跌变动。
+                # print( temp_df.loc[temp_i,"weight_raw" ]  )
+                # print( df_check.loc[:,["weight_raw","weight"]] )
+                
+                w_diff = max(0.0, temp_w - df_check["weight_raw"].sum() )
+                ### update "weight_raw" to difference weight 
+                temp_df.loc[temp_i,"weight_raw" ] = w_diff
+        
+        ### ana:看201612 to 201703的情况，增持的股票数量超过300
+        temp_df = temp_df.sort_values(by=["weight_raw"],ascending=False ) 
+        # for debug usage 
+        # temp_df.to_csv( file_path+ "temp.csv",encoding="gbk"  )
+        # temp_df_pre.to_csv( file_path+ "temp_pre.csv",encoding="gbk"  )
+        
+        temp_df = temp_df[ temp_df["weight_raw"]>0.0 ] 
+        temp_df= temp_df.head(100) 
+        temp_df["weight"] =  temp_df["weight_raw"]/temp_df["weight_raw"].sum()
+    else :
+        ### 取前100只股票
+        temp_df = temp_df[ temp_df["weight_raw"]>0.0 ] 
+        temp_df = temp_df.sort_values(by=["weight_raw"],ascending=False )
+        temp_df_pre = temp_df
+        temp_df= temp_df.head(100)
+        temp_df["weight"] =  temp_df["weight_raw"]*0.95/temp_df["weight_raw"].sum()
+        
+    ########################################################################
+    ### Standarded step forming PMS templates       
+    print(temp_df.head(3) ) 
+    temp_df["weight"] =  100*temp_df["weight"]
+    if i_df == 0 :
+        temp_df2 = temp_df.loc[:,["证券代码","weight"] ]
+        ### col_PMS=证券代码	持仓权重	成本价格	调整日期	证券类型
+        temp_df2["成本价格"] = ""
+        temp_df2["调整日期"] = temp_date
+        temp_df2["证券类型"] = "股票"
+        ### 修改列名
+        temp_df2.rename(columns={'weight':'持仓权重'},inplace=True) 
+        df_output = temp_df2 
+    else :
+        temp_df2 = temp_df.loc[:,["证券代码","weight"] ]
+        ### col_PMS=证券代码	持仓权重	成本价格	调整日期	证券类型
+        temp_df2["成本价格"] = ""
+        temp_df2["调整日期"] = temp_date
+        temp_df2["证券类型"] = "股票"
+        temp_df2.rename(columns={'weight':'持仓权重'},inplace=True) 
+        df_output = df_output.append(temp_df2 ) 
+    
+    i_df = i_df+1 
+    print( df_output.tail(3) ) 
+
+file_output = "沪深港通持股_shsz_"+ name_method+"_" + "1612_1909" +".csv"
+df_output.to_csv( file_path+ file_output,encoding="gbk"  )
+
+### Previous function
 # col_name = "ind"
 # para_w =0.1 
 # df_output=fund_simu_1.weight2weight_sub(file_name_csv,file_path,col_name ,para_w )
 
-# asd
+asd
 
 #################################################################################
 ### Choice 6：导入季度调整的BL行业组合权重，生成Wind可以识别的季度调整文件

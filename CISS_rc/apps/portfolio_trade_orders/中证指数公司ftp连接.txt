@@ -1,0 +1,22 @@
+上海主站点 ftp.csindex.com.cn 124.74.243.125 
+上海备站点 ftp.csindex.cn 183.195.154.145 
+香港站点 ftp.csindex.hk 210.184.69.11 
+
+用户名csics 
+密码是17381906
+
+有效数据路径如：
+ftp://124.74.243.125/idxdata/data/asharedata/
+
+
+
+！！！！！！！！！！！！！！！！！！！！！！！
+通常使用“weight_for_next_trading_day”文件夹下的“指数代码+weightnextday+日期.xls”的文件
+
+因为里面有一列第二日的“开盘参考价”可能与当日的“收盘”价不同，因为考虑了第二天股票除息除权对股价的影响，更贴近实际交易价格，以及对应的交易数量（在给定权重或交易金额的前提下）
+
+
+
+！！！！！！！！！！！！！！！！！！！！！！！
+“securities_to_be_included”文件夹下的“指数代码+tobeincludedweight+日期.xls”的文件
+

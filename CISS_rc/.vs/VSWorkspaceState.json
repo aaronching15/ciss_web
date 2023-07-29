@@ -1,0 +1,11 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\bin",
+    "\\config",
+    "\\tests",
+    "\\tests\\data_manage"
+  ],
+  "SelectedNode": "\\tests\\data_manage\\test_json.py",
+  "PreviewInSolutionExplorer": false
+}

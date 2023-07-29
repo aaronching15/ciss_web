@@ -1,0 +1,1079 @@
+{% extends "base.html" %}
+<meta charset="UTF-8"> 
+<!-- for HTML5 -->
+<!-- The block items for this base html file is: {nav_sub, left_frame,menu,content } -->
+<!-- Derived from index_event.html since 220905 -->
+<!-- 设置标题 -->
+{% block title0 %} 
+    基本面事件和观点|股票池基金池
+{% endblock title0 %}
+
+{% block nav_sub %}
+<!-- layui定义左侧工具栏：第一部分目录 -->
+<li style="text-align: center;">基本面事件&股票池基金池</li>
+<!-- notes:class="layui-nav-item"默认是收起的， 加上" layui-nav-itemed"后内容是展开的;  -->
+<li class="layui-nav-item">
+    <a class="" href="#location_title">事件、观点的分类汇总</a>
+    <dl class="layui-nav-child">
+        <dd><a href="#event_summary_multiasset">1,大类资产配置观点 </a></dd>
+        <dd><a href="#event_summary_indstyle">2,股票行业和主题（基金）</a></dd>
+        <dd><a href="#event_summary_stock">3,个股股票</a></dd> 
+    </dl>
+</li>
+<li class="layui-nav-item"><a href="#event_multiasset">1，大类资产和宏观</a></li> 
+
+<li class="layui-nav-item">
+    <a class="" href="#event_indstyle">2，市场行业风格</a>
+    <dl class="layui-nav-child">
+        <dd><a href="#event_indstyle_classification">2.1,查询中信行业分类标准</a></dd>
+        <dd><a href="#event_indstyle_search">2.2,查询行业、主题等</a></dd>
+        <dd><a href="#event_indstyle_insert">2.3,提交行业、主题等</a></dd> 
+    </dl>
+</li>
+
+<li class="layui-nav-item layui-nav-itemed">
+    <a class="" href="#event_stock_funda">3，个股事件时间序列</a>
+    <dl class="layui-nav-child">
+        <dd><a href="#event_stock_funda_indicator">3.1,查询中信行业分类标准</a></dd>
+        <dd><a href="#event_stock_funda_search">3.2,查询个股定性研究记录</a></dd>
+        <dd><a href="#event_stock_funda_insert">3.3,提交个股定性研究记录</a></dd> 
+        <dd><a href="#event_stock_funda_delete">3.4,删除个股事件、观点和宏观研究记录</a></dd> 
+    </dl>
+</li>
+<li class="layui-nav-item layui-nav-itemed">
+    <a class="" href="#fundpool_stockpool_weight">4，股票池和基金池管理：I/O，weight</a>
+    <dl class="layui-nav-child">
+        <dd><a href="#fundpool_stockpool_weight_search">4.1,查询股票池、基金池：股票池|以策略名称区分</a></dd>
+        <dd><a href="#fundpool_stockpool_weight_insert">4.2,提交个券的基金池或股票池调整</a></dd>
+        <dd><a href="#fundpool_stockpool_weight_iselete">4.3,删除个券的基金池或股票池调整</a></dd> 
+    </dl>
+</li>
+<li class="layui-nav-item"><a href="#institute_activity">5，机构行为 todo</a></li> 
+<li class="layui-nav-item"><a href="#event_summary_statistics">6，事件、观点的汇总和统计</a></li> 
+<li>当前日期:{{ time_now_str }}</li>
+
+{% endblock nav_sub %}
+<!--- ################################################################## --->
+<!--- ################################################################## --->
+
+
+<!--- ################################################################## --->
+<!--- ################################################################## --->
+
+{% block left_frame %}
+<h1><a id="location_title">基本面事件、观点；股票池基金池|Fundamental Events&Views&StockPool</a> </h1>
+<h3>目录</h3>
+<ul>
+    <li><a href="#event_manage">事件、观点的分类和管理 </a></li>
+    <ul>
+        <li><a href="#event_summary_multiasset">大类资产最新配置观点汇总 </a></li>
+        <li><a href="#event_summary_indstyle">股票行业和主题（基金）最新配置观点汇总 </a></li>
+        <li><a href="#event_summary_stock">个股股票最新配置观点汇总 todo </a></li>
+    </ul>
+    <li><a href="#event_multiasset">1，大类资产、投资观点和宏观 </a></li>
+    <li><a href="#event_indstyle">2，市场行业风格</a></li>
+    <li><a href="#event_stock_funda">3，个股事件时间序列 </a></li>
+    <li><a href="#fundpool_stockpool_weight">4，股票池和基金池管理：I/O，weight </a></li>
+    <li><a href="#institute_activity">5，机构行为 todo</a></li>
+    <li><a href="#event_summary_statistics">6，事件、观点的汇总和统计</a></li>
+
+</ul>
+{% endblock left_frame %} {% block menu %} {% endblock menu %} {% block content %}
+<hr>
+
+<!--- ################################################################## --->
+<form action="{% url 'event_view' %}" method="post" accept-charset="utf-8"> 
+<!--- ################################################################## --->
+<!--- ################################################################## --->
+<hr>
+<h3 id="event_manage">事件、观点的分类和管理</h3> 
+
+<hr>
+<h4 id="event_summary_multiasset">大类资产最新配置观点汇总</h4>
+<p>汇总大类资产的观点、配置比例、关键词 || 数据提取在view_xxx.py 里完成
+</p> 
+
+{% csrf_token %}
+<input type="submit" name="input_event_summary_multiasset" value="汇总-大类资产最新配置观点"> 
+
+<div id="div_table">
+<table id="ciss_table" >
+    <tr id="table_tr_text">
+        <td id="table_tr_text">序号</td>
+        <td id="table_tr_text">日期</td>
+        <td id="table_tr_text">资产-市场-数据</td>
+        <td id="table_tr_text">事件或观点类型</td>
+        <td id="table_tr_text">主题</td>
+        <td id="table_tr_text">关键词</td>
+        <td id="table_tr_text">概要</td>
+        <td id="table_tr_text">权重</td>
+        <td id="table_tr_text">数据来源</td>        
+    </tr>
+
+    {% for temp_i,temp_v in df_event_summary_multiasset.items %}
+    <tr id="table_tr_text">
+        <td id="table_tr_text">{{ temp_v.id }}</td>
+        <td id="table_tr_text" width="80">{{ temp_v.date }}</td>
+        <td id="table_tr_text">{{ temp_v.asset_market_topic }}</td>
+        <td id="table_tr_text">{{ temp_v.type_event_view }}</td>
+        <td id="table_tr_text">{{ temp_v.keyword }}</td>
+        <td id="table_tr_text" width="600">{{ temp_v.abstract }}</td>
+        <td id="table_tr_text">{{ temp_v.weight }}</td>
+        <td id="table_tr_text">{{ temp_v.source }}</td> 
+    </tr>
+    {% endfor %}
+</table>
+<button type="button" onclick="tableToExcel('ciss_table')">导出Excel</button> <br>
+</div>
+
+<hr>
+<h4 id="event_summary_indstyle">股票行业和主题（基金）最新配置观点汇总 </h4>
+<p>TODO：
+<br>1，获取一级和三级行业匹配地基金品种。例如：机械，012516.OF，20.0%。 
+<br>3, 行业所属统计：行业核心股票：价值锚,成长锚,特色锚-基金重仓
+</p>
+
+{% csrf_token %}
+<input type="submit" name="input_event_summary_ind_style" value="汇总-股票行业最新观点"> 
+<p>近一年无研究记录的一级行业：{{ list_ind1_no_record }}</p>
+<p>近一年无研究记录的三级行业top40：{{ list_ind3_no_record }}</p>
+<div id="div_table">
+<table id="ciss_table" >
+    <tr id="table_tr_text">
+        <td id="table_tr_text">序号</td>
+        <td id="table_tr_text">日期</td>
+        <td id="table_tr_text">行业-主题-市场</td>
+        <td id="table_tr_text">行业主题类型</td> 
+        <td id="table_tr_text">关键词</td>
+        <td id="table_tr_text">概要</td>    
+    </tr>
+
+    {% for temp_i,temp_v in df_event_summary_ind_style.items %}
+    <tr id="table_tr_text">
+        <td id="table_tr_text">{{ temp_v.id }}</td>
+        <td id="table_tr_text" width="80">{{ temp_v.date }}</td>
+        <td id="table_tr_text">{{ temp_v.name_index }}</td>
+        <td id="table_tr_text">{{ temp_v.type_ind_style }}</td>
+        <td id="table_tr_text">{{ temp_v.keyword }}</td>
+        <td id="table_tr_text" width="600">{{ temp_v.abstract }}</td> 
+    </tr>
+    {% endfor %}
+</table>
+<button type="button" onclick="tableToExcel('ciss_table')">导出Excel</button> <br>
+</div>
+
+<hr>
+{% csrf_token %}
+<input type="submit" name="input_event_summary_style_market" value="汇总-股票风格、主题和指数最新观点"> 
+<p>TODO:1,四类市值风格的量化指标统计：超大市值、大市值、中市值、小市值、小微市值
+    <br>2，行业板块的统计；上游制造、科技、消费、医疗、金融地产；风格：成长、价值；主题板块【新兴消费、新能源车等】 
+    <br>3，市场指数：主要市场和风格指数的观点：
+ </p>
+<p>市值风格的量化指标统计：超大市值、大市值、中市值、小市值、小微市值</p> 
+<table id="ciss_table" >
+    <tr id="table_tr_text">
+        <td id="table_tr_text">序号|分类</td>
+        <td id="table_tr_text">月均市值占比</td>
+        <td id="table_tr_text">月均成交额占比</td>
+        <td id="table_tr_text">月均市值</td> 
+        <td id="table_tr_text">月均成交额</td>
+        <td id="table_tr_text">股票数量</td>  
+        <td id="table_tr_text">20日涨跌幅</td> 
+        <td id="table_tr_text">60日涨跌幅</td> 
+        <td id="table_tr_text">120日涨跌幅</td> 
+        <td id="table_tr_text">基金持股比例</td> 
+        <td id="table_tr_text">净资产收益率(TTM)</td> 
+        <td id="table_tr_text">归母净利润同比增长率</td> 
+        <td id="table_tr_text">市盈率(TTM)</td> 
+    </tr>
+    {% for temp_i,temp_v in df_mv_style_market.items %}
+    <tr id="table_tr_text">
+        <td id="table_td_number" width="100">{{ temp_v.name }}</td>
+        <td id="table_td_number">{{ temp_v.ave_mv_pct }}</td>
+        <td id="table_td_number">{{ temp_v.ave_amt_pct }}</td>
+        <td id="table_td_number" width="90">{{ temp_v.ave_mv }}</td>
+        <td id="table_td_number" width="80">{{ temp_v.ave_amt }}</td>
+        <td id="table_td_number">{{ temp_v.num_stock }}</td>
+        <td id="table_td_number">{{ temp_v.20日涨跌幅 }}</td>
+        <td id="table_td_number">{{ temp_v.60日涨跌幅 }}</td>
+        <td id="table_td_number">{{ temp_v.120日涨跌幅 }}</td>
+        <td id="table_td_number">{{ temp_v.基金持股比例 }}</td>
+        <td id="table_td_number">{{ temp_v.净资产收益率ttm }}</td>
+        <td id="table_td_number">{{ temp_v.归母净利润同比增长率 }}</td>
+        <td id="table_td_number">{{ temp_v.市盈率ttm }}</td>
+        
+    </tr>
+    {% endfor %}
+</table>
+<button type="button" onclick="tableToExcel('ciss_table')">导出Excel</button> <br> 
+
+<p>行业板块风格：用ind1、ind3匹配成长、价值；上游制造,科技,消费,医疗,金融地产</p> 
+<table id="ciss_table" >
+    <tr id="table_tr_text">
+        <td id="table_tr_text">序号|分类</td>
+        <td id="table_tr_text">月均市值占比</td>
+        <td id="table_tr_text">月均成交额占比</td>
+        <td id="table_tr_text">月均市值</td> 
+        <td id="table_tr_text">月均成交额</td>
+        <td id="table_tr_text">股票数量</td>  
+        <td id="table_tr_text">20日涨跌幅</td> 
+        <td id="table_tr_text">60日涨跌幅</td> 
+        <td id="table_tr_text">120日涨跌幅</td> 
+        <td id="table_tr_text">基金持股比例</td> 
+        <td id="table_tr_text">净资产收益率(TTM)</td> 
+        <td id="table_tr_text">归母净利润同比增长率</td> 
+        <td id="table_tr_text">市盈率(TTM)</td> 
+    </tr>
+    {% for temp_i,temp_v in df_style_style_market.items %}
+    <tr id="table_tr_text">
+        <td id="table_td_number" width="80">{{ temp_v.name }}</td>
+        <td id="table_td_number">{{ temp_v.ave_mv_pct }}</td>
+        <td id="table_td_number">{{ temp_v.ave_amt_pct }}</td>
+        <td id="table_td_number" width="90">{{ temp_v.ave_mv }}</td>
+        <td id="table_td_number" width="80">{{ temp_v.ave_amt }}</td>
+        <td id="table_td_number">{{ temp_v.num_stock }}</td>
+        <td id="table_td_number">{{ temp_v.20日涨跌幅 }}</td>
+        <td id="table_td_number">{{ temp_v.60日涨跌幅 }}</td>
+        <td id="table_td_number">{{ temp_v.120日涨跌幅 }}</td>
+        <td id="table_td_number">{{ temp_v.基金持股比例 }}</td>
+        <td id="table_td_number">{{ temp_v.净资产收益率ttm }}</td>
+        <td id="table_td_number">{{ temp_v.归母净利润同比增长率 }}</td>
+        <td id="table_td_number">{{ temp_v.市盈率ttm }}</td>
+        
+    </tr>
+    {% endfor %}
+</table>
+<button type="button" onclick="tableToExcel('ciss_table')">导出Excel</button> <br> 
+
+
+<hr>
+<h4 id="event_summary_stock">主动股票最新配置观点汇总 todo</h4>
+<p>TODO:1，个股统计汇总：市值维度、行业板块维度。2，市场成交top50个股。3，核心池、基础池个股权重和统计指标——和全市场比较
+    <br>2,指标：月均成交额,总市值,trend_short,trend_mid,基金持股比例,净资产收益率(TTM),归母净利润同比增长率,市盈率(TTM),20日涨跌幅,60日涨跌幅,120日涨跌幅
+    <br>Notes: 需要输入资产的配置比例和观点
+</p>
+
+{% csrf_token %}
+<input type="submit" name="input_event_summary_stock_funda" value="汇总-个股股票行业研究汇总"> 
+<p> </p>
+<p>无个股跟踪记录的一级行业：{{ list_ind1_no_record_stock  }}</p>
+
+<div id="div_table">
+<table id="ciss_table" >
+    <tr id="table_tr_text">
+        <td id="table_tr_text">序号</td>
+        <td id="table_tr_text">日期</td>
+        <td id="table_tr_text">行业-主题-市场</td>
+        <td id="table_tr_text">行业主题类型</td> 
+        <td id="table_tr_text">关键词</td>
+        <td id="table_tr_text">概要</td>    
+    </tr>
+
+    {% for temp_i,temp_v in df_event_summary_stock_funda.items %}
+    <tr id="table_tr_text">
+        <td id="table_tr_text">{{ temp_v.id }}</td>
+        <td id="table_tr_text" width="80">{{ temp_v.date }}</td>
+        <td id="table_tr_text">{{ temp_v.name_index }}</td>
+        <td id="table_tr_text">{{ temp_v.type_ind_style }}</td>
+        <td id="table_tr_text">{{ temp_v.keyword }}</td>
+        <td id="table_tr_text" width="600">{{ temp_v.abstract }}</td> 
+    </tr>
+    {% endfor %}
+</table>
+<button type="button" onclick="tableToExcel('ciss_table')">导出Excel</button> <br>
+</div>
+
+
+
+<hr>
+<!--- ################################################################## --->
+<h3 id="event_multiasset">1，大类资产、投资观点和宏观 </h3> 
+
+<p>查询投资观点和宏观TODO ,根据给定column列名称和数值，提交数据库
+    <br>todo：统计分析功能：根据时间区间，统计研究主题和关键词的分布
+     </p>
+{% csrf_token %}
+<table border="1">
+    <!-- step1：输入代码，选择是否查询基金信息；step2：根据获取的数据，填入定性信息，保存到sqlite数据库  -->
+    <tr>1,查询数据库中大类资产、投资观点事件 | 至少输入一项，否则返回最新的5条记录：
+        <!-- <tr>开始日期<input type="text" name="date_begin" value=""></tr>
+        <tr>结束日期<input type="text" name="date_end" value=""></tr><br> -->
+        <br>
+        <tr>资产-市场-数据<select name="asset_market_topic" value="">
+        <option value ="all">ALL</option><option value ="A股">A股</option><option value ="港股">港股</option>
+        <option value ="美股">美股</option><option value ="基金产品">基金产品</option>
+        <option value ="策略">策略</option><option value ="宏观">宏观</option><option value ="债券">债券</option>        
+        </select></tr>
+        <tr>事件或观点类型<input type="text" name="type_event_view" value=""></tr>
+        <br>
+        <tr>关键词<input type="text" name="keyword" value=""></tr>
+        <tr>概要<input type="text" name="abstract" value=""></tr>
+        <br>
+        <input type="submit" name="input_event_select" value="提交"> 
+    </tr>
+
+</table>
+
+<hr>
+{% csrf_token %}
+<table border="1">
+    <!-- step1：输入代码，选择是否查询基金信息；step2：根据获取的数据，填入定性信息，保存到sqlite数据库  -->
+    <tr>2,提交事件、观点和宏观研究记录：|观点必须对应权重</tr>
+    <br>
+    <tr>观点事件日期<input type="text" name="date_submit" value="{{ time_now_str }}"></tr> 
+    <tr>资产-市场-数据<select name="asset_market_topic_submit" value="">
+        <option value ="all">ALL</option><option value ="A股">A股</option><option value ="港股">港股</option>
+        <option value ="美股">美股</option><option value ="基金产品">基金产品</option>
+        <option value ="策略">策略</option><option value ="宏观">宏观</option><option value ="债券">债券</option>        
+        </select></tr>
+    <tr>事件或观点类型<input type="text" name="type_event_view_submit" value=""></tr>
+    <br>
+    <tr>关键词<input type="text" name="keyword_submit" value=""></tr>
+    <tr>概要:<textarea rows="10" cols="80" type="text" name="abstract_submit" value=""></textarea></tr>
+    <br>
+    <tr>权重：<input type="text" name="weight_submit" value=""></tr>
+    <tr>来源：<input type="text" name="source_submit" value=""></tr>  
+    <br>
+    <input type="submit" name="input_event_to_sql" value="提交"> 
+
+</table>
+
+<hr>
+{% csrf_token %}
+<table border="1">
+    <!-- step1：输入代码，选择是否查询基金信息；step2：根据获取的数据，填入定性信息，保存到sqlite数据库  -->
+    <tr>3,删除事件、观点和宏观研究记录： 
+        <tr>id<input type="text" name="del_id" value=""></tr>
+        <tr>列名称Column Name <input type="text" name="del_col_name" value=""></tr>
+        <tr>列值Value<input type="text" name="del_col_value" value=""></tr> 
+        <br>
+        <input type="submit" name="input_event_delete" value="提交"> 
+    </tr>
+
+</table>
+
+
+<p>投资事件、观点和宏观研究记录：最新N条</p>
+<!--给table添加滚动条，table放到一个div里去,然后再设置div显示滚动条即可 div比table大小要小才会显示-->  
+<div id="div_table">
+<table id="ciss_table" >
+    <tr id="table_tr_text">
+        <td id="table_tr_text">序号</td>
+        <td id="table_tr_text">日期</td>
+        <td id="table_tr_text">资产-市场-数据</td>
+        <td id="table_tr_text">事件或观点类型</td>
+        <td id="table_tr_text">主题</td>
+        <td id="table_tr_text">关键词</td>
+        <td id="table_tr_text">概要</td>
+        <td id="table_tr_text">权重</td>
+        <td id="table_tr_text">数据来源</td>        
+    </tr>
+
+    {% for temp_i,temp_v in df_event_view_multiasset_macro.items %}
+    <tr id="table_tr_text">
+        <td id="table_tr_text">{{ temp_v.id }}</td>
+        <td id="table_tr_text" width="80">{{ temp_v.date }}</td>
+        <td id="table_tr_text">{{ temp_v.asset_market_topic }}</td>
+        <td id="table_tr_text">{{ temp_v.type_event_view }}</td>
+        <td id="table_tr_text">{{ temp_v.keyword }}</td>
+        <td id="table_tr_text" width="600">{{ temp_v.abstract }}</td>
+        <td id="table_tr_text">{{ temp_v.weight }}</td>
+        <td id="table_tr_text">{{ temp_v.source }}</td> 
+    </tr>
+    {% endfor %}
+</table>
+<button type="button" onclick="tableToExcel('ciss_table')">导出Excel</button> <br>
+</div>
+
+
+
+
+
+<!--- ################################################################## --->
+<!--- ################################################################## --->
+<hr>
+<h3 id="event_indstyle">2，市场、行业、主题、因子风格 </h3> 
+
+<p>查询市场、行业、主题、因子 ,根据给定column列名称和数值，提交数据库
+    <br>todo：统计分析功能：根据时间区间，统计研究主题和关键词的分布
+    <br>notes:name_index列和ind3列是一样的
+     </p>
+
+<h4 id="event_indstyle_classification">2.1,查询中信行业分类标准</h4>
+{% csrf_token %}
+<table border="1">
+    <!-- 查询中信行业分类标准 -->
+    <tr>1,查询中信行业分类标准；file=db_manage.xlsx\sheet_name=MATCH ; file_source=中信行业分类标准v2.0.xlsx 
+        <br>
+        <tr>行业或风格类型名称<select name="type_ind_style_match" value="">
+        <option value ="">all</option><option value ="ind1">中信一级行业</option>
+        <option value ="ind3">中信三级行业</option><option value ="style">风格指数和基金</option>
+        <option value ="market">市场指数和基金</option><option value ="bond">债券类</option>
+        <option value ="hkus">港股美股</option>
+        </select></tr>
+        <tr>其他列名称Column<select name="column_name_match" value="">        
+        <option value =""></option>
+        <option value ="ind1">中信一级行业</option><option value ="ind3">三级行业</option>
+        <option value ="name_index">指数名称name_index</option><option value ="ind2">二级行业</option>
+        <option value ="ind_sector">ind_sector</option><option value ="growth_value">growth_value</option>
+        <option value ="code_index">指数代码code_index</option>        
+        <option value ="ind_code">ind_code</option><option value ="name_index_full">name_index_full</option>
+        </select></tr>
+        <tr>列值value<input type="text" name="column_value_match" value=""></tr>
+        <br>
+        <input type="submit" name="input_ind_style_match" value="提交"> 
+    </tr> 
+</table>
+
+<table id="ciss_table" >
+    <tr id="table_tr_text">
+        <td id="table_tr_text">type_ind_style</td>
+        <td id="table_tr_text" width="100">code_index</td>
+        <td id="table_tr_text">name_index</td>
+        <td id="table_tr_text">ind_sector</td>
+        <td id="table_tr_text">growth_value</td>
+        <td id="table_tr_text">ind_code</td>
+        <td id="table_tr_text" width="150">ind3</td> 
+        <td id="table_tr_text">ind1</td> 
+        <td id="table_tr_text">name_index_full</td> 
+    </tr>
+
+    {% for temp_i,temp_v in df_ind_style_match.items %}
+    <tr id="table_tr_text">
+        <td id="table_tr_text">{{ temp_v.type_ind_style }}</td>
+        <td id="table_tr_text" >{{ temp_v.code_index }}</td>
+        <td id="table_tr_text">{{ temp_v.name_index }}</td>
+        <td id="table_tr_text">{{ temp_v.ind_sector }}</td>
+        <td id="table_tr_text">{{ temp_v.growth_value }}</td>
+        <td id="table_tr_text">{{ temp_v.ind3 }}</td>
+        <td id="table_tr_text">{{ temp_v.ind1 }}</td>
+        <td id="table_tr_text">{{ temp_v.name_index_full }}</td>
+        </tr>
+    {% endfor %}
+</table>  
+
+<hr>
+<h4 id="event_indstyle_search">2.2,查询数据库中行业、主题、因子事件</h4>
+{% csrf_token %}
+<table border="1">
+    <!-- step1：输入代码，选择是否查询基金信息；step2：根据获取的数据，填入定性信息，保存到sqlite数据库  -->
+    <tr>1,查询数据库中行业、主题、因子事件 | 至少输入一项，否则返回最新的5条记录：
+        <!-- <tr>开始日期<input type="text" name="date_begin" value=""></tr>
+        <tr>结束日期<input type="text" name="date_end" value=""></tr><br> -->
+        <br>
+        <tr>行业或风格名称<input type="text" name="name_index_indstyle" value=""></tr>
+        <tr>行业或风格代码<input type="text" name="code_index_indstyle" value=""></tr>
+        <tr>行业或风格类型名称<select name="type_ind_style_indstyle" value="">
+        <option value ="">all</option><option value ="ind1">中信一级行业</option>
+        <option value ="ind3">中信三级行业</option><option value ="style">风格指数和基金</option>
+        <option value ="market">市场指数和基金</option><option value ="bond">债券类</option>
+        <option value ="hkus">港股美股</option>
+        </select></tr>
+        <br>
+        <tr>关键词<input type="text" name="keyword_indstyle" value=""></tr>
+        <tr>概要<input type="text" name="abstract_indstyle" value=""></tr>
+        <br>
+        <input type="submit" name="input_event_select_indstyle" value="提交"> 
+    </tr>
+
+</table>
+
+<hr>
+<h4 id="event_indstyle_insert">2.3,提交市场、行业、主题、因子事件</h4>
+{% csrf_token %}
+<table border="1">
+    <!-- step1：输入代码，选择是否查询基金信息；step2：根据获取的数据，填入定性信息，保存到sqlite数据库  -->
+    <tr>2,提交市场、行业、主题、因子事件：|部分行业、风格、市场可以匹配指数代码 </tr>
+    <br>
+    <tr>观点事件日期<input type="text" name="date_indstyle_submit" value="{{ time_now_str }}"></tr> 
+    <tr>行业或风格类型名称<select name="type_ind_style_submit" value="">
+        <option value ="">all</option><option value ="ind1">中信一级行业</option>
+        <option value ="ind3">中信三级行业</option><option value ="style">风格指数和基金</option>
+        <option value ="market">市场指数和基金</option><option value ="bond">债券类</option>
+        <option value ="hkus">港股美股</option>
+        </select></tr>
+    <tr>行业或风格名称<input type="text" name="name_index_indstyle_submit" value=""></tr>
+    <tr>行业或风格代码|不必须<input type="text" name="code_index_indstyle_submit" value=""></tr>    
+    <tr>权重|非必须：<input type="text" name="weight_indstyle_submit" value=""></tr>
+    <br>
+    <tr>关键词<input type="text" name="keyword_indstyle_submit" value=""></tr>
+    <tr>概要<textarea rows="10" cols="80" type="text" name="abstract_indstyle_submit" value=""></textarea> </tr>    
+    <br>
+    <input type="submit" name="input_event_to_sql_indstyle" value="提交"> 
+
+</table>
+
+<hr>
+{% csrf_token %}
+<table border="1">
+    <!-- step1：输入代码，选择是否查询基金信息；step2：根据获取的数据，填入定性信息，保存到sqlite数据库  -->
+    <tr>3,删除事件、观点和宏观研究记录： 
+        <tr>id<input type="text" name="del_id_indstyle" value=""></tr>
+        <tr>列名称Column Name <input type="text" name="del_col_name_indstyle" value=""></tr>
+        <tr>列值Value<input type="text" name="del_col_value_indstyle" value=""></tr> 
+        <br>
+        <input type="submit" name="input_event_delete_indstyle" value="提交"> 
+    </tr>
+
+</table>
+
+
+<p>市场、行业、主题、因子研究记录：最新N条</p>
+<!--给table添加滚动条，table放到一个div里去,然后再设置div显示滚动条即可 div比table大小要小才会显示-->  
+<div id="div_table">
+<table id="ciss_table_3" >
+    <tr id="table_tr_text">
+        <td id="table_tr_text">序号</td>
+        <td id="table_tr_text">日期</td>
+        <td id="table_tr_text">市场-行业-风格</td>
+        <td id="table_tr_text">代码</td>
+        <td id="table_tr_text">行业或风格类型</td>
+        <td id="table_tr_text">关键词</td>
+        <td id="table_tr_text">概要</td> 
+    </tr>
+
+    {% for temp_i,temp_v in df_event_view_ind_style.items %}
+    <tr id="table_tr_text">
+        <td id="table_tr_text">{{ temp_v.id }}</td>
+        <td id="table_tr_text" width="80">{{ temp_v.date }}</td>
+        <td id="table_tr_text">{{ temp_v.name_index }}</td>
+        <td id="table_tr_text">{{ temp_v.code_index }}</td>
+        <td id="table_tr_text">{{ temp_v.type_ind_style }}</td>
+        <td id="table_tr_text">{{ temp_v.keyword }}</td>
+        <td id="table_tr_text" width="600">{{ temp_v.abstract }}</td>
+        </tr>
+    {% endfor %}
+</table>
+<button type="button" onclick="tableToExcel('ciss_table_3')">导出Excel</button> <br>
+</div>
+ 
+   
+
+<!--- ################################################################## --->
+<!--- ################################################################## --->
+<hr>
+<h3 id="event_stock_funda">3，个股事件时间序列 </h3>
+<p>1，输入股票代码或名称查询定量指标；2，输入日期、代码、关键词和摘要等信息 。
+<br>todo：匹配个股是否属于 核心股票池,基础股票池
+<br>file_data=ah_shares.xlsx ; path_data=C:\rc_HUARONG\rc_HUARONG\data_pms\data_adj
+<br>file=rc_个股推荐行业事件.xlsx\sheet_name=1个股事件时间序列 ; file_source=中信行业分类标准v2.0.xlsx
+    </p>  
+
+<h4 id="event_stock_funda_indicator">3.1,查询个股定量指标</h4>
+<!--- ################################################################## --->
+{% csrf_token %}
+<table border="1"> 
+    <tr>1,查询个股定量指标；  <br> 
+        <tr>股票代码<input type="text" name="code_stock" value=""></tr>
+        <tr>股票名称<input type="text" name="name_stock" value=""></tr>
+        <tr>中信三级行业<input type="text" name="ind3_stock" value=""></tr>
+        <br>
+        <tr>区间查询：列名称<input type="text" name="column_name_stock" value=""></tr>
+        <tr>区间查询：数值下限<input type="text" name="column_value_lb_stock" value=""></tr>
+        <tr>区间查询：数值上限<input type="text" name="column_value_ub_stock" value=""></tr>
+        <br>
+        <input type="submit" name="input_stock_indi_search" value="提交"> 
+    </tr> 
+</table>
+
+<table id="ciss_table" >
+    <tr id="table_tr_text">
+        <td id="table_tr_text">核心股票池</td>
+        <td id="table_tr_text">基础股票池</td>
+        <td id="table_tr_text">跟踪时间</td>
+        <td id="table_tr_text"  width="100">代码</td>
+        <td id="table_tr_text"  width="80">名称</td>
+        <td id="table_tr_text">中期趋势</td>
+        <td id="table_tr_text">短期趋势</td>
+        <td id="table_tr_text">20日涨跌幅</td> 
+        <td id="table_tr_text">60日涨跌幅</td> 
+        <td id="table_tr_text">120日涨跌幅</td> 
+        <td id="table_tr_text">总市值</td> 
+        <td id="table_tr_text">市盈率(TTM)</td> 
+        <td id="table_tr_text">基金持股比例</td> 
+        <td id="table_tr_text">净资产收益率(TTM)</td> 
+        <td id="table_tr_text">归母净利润同比增长率</td> 
+        <td id="table_tr_text">中信一级行业</td>
+        <td id="table_tr_text">中信二级行业</td>
+        <td id="table_tr_text">中信三级行业</td> 
+    </tr>
+
+    {% for temp_i,temp_v in df_stock_indi_search.items %}
+    <tr id="table_tr_text">
+        <td id="table_tr_text">{{ temp_v.if_stockpool_core }}</td>
+        <td id="table_tr_text" >{{ temp_v.if_stockpool_basic }}</td>
+        <td id="table_tr_text">{{ temp_v.date }}</td>
+        <td id="table_tr_text">{{ temp_v.代码 }}</td>
+        <td id="table_tr_text">{{ temp_v.名称 }}</td>
+        <td id="table_tr_text">{{ temp_v.trend_mid }}</td>
+        <td id="table_tr_text">{{ temp_v.trend_short }}</td>
+        <td id="table_tr_text">{{ temp_v.pctchange_20d }}</td>
+        <td id="table_tr_text">{{ temp_v.pctchange_60d }}</td>
+        <td id="table_tr_text">{{ temp_v.pctchange_120d }}</td>
+        <td id="table_tr_text">{{ temp_v.mv }}</td>
+        <td id="table_tr_text">{{ temp_v.pe_ttm }}</td>
+        <td id="table_tr_text">{{ temp_v.fund_holding_pct }}</td>
+        <td id="table_tr_text">{{ temp_v.roe_ttm }}</td>
+        <td id="table_tr_text">{{ temp_v.归母净利润同比增长率 }}</td>
+        <td id="table_tr_text">{{ temp_v.中信一级行业 }}</td>
+        <td id="table_tr_text">{{ temp_v.中信二级行业 }}</td>
+        <td id="table_tr_text">{{ temp_v.中信三级行业 }}</td>
+        </tr>
+    {% endfor %}
+</table>  
+<button type="button" onclick="tableToExcel('ciss_table')">导出Excel</button> <br> 
+
+<hr>
+<h4 id="event_stock_funda_search">3.2,查询个股定性研究记录</h4>
+<!--- ################################################################## --->
+{% csrf_token %}
+<table border="1"> 
+    <tr>1,查询个股定性研究记录；   
+        <tr>日期<input type="text" name="date_active_search" value=""></tr>
+        <tr>股票代码<input type="text" name="code_stock_active_search" value=""></tr>
+        <tr>股票名称<input type="text" name="name_stock_active_search" value=""></tr>
+        <tr>关键词<input type="text" name="keyword_active_search" value=""></tr>
+        <br>
+        <tr>概要<textarea rows="10" cols="80" type="text" name="abstract_active_search" value=""></textarea></tr>
+        <br>
+        <input type="submit" name="input_stock_active_search" value="提交"> 
+    </tr> 
+</table>
+
+<hr>
+<h4 id="event_stock_funda_insert">3.3,提交个股定性研究记录</h4>
+{% csrf_token %}
+<table border="1">
+    <!-- step1：输入代码，选择是否查询基金信息；step2：根据获取的数据，填入定性信息，保存到sqlite数据库  -->
+    <tr>2,提交个股基本面研究记录 </tr>
+    <br>
+    <tr>基本面研究日期<input type="text" name="date_active_submit" value="{{ time_now_str }}"></tr> 
+    <tr>股票代码<input type="text" name="code_stock_active_submit" value=""></tr>
+    <tr>股票名称<input type="text" name="name_stock_active_submit" value=""></tr>
+    <tr>关键词<input type="text" name="keyword_stock_active_submit" value=""></tr>
+    <br>
+    <tr>概要<textarea rows="10" cols="80" type="text" name="abstract_stock_active_submit" value=""></textarea> </tr>
+    <tr>市值以下买入<input type="text" name="mv_buy_lb_submit" value=""></tr>
+    <tr>市值以上卖出<input type="text" name="mv_sell_ub_submit" value=""></tr>
+    <tr>来源<input type="text" name="source_stock_active_submit" value=""></tr>
+    <br>
+    <input type="submit" name="input_event_to_sql_stock_active" value="提交"> 
+
+</table>
+
+<hr>
+<h4 id="event_stock_funda_delete">3.4,删除个股事件、观点和宏观研究记录：</h4>
+{% csrf_token %}
+<table border="1">
+    <!-- step1：输入代码，选择是否查询基金信息；step2：根据获取的数据，填入定性信息，保存到sqlite数据库  -->
+    <tr>3,删除事件、观点和宏观研究记录： 
+        <tr>id<input type="text" name="del_id_stock_active" value=""></tr>
+        <tr>列名称Column Name <input type="text" name="del_col_name_stock_active" value=""></tr>
+        <tr>列值Value<input type="text" name="del_col_value_stock_active" value=""></tr> 
+        <br>
+        <input type="submit" name="input_event_delete_stock_active" value="提交"> 
+    </tr>
+
+</table>
+
+<br>
+<!--给table添加滚动条，table放到一个div里去,然后再设置div显示滚动条即可 div比table大小要小才会显示-->  
+<div id="div_table">
+<table id="ciss_table" >
+    <tr id="table_tr_text">
+        <td id="table_tr_text">序号</td>
+        <td id="table_tr_text">日期</td>
+        <td id="table_tr_text">股票代码</td>
+        <td id="table_tr_text">股票名称</td>
+        <td id="table_tr_text">关键词</td>
+        <td id="table_tr_text">概要</td> 
+        <td id="table_tr_text">市值以下买入</td> 
+        <td id="table_tr_text">市值以上卖出</td> 
+        <td id="table_tr_text">信息来源</td> 
+    </tr>
+
+    {% for temp_i,temp_v in df_stock_active_funda.items %}
+    <tr id="table_tr_text">
+        <td id="table_tr_text">{{ temp_v.id }}</td>
+        <td id="table_tr_text" width="80">{{ temp_v.date }}</td>
+        <td id="table_tr_text" width="100">{{ temp_v.code }}</td>
+        <td id="table_tr_text" width="80">{{ temp_v.name }}</td>        
+        <td id="table_tr_text">{{ temp_v.keyword }}</td>
+        <td id="table_tr_text" width="600">{{ temp_v.abstract }}</td>
+        <td id="table_tr_text">{{ temp_v.mv_buy_lb }}</td>
+        <td id="table_tr_text">{{ temp_v.mv_sell_ub }}</td>
+        <td id="table_tr_text">{{ temp_v.source }}</td>
+        </tr>
+    {% endfor %}
+</table>
+<button type="button" onclick="tableToExcel('ciss_table')">导出Excel</button> <br>
+</div>
+
+
+
+
+
+<!--- ################################################################## --->
+<!--- ################################################################## --->
+<hr>
+<h3 id="fundpool_stockpool_weight">4，股票池、基金池管理【<a href="/ciss_exhi/strategy/">迁移至策略开发</a>】 </h3>
+<p>查询最新股票池和记录股票池股票调入和跳出记录
+    <br>1,查询最新股票池，链接股票最新基本面跟踪日期和摘要；2，提交股票池变动；3，删除股票池调整记录
+    <br>2,查询最新资产、基金池，链接资产、基金最新基本面跟踪日期和摘要；2，提交资产、基金池变动；3，删除资产、基金池调整记录
+     </p> 
+<p>date pool_name","pool_level","type_asset_indstyle_stock","
+<br> 日期 证券池类型","核心基础备选","资产类型","
+<br> strategy","strategy_CN","code","name","weight","code_fund","code_stock","note
+<br> 策略","策略名称","代码","名称","权重","基金代码","股票代码","note</p>
+
+<h4 id="fundpool_stockpool_weight_search">4.1,查询股票池、基金池：股票池|以策略名称区分</h4>
+<hr>
+<!--- ################################################################## --->
+{% csrf_token %}
+<table border="1"> 
+    <tr>1,查询股票池、基金池：股票池|以策略名称区分； <br>  
+    <tr>策略名称|必须<select name="strategy_CN_search" value="">
+        <option value =""></option>
+        <option value ="市场风格趋势">市场风格趋势</option>
+        <option value ="股票行业研究">股票行业研究</option>
+        </select></tr>   
+        <tr>策略<select name="strategy_search" value="">
+        <option value =""></option>
+        <option value ="fund_market_trend">fund_market_trend</option>
+        <option value ="stock_active_ind">stock_active_ind</option>
+        </select></tr>  
+        <br> 
+        <tr>调整日期{{ time_now_str }}|非必须<input type="text" name="date_pool_search" value=""></tr> 
+        <tr>证券池类型<select name="pool_name_search" value=""><option value =""></option>
+        <option value ="active_stock">主动股票active_stock</option>
+        <option value ="active_fund">主动基金active_fund</option>
+        </select></tr>   
+        <tr>核心、基础、备选池<select name="pool_level_search" value="">
+            <option value =""></option>
+            <option value ="core">核心core</option> <option value ="basic">基础basic</option>
+        </select></tr>  
+        <tr>资产类型<select name="type_asset_indstyle_stock_search" value=""><option value =""></option>
+        <option value ="fund">基金</option><option value ="stock">股票</option><option value ="bond">债</option>
+        <option value ="asset">大类资产</option><option value ="market">市场指数</option>
+        <option value ="ind1">一级行业</option><option value ="ind3">三级行业</option><option value ="style">风格</option>
+        <option value ="factor">因子</option>        
+        </select></tr>
+        <br> 
+        
+        <tr>证券代码<input type="text" name="code_search" value=""></tr>
+        <tr>证券名称<input type="text" name="name_search" value=""></tr>
+        <tr>权重<input type="text" name="weight_search" value=""></tr>
+        <br>
+        <tr>基金代码<input type="text" name="code_fund_search" value=""></tr>
+        <tr>股票代码<input type="text" name="code_stock_search" value=""></tr>
+        <tr>备注<input type="text" name="note_search" value=""></tr>
+        <br>
+        <tr>是否提取基本面研究信息<input type="checkbox" name="if_funda_info_stockpool_search" value="1"></tr>
+        <tr>是否提取量化指标信息<input type="checkbox" name="if_indicator_stockpool_search" value="1"></tr>
+        <br>
+        <input type="submit" name="input_stockpool_search" value="提交"> 
+    </tr> 
+</table>
+
+<hr>
+<h4 id="fundpool_stockpool_weight_insert">4.2,提交个券的基金池或股票池调整</h4>
+<p>批量调整步骤：1，查询证券池列表，导出数据至 "D:\\df_fundpool_stockpool.xlsx"
+<br>2,更新权重后，批量导入sql
+
+</p>
+
+{% csrf_token %}
+<table border="1">
+    <!-- step1：输入代码，选择是否查询基金信息；step2：根据获取的数据，填入定性信息，保存到sqlite数据库  -->
+    <tr>2,单一调整：提交个券的基金池或股票池调整，若批量调整使用"批量调整"  </tr>
+    <br>
+    <tr>策略名称<select name="strategy_CN_to_sql" value="">
+        <option value =""></option>
+        <option value ="市场风格趋势">市场风格趋势</option>
+        <option value ="股票行业研究">股票行业研究</option>
+        </select></tr>  
+        <tr>策略<select name="strategy_to_sql" value="">
+        <option value =""></option>
+        <option value ="fund_market_trend">fund_market_trend</option>
+        <option value ="stock_active_ind">stock_active_ind</option>
+        </select></tr>   
+        <br>
+        <tr>调整日期<input type="text" name="date_pool_to_sql" value="{{ time_now_str }}"></tr> 
+        <tr>证券池类型<select name="pool_name_to_sql" value=""><option value =""></option>
+        <option value ="active_stock">主动股票active_stock</option>
+        <option value ="active_fund">主动基金active_fund</option>
+        </select></tr> 
+        <tr>核心、基础、备选池<select name="pool_level_to_sql" value="">
+            <option value =""></option>
+        <option value ="core">核心core</option> <option value ="basic">基础basic</option>
+        </select></tr> 
+        <tr>资产类型<select name="type_asset_indstyle_stock_to_sql" value="">
+        <option value =""></option>
+        <option value ="stock">股票</option><option value ="fund">基金</option><option value ="bond">债</option>
+        <option value ="asset">大类资产</option><option value ="market">市场指数</option>
+        <option value ="ind1">一级行业</option><option value ="ind3">三级行业</option><option value ="style">风格</option>
+        <option value ="factor">因子</option>        
+        </select></tr>
+        <br> 
+        <tr>证券代码<input type="text" name="code_to_sql" value=""></tr>
+        <tr>证券名称<input type="text" name="name_to_sql" value=""></tr>
+        <tr>权重<input type="text" name="weight_to_sql" value=""></tr>
+        <br>
+        <tr>基金代码<input type="text" name="code_fund_to_sql" value=""></tr>
+        <tr>股票代码<input type="text" name="code_stock_to_sql" value=""></tr>
+        <tr>备注<input type="text" name="note_to_sql" value=""></tr>
+    <br>
+    <input type="submit" name="input_stockpool_to_sql" value="提交"> 
+
+</table>
+
+<hr>
+<!--- ################################################################## --->
+{% csrf_token %}
+<table border="1">
+    <!-- derived from   -->
+    <tr>批量调整：整个基金池或股票池的最新完整权重列表。Notes:需要对上一期的退出个股或基金新增权重0%的记录 
+    <br> 
+    <tr>策略<input type="text" name="strategy_df_to_sql" value=""></tr>
+    <tr>策略名称<input type="text" name="strategy_CN_df_to_sql" value=""></tr>
+    <tr>外部Excel文件位置:<input type="text" name="path_excel_stockpool_df_to_sql" value="C:\rc_202X\rc_202X\ciss_web\ciss_exhi\"></tr> 
+    <tr>Excel文件名称<input type="text" name="file_name_stockpool_df_to_sql" value="db_manage.xlsx"></tr> 
+    <tr>Excel-Sheet名称<input type="text" name="sheet_name_stockpool_df_to_sql" value="temp"></tr> 
+    <br>
+    <input type="submit" name="input_stockpool_df_to_sql" value="提交"> 
+    </tr>
+
+</table>
+
+
+<hr>
+<h4 id="fundpool_stockpool_weight_iselete">4.3,删除个券的基金池或股票池调整</h4>
+{% csrf_token %}
+<table border="1">
+    <!-- step1：输入代码，选择是否查询基金信息；step2：根据获取的数据，填入定性信息，保存到sqlite数据库  -->
+    <tr>3,删除个券的基金池或股票池调整
+    <br>
+    <tr>id<input type="text" name="id_stockpool_delete" value=""></tr>
+        <tr>列名称Column Name <input type="text" name="col_name_stockpool_delete" value=""></tr>
+        <tr>列值Value<input type="text" name="col_value_stockpool_delete" value=""></tr> 
+        <br>
+        <input type="submit" name="input_stockpool_delete" value="提交"> 
+    </tr>
+
+</table>
+
+
+
+<hr>
+<p>股票池、基金池持仓：</p>
+<!--给table添加滚动条，table放到一个div里去,然后再设置div显示滚动条即可 div比table大小要小才会显示-->  
+<div id="div_table">
+<table id="ciss_table" >
+    <tr id="table_tr_text"> 
+        <td id="table_tr_text">日期</td>
+        <!-- <td id="table_tr_text">证券池类型</td>
+        <td id="table_tr_text">核心基础备选</td>
+        <td id="table_tr_text">资产类型</td> -->
+        <td id="table_tr_text">策略</td> 
+        <td id="table_tr_text">策略名称</td> 
+        <td id="table_tr_text">代码</td> 
+        <td id="table_tr_text">名称</td> 
+        <td id="table_tr_text">权重</td> 
+
+        <td id="table_tr_text">基金代码</td> 
+        <td id="table_tr_text">股票代码</td> 
+
+        <td id="table_tr_text">跟踪日期</td> 
+        <td id="table_tr_text">关键词</td> 
+        <td id="table_tr_text">买入市值下限</td> 
+        <td id="table_tr_text">卖出市值上限</td> 
+        
+  
+    </tr>
+
+    {% for temp_i,temp_v in df_fundpool_stockpool.items %}
+    <tr id="table_tr_text"> 
+        <td id="table_tr_text" width="80">{{ temp_v.date }}</td>
+        <!-- <td id="table_tr_text">{{ temp_v.pool_name }}</td>
+        <td id="table_tr_text">{{ temp_v.pool_level }}</td>        
+        <td id="table_tr_text">{{ temp_v.type_asset_indstyle_stock }}</td> -->
+        <td id="table_tr_text">{{ temp_v.strategy }}</td>
+        <td id="table_tr_text">{{ temp_v.strategy_CN }}</td>
+        <td id="table_tr_text" width="100">{{ temp_v.code }}</td>
+        <td id="table_tr_text" width="80">{{ temp_v.name }}</td>
+        <td id="table_tr_text" width="80">{{ temp_v.weight }}</td>
+
+        <td id="table_tr_text">{{ temp_v.code_fund }}</td>
+        <td id="table_tr_text">{{ temp_v.code_stock }}</td>
+
+        <td id="table_tr_text">{{ temp_v.date_funda }}</td>
+        <td id="table_tr_text">{{ temp_v.keyword }}</td>
+        <td id="table_tr_text">{{ temp_v.mv_buy_lb }}</td>
+        <td id="table_tr_text">{{ temp_v.mv_sell_ub }}</td>     
+        </tr>
+    {% endfor %}
+</table>
+<table id="ciss_table" >
+    <tr id="table_tr_text">
+        <td id="table_tr_text">代码</td> 
+        <td id="table_tr_text">名称</td>  
+        <td id="table_tr_text">20日涨跌幅</td>
+        <td id="table_tr_text">60日涨跌幅</td>
+        <td id="table_tr_text">120日涨跌幅</td>
+        <td id="table_tr_text">年初至今</td>
+        <td id="table_tr_text">市盈率(TTM)</td>
+        <td id="table_tr_text">基金持股比例</td>
+        <td id="table_tr_text">净资产收益率(TTM)</td>
+        <td id="table_tr_text">归母净利润同比增长率</td>
+        <td id="table_tr_text">中信一级行业</td>
+        <td id="table_tr_text">中信二级行业</td>
+        <td id="table_tr_text">中信三级行业</td>
+        <td id="table_tr_text">mv</td>
+        <td id="table_tr_text">trend_short</td>
+        <td id="table_tr_text">trend_mid</td> 
+  
+    </tr>
+
+    {% for temp_i,temp_v in df_fundpool_stockpool.items %}
+    <tr id="table_tr_text">
+        <td id="table_tr_text" width="100">{{ temp_v.代码 }}</td>  
+        <td id="table_tr_text">{{ temp_v.名称 }}</td>
+        <td id="table_td_number" >{{ temp_v.20日涨跌幅 }}</td>
+        <td id="table_td_number" >{{ temp_v.60日涨跌幅 }}</td>
+        <td id="table_td_number" >{{ temp_v.120日涨跌幅 }}</td>
+        <td id="table_td_number" width="60">{{ temp_v.年初至今 }}</td>
+        <td id="table_td_number" >{{ temp_v.市盈率ttm }}</td>
+        <td id="table_td_number" >{{ temp_v.基金持股比例 }}</td>
+        <td id="table_td_number" >{{ temp_v.净资产收益率ttm }}</td>
+        <td id="table_td_number" width="60">{{ temp_v.归母净利润同比增长率 }}</td>
+        <td id="table_tr_text">{{ temp_v.中信一级行业 }}</td>
+        <td id="table_tr_text">{{ temp_v.中信二级行业 }}</td>
+        <td id="table_tr_text">{{ temp_v.中信三级行业 }}</td>
+        <td id="table_td_number" width="90">{{ temp_v.mv }}</td>
+        <td id="table_td_number" >{{ temp_v.trend_short }}</td>
+        <td id="table_td_number" >{{ temp_v.trend_mid }}</td> 
+        </tr>
+    {% endfor %}
+</table>
+
+<button type="button" onclick="tableToExcel('ciss_table')">导出Excel</button> <br>
+</div>
+<p>证券池总权重 {{ weight_sum }} % ；总基金、股票数量：{{ num_stock }} 。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--- ################################################################## --->
+<!--- ################################################################## --->
+<hr>
+<h3 id="institute_activity">5，机构行为 todo </h3>
+<p> 。 </p> 
+
+
+
+
+
+<!--- ################################################################## --->
+<!--- ################################################################## --->
+<hr>
+<h3 id="event_summary_statistics">6，事件、观点的汇总和统计</h3>
+<p> 。 </p> 
+
+<h4>区间汇总：大类资产和宏观、市场行业风格、个股、基金研究 </h4>
+{% csrf_token %}
+<table border="1">
+    <!-- 依次查询3个表格  -->
+    <tr>
+        <tr>开始日期<input type="text" name="date_begin_summary_period" value="{{ time_now_str_pre1d }}"></tr> 
+        <tr>结束日期<input type="text" name="date_end_summary_period" value="{{ time_now_str }}"></tr>
+        <br>
+        <input type="submit" name="input_event_summary_period" value="提交"> 
+    </tr>
+
+</table>
+
+<p>区间汇总结果；用于晨会汇总和周报模板。 导出文件为 D:\\df_data.xlsx ; 或 {{ file_name }}</p>
+<!--给table添加滚动条，table放到一个div里去,然后再设置div显示滚动条即可 div比table大小要小才会显示-->  
+<div id="div_table">
+<table id="ciss_table" >
+    <tr id="table_tr_text">
+        <td id="table_tr_text">序号</td>
+        <td id="table_tr_text">日期</td>
+        <td id="table_tr_text">资产-市场-数据</td>
+        <td id="table_tr_text">事件或观点类型</td> 
+        <td id="table_tr_text">关键词</td>
+        <td id="table_tr_text">概要abstract</td> 
+    </tr>
+
+    {% for temp_i,temp_v in df_summary_period.items %}
+    <tr id="table_tr_text">
+        <td id="table_tr_text">{{ temp_v.id }}</td>
+        <td id="table_tr_text" width="80">{{ temp_v.date }}</td>
+        <td id="table_tr_text">{{ temp_v.asset_market_topic }}</td>
+        <td id="table_tr_text">{{ temp_v.type }}</td>
+        <td id="table_tr_text">{{ temp_v.keyword }}</td>
+        <td id="table_tr_text" width="600">{{ temp_v.abstract }}</td>
+        
+    </tr>
+    {% endfor %}
+</table>
+<button type="button" onclick="tableToExcel('ciss_table')">导出Excel</button> <br>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</form>
+
+
+{% endblock content %}
+

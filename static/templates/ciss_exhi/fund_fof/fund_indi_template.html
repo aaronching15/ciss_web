@@ -1,0 +1,379 @@
+{% extends "base.html" %}
+<meta charset="UTF-8">
+<!-- for HTML5 -->
+<!-- The block items for this base html file is: {nav_sub, left_frame,menu,content } -->
+<!-- 设置标题 -->
+{% block title0 %} 
+    月基金池指标和入池模板
+{% endblock title0 %}
+
+{% block nav_sub %}
+<!-- layui定义左侧工具栏：第一部分目录 -->
+<li class="layui-nav-item layui-nav-itemed">
+    <a class="" href="#fund_indi_bond">债券基金指标和入池</a>
+    <dl class="layui-nav-child">
+        <dd><a href="#fund_indi_check_date">1,检查日期完整性</a></dd>
+        <dd><a href="#fund_indi_check_code">2,导出月末基金代码列表文件</a></dd>
+        <dd><a href="#fund_indi_get_data">3,获取基金指标数据</a></dd>  
+        <dd><a href="#fund_indi_select">4,基金分析比较</a></dd>  
+    </dl>
+</li>
+<li class="layui-nav-item layui-nav-itemed">
+    <a class="" href="#fund_tempplate">基金入池模板</a>    
+        <dd><a href="#gen_excel_word_file_fund">1,生成Excel/Word基金入池研究报告</a></dd>
+        <dd></dd>
+        <dd></dd>
+    </dl>
+</li>
+
+
+
+<br>
+{% endblock nav_sub %} 
+<!--- ################################################################## --->
+<!--- ################################################################## --->
+{% block left_frame %}  
+<h3 id="fund_indi_bond">债券基金指标和入池</h3>
+ 
+{% endblock left_frame %}
+
+{% block menu %} {% endblock menu %} 
+{% block content %}
+
+<!--- ###url 与 views_xxx.py 文件中的 def fund_analysis(request) 对应。#### --->
+<form action="{% url 'fund_indi_template' %}" method="post" accept-charset="utf-8"> 
+<!--- ################################################################## --->
+<!--- ################################################################## --->
+<hr>
+<h4 id="fund_indi_check_date">1,检查日期完整性</h4>
+<p>更新日期数据至未来6个月。频率：只提取月末或者季末数据。引用times.py 里的 manage_date_trade </p>
+{% csrf_token %}
+<table border="1"> 
+    <input type="submit" name="input_check_data_update_date" value="更新日期数据至未来6个月"> 
+    </tr>
+
+</table>
+<p>OUPUT: {{ output_latest_date }}</p>
+
+ 
+<hr>
+<h4 id="fund_indi_check_code">2，导出月末基金代码列表文件</h4> 
+<p>步骤：1，定期新增：每个月末，从几个基金筛选策略fundpool中纳入的品种；数据来源：1，基金池：纯债、偏债混合策略；2，绩优基金品种或其他自定义品种 from sql；
+    <br>2，不定期新增，临时决定新增的基金品种，如 基金经理定性调研 ；来源：http://127.0.0.1:8000/ciss_exhi/fund_analysis/
+    <br>3，新增数据汇总至 sheet=fundcode,file=fund_indi_manage.xlsx ； path=C:\rc_2023\rc_202X\data_pms\ 。
+    <br>4，存量评估和延续：与存量代码比较，剔除重复项 
+    <br>5,保存为 "fundcode_bond_20230531.xlsx" || 总数限制：总数不超过400只，每期新增的数量不小于20，不高于100。
+    <br>6，基金指标数据 file= fund_indi_20230331.xlsx 基于历史 fundcode_bond_20230531.xlsx
+    <br>column:"num_months_stay"基金在列表中存续N个月；"if_keep"=1，无论剔除指标如何，都保存在列表中
+    </p>
+{% csrf_token %}
+<table border="1"> 
+    <tr>输入月末日期——债券型 <input type="text" name="date_get_fundlist_1m" value="20220331"></tr>
+    <input type="submit" name="input_get_fundlist_bond_1m" value="生成月末基金代码列表"> 
+    </tr>
+
+</table>
+<p>OUPUT:日期={{ date_month_end }} ；基金数量= {{ num_fund_code }}</p>
+
+<hr>
+<h5>3，基金绩效池维护--给定月末，对近6个月的债券基金绩效进行评估</h5>
+<p>TODO:每个月末，如20230630时，计算每个基金在基金列表中的时间，若超过6个月，需要对超过6个月的品种进行评估，剔除尾部20%数量。
+    <br>总分最差的后20%剔除；标记品种if_keep=1的，可以标记不剔除
+</p>
+
+
+<!--- ################################################################## --->
+<hr>
+<h4 id="fund_indi_get_data">4,获取和计算债券类基金指标数据</h4>
+<p>根据输入的“基金代码、时间等参数、基金和持仓指标”，获取、计算标准化的基金数据。只提取月末或者季末数据。
+    <br>步骤：1，导入需要计算的基金代码，file=fundcode_bond_20220531.xlsx ； path=C:\rc_2023\rc_202X\data_pms\fund\fund_indi\
+    <br>步骤：2，导入债券基金相关指标的wind-api公式，sheet_name="indicators" ,file=fund_indi_manage.xlsx ； path=C:\rc_2023\rc_202X\data_pms\
+    <br>步骤：3，导入月末日期对应的基金指标文件，
+  
+  
+  
+    <br>指标类型：基本信息、绩效分析、持仓分析、基准数据。
+    <br>todo：根据2023.5月末数据，下载2022.12~2.23.5六个月末的数据
+    <br>notes:设置基金指标管理的相关参数，如 ；对应py=fund_indicator_windapi.py,url=ciss_exhi/fund_indi_template/ 
+
+</p>
+
+<hr>
+<h5>方式一：单月末+单个基金代码</h5>
+{% csrf_token %}
+<table border="1">
+    <!-- step1：输入代码，选择是否查询基金信息；step2：根据获取的数据，填入定性信息，保存到sqlite数据库  -->
+    <tr>输入代码文件的月末时间<input type="text" name="date_fund_indi_1m1f" value="{{ 2023 }}"></tr> 
+    <tr>基金代码<input type="text" name="code_fund_indi_get_data" value="270044.OF"></tr>
+    <br>
+    <input type="submit" name="input_fund_indi_1month_1fund" value="获取基金指标数据"> 
+    </tr>
+
+</table>
+<p>OUPUT: {{ output_fund_indi_get_data_1m1f }}</p>
+
+<hr>
+<h5>方式二：单月末+基金代码列表 | 给定基金列表，推荐方法 </h5>
+<p>views=views_fund_analysis.py</p>
+{% csrf_token %}
+<table border="1">
+    <!-- step1：输入代码，选择是否查询基金信息；step2：根据获取的数据，填入定性信息，保存到sqlite数据库  -->
+    <tr>导入基金代码的月末时间<input type="text" name="date_fundcode_input_1mmf" value="{{ 2023 }}"></tr>  
+    <tr>基金指标对应的月末时间<input type="text" name="date_fund_indi_output_1mmf" value="{{ 2023 }}"></tr>  
+    <tr>基金列表:sheet=fundcode,file=fund_indi_manage.xlsx,path=C:\rc_2023\rc_202X\data_pms </tr>
+    <br>
+    <input type="submit" name="input_fund_indi_1month_Mfund" value="获取基金指标数据"> 
+    </tr>
+
+</table>
+<p>OUPUT: {{ output_fund_indi_get_data_1mmf }}</p>
+
+<hr>
+<h5>方式三：日期区间+基金代码列表 | 给定基金列表 TODO </h5>
+{% csrf_token %}
+<table border="1">
+    <!-- step1：输入代码，选择是否查询基金信息；step2：根据获取的数据，填入定性信息，保存到sqlite数据库  -->
+    <tr>开始时间<input type="text" name="date_start_fund_indi" value="{{ 2023 }}"></tr> 
+    <tr>结束时间<input type="text" name="date_end_fund_indi" value="{{ 2023 }}"></tr> 
+    <tr>基金列表:sheet=fundcode,file=fund_indi_manage.xlsx,path=C:\rc_2023\rc_202X\data_pms </tr>
+    <br>
+    <input type="submit" name="input_fund_indi_Nmonth_Mfund" value="获取基金指标数据"> 
+    </tr>
+
+</table>
+
+
+
+<!--- ################################################################## --->
+<hr>
+<h4 id="fund_indi_select">3,基金分析比较 </h4>
+<p>
+
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<hr>
+<!--- ################################################################## --->
+<!--- ################################################################## --->
+<h3 id="fund_tempplate">基金入池模板</h3>
+<br>
+
+
+
+<!--- ################################################################## --->
+<h4 id="gen_excel_word_file_fund">1,生成Excel/Word基金入池研究报告</h4> 
+<p>根据给定基金列表和基金入池模板涉及的指标，从“获取基金指标数据”生成的数据文件中提取指标；频率：只提取月末或者季末数据。
+</p>
+
+{% csrf_token %}
+<table border="1">
+    <!-- step1：输入代码，选择是否查询基金信息；step2：根据获取的数据，填入定性信息，保存到sqlite数据库  -->
+    <tr>
+    <tr>输入截至时间，如20221104<input type="text" name="date_gen_excel_word_file_fund" value="{{ time_now_str }}"></tr> 
+    <br>
+    <input type="submit" name="input_gen_excel_word_file_fund" value="生成Excel/Word入池模板"> 
+    </tr>
+
+</table>
+ 
+
+
+
+
+
+<!--- ################################################################## --->
+<!--- ################################################################## --->
+
+
+
+
+
+
+
+
+
+<hr>
+BEFORE BEFORE BEFORE ##################################################################<br>
+BEFORE BEFORE BEFORE ##################################################################<br>
+
+{% csrf_token %}
+<table border="1">
+    <!-- step1：输入代码，选择是否查询基金信息；step2：根据获取的数据，填入定性信息，保存到sqlite数据库  -->
+    <tr>
+    <tr>输入截至时间<input type="text" name="date_weight_stock" value="20221104"></tr> 
+    <tr>组合名称或代码，如“富国天惠或普通股票基金” <input type="text" name="port_name_weight_stock" value=""></tr>
+    <tr>Note:债券基准组合1权重+组合2+...权重合计不超过100：【weight_stock = 1 - weight_bond1 - weight_bond2】</tr>
+    <br>
+    <tr>债券基准组合1名称 <input type="text" name="name_bond1_weight_stock" value="企业债总财富3-5y"></tr>
+    <tr>债券基准组合1权重：0~100 <input type="text" name="weight_bond1_weight_stock" value=""></tr>
+    <br>
+    <tr>债券基准组合2名称 <input type="text" name="name_bond2_weight_stock" value="新中票总财富3-5y"></tr>
+    <tr>债券基准组合2权重：0~100 <input type="text" name="weight_bond2_weight_stock" value=""></tr>
+    
+    <br>
+    <input type="submit" name="input_fund_allo_weight_stock" value="提交"> 
+    </tr>
+
+</table>
+
+<!--给table添加滚动条，table放到一个div里去,然后再设置div显示滚动条即可 div比table大小要小才会显示-->  
+<div class="div_table" style="overflow-x: auto; overflow-y: auto;">
+    <table id="ciss_table">
+        <tr class="hover">
+            <td>基础资产名称</td>
+            <td>配置权重%</td>
+            <td>加权得分score</td>
+            <td>相关性corr</td>
+            <td>平均收益率</td>
+            <td>累计收益率</td>
+            <td>周最大回撤</td>
+            <td>平均收益率差值</td>
+            <td>累计收益率差值</td>
+        </tr>    
+        {% for temp_i,temp_v in df_stat_ind.items %}
+        <tr>
+            <td id="table_td_right" style='text-align:left;' width="140">{{ temp_i }}</td>
+            <td id="table_td_right">{{ temp_v.weight_simu }}</td>
+            <td id="table_td_right">{{ temp_v.score }}</td>
+            <td id="table_td_right">{{ temp_v.corr }}</td>
+            <td id="table_td_right">{{ temp_v.ret_ave }}</td>
+            <td id="table_td_right">{{ temp_v.ret_accu }}</td>
+            <td id="table_td_right">{{ temp_v.mdd }}</td>
+            <td id="table_td_right">{{ temp_v.diff_ret_ave }}</td>
+            <td id="table_td_right">{{ temp_v.diff_ret_accu }}</td>
+            						
+
+        </tr>
+        {% endfor %}
+    </table>
+    <button type="button" onclick="tableToExcel('ciss_table')">导出Excel</button> <br>
+</div>
+
+
+<!--- ################################################################## --->
+<hr>
+<h4 id="fund_allo_simu_bond">4,债券资产拟合</h4>
+<p>假定w_b前后5个档差异5%，用债券市场、债券基金指数、不同久期指数拟合股票部分收益率，寻找综合差异最小的3个拟合组合
+</p>
+
+{% csrf_token %}
+<table border="1">
+    <!-- step1：输入代码，选择是否查询基金信息；step2：根据获取的数据，填入定性信息，保存到sqlite数据库  -->
+    <tr>
+    <tr>输入截至时间<input type="text" name="date_weight_bond" value="20221104"></tr> 
+    <tr>组合名称或代码，如“富国天惠或普通股票基金” <input type="text" name="port_name_weight_bond" value=""></tr>
+    <tr>Note:股票组合1,组合2必须，组合3、组合4非必须；权重合计不超过100：【weight_stock = 1 - weight_stock1 - weight_stock2】</tr>
+    <tr>股票资产总权重<input type="text" name="weight_stock_sum_weight_bond" value="0.8"></tr>
+    <br>
+    <tr>股票基准组合1名称 <input type="text" name="name_stock1_weight_bond" value="医药流通"></tr>
+    <tr>股票基准组合1权重：0~100 <input type="text" name="weight_stock1_weight_bond" value="0.35"></tr>
+    <br>
+    <tr>股票基准组合2名称 <input type="text" name="name_stock2_weight_bond" value="消费者服务"></tr>
+    <tr>股票基准组合2权重：0~100 <input type="text" name="weight_stock2_weight_bond" value="0.3"></tr>
+    <br>
+    <tr>股票基准组合3名称 <input type="text" name="name_stock3_weight_bond" value="中成药"></tr>
+    <tr>股票基准组合3权重：0~100 <input type="text" name="weight_stock3_weight_bond" value="0.25"></tr>
+    <br>
+    <tr>股票基准组合4名称 <input type="text" name="name_stock4_weight_bond" value="化学制剂"></tr>
+    <tr>股票基准组合4权重：0~100 <input type="text" name="weight_stock4_weight_bond" value="0.1"></tr>
+    <br>
+    <input type="submit" name="input_fund_allo_weight_bond" value="提交"> 
+    </tr>
+
+</table>
+
+<!--给table添加滚动条，table放到一个div里去,然后再设置div显示滚动条即可 div比table大小要小才会显示-->  
+<div class="div_table" style="overflow-x: auto; overflow-y: auto;">
+    <table id="ciss_table">
+        <tr class="hover">
+            <td>基础资产名称</td>
+            <td>配置权重%</td>
+            <td>加权得分score</td>
+            <td>相关性corr</td>
+            <td>平均收益率</td>
+            <td>累计收益率</td>
+            <td>周最大回撤</td>
+            <td>平均收益率差值</td>
+            <td>累计收益率差值</td>
+        </tr>    
+        {% for temp_i,temp_v in df_stat_bondind.items %}
+        <tr>
+            <td id="table_td_right" style='text-align:left;' width="140">{{ temp_i }}</td>
+            <td id="table_td_right">{{ temp_v.weight_simu }}</td>
+            <td id="table_td_right">{{ temp_v.score }}</td>
+            <td id="table_td_right">{{ temp_v.corr }}</td>
+            <td id="table_td_right">{{ temp_v.ret_ave }}</td>
+            <td id="table_td_right">{{ temp_v.ret_accu }}</td>
+            <td id="table_td_right">{{ temp_v.mdd }}</td>
+            <td id="table_td_right">{{ temp_v.diff_ret_ave }}</td>
+            <td id="table_td_right">{{ temp_v.diff_ret_accu }}</td>
+            						
+
+        </tr>
+        {% endfor %}
+    </table>
+    <button type="button" onclick="tableToExcel('ciss_table')">导出Excel</button> <br>
+</div>
+
+
+
+
+<!--- ################################################################## --->
+<hr>
+<h4 id="fund_allo_weight_opt">5,股债比例优化</h4>
+<p>用拟合的股票、债券资产组合，重新计算配置比例w_s,w_b;计算最新的指标差异
+</p>
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+<h3>TODO </h3>
+<hr>
+<p> </p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</form>
+
+{% endblock content %}

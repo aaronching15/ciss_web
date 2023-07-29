@@ -1,0 +1,198 @@
+python demo_choice.py
+[EmQuantAPI Python] [Em_Info][2022-09-28 11:18:51]:The current version is EmQuantAPI(V2.5.4.0).
+
+[EmQuantAPI Python] [Em_Info][2022-09-28 11:18:51]:verifying your token...
+
+[EmQuantAPI Python] [Em_Info][2022-09-28 11:18:51]:connect server...
+
+[EmQuantAPI Python] [Em_Info][2022-09-28 11:18:52]:start success!
+
+     INDEXCODE   SECUCODE   TRADEDATE  NAME  CLOSE  ... CONTRIBUTEPT SHRMARKETVALUE       MV TOTALTRADABLE SHARETOTAL
+0    000300.SH  000001.SZ  2017-01-13  平安银行   9.16  ...      0.00093        1549.69  1572.81        169.18    171.704
+1    000300.SH  000002.SZ  2017-01-13   万科A  21.81  ...     0.103994        2117.55  2407.64        110.24    110.392
+2    000300.SH  000008.SZ  2017-01-13  神州高铁   9.21  ...    -0.001345        137.711  258.716       14.9523    28.0908
+3    000300.SH  000009.SZ  2017-01-13  中国宝安  10.07  ...    -0.002329        213.491  216.439       21.2007    21.4934
+4    000300.SH  000027.SZ  2017-01-13  深圳能源   6.95  ...    -0.000515        275.532  275.532       39.6449    39.6449
+..         ...        ...         ...   ...    ...  ...          ...            ...      ...           ...        ...
+295  000300.SH  601998.SH  2017-01-13  中信银行   6.77  ...     0.003653        2159.98  3312.89       467.873    489.348
+296  000300.SH  603000.SH  2017-01-13   人民网  16.09  ...    -0.003235        177.906  177.906       11.0569    11.0569
+297  000300.SH  603885.SH  2017-01-13  吉祥航空  23.29  ...     0.000528        50.0735  298.946          2.15    12.8358
+298  000300.SH  603993.SH  2017-01-13  洛阳钼业   3.92  ...     0.001263        507.786  661.978       168.872    168.872
+299  000300.SH  601688.SH  2017-01-13  华泰证券  17.88  ...     0.004955        973.338   1280.7       71.6277    71.6277
+
+[300 rows x 12 columns]
+                DATES   SECUCODE SECURITYSHORTNAME
+CODES
+000001.SZ  2022-05-26  000001.SZ              平安银行
+000002.SZ  2022-05-26  000002.SZ               万科A
+000004.SZ  2022-05-26  000004.SZ              ST国华
+000005.SZ  2022-05-26  000005.SZ              ST星源
+000006.SZ  2022-05-26  000006.SZ              深振业A
+...               ...        ...               ...
+688799.SH  2022-05-26  688799.SH              华纳药厂
+688800.SH  2022-05-26  688800.SH               瑞可达
+688819.SH  2022-05-26  688819.SH              天能股份
+688981.SH  2022-05-26  688981.SH              中芯国际
+689009.SH  2022-05-26  689009.SH              九号公司
+
+[4723 rows x 3 columns]
+cfc======分割线======
+INDEX  CODE  INDICATOR  Output data: <class 'EmQuantAPI.c.EmQuantData'> ErrorCode=0, ErrorMsg=success, Data={'0': [1, '000001.SZ,600000.SH', 'NAME,CODE'], '1': [2, '000001.SH', 'NAME,CODE']}
+1  000001.SZ,600000.SH  NAME,CODE
+2  000001.SH  NAME,CODE
+cec======分割线======
+INDEX  CODE  T/F  FULLCODES  Output data: <class 'EmQuantAPI.c.EmQuantData'> ErrorCode=0, ErrorMsg=success, Data={'0': [1, '000001.SZ', True, '000001.SZ'], '1': [2, '000001.SH', True, '000001.SH'], '2': [3, '600000.SH', True, '600000.SH'], '3': [4, '000000.TEST', False, None]}
+1  000001.SZ  True  000001.SZ
+2  000001.SH  True  000001.SH
+3  600000.SH  True  600000.SH
+4  000000.TEST  False  None
+[EmQuantAPI Python] [Em_Info][2022-09-28 11:18:57]:CInfoQueryReqThread connect...
+
+[EmQuantAPI Python] [Em_Info][2022-09-28 11:18:57]: info CInfoQueryReqThread login ...
+
+[EmQuantAPI Python] [Em_Info][2022-09-28 11:18:57]:info CInfoQueryReqThread login succese !!!
+
+cfn输出结果======分隔线======
+['2019-07-25 20:37:13', '', '300024.SZ', 'companynews', '1元钱收购、市值大增2个亿！这就是A股的“故事”', 'NW201907251188562222', '中国基金报', 'http://app.jg.eastmoney.com/html_News/DetailOnly.html?infoCode=NW201907251188562222']
+['2019-07-25 18:10:29', '2019-07-25 19:18:07', '300024.SZ', 'companynews', '【调研快报】华工科技接待惠理基金等4家机构调 研', 'NW201907251188502962', '东方财富网', 'http://app.jg.eastmoney.com/html_News/DetailOnly.html?infoCode=NW201907251188502962']
+['2019-07-25 08:49:17', '2019-07-25 08:49:26', '300024.SZ', 'companynews', '机器人(300024)融资融券信息(07-24)', 'NW201907251187791032', '东方财富网', 'http://app.jg.eastmoney.com/html_News/DetailOnly.html?infoCode=NW201907251187791032']
+['2019-07-25 19:47:38', '2019-07-25 19:59:59', '600519.SH', 'companynews', '贵州茅台07月25日发生2笔大宗交易 共成交4857.38万元', 'NW201907251188549026', '东方财富网', 'http://app.jg.eastmoney.com/html_News/DetailOnly.html?infoCode=NW201907251188549026']
+['2019-07-25 15:40:52', '', '600519.SH', 'industrynews', '涨停揭秘：食品饮料板块走强 香飘飘今日涨停', 'NW201907251188321283', '东方财富Choice数据', 'http://app.jg.eastmoney.com/html_News/DetailOnly.html?infoCode=NW201907251188321283']
+['2019-07-25 15:33:32', '2019-07-25 15:34:18', '600519.SH', 'industrynews', '（7-25）青青稞酒连续三日收于年线之上，前次 最大涨幅9.99%', 'NW201907251188301279', '东方财富Choice数据', 'http://app.jg.eastmoney.com/html_News/DetailOnly.html?infoCode=NW201907251188301279']
+['2019-07-25 08:04:00', '2019-07-25 11:08:07', '600519.SH', 'industrynews', '重庆啤酒：融资净偿还689.6万元，融资余额1.71亿元（07-24）', 'NW201907251187708051', '东方财富Choice数据', 'http://app.jg.eastmoney.com/html_News/DetailOnly.html?infoCode=NW201907251187708051']
+['2019-07-25 08:03:09', '2019-07-25 11:08:07', '600519.SH', 'industrynews', '青岛啤酒：连续3日融资净偿还累计1211.21万元 （07-24）', 'NW201907251187704945', '东方财富Choice数据', 'http://app.jg.eastmoney.com/html_News/DetailOnly.html?infoCode=NW201907251187704945']
+['2019-07-25 16:05:29', '2019-07-25 16:29:31', '300059.SZ', 'industrynews', '恒生电子预计上半年净利润6.72亿元至6.82亿元 同比增长124%至127%', 'NW201907251188361786', '东方财富网', 'http://app.jg.eastmoney.com/html_News/DetailOnly.html?infoCode=NW201907251188361786']
+['2019-07-25 08:05:21', '2019-07-25 11:08:08', '300059.SZ', 'industrynews', '恒生电子：融资净买入370.73万元，融资余额33.26亿元（07-24）', 'NW201907251187714559', '东方财富Choice数据', 'http://app.jg.eastmoney.com/html_News/DetailOnly.html?infoCode=NW201907251187714559']
+cfnquery输出结果======分隔线======
+S888005002API
+头条资讯
+所有资讯
+S888005003API
+财经聚焦
+所有资讯
+S888005004API
+国际资讯
+所有资讯
+S888005005API
+公司资讯
+所有资讯
+S888005010API
+Choice早班车
+所有资讯
+S888005008API
+早盘内参
+所有资讯
+S888005009API
+涨停揭秘
+所有资讯
+S888008031API
+科创板
+热点追踪
+S888008024API
+沪伦通
+热点追踪
+S888008002API
+自贸区
+热点追踪
+S888008026API
+股权质押
+热点追踪
+S888008015API
+集成电路
+热点追踪
+S888008027API
+区域经济
+热点追踪
+S888008028API
+5G
+热点追踪
+S888008029API
+区块链
+热点追踪
+S888008025API
+创投
+热点追踪
+S888008022API
+人工智能
+热点追踪
+C888003004001API
+俄乌局势
+热点追踪
+S888009001API
+中国股市
+重要市场
+S888009002API
+海外中国股
+重要市场
+S888009003API
+香港股市
+重要市场
+S888009004API
+美国股市
+重要市场
+S888009005API
+欧洲股市
+重要市场
+S888009006API
+亚太股市
+重要市场
+S888009007API
+债券市场
+重要市场
+S888009008API
+期货市场
+重要市场
+S888009009API
+基金市场
+重要市场
+S888009010API
+黄金市场
+重要市场
+S888009011API
+外汇市场
+重要市场
+S888010001API
+财经聚焦
+财经资讯
+S888010002API
+财经评论
+财经资讯
+S888010003API
+宏观经济
+财经资讯
+S888010004API
+产业经济
+财经资讯
+S888010005API
+国内经济
+财经资讯
+S888010006API
+国际经济
+财经资讯
+S888010007API
+经济数据
+财经资讯
+[EmQuantAPI Python] [Em_Info][2022-09-28 11:18:58]:CInfoSubscribeReqThread connect...
+
+[EmQuantAPI Python] [Em_Info][2022-09-28 11:18:58]: info CInfoSubscribeReqThread login ...
+
+[EmQuantAPI Python] [Em_Info][2022-09-28 11:18:58]:info CInfoSubscribeReqThread login succese !!!
+
+[EmQuantAPI Python] [Em_Info][2022-09-28 11:18:58]:[locationid:9ACDB7B3-4221-4404-A563-5F93B763FF88] cnq_bk req [serialid:1] [count:1 / real add:1] [local now:1 / total max:4]
+
+[EmQuantAPI Python] [Em_Info][2022-09-28 11:18:59]:[locationid:9ACDB7B3-4221-4404-A563-5F93B763FF88][serialid:1] cnq_bk try add:1 success.
+
+cnq输出结果======分隔线======
+cnqCallback,
+['2022-09-28 07:37:34', '2022-09-28 11:18:10', 'S888005002API', 'sectornews', '黄金持续遇冷 “婚嫁季”能否带动“淘金热”？', 'NW202209282519944058', '期货日报', 'http://app.jg.eastmoney.com/html_News/DetailOnly.html?infoCode=NW202209282519944058']
+['2022-09-28 07:14:59', '2022-09-28 11:18:10', 'S888005002API', 'sectornews', '汇率波动明显！上市公司掀外汇套期保值热潮', 'NW202209282519814438', '期货日报', 'http://app.jg.eastmoney.com/html_News/DetailOnly.html?infoCode=NW202209282519814438']
+['2022-09-28 05:33:28', '2022-09-28 08:57:00', 'S888005002API', 'sectornews', '9月28日国内四大证券报纸、重要财经媒体头版头条内容精华摘要', 'NW202209282519808027', '东方财富研究中心', 'http://app.jg.eastmoney.com/html_News/DetailOnly.html?infoCode=NW202209282519808027']
+['2022-09-28 05:13:16', '2022-09-28 08:57:00', 'S888005002API', 'sectornews', '【早盘内参】三部门发文：加大支持科技创新 税前扣除力度', 'NW202209282519794041', '东方财富研究中心', 'http://app.jg.eastmoney.com/html_News/DetailOnly.html?infoCode=NW202209282519794041']
+['2022-09-28 00:16:29', '2022-09-28 11:18:10', 'S888005002API', 'sectornews', '400亿白马股董事长辞职！军工龙头合并最新进展也来了', 'NW202209282519775791', '中国基金报', 'http://app.jg.eastmoney.com/html_News/DetailOnly.html?infoCode=NW202209282519775791']
+['2022-09-28 00:08:01', '2022-09-28 11:15:05', 'S888005002API', 'sectornews', '重磅发声！一则传言搅动A股 接近监管相关人 士：消息不实！', 'NW202209282519774414', '中国基金报', 'http://app.jg.eastmoney.com/html_News/DetailOnly.html?infoCode=NW202209282519774414']
+['2022-09-27 21:06:23', '2022-09-28 07:06:00', 'S888005002API', 'sectornews', '9月27日晚间影响市场重要政策消息速递(附新 闻联播集锦)', 'NW202209272519719442', '东方财富研究中心', 'http://app.jg.eastmoney.com/html_News/DetailOnly.html?infoCode=NW202209272519719442']
+['2022-09-27 20:29:59', '2022-09-28 07:06:00', 'S888005002API', 'sectornews', '9月27日晚间上市公司利好消息一览(附名单)', 'NW202209272519698633', '东方财富研究中心', 'http://app.jg.eastmoney.com/html_News/DetailOnly.html?infoCode=NW202209272519698633']
+['2022-09-27 16:08:04', '2022-09-28 07:42:00', 'S888005002API', 'sectornews', 'A股沸腾 超级大反攻 大消费板块集体爆发！大涨原因找到了！', 'NW202209272519495174', '中国基金报', 'http://app.jg.eastmoney.com/html_News/DetailOnly.html?infoCode=NW202209272519495174']
+['2022-09-27 16:07:56', '2022-09-28 07:36:00', 'S888005002API', 'sectornews', '全面回暖！头部玩家股价大涨 这一板块要火了？', 'NW202209272519495284', '中国基金报', 'http://app.jg.eastmoney.com/html_News/DetailOnly.html?infoCode=NW202209272519495284']
+press any key to cancel cnq
+[EmQuantAPI Python] [Em_Info][2022-09-28 11:28:57]:CInfoQueryReqThread end.

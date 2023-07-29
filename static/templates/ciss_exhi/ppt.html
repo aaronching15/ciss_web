@@ -1,0 +1,246 @@
+{% extends "base.html" %}
+<meta charset="UTF-8">
+<!-- for HTML5 -->
+<!-- The block items for this base html file is: {nav_sub, left_frame,menu,content } -->
+<!-- 设置标题 -->
+{% block head_content %}
+    <!-- 引入layui，也可以本地导入：C:\rc_202X\rc_202X\ciss_web\static\layui  | 20221014 -->
+    <link rel="stylesheet" type="text/css" href="https://www.layuicdn.com/layui/css/layui.css" />
+    <script src="https://www.layuicdn.com/layui/layui.js"></script>
+     
+
+{% endblock head_content %}
+
+{% block title0 %} 
+    策略开发管理|Strategy Develop
+{% endblock title0 %}
+
+
+{% block nav_sub %} 
+<!-- layui定义左侧工具栏：第一部分目录 -->
+<li style="text-align: center;"><a href="#title">展示PPT|Powerpint </a></li>
+<!-- notes:class="layui-nav-item"默认是收起的， 加上" layui-nav-itemed"后内容是展开的;  -->
+<li class="layui-nav-item layui-nav-itemed">
+    <a class="" href="">PPT内容</a>
+    <dl class="layui-nav-child">
+      <dd><a href="#title_menu">标题和目录 </a></dd>
+      <dd><a href="#part1">第一部分 </a></dd>
+      <dd><a href="#part2">第二部分 </a></dd>
+      <dd><a href="#part3">第三部分 </a></dd>
+      <dd><a href="#part4">第四部分 </a></dd>
+    </dl>
+</li>
+
+
+
+
+
+<li>当前日期:{{ time_now_str }}</li>
+<br> {% endblock nav_sub %} 
+
+<!--- ################################################################## --->
+<!--- ################################################################## --->
+{% block left_frame %}
+<!-- Menu in left frame -->
+<h1><a id="title">展示PPT|Powerpint </a></h1>
+<p>explore details of strategy developing process</p>
+<hr>
+<h3>目录</h3>
+<ul style="font-size: large;">
+    <li><a href="#title_menu">标题和目录 </a></li>
+    <li><a href="#part1">第一部分 </a></li>
+    <li><a href="#part2">第二部分 </a></li>
+    <li><a href="#part3">第三部分 </a></li>
+    <li><a href="#part4">第四部分 </a></li>
+</ul>
+<hr> {% endblock left_frame %} 
+
+{% block content %}
+<!--- ################################################################## --->
+<!-- <form action="{% url 'ppt' %}" method="post" accept-charset="utf-8"> -->
+
+
+<!-------------------------------------------------------------------------------------> 
+<!-------------------------------------------------------------------------------------> 
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+    <legend><a name="title_menu">标题和目录</a></legend>
+  </fieldset>    
+   
+  <div class="layui-carousel" id="title_menu">
+    <div carousel-item="">
+        <!-- source= C:\rc_202X\rc_202X\立项-路演ppt\2206-FOF介绍无要素\FOF产品-2206\ -->
+      <div><img src="../../static/ppt/FOF_2206/幻灯片1.PNG" tppabs="http://static/ppt/FOF_2206/幻灯片1.PNG"></div> 
+    </div>
+  </div>
+
+
+
+<!-------------------------------------------------------------------------------------> 
+<!------------------------------------------------------------------------------------->
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+    <legend><a name="part1">第一部分</a></legend>
+  </fieldset>    
+  <div class="layui-carousel" id="part1" lay-filter="test1">
+    <div carousel-item="">
+      <div><img src="../../static/ppt/FOF_2206/幻灯片2.PNG" tppabs="http://static/ppt/FOF_2206/幻灯片2.PNG"></div>
+      <div><img src="../../static/ppt/FOF_2206/幻灯片3.PNG" tppabs="http://static/ppt/FOF_2206/幻灯片3.PNG"></div>
+      <div><img src="../../static/ppt/FOF_2206/幻灯片4.PNG" tppabs="http://static/ppt/FOF_2206/幻灯片4.PNG"></div> 
+    </div>
+  </div> 
+
+
+
+
+<!-------------------------------------------------------------------------------------> 
+<!------------------------------------------------------------------------------------->
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+    <legend><a name="part2">第二部分</a></legend>
+  </fieldset>    
+<div class="layui-carousel" id="part2" lay-filter="test2">
+    <div carousel-item=""> 
+      <div><img src="../../static/ppt/FOF_2206/幻灯片5.PNG" tppabs="http://static/ppt/FOF_2206/幻灯片5.PNG"></div>
+      <div><img src="../../static/ppt/FOF_2206/幻灯片6.PNG" tppabs="http://static/ppt/FOF_2206/幻灯片6.PNG"></div>
+      <div><img src="../../static/ppt/FOF_2206/幻灯片7.PNG" tppabs="http://static/ppt/FOF_2206/幻灯片7.PNG"></div>
+      <div><img src="../../static/ppt/FOF_2206/幻灯片8.PNG" tppabs="http://static/ppt/FOF_2206/幻灯片8.PNG"></div>
+      <div><img src="../../static/ppt/FOF_2206/幻灯片9.PNG" tppabs="http://static/ppt/FOF_2206/幻灯片9.PNG"></div>
+      <div><img src="../../static/ppt/FOF_2206/幻灯片10.PNG" tppabs="http://static/ppt/FOF_2206/幻灯片10.PNG"></div>
+
+    </div>
+</div>
+
+
+
+<!-------------------------------------------------------------------------------------> 
+<!-------------------------------------------------------------------------------------> 
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+    <legend><a name="part3">第三部分</a></legend>
+  </fieldset>    
+<div class="layui-carousel" id="part3" lay-filter="test3">
+    <div carousel-item=""> 
+      <div><img src="../../static/ppt/FOF_2206/幻灯片11.PNG" tppabs="http://static/ppt/FOF_2206/幻灯片11.PNG"></div>
+      <div><img src="../../static/ppt/FOF_2206/幻灯片12.PNG" tppabs="http://static/ppt/FOF_2206/幻灯片12.PNG"></div>
+      <div><img src="../../static/ppt/FOF_2206/幻灯片13.PNG" tppabs="http://static/ppt/FOF_2206/幻灯片13.PNG"></div>
+      <div><img src="../../static/ppt/FOF_2206/幻灯片14.PNG" tppabs="http://static/ppt/FOF_2206/幻灯片14.PNG"></div>
+      <div><img src="../../static/ppt/FOF_2206/幻灯片15.PNG" tppabs="http://static/ppt/FOF_2206/幻灯片15.PNG"></div>
+      <div><img src="../../static/ppt/FOF_2206/幻灯片16.PNG" tppabs="http://static/ppt/FOF_2206/幻灯片16.PNG"></div>
+      <div><img src="../../static/ppt/FOF_2206/幻灯片17.PNG" tppabs="http://static/ppt/FOF_2206/幻灯片17.PNG"></div>
+    </div>
+</div>
+ 
+
+
+<!-------------------------------------------------------------------------------------> 
+<!-------------------------------------------------------------------------------------> 
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+    <legend><a name="part4">第四部分</a></legend>
+  </fieldset>    
+<div class="layui-carousel" id="part4" lay-filter="test4">
+    <div carousel-item=""> 
+      <div><img src="../../static/ppt/FOF_2206/幻灯片18.PNG" tppabs="http://static/ppt/FOF_2206/幻灯片18.PNG"></div>
+      <div><img src="../../static/ppt/FOF_2206/幻灯片19.PNG" tppabs="http://static/ppt/FOF_2206/幻灯片19.PNG"></div>
+      <div><img src="../../static/ppt/FOF_2206/幻灯片20.PNG" tppabs="http://static/ppt/FOF_2206/幻灯片20.PNG"></div>
+      <div><img src="../../static/ppt/FOF_2206/幻灯片21.PNG" tppabs="http://static/ppt/FOF_2206/幻灯片21.PNG"></div> 
+    </div>
+</div>
+
+
+
+
+
+
+
+<!-------------------------------------------------------------------------------------> 
+<!------------------------------------------------------------------------------------->
+<!-- test  --> 
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+    <legend>常规轮播</legend>
+  </fieldset>  
+   
+  <div class="layui-carousel" id="test1" lay-filter="test1">
+    <div carousel-item="">
+      <div>条目1</div>
+      <div>条目2</div>
+      <div>条目3</div>
+      <div>条目4</div>
+      <div>条目5</div>
+    </div>
+  </div> 
+   
+  <div class="layui-carousel" id="test2" style="margin-top: 15px;">
+    <div carousel-item="">
+      <div>条目1</div>
+      <div>条目2</div>
+    </div>
+  </div>
+   
+
+   
+   
+            
+  <script src="//layui/dist/layui.js" charset="utf-8"></script>
+  <!-- 注意：如果你直接复制所有代码到本地，上述 JS 路径需要改成你本地的 -->
+  <script>
+  layui.use(['carousel', 'form'], function(){
+    var carousel = layui.carousel
+    ,form = layui.form;
+    
+    // 定义ppt页面长度和宽度
+    // var page_width = "1280px";
+    // var page_height = "800px"; 
+    var page_width = "1024px";
+    var page_height = "600px"; 
+    // 10*60*1000 对应 10分钟*60秒*1000毫秒
+    var time_interval = 10*60*1000
+
+    //图片轮播
+    carousel.render({
+      elem: '#title_menu'
+      ,width: page_width
+      ,height: page_height
+      ,interval: time_interval
+    });
+    carousel.render({
+      elem: '#part1'
+      ,width: page_width
+      ,height: page_height
+      ,interval: time_interval
+    });
+    carousel.render({
+      elem: '#part2'
+      ,width: page_width
+      ,height: page_height
+      ,interval: time_interval
+    });
+    carousel.render({
+      elem: '#part3'
+      ,width: page_width
+      ,height: page_height
+      ,interval: time_interval
+    });
+    carousel.render({
+      elem: '#part4'
+      ,width: page_width
+      ,height: page_height
+      ,interval: time_interval
+    });
+
+    //其它示例
+    // $('.demoTest .layui-btn').on('click', function(){
+    //   var othis = $(this), type = othis.data('type');
+    //   active[type] ? active[type].call(this, othis) : '';
+    // });
+
+  });
+  </script>
+
+
+<!-- end test  -->
+
+ 
+
+
+
+
+<!-- </form> -->
+
+{% endblock content %}

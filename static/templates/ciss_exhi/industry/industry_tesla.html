@@ -1,0 +1,261 @@
+{% extends "base.html" %}
+<meta charset="UTF-8">
+<!-- for HTML5 -->
+<!-- The block items for this base html file is: {nav_sub, left_frame,menu,content } -->
+<!-- 产业链网页模板 -->
+
+{% block nav_sub %}
+
+<a id="a_nav" href="./core_industry.html">核心产业链 |Core industry chain</a> >>
+<a id="a_nav" href="./last_industry.html">最新产业链 |Lastest industry chain</a> >>
+
+<br>
+<a>细分产业链列表：</a>
+<a id="ciss_menu" href="#industry_specific">特定行业软件 </a> >>
+<a id="ciss_menu" href="#replacement">国产替代软件 </a> >>
+<a id="ciss_menu" href="#fundamental">基础软件：系统和办公等 </a> >>
+<a id="ciss_menu" href="#classic_components">传统汽车零部件 </a> >> {% endblock nav_sub %} {% block right_frame %}
+
+<!-- Menu in right frame -->
+<!-- ---------------------------------------------------------- -->
+<h1>软件产业链 </h1>
+<h3>目录</h3>
+<ul>
+    <li><a href="#abstract">1，概要 </a></li>
+    <li><a href="#industry_methodology">2，行业分类方法和产业链分析方法 </a></li>
+    <li><a href="#sellside_reports">3，主要外部参考资料 </a></li>
+    <li><a href="#inside_reports">4，内部研究报告&产业链列表 </a></li>
+    <li><a href="#research_menu">5，产业链目录和研究计划 </a></li>
+    <li><a href="#industry_db">6，产业链数据和数据库 </a></li>
+    <li><a href="#industry_stra">7，产业链相关策略 </a></li>
+    <li><a href="#industry_port">8，产业链相关组合和指数 </a></li>
+    <li><a href="#industry_reference">9，参考信息和链接 </a></li>
+
+    <li><a href="#ind_definition">1，获取产业链定义  </a></li>
+    <li><a href="#ind_fundamental">2，产业链基本面数据   </a></li>
+    <li><a href="#ind_data_standarded">3，标准化定性和定量数据 </a></li>
+    <li><a href="#ind_table_columns">4，表格数据列设计  </a></li>
+    <li><a href="#ind_maintainence">5，分析方案和数据表的定期维护机制。 </a></li>
+</ul>
+<h3><a id="ind_definition">软件产业链分析 </a></h3>
+<ul>
+    <li><a href="#ind_def_abstract">2020计算机行业概览：</a> </li>
+    <li><a href="#ind_def_sub_chain">景气度提升的细分领域（子产业链）：</a> </li>
+    <li><a href="#ind_def_anchor_list">软件行业市值龙头</a> </li>
+    <li><a href="#ind_def_anchor_stock">软件行业锚个股</a> </li>
+
+</ul>
+
+<h3>细分产业链目录</h3>
+<ul>
+    <li><a href="#industry_specific">特定行业软件 </a></li>
+    <li><a href="#replacement">国产替代软件 </a></li>
+    <li><a href="#fundamental">基础软件：系统和办公等 </a></li>
+    <li><a href="#security">信息安全 </a></li>
+</ul>
+
+{% endblock right_frame %} {% block left_frame %}
+
+
+<!-- Menu in left frame -->
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h1>软件产业链 </h1>
+<p>软件产业链对应中信一级行业计算机，需要在A股中梳理出与其他行业相关的股票，把这些公司计入 对应产业链。并根据不同时期的最优预期收益，设计软件产业链组合。
+    <br>2020年2月的重点是国产软件在不同行业的国产替代，主要的几个大领域有 ：基础和办公、行业软件、仿制、自主可控、安全。
+</p>
+<hr>
+<h3>目录</h3>
+<ul>
+    <li><a href="#abstract">1，概要 </a></li>
+    <li><a href="#industry_methodology">2，行业分类方法和产业链分析方法 </a></li>
+    <li><a href="#sellside_reports">3，主要外部参考资料 </a></li>
+    <li><a href="#inside_reports">4，内部研究报告&产业链列表 </a></li>
+    <li><a href="#research_menu">5，产业链目录和研究计划 </a></li>
+    <li><a href="#industry_db">6，产业链数据和数据库 </a></li>
+    <li><a href="#industry_stra">7，产业链相关策略 </a></li>
+    <li><a href="#industry_port">8，产业链相关组合和指数 </a></li>
+    <li><a href="#industry_reference">9，参考信息和链接 </a></li>
+
+    <li><a href="#ind_definition">1，获取产业链定义 </li>
+<li><a href="#ind_fundamental">2，产业链基本面数据  </li>
+<li><a href="#ind_data_standarded">3，标准化定性和定量数据</li>
+<li><a href="#ind_table_columns">4，表格数据列设计 </li>
+<li><a href="#ind_maintainence">5，分析方案和数据表的定期维护机制。 </li>
+</ul>  
+{% endblock left_frame %}
+
+{% block menu %} 
+
+
+
+<h3>细分产业链目录</h3>
+<ul>
+<li><a href="#industry_specific">特定行业软件 </a></li>
+    <li><a href="#replacement">国产替代软件 </a></li>
+    <li><a href="#fundamental">基础软件：系统和办公等 </a></li>
+    <li><a href="#security">信息安全 </a></li>
+</ul>
+
+{% endblock menu %} {% block content %}
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="abstract">1，概要</h3>
+<hr>
+<p>{......}
+    <br>对应文件：0跨行业的产业链组合_200213.xlsx
+    <br>对应文件目录：C:\zd_zxjtzq\rc_reports_cs\行业分类_产业链量化
+</p>
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="industry_definition">产业链定义</h3>
+<p>获取产业链定义：基于某个公司研究或行业研究报告、某个事件、Wind产业链分类等。
+</p>
+<h4 id="ind_def_abstract">2020计算机行业概览：</h4>
+<p>
+    当前所处阶段：商业化场景落地实现收入;细分领域龙头业务从1到N。
+    <br>计算机产业发展周期：每一轮产升级周期：技术可行性论证+产品研发阶段资本投资+商业化场景落地实现收入+快速增长增加 +成熟期财务数据披露+衰退或改进期。
+    <br>历史复盘：早期行业软件0-->1,行业基数小、竞争者少、增长较容易； 当前云计算基础设施晚上、发展方向明确、商业模式确定、客户群体带来正循环、头部企业资本实力强， 龙头企业增长更快。
+    <br>估值提升因素：所处行业的成长性、天花板；公司产品或服务在行业内的竞争力；产品和商业模式变动。
+
+    <br>数据来源：20191213_广发证券_行业策略深度_计算机_刘雪峰王奇珏郑楠庞倩倩_广发证券-计算机-刘雪峰-策略-计算机行业-2020年投资策略：新产业周期落地加速,中等市值龙头群体崛起-买入-2019-12-13.pdf
+</p>
+
+
+{% load static %}
+<h5>图：计算机行业S型增长曲线</h5>
+<img src="{% static 'templates\ciss_exhi\industry\static\soft_s_growth_curve.png' %}" alt="" />
+<p>source:广发证券-计算机-刘雪峰-策略-计算机行业-2020年投资策略：新产业周期落地加速,中等市值龙头群体崛起 </p>
+<br>
+
+<p>2010以来历史市盈率pe_ttm,201001，50;201208,25;201506,90;201812,35;202002,50。
+    <br>2006，2007年计算机行业净利润快速增长，但跑输市场；上市公司36，40家且中位数市值50亿元，最大107亿。 2012年以后，净利润增速从35%下降至15%左右，但股价开始强于指数直到2015-6高点。 2017，2018年扣非归母净利润增速 &gt; 非归母净利润增速 &gt; 收入增速
+
+</p>
+
+<h5>图：计算机行业行情与盈利成长的相关性变化 </h5>
+{% load static %}
+<img src="{% static 'templates\ciss_exhi\industry\static\corr_price_growth.png' %}" alt=" " />
+<p>source:广发证券-计算机-刘雪峰-策略-计算机行业-2020年投资策略：新产业周期落地加速,中等市值龙头群体崛起 </p>
+
+<h5>历史行情</h5>
+<p>行业的行情可以分为2009年以前；2014-2015年；2016年至2020年2月 </p>
+<p>2009年前上市45家，：办公软件、金融信息化、政务信息化（电子政务）、酒店信息化、信息安全等16个细分子行业。 部分子行业仅有1家公司（如人工智能等）、部分子行业内的公司较多，如金融信息化、政务信息化、硬件等。 2009年-2019年12月9日，行业平均的涨跌幅达到548%；平均最大涨跌幅为1720%；平均最大回撤78%； 收入复合增速18%；净利润复合增速29%；板块股价表现看，人工智能、金融信息化的区间涨跌幅、最大涨幅表现出众。
+    <br>其中仅外包业务涨跌幅弱于行业平均。但其中，类似政务信息化、 交通信息化主要受政府部门投资所决定，在早 期阶段，辅以我国大力基础建设的大环境，可以理解为该时期净利润增速大幅提升的缘由。
+
+
+</p>
+<h5>图：自动驾驶产业链</h5>
+{% load static %}
+<img src="{% static 'templates\ciss_exhi\industry\static\software_chain_autodrive.png' %}" alt=" " height="90%" width="90%" />
+<p>source:广发证券-计算机-刘雪峰-策略-计算机行业-2020年投资策略：新产业周期落地加速,中等市值龙头群体崛起 </p>
+<!-- 按照图片具体大小设置百分比 -->
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="ind_fundamental">2，产业链基本面数据</h3>
+<p>梳理产业链基本面数据：根据产业链定义梳理产品和服务、个股、行业分类、财务指标。识别高风险和不重要股票。
+</p>
+
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="ind_data_standarded">3，标准化定性和定量数据</h3>
+<p>构建标准化定性和定量数据：考虑时间维度和多产业链维度。 </p>
+
+<h4>标准化定性信息</h4>
+<p>
+
+</p>
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="ind_table_columns">4，表格数据列设计</h3>
+<p>4，表格数据列设计： 日期,股票名称,代码,中信行业1,中信行业2,中信行业3,概念1,概念2,产业链1,产业链2,notes,...
+</p>
+
+
+
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="ind_maintainence">5，分析方案和数据表的定期维护机制</h3>
+<p>分析方案和数据表的定期维护机制。
+</p>
+
+
+
+
+
+
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="industry_specific">特定行业软件</h3>
+<p>
+
+</p>
+
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="replacement">国产替代软件</h3>
+<p>
+
+</p>
+
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="fundamental">基础软件：系统和办公等</h3>
+<p>
+
+</p>
+
+
+{% load static %}
+<img src="{% static 'templates\ciss_exhi\industry\static\online_office.png' %}" alt="在线办公产业链.png" height="60%" width="60%" />
+<p>source:Wind.</p>
+<!-- height=100 width=100  -->
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="ind_def_anchor_stock ">细分产业链锚个股：</h3>
+<hr>
+
+
+
+
+
+<!-- ---------------------------------------------------------- -->
+<h4 id="classic_components">传统汽车零部件</h4>
+<ul>
+    <li>玻璃：福耀玻璃600660.SH </li>
+    <li>轮胎：玲珑轮胎601966.SH</li>
+
+</ul>
+
+
+<h5>IGBT模块：斯达半导603290.SH</h5>
+<p>
+
+
+    {% endblock content %}

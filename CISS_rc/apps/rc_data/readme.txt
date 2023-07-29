@@ -1,0 +1,4 @@
+0,0wds_191120.xlsx
+1,date_list.csv,会包含周末和节假日，这时因为有些公告是在周末披露
+2,date_list_tradingdate_ashares.csv,A股交易日列表
+3，注意：data_check_anndates.csv里所有column表格需要在log_data_wds_tables.csv有对应的关键词keyword

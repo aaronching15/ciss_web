@@ -1,0 +1,463 @@
+{% extends "base.html" %}
+<meta charset="UTF-8">
+<!-- for HTML5 -->
+<!-- The block items for this base html file is: {nav_sub, left_frame,menu,content } -->
+<!-- 设置标题 -->
+{% block title0 %} 
+    基金数据管理 
+{% endblock title0 %}
+
+{% block nav_sub %}
+<!-- layui定义左侧工具栏：第一部分目录 -->
+<li class="layui-nav-item layui-nav-itemed">
+    <a class="" href="#fund_report">基金季报年报数据</a>
+    <dl class="layui-nav-child">
+        <dd><a href="#fund_fundpool_cal">1,细分基金池筛选 </a></dd> 
+        <dd><a href="#fund_ret_rank_cal">2,基金收益率排名计算 </a></dd> 
+        <dd><a href="#fund_period_stat">3，每周/月基金分类统计 </a></dd> 
+        <dd></dd>
+    </dl>
+</li>
+
+<li class="layui-nav-item layui-nav-itemed">
+    <a class="" href="#fund_unit">基金净值数据</a> 
+</li>
+<li class="layui-nav-item layui-nav-itemed">
+    <a class="" href="#fund_perf_scenario">牛熊市场环境下债基相对表现 scenario analysis</a> 
+</li>
+<li class="layui-nav-item layui-nav-itemed">
+    <a class="" href="#todo">TODO</a> 
+</li>
+<li class="layui-nav-item layui-nav-itemed"> 
+    <a class="" href="#fund_qual">增删查改基金定性信息</a>
+    <dl class="layui-nav-child"> 
+        <dd><a href="#fund_event_select">1,查询基金定性或定量研究信息</a></dd>
+        <dd><a href="#fund_event_submit">2,提交基金定性或定量研究信息</a></dd> 
+        
+    </dl>
+</li>
+
+
+
+
+<br>
+{% endblock nav_sub %} 
+<!--- ################################################################## --->
+<!--- ################################################################## --->
+{% block left_frame %} 
+<h1>基金数据管理|fund_data_manage</h1> 
+ 
+{% endblock left_frame %}
+
+{% block menu %} {% endblock menu %} 
+{% block content %}
+
+<!--- ###url 与 views_xxx.py 文件中的 def fund_analysis_old(request) 对应。#### --->
+<form action="{% url 'fund_data_manage' %}" method="post" accept-charset="utf-8"> 
+<!--- ################################################################## --->
+<!--- ################################################################## --->
+<h3 id="fund_fof">5，基金池和FOF </h3>
+<p>1，每周/月基金分类统计；2，每月筛选基金池：主动股票、指数、混合、纯债、对冲等
+    <br>file=全部基金(只含主代码)-220218.xlsx
+    <br> file=test_pms_manage.py ;path= path=C:\rc_202X\rc_202X\ciss_web\CISS_rc\apps\portfolio_simulation 7,FOF持仓选基
+</p>
+
+<hr>
+<h3 id="fund_fundpool_cal">2,细分基金池筛选</h3>
+<p>基金池自动分析，生成对应基金池表格。
+    <br>基金分类与Wind基金分类：
+    <br>主动股票:普通股票型基金,
+    <br>偏股混合 :偏股混合型基金,平衡混合型基金,灵活配置型基金
+    <br>偏债混合 :偏债混合型基金,混合债券型二级基金
+    <br>纯债 :中长期纯债型基金,短期纯债型基金,混合债券型一级基金 ||被动指数型债券基金,增强指数型债券基金
+    <br>FOF :混合型FOF基金,债券型FOF基金,股票型FOF基金
+    <br>notes：注意选择 “是否可申购”
+    <br>美股港股 :国际(QDII)股票型基金,国际(QDII)混合型基金
+    <br>股票指数 :被动指数型基金,增强指数型基金
+    <br>对冲reits :REITs,股票多空,类REITs
+    <br>商品 :商品型基金
+    
+</p>
+<tr>输入基金池日期 <input type="text" name="date_fundpool" value="{{ time_now_str_pre1d }}"></tr>
+<tr>基金池类型：<select name="type_fundpool" value="主动股票">
+    <option value ="all">全部</option>
+    <option value ="主动股票">主动股票</option><option value ="偏股混合">偏股混合</option>
+    <option value ="偏债混合">偏债混合</option><option value ="纯债">纯债</option>
+    <option value ="美股港股">美股港股</option><option value ="FOF">FOF</option>
+    <option value ="货币">货币</option><option value ="股票指数">股票指数</option> 
+    <option value ="对冲reits">对冲reits</option><option value ="商品">商品</option> 
+    </select></tr>
+<tr>是否可申购：<select name="if_purchase" value="0"> 
+    <option value ="1">可申购</option><option value ="0">无限制</option>
+    </select></tr>
+<br>
+<input type="submit" name="input_cal_fundpool" value="筛选基金池"><br>
+
+
+<!--- ################################################################## --->
+<hr>
+<h3 id="fund_ret_rank_cal">2,基金收益率排名计算：年初至今 </h3>
+<tr>输入日期 <input type="text" name="date_fund_rank" value="{{ time_now_str_pre1d }}"></tr>
+<tr>收益率 <input type="text" name="ret_fund_rank" value=""></tr>
+<tr>基金类型：<select name="type_fundpool_rank" value="主动股票">
+<option value ="主动股票">主动股票</option><option value ="偏股混合">偏股混合</option>
+<option value ="偏债混合">偏债混合</option> <option value ="纯债">纯债</option>
+<option value ="FOF">FOF</option><option value ="股票指数">股票指数</option>
+<option value ="美股港股">美股港股</option>
+<option value ="对冲reits">对冲reits</option><option value ="商品">商品</option> 
+    </select></tr>
+<tr>收益率2 <input type="text" name="ret_fund_rank2" value="-100"></tr>
+<tr>收益率3 <input type="text" name="ret_fund_rank3" value="-100"></tr>
+<input type="submit" name="input_fund_ret_rank" value="提交日期"><br>
+<tr>基金排名：{{ rank_str }}</tr>
+<tr>基金排名百分位：{{ rank_pct }}</tr>
+<tr>;基金排名：{{ rank_str2 }}</tr>
+<tr>基金排名百分位：{{ rank_pct2 }}</tr>
+<tr>;基金排名：{{ rank_str3 }}</tr>
+<tr>基金排名百分位：{{ rank_pct3 }}</tr>
+
+
+<!--- #######################--------------------------------------- -->
+<hr>
+<h4 id="fund_period_stat">3,周/月基金分类统计top5 </h4>
+<tr>输入日期 <input type="text" name="date_fund_stat" value="20220218"></tr>
+<tr>指数类型：<select name="fund_type" value="主动股票">
+    <option value ="主动股票">主动股票</option> <option value ="股票指数">股票指数</option> 
+<option value ="偏债混合">偏债混合</option> <option value ="纯债">纯债</option>
+<option value ="美股港股">美股港股</option><option value ="FOF">FOF</option>
+<option value ="对冲reits">对冲reits</option><option value ="商品">商品</option> 
+    </select></tr>
+<input type="submit" name="input_fund_chg_stat" value="提交日期"><br>
+<table id="ciss_table_chg">
+    <tr class="hover">
+        <td>代码</td>
+        <td>名称</td>
+        <td>日回报</td>
+        <td>年初至今</td>
+        <td>近一周</td>
+        <td>近一月</td>
+        <td>近一季</td>
+        <td>近半年</td>
+        <td>近一年</td>
+        <td>近两年</td>
+        <td>近三年</td>
+        <td>成立以来</td>
+        <td>年化回报</td>
+        <td>最新规模</td>
+    </tr>
+    {% for temp_i,temp_v in df_fund_exhi.items %}
+    <tr>
+        <td>{{ temp_v.代码 }}</td>
+        <td>{{ temp_v.名称 }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_日回报 }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_年初至今 }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_近一周 }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_近一月 }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_近一季 }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_近半年 }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_近一年 }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_近两年 }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_近三年 }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_成立以来 }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_年化回报 }}</td>
+        <td id="table_td_right">{{ temp_v.exhi_最新规模 }}</td>
+    </tr>
+    {% endfor %}
+
+
+</table>
+
+
+<!------------------------------------------------------------------------------------->  
+<hr>
+<h3 id="fund_unit">基金净值数据 </h3>
+<hr>
+<p>维护基金净值数据 
+    <br>notes:默认日频率维护历史数据,若指标不只是NAV_adj，有可能需要设置其他参数，否则会报错。
+<br>Excel模板：C:\rc_2023\rc_202X\rc_report研究报告\rc_债基筛选模板_2301.xlsx
+</p>
+
+<br>
+{% csrf_token %}
+<table border="1">
+    <tr>单只基金：</tr><br>
+    <tr>基金代码：<input type="text" name="fund_code" value="720001.OF"></tr><br>
+    <tr>开始日期<input type="text" name="date_begin" value="20221231"></tr>
+    <tr>结束日期 <input type="text" name="date_end" value="{{ time_now_str_pre1d }}"></tr>
+    <tr>指定wind-api指标 <input type="text" name="col_list_wind_api" value="NAV_adj"></tr> 
+    <br><tr>非必须:</tr>
+    <tr>基准代码|如885005.WI：<input type="text" name="bench_code" value=""></tr> 
+    <br><input type="submit" name="input_fund_unit" value="提交"> </tr>       
+    
+</table>
+<table border="1">
+    <tr>基金列表：</tr> 
+    <textarea rows="2" cols="60">
+    path=C:\rc_2023\rc_202X\data_pms；file=temp.xlsx;sheet=temp
+    </textarea><br>
+    <tr>基金代码excel文件：<input type="text" name="file_name" value="temp.xlsx"></tr><br>
+    <tr>excel文件地址：<input type="text" name="file_path" value="C:\\rc_2023\\rc_202X\\data_pms\\"></tr><br>
+    <tr>sheet名称：<input type="text" name="sheet_name" value="temp"></tr><br>
+    <tr>表格列名称，如fund_code：<input type="text" name="col_name" value="code"></tr><br>
+    <tr>开始日期<input type="text" name="date_begin" value="20221231"></tr>
+    <tr>结束日期 <input type="text" name="date_end" value="{{ time_now_str_pre1d }}"></tr>
+    <tr>指定wind-api指标 <input type="text" name="col_list_wind_api" value="NAV_adj"></tr> 
+    <br><tr>非必须:</tr>
+    <tr>基准代码|如885005.WI：<input type="text" name="bench_code" value=""></tr> 
+    <br><input type="submit" name="input_fund_unit_list" value="提交"> </tr>       
+    
+</table>
+<table border="1"> 
+    <tr>基金净值数据-历史： {{ date_start_hist }} {{date_end_hist}}</tr>
+    <tr>基金净值数据-latest：{{ date_start }}{{ date_end }} </tr><br>
+    
+</table>
+ 
+<!------------------------------------------------------------------------------------->
+
+
+<!--- ################################################################## --->
+<!--- ################################################################## --->
+<hr>
+<h3 id="fund_perf_scenario">牛熊市场环境下债基相对表现 scenario analysis </h3>
+<p>参考 天天基金投研通\ 债券类基金分析 \图表15 成立以来各市场条件下的基金表现
+
+</p>
+
+
+<hr>
+
+
+
+
+<!------------------------------------------------------------------------------------->
+
+
+<!--- ################################################################## --->
+<!--- ################################################################## --->
+<hr>
+<h3 id="fund_qual">增删查改基金定性信息 </h3> 
+
+<hr>
+<h4 id="fund_event_select">1,查询基金定性或定量研究信息</h4>
+{% csrf_token %}
+<table border="1">
+    <!-- step1：输入代码，选择是否查询基金信息；step2：根据获取的数据，填入定性信息，保存到sqlite数据库  -->
+    <tr>
+        <tr>定性或定量<select name="fund_data_source" value="">
+    <option value ="fund_search_db_funda">定性研究记录</option><option value ="fund_search_quant_wind">定量指标-Wind</option>
+    </select> </tr>
+    <tr>方式一：基金代码<input type="text" name="fund_search_fund_code" value=""></tr>
+    <br>
+    <tr>方式二：列名称Column Name <input type="text" name="fund_search_col_name" value=""></tr>
+    <tr>列值Value<input type="text" name="fund_search_col_value" value=""></tr>
+    <br>
+    <input type="submit" name="input_fund_select" value="提交"> 
+    </tr>
+
+</table>
+
+<hr>
+<h4 id="fund_event_submit">2,提交基金定性或定量研究信息</h4>
+{% csrf_token %}
+<table border="1">
+    <!-- step1：输入代码，选择是否查询基金信息；step2：根据获取的数据，填入定性信息，保存到sqlite数据库  -->
+    <!--         <option value ="growth">成长</option><option value ="value">价值</option><option value ="even">均衡</option>
+        <option value ="weight_high">持仓集中</option><option value ="weight_low">持仓分散</option>
+        <option value ="quant">量化</option><option value ="small_cap">小市值</option><option value ="bond">纯债</option>
+        <option value ="FOF">FOF</option><option value ="dividend">红利</option>
+        </select></tr>
+                <option value ="mdd_small">保本低回撤</option><option value ="hk_share">港股</option><option value ="hkus_tech">港股美股科技股</option>
+        <option value ="tech">科技</option><option value ="tmedical">医药</option><option value ="consume">消费</option>
+        <option value ="new_energy">新能源</option><option value ="financial">金融</option><option value ="financial">金融</option>
+        <option value ="cycle_resource">周期资源</option><option value ="manufacture">工业制造</option>
+        <option value ="quant">量化</option><option value ="convertable_bond">可转债</option>            
+        </select></tr>
+
+         -->
+    <tr>基金代码<input type="text" name="fund_code2" value=""></tr>        
+    <tr>成长价值风格<select name="style_fund" value="">
+        <option value ="成长">成长</option><option value ="价值">价值</option><option value ="均衡">均衡</option>
+        <option value ="持仓集中">持仓集中</option><option value ="持仓分散">持仓分散</option>
+        <option value ="量化">量化</option><option value ="小市值">小市值</option><option value ="纯债">纯债</option>
+        <option value ="FOF">FOF</option><option value ="红利">红利</option>
+        </select></tr>
+
+    <tr>主题<select name="theme_fund" value="">
+        <option value ="保本低回撤">保本低回撤</option><option value ="港股">港股</option><option value ="港股美股科技股">港股美股科技股</option>
+        <option value ="科技">科技</option><option value ="医药">医药</option><option value ="消费">消费</option>
+        <option value ="新能源">新能源</option><option value ="金融">金融</option><option value ="金融">金融</option>
+        <option value ="周期资源">周期资源</option><option value ="工业制造">工业制造</option>
+        <option value ="量化">量化</option><option value ="可转债">可转债</option>            
+        </select></tr>
+    <br>
+    <tr>擅长行业1<input type="text" name="ind_1" value=""></tr>
+    <tr>擅长行业2<input type="text" name="ind_2" value=""></tr>
+    <tr>擅长行业3<input type="text" name="ind_3" value=""></tr>
+    <tr>行业集中度<input type="text" name="ind_num" value=""></tr>
+    <br>
+    <tr>熊市防御能力<input type="text" name="s_down_market" value=""></tr>
+    <tr>震荡行情能力<input type="text" name="s_flat_market" value=""></tr>
+    <tr>牛市进攻能力<input type="text" name="s_up_market" value=""></tr>
+    <br>
+    <tr>概要|行业配置、重点个股及观点<textarea type="text" name="abstract_analysis" value=""></textarea></tr>   
+    <br>
+    <tr>基金经理|时点<input type="text" name="fund_namager" value=""></tr>
+    <tr>备注信息<input type="text" name="note" value=""></tr>
+    <tr>最新修改时间<input type="text" name="date_lastmodify" value="{{ time_now_str }}"></tr> 
+    <tr>是否瑕疵|基金经理历史<input type="text" name="if_fundmanager_fault" value="0"></tr>
+    <br>
+    <input type="submit" name="input_fund_research_to_sql" value="提交">
+</table>
+
+<hr>
+{% csrf_token %}
+<table border="1">
+    <!-- step1：输入代码，选择是否查询基金信息；step2：根据获取的数据，填入定性信息，保存到sqlite数据库  -->
+    <tr>3,删除基金定性研究记录： 
+        <tr>基金代码<input type="text" name="del_fund_code" value=""></tr>
+        <tr>列名称Column Name <input type="text" name="del_col_name" value=""></tr>
+        <tr>列值Value<input type="text" name="del_col_value" value=""></tr> 
+        <input type="submit" name="input_fund_delete" value="提交"> 
+    </tr>
+
+</table>
+
+
+<p>基金定性研究记录：最新N条</p>
+<!--给table添加滚动条，table放到一个div里去,然后再设置div显示滚动条即可 div比table大小要小才会显示-->  
+<div class="div_table" style="overflow-x: auto; overflow-y: auto; height: 800px; width:1200px;">
+<table id="ciss_table" >
+    <tr class="hover">
+        <td>日期</td>
+        <td>基金代码</td>
+        <td>名称</td>
+        <td>成长价值风格</td>
+        <td>主题</td>
+        <td>擅长行业1</td>
+        <td>擅长行业2</td>
+        <td>擅长行业3</td>
+        <td>行业集中度</td>
+        <td>综合业绩得分</td>
+        <td>熊市防御能力</td>
+        <td>震荡行情能力</td>
+        <td>牛市进攻能力</td>
+        <td>概要|行业配置、重点个股及观点</td>
+        <td>基金经理|时点</td>
+        <td>是否瑕疵|基金经理历史</td>
+        
+    </tr>
+
+    {% for temp_i,temp_v in df_fund_research_tail.items %}
+    <tr>
+        <td id="table_td_right" style='text-align:left;' width="80">{{ temp_v.date }}</td>
+        <td id="table_td_right">{{ temp_v.code }}</td>
+        <td id="table_td_right">{{ temp_v.name }}</td>
+        <td id="table_td_right">{{ temp_v.style_fund }}</td>
+        <td id="table_td_right">{{ temp_v.theme_fund }}</td>
+        <td id="table_td_right">{{ temp_v.ind_1 }}</td>
+        <td id="table_td_right">{{ temp_v.ind_2 }}</td>
+        <td id="table_td_right">{{ temp_v.ind_3 }}</td>
+        <td id="table_td_right">{{ temp_v.ind_num }}</td>
+        <td id="table_td_right">{{ temp_v.score_performance }}</td>
+        <td id="table_td_right">{{ temp_v.s_down_market }}</td>
+        <td id="table_td_right">{{ temp_v.s_flat_market }}</td>
+        <td id="table_td_right">{{ temp_v.s_up_market }}</td>
+        <td id="table_td_right" width="400">{{ temp_v.abstract_analysis }}</td>
+        <td id="table_td_right">{{ temp_v.fund_namager }}</td>
+        <td id="table_td_right">{{ temp_v.if_fundmanager_fault }}</td>
+    </tr>
+    {% endfor %}
+</table>
+<button type="button" onclick="tableToExcel('ciss_table')">导出Excel</button> <br>
+</div>
+
+<!-------------------------------------------------------------------------------------> 
+
+
+<hr>
+<h4>End ......</h4>
+
+<!--- #######################--------------------------------------- --> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-------------------------------------------------------------------------------------> 
+<!------------------------------------------------------------------------------------->
+
+
+
+
+
+ 
+<hr>
+<h3 id="port_period_unit_ret">3，获取基金净值和区间收益率</h3>
+<p>月度数据分析的基金逻辑：1，本地月度行情数据提取：从data_choice\ 提取 file=month_fund_shares_20220930.xlsx; 2，计算指标：月度收益率return_m，计算10、25、50、75%分位数；
+<br>1，form表单：选择指标【】、日期
+<br>2，表格展示：业绩和指标（默认是规模）矩阵：5*5 先收益率后指标（如规模）分成5档：观察2个指标的单调性；
+<br>3，比较策略涉及的几个指标在近6个月的相对收益率：回撤、收益率、sharp、规模、基金经理经验等：
+</p>
+
+
+
+
+
+
+
+
+
+
+
+<hr>
+<h3 id="port_unit_perf">4，基金净值和绩效</h3>
+<p> </p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h3>TODO </h3>
+<hr>
+<p> </p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</form>
+
+{% endblock content %}

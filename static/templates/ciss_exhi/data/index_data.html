@@ -1,54 +1,385 @@
 {% extends "base.html" %}
-<meta charset="UTF-8"> <!-- for HTML5 -->
+<meta charset="UTF-8">
+<!-- for HTML5 -->
 <!-- The block items for this base html file is: {nav_sub, left_frame,menu,content } -->
-
+<!-- 设置标题 -->
+{% block title0 %} 
+    数据|SQL数据库管理
+{% endblock title0 %}
 
 {% block nav_sub %}
+<!-- layui定义左侧工具栏：第一部分目录 -->
+<li style="text-align: center;">CISS Data数据管理</li> 
+<!-- notes:class="layui-nav-item"默认是收起的， 加上" layui-nav-itemed"后内容是展开的;  -->
+<li class="layui-nav-item">
+    <a class="" href="#data_calculate">数据库</a>
+    <dl class="layui-nav-child">
+        <dd><a href="#ciss_db_funda">数据库db_funda.sqlite3 </a></dd> 
+    <dd><a href="#ciss_db_quote">数据库db_quote.sqlite3 </a></dd> 
+    </dl>
+</li>
+<li class="layui-nav-item">
+    <a class="" href="#fund_fof">细分数据</a>
+    <dl class="layui-nav-child">
+        <dd><a href="#abstract">1，概要 </a></dd>    
+        <dd><a href="#ciss_web">2，CISS模块包 </a></dd>
+        <dd><a href="#inside_reports">3，内部研究报告 </a></dd>
+        <dd><a href="#ciss_db">4，CISS数据 </a></dd>
+        <dd><a href="#sellside_reports">5，外部研究报告 </a></dd>
+        <dd><a href="#db_wind">6，Wind数据库 </a></dd>
+        <dd><a href="#db_others">7，其他数据库 </a></dd>
+        <dd><a href="#data_backup">8，数据备份 </a></dd>
+        <dd><a href="#data_funda">9，基本面数据:db_funda.sqlite3 </a></dd>
+        <dd><a href="#data_exhibition">10，数据交互和展示 </a></dd>
+    </dl>
+</li>
+<li>当前日期:{{ time_now_str }}</li>
 
-    <a id="a_nav" href="./data/data_api.html">数据接口 | Data API</a> >>
-    <a id="a_nav" href="./data/data_api.html">数据库 | Database </a> >>
-    <a id="a_nav" href="./data/data_api.html">自定义数据 | Custom Data</a> >>
-    <br>
-    <a>Database：</a>
-    <a id="a_nav" href="./db_wind_wds/log_191118.html">Wind-Oracle | Wind-WDS</a> >>
-    <a id="a_nav" href="./knowledge/data_study_postgresql.html">数据库学习:PostgreSQL</a> >>
-    
-    
-{% endblock nav_sub %}
 
+<br> {% endblock nav_sub %} 
+
+<!--- ################################################################## --->
+<!--- ################################################################## --->
 {% block left_frame %}
 
+<!-- Menu in left frame -->
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h1><a id="#location_title">CISS总数据管理</a> </h1>
+<p>构建、获取、转换、管理和系统相关的各类数据。目录中包括了整个CISS系统涉及的各类数据目录。</p>
+<hr>
+<h3>目录</h3>
+<ul style="font-size: large;"> 
+    <li><a href="#abstract">1，常用数据管理 </a></li>
+    <li><a href="#ciss_db_funda">数据库db_funda.sqlite3 </a></li> 
+    <li><a href="#ciss_web">2，CISS模块包 </a></li>
+    <li><a href="#inside_reports">3，内部研究报告 </a></li>
+    <li><a href="#ciss_db">4，CISS数据 </a></li>
+    <li><a href="#sellside_reports">5，外部研究报告 </a></li>
+    <li><a href="#db_wind">6，Wind数据库 </a></li>
+    <li><a href="#db_others">7，其他数据库 </a></li>
+    <li><a href="#data_backup">8，数据备份 </a></li>
+    <li><a href="#data_funda">9，基本面数据:db_funda.sqlite3 </a></li>
+    <li><a href="#data_exhibition">10，数据交互和展示 </a></li>
+
+</ul>
 
 
 
-{% endblock left_frame %}
-
-{% block menu %}
-
-
-{% endblock menu %}
-
+{% endblock left_frame %} 
+{% block menu %} {% endblock menu %} 
 
 {% block content %}
-   
-<h3>数据接口 | Data API</h3>
+
+
+<!--- ################################################################## --->
+<form action="{% url 'data_manage' %}" method="post" accept-charset="utf-8"> 
+<!--- ################################################################## ---> 
+
 <hr>
-<p>{......} </p>
-
-
-<h3>数据库 | Database</h3>
+<!--- ################################################################## ---> 
+<h3 id="ciss_db_funda">数据库db_funda.sqlite3;db_quote </h3>
 <hr>
-<p>{......} </p>
+<p>功能:新建、调整、删除Sqlite数据库表。
+    <br>研究信息网页&表格信息；分类:1,个股事件；2，股票池；3，市场行业风格；4，基金时间序列-主动和指数；5，大类资产;
+    <br>task名称 ：web网页和sql数据库联动。excel模型来源:file=rc_个股推荐行业事件.xlsx;
+    <br>todo:2种数据写入方式：1，逐条手动网页输入；2，上传excel文件，用python脚本批量写入sqlite。
+</p>
 
-<h4>1,Wind落地数据库windn | db_wind_wds Oracle</h4>
-<p>
-数据日志文件及位置：./db_wind_wds/log_191118.html
+
+<hr>
+<!--- ################################################################## --->
+<h4 >新建或删除Sqlite表格 </h4> 
+<p>表格生成方式gen_type：1，dict,根据输入的字典dict_column构建；2，excel:根据sheet里导入的df表格构建 
+    <br>step1：在Excel文件中定义表格名称和columns；sheet=table_column;file=db_manage.xlsx
+    <br>step2:输入表格名称，提交并生成表格。
+</p>
+{% csrf_token %}
+<table border="1">
+    <!--   -->
+    <tr>数据库选择<select name="db_name_gen_del" value="">
+        <option value ="db_quote.sqlite3">db_quote</option>
+        <option value ="db_funda.sqlite3">db_funda</option>        
+        </select></tr>
+    <tr>新建或删除表格<select name="table_gen_del" value="">
+        <option value ="generate">新建表格</option><option value ="delete">删除表格</option>
+        </select></tr>
+    <tr>表格名称：<input type="text" name="table_name_gen_del" value=""></tr> 
+    <input type="submit" name="input_table_gen" value="提交">  
+
+</table>
+<p>结果： {{ table_data }} </p>
+
+<!--- ################################################################## --->
+<h4 >删除Sqlite表格内，部分列的值相同的重复项，并保留最小的id </h4> 
+<p>step 1:选出某几列数值相同的列的最大的id值
+    <br>step 2:根据返回的列的id，逐一删除sql中的记录
+</p>
+{% csrf_token %}
+<table border="1">
+    <!--   -->
+    <tr>数据库选择<select name="db_name_del_index" value="">
+        <option value ="db_quote.sqlite3">db_quote</option>
+        <option value ="db_funda.sqlite3">db_funda</option>        
+        </select></tr>
+    <tr>表格名称：<input type="text" name="table_name_del_index" value=""></tr> 
+    <br>
+    <tr>输入列名列表","隔开：<input type="text" name="col_list_str_del_index" value="date,code"></tr> 
+    <input type="submit" name="input_table_del_index" value="提交">  
+
+</table>
+<p>结果： {{ df_del }} </p>
+
+<hr>
+<!--- ################################################################## --->
+<h4 >Excel批量导入Sqlite：数据从excel-sheet 导入 sqlite-table </h4> 
+<p>给定表格名称和数据源，将excel文件中数据导入sqlite的table
+<br>Notes：注意将文本内容里的空格删除、单引号用^替代
+</p>
+{% csrf_token %}
+<table border="1">
+    <tr>外部Excel文件位置（默认）:<input type="text" name="path_excel" value=""></tr> 
+    <tr>Excel文件名称<input type="text" name="file_name" value="db_manage.xlsx"></tr> 
+    <tr>Excel-Sheet名称<input type="text" name="sheet_name" value="temp"></tr> 
+    <br>
+    <tr>数据库选择:<select name="db_name_table_import" value="">
+        <option value ="db_quote.sqlite3">db_quote</option>
+        <option value ="db_funda.sqlite3">db_funda</option>        
+        </select></tr>
+    <tr>表格名称table:<input type="text" name="table_name_table_import" value=""></tr> 
+    <input type="submit" name="input_table_import" value="提交">  
+
+</table>
+<p>结果： {{ table_data }} </p>
+
+<hr>
+<!--- ################################################################## --->
+<h4 >新建Sqlite数据库 </h4> 
+<p>例子：conn = sqlite3.connect("test.db") #连接数据库，若test.db不存在，则会创建该数据库 
+</p>
+{% csrf_token %}
+<table border="1">
+    <!--   --> 
+    <tr>输入数据库名称：<input type="text" name="db_name_create" value=""></tr> 
+    <input type="submit" name="input_db_name_create" value="提交">  
+
+</table> 
+
+<hr>
+<!--- ################################################################## ---> 
+<h3 id="ciss_db_quote">数据库db_quote.sqlite3,同上</h3>
+<hr>
+<p> 
+</p>
+<h4>批量获取wds历史行情数据存入db_quote </h4>
+<p>TODO 
+
 </p>
 
 
 
-<h3>自定义数据 | Custom Data</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--- ################################################################## ---> 
+<!--- ################################################################## ---> 
 <hr>
-<p>{......} </p>
+<!-- ---------------------------------------------------------- -->
+<h3 id="abstract">1，概要</h3>
+<hr>
+<p>{......}
+    <br>通过FileGee文件同步备份软件对2~7类数据目录进行维护，但较大的数据文件目录（db_wind） 可能发生同步不准确的情况。
+</p>
+
+ 
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="ciss_web">2，CISS模块包 |ciss_web</h3>
+<p>主目录主要包括【CISS_rc,ciss_web,ciss_exhi,static,ciss_vue】,其中：
+    <br>CISS_rc:各类策略应用apps、策略引擎bin、配置文件config、数据管理db、文档docs、测试脚本tests、
+    <br>ciss_web：Django网站相关python脚本
+    <br>ciss_exhi：用于网页展示投研系统、策略、数据的python脚本
+    <br>static：静态网页html,javaScript,csv和json文件
+    <br>ciss_vue：前端框架vue及相关文件。
+
+</p>
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="inside_reports">3，内部研究报告 |rc_reports_cs </h3>
+<p>个人或团队在当前所在机构完成和维护的各类报告。</p>
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="ciss_db">4，CISS数据库 |CISS_db</h3>
+<p>保存CISS系统策略计算输出的数据文件，例如主动基准模型ABM的各个组合、动量策略40d_16d的 各个组合。
+    <br>notes:历史组合数据因为设计成保存每日持仓和交易文件，单个组合大小可以达到1gb，有较大的改进空间。</p>
+
+<p>主要数据目录【D:\CISS_db\】包括：</p>
+<ol>
+    <li>主动基准模型、行业历史成长锚和价值锚股票权重 |Active_Benchmark_Model_2019 </li>
+    <li>债券指数历史百分位策略 |bond_pct </li>
+    <li>PostgreSql数据库 |ciss_db </li>
+    <li>中证800行业轮动策略 |csi800_industrial_rotation </li>
+    <li>cs指数增强策略 |data_applications </li>
+    <li>ETF数据相关 |data_csi </li>
+    <li>BL资产配置课题相关数据：csi800成分、买方和卖方观点 |db_bl </li>
+
+</ol>
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="sellside_reports">5，外部研究报告 |TOUYAN </h3>
+<p>买方和卖方研究报告：行业、宏观、量化、债券、基金等
+</p>
+
+<h4>每周基金排名</h4>
+<p>主要有海通、中信每周邮件发送基金排名数据 文件：海通证券-基金业绩排行榜(2020-02-09)(更新版).xlsx；海通证券-基金超额收益排行榜（20200209）.xlsx 文件：中信证券 公募基金仓位监测数据20200207.xlsx 文件位置：D:\TOUYAN\基金排名
+
+</p>
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="db_wind">6，Wind数据库 |db_wind</h3>
+<p>
+     <li>data_wds |wds原始表格数据按表格名称目录保存 </li>
+    <li>data_adj |经过处理的wds数据信息，如基金分析目录fund_ana、个股历史行业分类数据industries_class </li>
+
+    <li>wind_data |wind-api获取的csi300，500，1000历史权重和成分数据，2006-201811</li>
+    <li>FICC_raw，index |固定收益类wds数据,债券指数数据</li>
+    <li>financialdata_summary，quote_us |Wind终端导出的美股财务数据,部分港股和美股的历史开盘收盘成交量数据 </li>
+    <li>Factset |从Factset获取的数据 </li>
+    <li>1min |201810之前A股1分钟数据 </li>
+    </p>  
+   
+
+    <h4>Wind终端数据获取</h4>
+    <p>Wind终端可以高效地获取许多梳理后地数据，并避免重复劳动。但问题在于Wind终端通常 只提供最新的专题数据，并且某些时效性高的新内容不能马上获得。例如200214在线办公产业链 很热门，但是在板块股票列表中还没有。
+    </p>
+    <ol>
+        <li>获取股票|基金|指数列表：Wind终端——股票——板块报价——全部A股；左侧栏选择行业、概念、产业链 </li>
+        <li> </li>
+        <li> </li>
+    </ol>
+
+    <h5>获取指数成分股票</h5>
+    <p>指数成分股票：数据来源：Wind终端——股票——板块报价 沪深股票： 科创板——按科创板主题行业 中信证券行业类： 中信证券特殊类：CS行业类别{金融地产、资源能源、原材料、设备制造、工业服务、交通运输、消费、科技}；风格{金融、周期、消费、成长、稳定} 地域类：福建——福州 美国股票——美股指数成分: 标普指数：SP500、标普100、标普中型股400、标普小型股600 其他指数：费城半导体指数SOX.GI；罗素1000，2000，3000
+    </p>
+    <h5>基金筛选方法： </h5>
+    <p>基金筛选方法： 基金：基金概念类——按投资标的分（概念类），有MSCI和科创板等但行业分类只有消费、环保、医疗 基金：Wind主题基金——Wind行业板块主题基金，Wind概念板块主题基金。感觉可能是以持仓股是否最多属于该板块来定的， 美股：全球股票——中国概念股——美国中资产业类；主要包括：网络游戏、电子商务、互联网、SNS社交网络、房地产、新能源、互联网视频、生物技术、制药、文化传媒。 数据来源：Wind终端——股票——板块报价
+    </p>
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="db_others">7，其他数据库 | others</h3>
+<p>
+    <br>Facset数据 | D:\db_factset
+    <br>2018Q3之前财务和权息数据4abm model | D:\db_dzh_dfw
+    <br>论文目录 | D:\paper
+    <br>python相关模块 | H:\py_modules
+    <br>相关软件 | H:\softs
+
+</p>
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h4>默认数据库Sqlite3：file=db.sqlite3 </h4>
+<p>常用功能：1，Python连接： path="C:\\rc_HUARONG\\rc_HUARONG\\ciss_web\\"
+；file="db.sqlite3"；import sqlite3；conn = sqlite3.connect(path+file)； c =conn.cursor()
+<br>2，获取所有表名称：1，c.execute("select name from sqlite_master where type='table' order by name")；
+list =  c.fetchall(); type(list[0]) ==tuple; type(list[0][0]) ==str,
+<br> [('auth_group',), ('auth_group_permissions',), ('auth_permission',), ('auth_user',), ('auth_user_groups',), ('auth_user_user_permissions',), ('ciss_exhi_asset',), ('ciss_exhi_basics',), ('ciss_exhi_bond',), ('ciss_exhi_bond_derivative',), ('ciss_exhi_cash_tool',), ('ciss_exhi_db',), ('ciss_exhi_group',), ('ciss_exhi_index',), ('ciss_exhi_index_derivative',), ('ciss_exhi_membership',), ('ciss_exhi_multi_asset',), ('ciss_exhi_person',), ('ciss_exhi_portfolio',), ('ciss_exhi_stock',), ('ciss_exhi_stock_derivative',), ('ciss_exhi_stra_port_links',), ('ciss_exhi_strategy',), ('ciss_exhi_user_ciss',), ('django_admin_log',), ('django_content_type',), ('django_migrations',), ('django_session',), ('sqlite_sequence',)]
+
+
+</p>
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="data_backup">8，数据备份 | </h3>
+<p>file_name |file_path
+    <br>D:\CISS_db_backup
+    <br>D:\db_wind_备用
+</p>
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="data_funda">9，基本面数据:db_funda.sqlite3 </h3> 
+
+<p>其他个性化数据目录：
+</p>
+
+<h3>sqlite3新增数据库 </h3>
+<p>1，新建数据库文件，也可以直接复制'db.sqlite3'
+    <br>2，数据库配置："settings.py"文件中DATABASES = {}设置： "ciss_db":{        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db_funda.sqlite3'),    },
+    <br>3，设置数据库的路由规则：
+
+</p>
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="data_exhibition">10，数据交互和展示 </h3>
+<p>基本面和行业研究等定性数据，特别是特定的数据表格，截至t时间的数据可能在未来t+1, t+2的时间都需要对图表加入数据并更新。基于目前的技术能力和时间成本，可以主要用
+    <br>“Excel-原始数据处理 --> csv标准数据--> python脚本转换成json --> html展示json数据”
+</p>
+
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+</form>
+
 
 {% endblock content %}

@@ -1,0 +1,289 @@
+{% extends "base.html" %}
+<meta charset="UTF-8">
+<!-- for HTML5 -->
+<!-- The block items for this base html file is: {nav_sub, left_frame,menu,content } -->
+<!-- 产业链网页模板 -->
+
+{% block nav_sub %}
+
+<a id="a_nav" href="./core_industry.html">核心产业链 |Core industry chain</a> >>
+<a id="a_nav" href="./last_industry.html">最新产业链 |Lastest industry chain</a> >>
+
+<br>Agriculture, forestry, animal husbandry and fishing
+<a>细分产业链列表：</a>
+<a id="ciss_menu" href="#consumer_services">消费者服务 </a> >>
+<a id="ciss_menu" href="#retail">商贸零售 </a> >>
+<a id="ciss_menu" href="#food_beverage">食品饮料 </a> >>
+<a id="ciss_menu" href="#agriculature_animal_forest_fishing">农林牧渔 </a> >>
+<br><a>产业链模拟组合：</a>
+<a id="port_pms" href="#port_simu_media_top40">新消费产业链top40v200218</a> >>
+<br><a>细分领域锚个股：</a>
+<a href="#ind_def_anchor_stock">细分领域锚个股</a> {% endblock nav_sub %} {% block right_frame %}
+<!-- Menu in right frame -->
+<!-- ---------------------------------------------------------- -->
+<h1>传媒产业链 </h1>
+<h3>目录</h3>
+<ul>
+    <li><a href="#abstract">1，概要 </a></li>
+    <li><a href="#industry_methodology">2，行业分类方法和产业链分析方法 </a></li>
+    <li><a href="#sellside_reports">3，主要外部参考资料 </a></li>
+    <li><a href="#inside_reports">4，内部研究报告&产业链列表 </a></li>
+    <li><a href="#research_menu">5，产业链目录和研究计划 </a></li>
+    <li><a href="#industry_db">6，产业链数据和数据库 </a></li>
+    <li><a href="#industry_stra">7，产业链相关策略 </a></li>
+    <li><a href="#industry_port">8，产业链相关组合和指数 </a></li>
+    <li><a href="#industry_reference">9，参考信息和链接 </a></li>
+
+    <li><a href="#ind_definition">1，获取产业链定义  </a></li>
+    <li><a href="#ind_fundamental">2，产业链基本面数据   </a></li>
+    <li><a href="#ind_data_standarded">3，标准化定性和定量数据 </a></li>
+    <li><a href="#ind_table_columns">4，表格数据列设计  </a></li>
+    <li><a href="#ind_maintainence">5，分析方案和数据表的定期维护机制。 </a></li>
+</ul>
+<h3><a id="ind_definition">传媒产业链分析 </a></h3>
+<ul>
+    <li><a href="#ind_def_abstract">行业概览：</a> </li>
+    <li><a href="#ind_def_sub_chain">景气度提升的细分领域（子产业链）：</a> </li>
+    <li><a href="#ind_def_anchor_list">行业市值龙头</a> </li>
+    <li><a href="#ind_def_anchor_stock">行业锚个股</a> </li>
+</ul>
+
+<h3>细分产业链目录</h3>
+<ul>
+    <li><a href="#consumer_services">消费者服务 </a></li>
+    <li><a href="#retail">商贸零售 </a></li>
+    <li><a href="#food_beverage">食品饮料 </a></li>
+    <li><a href="#agriculature_animal_forest_fishing">农林牧渔 </a></li>
+</ul>
+
+
+
+<h3><a href="#ind_def_anchor_stock">细分领域锚个股</a></h3>
+
+{% endblock right_frame %} {% block left_frame %}
+
+
+<!-- Menu in left frame -->
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h1>日常消费产业链 </h1>
+<p>必须消费：消费者服务、商贸零售、食品饮料、农林牧渔
+</p>
+<hr>
+<h3>目录</h3>
+<ul>
+    <li><a href="#abstract">1，概要 </a></li>
+    <li><a href="#industry_methodology">2，行业分类方法和产业链分析方法 </a></li>
+    <li><a href="#sellside_reports">3，主要外部参考资料 </a></li>
+    <li><a href="#inside_reports">4，内部研究报告&产业链列表 </a></li>
+    <li><a href="#research_menu">5，产业链目录和研究计划 </a></li>
+    <li><a href="#industry_db">6，产业链数据和数据库 </a></li>
+    <li><a href="#industry_stra">7，产业链相关策略 </a></li>
+    <li><a href="#industry_port">8，产业链相关组合和指数 </a></li>
+    <li><a href="#industry_reference">9，参考信息和链接 </a></li>
+
+    <li><a href="#ind_definition">1，获取产业链定义 </li>
+<li><a href="#ind_fundamental">2，产业链基本面数据  </li>
+<li><a href="#ind_data_standarded">3，标准化定性和定量数据</li>
+<li><a href="#ind_table_columns">4，表格数据列设计 </li>
+<li><a href="#ind_maintainence">5，分析方案和数据表的定期维护机制。 </li>
+</ul>  
+{% endblock left_frame %}
+
+{% block menu %} 
+
+<h3>细分产业链目录</h3>
+<ul>
+    <li><a href="#consumer_services">消费者服务 </a></li>
+    <li><a href="#retail">商贸零售 </a></li>
+    <li><a href="#food_beverage">食品饮料 </a></li>
+    <li><a href="#agriculature_animal_forest_fishing">农林牧渔 </a></li>
+</ul>
+
+<h3><a href="#ind_def_anchor_stock">细分领域锚个股</a></h3>
+{% endblock menu %} {% block content %}
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="abstract">1，概要</h3>
+<hr>
+<p>经过2016至2019年的下跌、财务报表集体资产减值损失、2018-2019政策监管趋严倒逼 行业改革、5G等技术的发展促进传媒行业创新。
+    <br>对应文件：0跨行业的产业链组合_200213.xlsx
+    <br>对应文件目录：C:\zd_zxjtzq\rc_reports_cs\产业链_传媒
+</p>
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="industry_definition">产业链定义</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+<hr>
+<h4 id="consumer_services">消费者服务 </h4>
+<p>
+</p>
+
+
+<hr>
+<h4 id="retail">商贸零售 </h4>
+<p>
+</p>
+
+<hr>
+<h4 id="food_beverage">食品饮料 </h4>
+<p>
+</p>
+
+
+<hr>
+<h4 id="agriculature_animal_forest_fishing">农林牧渔 </h4>
+<p>
+</p>
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="ind_fundamental ">2，产业链基本面数据</h3>
+<p>梳理产业链基本面数据：根据产业链定义梳理产品和服务、个股、行业分类、财务指标。识别高风险和不重要股票。
+</p>
+
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="ind_data_standarded ">3，标准化定性和定量数据</h3>
+<p>构建标准化定性和定量数据：考虑时间维度和多产业链维度。 </p>
+
+<h4>标准化定性信息</h4>
+<p>
+
+</p>
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="ind_table_columns ">4，表格数据列设计</h3>
+<p>4，表格数据列设计： 日期,股票名称,代码,中信行业1,中信行业2,中信行业3,概念1,概念2,产业链1,产业链2,notes,...
+</p>
+
+
+
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="ind_maintainence ">5，分析方案和数据表的定期维护机制</h3>
+<p>分析方案和数据表的定期维护机制。
+</p>
+
+
+
+
+
+
+
+
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="port_simu_media_top40 ">传媒产业链top40v200218</h3>
+<p>PMS组合“传媒产业链top40v200218”主要构建步骤为：
+    <br>1，获取Wind终端传媒行业169只股票地财务预测数据，进行打分；
+    <br>2，获取2019年初之前1年市场价格、成交额、换手率等数据，进行打分；
+    <br>3，对基金重仓持股指标打分
+    <br>4，对以上分数加总，剔除2019年以后上市股票，打分权重向预期净利润较高和基金持股梳理较多地股票倾斜。
+    <br> 业绩：190101-200217收益+68.09%；200101-200217收益+18.38%；
+
+</p>
+<p>市场同类产品对标：工银瑞信文体产业001714 基金经理：袁芳，基金公司：工银瑞信基金管理有限公司； 基金规模 29.65亿 投资类型 股票型基金 中证文体指数收益率*80%+中债综合财富(总值)指数收益率*20%
+    <br> 2020年YTD收益：+11.15%；2019年收益率：57.6%
+
+</p>
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h4 id="ind_def_anchor_stock ">行业锚个股：食品饮料</h4>
+<ul>
+    <li>休闲食品：恰恰食品002557.SZ</li>
+    <li>速冻食品：安井食品603345.SH</li>
+
+    <li>食品调料：金禾实业002597.SZ</li>
+
+</ul>
+
+<h5>休闲食品：恰恰食品002557.SZ</h5>
+<p>参考研报：华创食品202002
+
+</p>
+
+
+<h5>速冻食品：安井食品603345.SH</h5>
+<p>参考研报：华创食品202002
+
+</p>
+
+<h5>食品调料：金禾实业002597.SZ</h5>
+<p>公司属于精细化工，但是主要产品是无卡路里的甜味剂-安赛蜜。
+    <br>食品添加剂产品：安赛蜜（产能1.2万吨，全球最大）、三氯蔗糖（产能3000吨，全球第二）等甜味剂；甲基、乙基麦芽酚（产能6000吨、全球最大）等食品香料。功能性化工品及中间体：新戊二醇、季戊四醇、双季戊四醇、二辛脂等产品。医药中间体：乙酰乙酸甲酯、乙酰乙酸乙酯及吡啶盐酸盐产品。基础化工品：液氨、双氧水、碳酸氢铵、三聚氰胺、甲醛、硫酸、硝酸、双乙烯酮等产品。部分基础化工品在华东区域甚至全国范围内，产能及市场占有率处于领先地位。
+    <br>新型甜味剂成长空间广阔，公司龙头地位凸高倍甜味剂市场持续高增长，安赛蜜和三氯蔗糖的消费量持续上升。甜味剂多不参与代谢过程，产品没有能量，追求健康生活人群可放心使用。目前高倍甜味剂市场规模近20亿美金，至2021年年复合增长有望达到5.4%。
+    <br>安赛蜜和三氯蔗糖分别对国内糖精、甜蜜素和阿斯巴甜进行替代，安赛蜜和三氯蔗糖潜在市场增长空间可分别达到50亿美元和60亿美元。安赛蜜供需格局偏紧，三氯蔗糖前景看好。安赛蜜全球产能约17000吨，而需求量大约15000-16000吨，行业供需偏紧。随着浩波产能退出及下游需求持续增长，安赛蜜价格存在上涨空间。三氯蔗糖全球主要产能约8000吨，需求量大约4-5000吨，名义开工率接近50%，
+    <br> 20200202-中泰证券-金禾实业（002597.SZ）：精细化工龙头，缔造甜蜜事业.pdf
+</p>
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h4 id="ind_def_anchor_stock ">行业锚个股：农林牧渔</h4>
+<ul>
+    <li>饲料-维生素：新和成002001.SZ</li>
+
+
+</ul>
+
+<h5>饲料-维生素：新和成002001.SZ </h5>
+<p>核心业务维生素和香精香料占公司营收80%以上，市场占有率高。公司立足维生素生产工艺，坚持自主研发和技术创新，不断完善产业链。
+    <br> 20200218-华创证券-新和成（002001.SZ）：锐意进取，创新发展，中国精细化工行业的优秀典范.pdf
+    <br>近几年在潍坊基地、黑龙江基地持续大规模投入，包括新建25万吨蛋氨酸项目、黑龙江生物发酵项目、2X2万吨营养品项目以及年产11000吨营养品及9000吨精细化学品项目，合计投资超过百亿。超高资本开支为未来公司的业绩增长奠定了扎实的基础。
+
+
+</p>
+
+<h5></h5>
+<p>
+
+</p>
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h4 id="ind_def_anchor_stock ">行业锚个股：商贸零售</h4>
+<ul>
+    <li>超市：永辉超市601933.SH</li>
+    <li>家电&超市：苏宁易购002024.SZ</li>
+
+</ul>
+
+<h5>家电&超市：苏宁易购002024.SZ</h5>
+<p>
+    2019年苏宁易购002024.SZ收购家乐福中国区业务
+</p>
+
+
+{% endblock content %}

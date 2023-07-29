@@ -1,94 +1,290 @@
-{% extends "base_docs.html" %}
-<meta charset="UTF-8"> <!-- for HTML5 -->
+{% extends "base.html" %}
+<meta charset="UTF-8">
+<!-- for HTML5 -->
 <!-- The block items for this base html file is: {nav_sub, left_frame,menu,content } -->
 
+{% block nav_sub %}
+<br><a>主目录：</a>
+<a id="ciss_menu" href="#module_tree">模块包目录</a> >>
+<a id="ciss_menu" href="#5min_ciss">5分钟入手</a> >>
+<a id="ciss_menu" href="#esse_func">核心功能</a> >>
+<br><a>相关编程学习和数据库：</a>
+<a id="ciss_menu" href="#python">Python</a> >>
+<a id="ciss_menu" href="#html5">Html5</a> >>
+<a id="ciss_menu" href="#javascript">Javascript</a> >>
+<a id="ciss_menu" href="#vue">Vue</a> >>
+<a id="ciss_menu" href="#postgresql">Postgresql</a> >>
 
+<br> {% endblock nav_sub %} {% block left_frame %}{% endblock left_frame %} {% block menu %}
 
-{% block left_frame %}
-    
+<h1 id="location_title">中式投资策略系统模块包 |CISS </h1>
+<p>A strategy platform supportting 24 hours strategy development for professional investment</p>
+<hr>
 
-{% endblock left_frame %}
+<a>CISS_web模块包：</a>
+<ul>
+    <li><a href="#module_tree">模块包目录 | module menu</a></li>
+    <li><a href="#5min_ciss">5分钟入手 |5 Minutes to CISS</a></li>
+    <li><a href="#esse_func">核心功能 |Essential Functions</a></li>
+    <li><a href="#data_manage">数据管理 |Data Management</a></li>
+    <li><a href="#stra_ana">策略分析 |Strategy Analysis</a></li>
+    <li><a href="#port_simu">模拟组合 |Portfolio Simulation</a></li>
+    <li><a href="#multi_asset">多资产管理 |Multi-Asset Investment</a></li>
+    <li><a href="#stra_eval">策略评估及可视化 |Strategy Evaluation and Visualization</a></li>
+    <li><a href="#web_plat">策略平台网站 |Strategy Platform as Website</a></li>
+    <li><a href="#update_coop_opensource">更新，协作，和开源 |Update,Cooperation and Open source</a></li>
 
-{% block menu %}
+</ul>
+<a>子目录：.py脚本相关</a>
+<ul>
+    <li><a href="#py_structure">脚本功能实现架构</a></li>
+    <li><a href="#var_io_object">变量In/Out类型</a></li>
+</ul>
+<a>子目录：相关编程学习和数据库：</a>
+<ul>
+    <li><a href="#python">Python</a></li>
+    <li><a href="#html5">Html5</a></li>
+    <li><a href="#javascript">Javascript</a></li>
+    <li><a href="#vue">Vue</a></li>
+    <li><a href="#postgresql">Postgresql</a></li>
+</ul>
+{% endblock menu %} {% block right_frame %}
 
-    <h1 >中式投资策略系统模块 |CISS </h1> 
-    <p>A strategy platform supportting 24 hours strategy development for professional investment</p>
-    <hr>       
-
+<!-- Menu in right frame -->
+<!-- ---------------------------------------------------------- -->
+<h1>
+    <a href="#location_title">CISS文档</a></h1>
+<h3>目录</h3>
+<ul>
+    <li><a href="#module_tree">模块包目录 | module menu</a></li>
     <ul>
-    <li><a href="#5min_ciss">5分钟入手 |5 Minutes to CISS</a></li> 
-    <li><a href="#esse_func">核心功能 |Essential Functions</a></li>  
-    <li><a href="#data_manage">数据管理 |Data Management</a></li>  
-    <li><a href="#stra_ana">策略分析 |Strategy Analysis</a></li>  
-    <li><a href="#port_simu">模拟组合 |Portfolio Simulation</a></li>  
-    <li><a href="#multi_asset">多资产管理 |Multi-Asset Investment</a></li>  
-    <li><a href="#stra_eval">策略评估及可视化 |Strategy Evaluation and Visualization</a></li>  
-    <li><a href="#web_plat.html">策略平台网站 |Strategy Platform as Website</a></li>  
-    <li><a href="#update_coop_opensource">更新，协作，和开源 |Update,Cooperation and Open source</a></li>  
+        <li><a href="#level1">level1：ciss_web\\|系统层目录</a> </li>
+        <li><a href="#level2_ciss_exhi"> level2：ciss_exhi</a> </li>
+        <li><a href="#level2_CISS_rc">level2：CISS_rc</a> </li>
+        <li><a href="#level3_apps"> level3：apps</a> </li>
+        <li><a href="#level4_rc_data"> level4：rc_data</a> </li>
     </ul>
+    <li><a href="#5min_ciss">5分钟入手 |5 Minutes to CISS</a></li>
+    <li><a href="#esse_func">核心功能 |Essential Functions</a></li>
+    <li><a href="#data_manage">数据管理 |Data Management</a></li>
+    <li><a href="#stra_ana">策略分析 |Strategy Analysis</a></li>
+    <li><a href="#port_simu">模拟组合 |Portfolio Simulation</a></li>
+    <li><a href="#multi_asset">多资产管理 |Multi-Asset Investment</a></li>
+    <li><a href="#stra_eval">策略评估及可视化 |Strategy Evaluation and Visualization</a></li>
+    <li><a href="#web_plat">策略平台网站 |Strategy Platform as Website</a></li>
+    <li><a href="#update_coop_opensource">更新，协作，和开源 |Update,Cooperation and Open source</a></li>
+
+</ul>
+<h4>子目录：.py脚本相关</h4>
+<ul>
+    <li><a href="#py_structure">脚本功能实现架构</a></li>
+    <li><a href="#var_io_object">变量In/Out类型</a></li>
+</ul>
+
+<h4>子目录:相关编程学习和数据库：</h4>
+<ul>
+    <li><a href="#python">Python</a></li>
+    <li><a href="#html5">Html5</a></li>
+    <li><a href="#javascript">Javascript</a></li>
+    <li><a href="#vue">Vue</a></li>
+    <li><a href="#postgresql">Postgresql</a></li>
+</ul>
+
+{% endblock right_frame %} {% block content %}
+
+<hr>
+<h3><a id="module_tree">模块包目录 | module menu</a></h3>
+
+<h4> <a id="level1"> level1：ciss_web\\|系统层目录</a> </h4>
+<ul>
+    <li>ciss_exhi\\: 网站展示相关网页</li>
+    <li>CISS_rc\\:策略功能平台如：应用app、数据库db、引擎bin等 </li>
+    <li>ciss_vue\\:前端框架（无功能） </li>
+    <li>ciss_web\\:Django网站框架 </li>
+    <li>static\\:静态文件如.html,.js等 </li>
+    <li>其他文件：db.sqlite3, manage.py, models.json, models.py,requirements.txt</li>
+</ul>
+
+<h4><a id="level2_ciss_exhi"> level2：ciss_exhi\\: 网站展示相关网页</a> </h4>
+<ul>
+    <li>admin.py:</li>
+    <li>apps.py:</li>
+    <li>forms.py: </li>
+    <li>models.py:</li>
+    <li>search_indexes.py: </li>
+    <li>tests.py: </li>
+    <li>urls.py: </li>
+    <li>views.py: </li>
+</ul>
+
+<h4> <a id="level2_CISS_rc"> level2：CISS_rc\\:策略功能平台</a></h4>
+<ul>
+
+    <li>apps\\:个性化应用如主动基准active_bm、资产配置black_litterman、数据管理脚本rc_data等 </li>
+    <li>bin\\:标准化脚本文件，如策略算法、组合分析、基金分析等 </li>
+    <li>config\\:标准化配置文件</li>
+    <li>db\\:数据相关文件 </li>
+    <li>docs\\: 说明文档</li>
+    <li>tests\\: </li>
+    <li>其他文件：logs.txt,README.html </li>
+</ul>
+
+<h4><a id="level3_apps"> level3：apps\\:个性化应用</a></h4>
+<ul>
+    <a>数据管理：</a>
+    <li>rc_data\\:数据管理：数据下载、转换等 </li>
+    <a>组合和策略：</a>
+    <li>industrial_rotation\\:行业轮动策略 </li>
+    <li>black_litterman\\:资产配置模型BL研究 </li>
+    <li>industrial_rotation\\:行业轮动策略 </li>
+    <li>bond\\:债券策略研究 </li>
+    <li>rc_stra\\:个人策略脚本 </li>
+    <a>基准和指数：</a>
+    <li>active_bm\\:主动基准研究 </li>
+    <li>rc_etf\\:ETF基金相关 </li>
+    <a>其他：</a>
+    <li>rc_self\\:个人工作日志</li>
+    <li>rc_coding\\:编程和软件开发学习相关</li>
+    <li>beida_mem\\:mem相关文件 </li>
+    <li>temp\\:临时文档</li>
+
+</ul>
+
+<h4> <a id="level4_rc_data"> level4：rc_data</a></h4>
+<ul>
+    <a>python：常用</a>
+    <li>test_wds_by-date.py：按交易日下载维护wds数据表 </li>
+    <li>test_wds_data_transform.py：转换原始wds数据：个股历史行业数据 </li>
+    <li> <a href="#level4_rc_data_wds_data_transform_fund">test_wds_data_transform_fund.py：计算基金持仓数据变动。</a>
+    </li>
+    <li>test_wds_manage.py：下载单个或特定数据表、连接pgsql数据库等</li>
+
+    <a>python：不常用</a>
+    <li>test_Wind.py：基于wind-API，用rC_Data_Initial下载股票日数据 </li>
+    <li>test_Wind_single.py：基于wind-API，下载单只股票历史行情数据 </li>
+    <li>rC_Data_Initial.py：用wind-API-python获取数据</li>
+    <li>test_data_html.py：将csv数据转化为html可以展示的形式</li>
+    <li>postgresql.py：学习postgresql和将wds表写入pgsql数据库 </li>
+    <li>test_db_sql_manage.py：将csv数据IO读取或写入sqlite或pgsql数据库。</li>
+    <li>test_mdf_mdfreader.py：数据转换：csv to hdf5 or mdf-sqlserver</li>
+    <li>test_oracle_wind.py：已不用，下载oracle-wds数据表。</li>
+    <a>csv,xlsx：</a>
+    <li>0wds_191120.xlsx：人工管理wds表格的各类信息</li>
+    <li>data_check_anndates.csv:wds表格下载的逐日跟踪表 </li>
+    <li>code_list.csv:A股代码表，备份文件=code_list_202002.csv </li>
+    <li>date_list.csv:A股日期序列</li>
+    <li>list_table_wds_FICC.csv:wds债券相关表格</li>
+    <li>log_data_wds_tables.csv：wds跟踪表格列的信息</li>
+    <li>log_data_wds_columns.csv：wds跟踪表格列名的结构及中英文 </li>
+    <li>log_data_wds_tables_columns.csv：跟踪的wds表所有列名称及信息</li>
+
+</ul>
+
+<hr>
+<h4> </h4>
+
+<hr>
+<h4><a id="level4_rc_data_wds_data_transform_fund"> test_wds_data_transform_fund.py：计算基金持仓数据变动</a> </h4>
+<p>file_path=CISS_rc\apps\rc_data\
+    <br>
+</p>
+<ul>
+    <a>Head：概要 </a>
+    <li>功能： 1,历史个股行业分类， 2, 基金持仓变动， 3, 行业内个股的定性和定量数据； </li>
+
+    <a>Content: 具体功能</a>
+    <li>line 68,按一定的命名规则对文件夹内满足条件的文件改名 </li>
+    <li>line 80,对于给定交易日至最新交易日，若有新股票无个券csv文件则新建该文件 </li>
+    <li>line 按最新交易日行情对个股日行情内的交易日进行更新</li>
+    <li>line 给定交易日，计算当日所有股票行业分类</li>
+    <li>line 获取所有文件名称 |需要对每张表进行匹配分析</li>
+    <li>line 145,1,计算个股历史行业分类：对3个行业分类计算1~4级的代码，并单独保存成列值； 2，按照3个行业分类计算所属行业。 ；3，对每个股票，用行业数据生成全历史行业分类数据； 4,对于每个行业分类，匹配新旧2种行业分类 </li>
+    <li>line </li>
+
+</ul>
+
+<h4><a id="level4_transform_wind_wds"> transform_wind_wds.py：转换wds数据</a> </h4>
+<p>file_path=.\CISS_rc\db\db_assets\
+    <br>
+</p>
+<h5>print infomation</h5>
+<p>
+    ### print all modules for current clss
+    <br>2.1,文件目录、文件名、csv文件列名称批量处理
+    <br>rename_folder |按命名规则对文件夹内满足条件的文件改名,并对columns赋值
+    <br>add_columns2table | 对文件夹内文件名字进行统一处理，并讲列名称赋值
+
+    <br>2.2,A股股票行业分类处理
+    <br>import_df_ind | 导入行业分类必备的数据文件
+    <br>match_ind_name | 根据行业代码匹配行业分类表格内的行业名称、行业级数和是否弃用
+    <br>get_ind_period |根据期初和期末日期获取股票所属行业
+    <br>get_ind_date |给定交易日获取股票所属行业
+
+    <br>2.3,导入历史交易日数据
+    <br>import_df_dates | 导入历史交易日数据数据文件
+
+    <br>2.6,用交易日数据填入单证券品种" )
+    <br>update_date_pass_code |给定table,对于现有个券文件，用WDS_TRADE_DT_20200210_ALL.csv 填入 WDS_S_INFO_WINDCODE_000001.SZ_ALL.csv
+    <br>update_newcode_from_date |对于给定交易日内，若有新股票无个券csv文件则新建该文件
+
+    <br>2.4,导入基金数据和持仓数据
+    <br>import_fund_list | 根据季末日期获取基金基础信息列表
+    <br>import_df_fund | 导入基金数据相关的数据表格
+
+    <br>2.5,计算基金持仓股票多维度变动
+    <br>cal_diff_stockport | 计算季度之间的差异值，但不进行分析
+    <br>get_period_indicator_diff | 获取区间股票价格、市值股本、财务指标变动和涨跌幅
+
+    <br>2.6,计算指数定期调整
+    <br>cal_index_constituents_adjustment| 计算指数调整
+
+</p>
 
 
-{% endblock menu %}
-
-
-{% block content %}
-
-    <h3><a name="5min_ciss" href="./docs/5min_ciss.html">5分钟入手 |5 Minutes to CISS</a></h3>  
-    <hr>
-    <p>{todo；1，安装\软硬件环境dependent}</p>
-
-
-
-
-
-      
+<hr>
+<h3><a name="5min_ciss" href="./5min_ciss.html">5分钟入手 |5 Minutes to CISS</a></h3>
+<hr>
+<p>{todo；1，安装\软硬件环境dependent}</p>
 
 
 
 
 
 
-    </section> 
 
 
-    <section id="s2">  
-    <h3><a name="esse_func" href="./docs/esse_func.html">核心功能 |Essential Functions</a></h3>  
-    <hr>
-    <p>{todo；1，软硬件环境dependent}</p>
+
+<h3><a name="esse_func" href="./esse_func.html">核心功能 |Essential Functions</a></h3>
+<hr>
+<p>{todo；1，软硬件环境dependent}</p>
 
 
-    <ol>
+<ol>
     <li>假设，输入数据</li>
     <li>分析指标  策略模型及信号</li>
-    <li>交易，账户计划管理</li> 
+    <li>交易，账户计划管理</li>
     <li>组合分析管理</li>
     <li>多组合|多资产分析管理</li>
     <li>基金受市场影响的资金变动</li>
     <li>组织,出资方，监管的限制条件</li>
     <li></li>
 
-    </ol> 
- 
+</ol>
 
 
-    </section> 
 
-    <section id="s3">  
-    <h3><a name="data_manage" href="./docs/data_manage.html">数据管理 |Data Management</a></h3>  
-    <hr>
-    <p>数据管理的功能主要通过“数据管理”目录实现，主要包括以下几类数据：时间数据、资产数据、投资相关基础信息数据、股票池数据、分析指标数据、方程和策略数据、交易信号数据、算法和最优化数据、交易数据、账户数据、组合数据、基金数据、团队数据、机构数据、市场数据、日志数据、用户数据、数据输入输出（In/Out,简称I/O）数据。时间数据子目录下可以对中国、香港和美国等不同国家不同市场的交易日、交易时间区别对待。多资产类别子目录内包含了数据脚本用于从信息服务商的数据接口（如Wind-API，Choice-API）抓取数据、初步分析后保存至本地。其他常用的数据服务商还有恒生，钱龙，恒泰，朝阳永续，各市场交易所等。以数据质量相对较高的某数据API为例，截止2018年12月，在获取香港、美国市场行情或财务基本面数据时仍然有很多诸如日成交金额、企业价值倍数等指标无法通过数据接口获得。因此在当前的策略开发过程中，人工复核和整理数据接口获取的数据还是不可或缺的。 </p>
+<h3><a name="data_manage" href="./data_manage.html">数据管理 |Data Management</a></h3>
+<hr>
+<p>数据管理的功能主要通过“数据管理”目录实现，主要包括以下几类数据：时间数据、资产数据、投资相关基础信息数据、股票池数据、分析指标数据、方程和策略数据、交易信号数据、算法和最优化数据、交易数据、账户数据、组合数据、基金数据、团队数据、机构数据、市场数据、日志数据、用户数据、数据输入输出（In/Out,简称I/O）数据。时间数据子目录下可以对中国、香港和美国等不同国家不同市场的交易日、交易时间区别对待。多资产类别子目录内包含了数据脚本用于从信息服务商的数据接口（如Wind-API，Choice-API）抓取数据、初步分析后保存至本地。其他常用的数据服务商还有恒生，钱龙，恒泰，朝阳永续，各市场交易所等。以数据质量相对较高的某数据API为例，截止2018年12月，在获取香港、美国市场行情或财务基本面数据时仍然有很多诸如日成交金额、企业价值倍数等指标无法通过数据接口获得。因此在当前的策略开发过程中，人工复核和整理数据接口获取的数据还是不可或缺的。
+</p>
 
-    <p>数据格式csv json html ，
-        类型bollean,int str datetime float 等
-    结构 
-    时间序列， day weel quarter ,5month
-    数据输入/输出, pd, read  数据存储
-        
+<p>数据格式csv json html ， 类型bollean,int str datetime float 等 结构 时间序列， day weel quarter ,5month 数据输入/输出, pd, read 数据存储
 
-    </p>
 
-    <h4>目录</h4>
-    <ol>
+</p>
+
+<h4>目录</h4>
+<ol>
     <li>数据格式，类型和结构</li>
     <li>时间序列</li>
     <li>数据存储，输入输出（In/Out,简称I/O）数据</li>
@@ -110,87 +306,589 @@
     <li>市场数据</li>
     <li>日志数据</li>
     <li>用户数据</li>
-    </ol> 
+</ol>
 
 
+<hr>
+<h3><a name="stra_ana" href="./stra_ana.html">策略分析 |Strategy Analysis</a></h3>
+
+<p></p>
 
 
-
-    </section> 
-
-    <section id="s4">  
-    <h3><a name="stra_ana" href="./docs/stra_ana.html">策略分析 |Strategy Analysis</a></h3>  
-    <hr>
-    <p></p>
-    
-   
-    <h4>目录</h4>
-    <ol>
+<h4>目录</h4>
+<ol>
     <li>假设，输入数据</li>
     <li>分析指标  策略模型及信号</li>
-    <li>交易，账户计划管理</li> 
+    <li>交易，账户计划管理</li>
     <li>组合分析管理</li>
     <li>多组合|多资产分析管理</li>
     <li>基金受市场影响的资金变动</li>
     <li>组织,出资方，监管的限制条件</li>
     <li></li>
 
-    </ol> 
+</ol>
+
+<hr>
+<h3><a name="port_simu" href="./port_simu.html">模拟组合 |Portfolio Simulation</a></h3>
+
+<p></p>
+
+
+
+
+
+<hr>
+<h3><a name="multi_asset" href="./multi_asset.html">多资产管理 |Multi-Asset Investment</a></h3>
+
+<p></p>
+
+
+
+
+<hr>
+<h3><a name="stra_eval" href="./stra_eval.html">策略评估及可视化 |Strategy Evaluation and Visualization</a></h3>
+
+<p></p>
+
+<hr>
+<h3><a name="web_plat" href="./web_plat.html">策略平台网站 |Strategy Platform as Website</a></h3>
+<p>介绍策略平台网站的主要功能。</p>
+<p></p>
+
+
+<hr>
+<h3><a name="update_coop_opensource" href="./update_coop_opensource.html">更新，协作，和开源 |Update,Cooperation and Open source</a></h3>
+
+<p></p> 
+
+
+<hr>
+<h3><a name="py_structure">脚本功能实现架构</a></h3>
+<p>python脚本功能实现的经典/主要流程包括了： 1，apps\目录内的测试文件，通常前缀为“test_”；
+    <br>2，db\目录下的data_io.py文件根据配置文件config\目录内的配置文件config_data.py导入数据 ;
+    <br>3,bin\目录下的策略引擎_strategy.py依次引入stockpools.py,indicator.py,func_stra.py,signal.py,algo_opt.py生成最优配置策略组合；
+    <br>4,bin\目录下的组合引擎根据策略配置构建模拟组合持仓、交易和净值，分为历史回测和逐日跟踪两大类；
+    <br>5,bin\目录下的策略组合评估引擎对组合历史净值、持仓等进行评估；
+    <br>6，bin\目录下的基金引擎在模拟组合基础上分析资金申购和赎回行为；
+</p>
+
+<hr>
+<h3><a name="var_io_object">脚本注释和变量In/Out类型</a></h3>
+<p>200420重新设计了.py脚本的注释模板和变量In/Out类型的标准。 </p>
+
+<a href="">.py脚本的注释模板</a>
+<ul>
+    <li>1，Class info | Function: 功能： </li>
+    <li> 1.1，功能：configuration for operating data.For instance, data from Wind API </li>
+    <li> 1.2，config_data ：母类：主要配置目录path和数据参数para等 </li>
+    <li> 1.2，config_data_factor_model：子类：多因子模型配置目录和数据参数等 </li>
+    <li>2，todo待办事项 </li>
+    <li>3，关联脚本：对应数据文件 | db\data_io.py </li>
+    <li>4,OUTPUT: 1,obj_1["dict"]，字典信息,json 2,obj_1["df"]，表格信息,dataframe </li>
+    <li>5,分析：目标是所有数据变量以object类型作为输入输出，其中主要是2个key: 1,obj_1["dict"]:字典格式，数据io都采用json的字典格式。 2,obj_1["df"]:DataFrame格式 </li>
+    <li>6，notes ; last update | since </li>
+</ul>
+
+
+
+<hr>
+<h3><a>子目录:相关编程学习和数据库</a></h3>
+<hr>
+<h3><a name="python">Python</a></h3>
+<p></p>
+
+<h4>Python变量和对象</h4>
+<p>
+    python 判断一个变量是否已经定义
+    <br> 1，第一种方法使用内置函数locals()： 'testvar' in locals().keys()
+    <br> 同时判断变量是否属于局部变量列表或全局变量列表。
+    <br> "df_out" in locals() or "df_out" in globals()
+    <br>2，第二种方法使用内置函数dir()： dir()：获取已定义对象列表
+    <br>'testvar' in dir()
+    <br>3， 第三种方法使用内置函数vars()： vars()：获取已定义对象字典
+    <br>vars().has_key('testvar')
+
+</p>
+<p>list：
+    <br> 在删除list中的元素后，list的实际长度变小了，但是循环次数没有减少，依然按照原来list的长度进行遍历，所以会造成索引溢出。
+    <br>删除list里的每个对象：
+    <textarea name="" id="" cols="30" rows="6">
+list_del = []
+for i1 in list1: 
+    if i1 &lt 10 :
+        list_del.append( i1 )
+for j1 in list_del : 
+    list1.remove(j1) 
+</textarea>
+    <br> list解析 ：squares = [x**2 for x in range(1,10)]
+    <br>[i1*3 for i1 in list1 if i1 &lt 10]
+
+</p>
+
+<p>
+    print os.getcwd() #获取当前工作目录路径
+    <br>改变当前目录:进入E 下面的files 文件 可以使用 os.chdir(E:\files).
+
+</p>
+
+ 
+
+<hr>
+<h3><a name="html5">Html5</a></h3>  
+<p>html5的主要功能。</p>
+
+<br>
+<h4><a name="html2excel">网页数据和Excel数据导入导出|html2excel</a></h4>   
+<p>浏览器基本都支持data协议，所以我们可以使用该协议去将网页中的table转化为excel下载下来.url=https://www.jianshu.com/p/a3642877d590
+    <br>对html 进行base64编码处理: 编码后的html内容增加前缀 data:application/vnd.ms-excel; ，即可使浏览器将其中的数据当做excel来处理，浏览器将提示下载或打开excel文件
+<br> data协议可以将网页中的table转化为excel下载; 编码后的html内容增加前缀 data:application/vnd.ms-excel; ，即可使浏览器将其中的数据当做excel来处理，浏览器将提示下载或打开excel文件
+<br>在html网页的注释里标明3个部分对应的匹配：table表格--js方程--按钮 。 match：1，table id="ciss_table；2，function tableToExcel,base64；3，button，tableToExcel 
+<br>参考案例：file=quick.html
+    
+</p>
  
 
 
-    </section> 
- 
-    <section id="s5">  
-    <h3><a name="port_simu" href="./docs/port_simu.html">模拟组合 |Portfolio Simulation</a></h3>  
-    <hr>
-    <p></p>
-    
-   
-     
+<h4>HTML大于号、小于号、空格、引号等常用的转义代码 </h4>
+<table id="ciss_table">
+    <tbody>
+        <tr id="table_tr">
+            <td>
+                <p>HTML&nbsp;原始码</p>
+            </td>
+            <td>
+                <p>显示结果</p>
+            </td>
+            <td>
+                <p>描述</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&amp;lt;</p>
+            </td>
+            <td>
+                <p>&lt;&nbsp;</p>
+            </td>
+            <td>
+                <p>little than,小于号或显示标记</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&amp;gt;</p>
+            </td>
+            <td>
+                <p>&gt;&nbsp;</p>
+            </td>
+            <td>
+                <p>greater than,大于号或显示标记</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&amp;amp;</p>
+            </td>
+            <td>
+                <p>&amp;</p>
+            </td>
+            <td>
+                <p>可用於显示其它特殊字符</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&amp;quot;</p>
+            </td>
+            <td>
+                <p>&quot;</p>
+            </td>
+            <td>
+                <p>引号</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&amp;nbsp;</p>
+            </td>
+            <td>
+                <p>&nbsp;</p>
+            </td>
+            <td>
+                <p>空格：1个字母</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>&amp;emsp;</p>
+            </td>
+            <td>
+                <p>&emsp;</p>
+            </td>
+            <td>
+                <p>空格：2个字母</p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
+<hr>
+<h3><a name="javascript">Javascript</a></h3>
+<p>相关文件保存在子目录.\coding\\下。
+    <br>入门在线学习资源：菜鸟教程：https://www.runoob.com/js/js-examples.html
+    <br>
+
+
+</p>
+<ul>
+    <li>基础操作</li>
+    <li>数据相关</li>
+    <li>文件IO</li>
+</ul>
+
+<h4>基础操作 </h4>
+<p>注释方法： /* blabla... */
+    <br>单个语句;结尾
+    <br>多个语句用{}包裹，如 if(test){ test=false;alert(test); }
+    <br>在function(){} 中，"var x=1"是局部变量，function外不能用，"x=1"是全局变量，function外可用。
+    <br>字符串：
 
 
 
-    </section> 
-    
-    <section id="s6">  
-    <h3><a name="multi_asset" href="./docs/multi_asset.html">多资产管理 |Multi-Asset Investment</a></h3>  
-    <hr>
-    <p></p>
-    
-   
-     
-  
 
 
-    </section> 
- 
-    <section id="s6">  
-    <h3><a name="stra_eval" href="./docs/stra_eval.html">策略评估及可视化 |Strategy Evaluation and Visualization</a></h3>  
-    <hr>
-    <p></p>
-    
-   
-     
- 
+</p>
+
+
+<h4>数据相关 </h4>
+<p><br>数据类型5+2：undefined,null,boolean,number,string;object,function
+    <br>判断数据类型： typeof(x);typeof x
+    <br>var x --> typeof(x) == undefined
+    <br>var x = null --> typeof(x) == null
+    <br>var x = 070 --> x=70
+    <br>数值转换：y=true --> Number(y) =1;y=false --> Number(y) =0
+    <br>y=null --> Number(y) =0;<br>y=undefined --> Number(y) =NaN;
+    <br>string to number：y="123" --> Number(y) =123 ;
+    <br>识别整数：识别到第一个非数字停下来，包括小数点 parseInt("1234blue") = 1234;parseInt("22.5") =22
+    <br>number to string：var age=11, var age_str=age.toString()
+    <br>方法二：String(x), 和toString()的区别，会返回null和undefined
+    <br>Obejct类型：定义 var obj = new Object() ;
+
+</p>
+<p>操作符：加减乘除等
+    <br>age = age+1 ==== ++age;age = age-1 ==== --age
+    <br>逻辑判断：非not,用感叹号, !false, !"blue",!"600036.SH"
+    <br>逻辑判断：与and,用 && ， a2 && b1
+    <br>字符串比较："Bea" &lt; "asdff",因为大写字母排在小写字母后边，
+    <br> x +=10; 等价于 x = x+10;
+</p>
+<p>字符串比较：小于， "23" &lt; 3 == false ，"23"会先被转化成23再比较
+    <br>条件操作符： var result = ( a &gt b) ? a:b
+    <br>如果a大于b，result=a,否则result=b
+
+</p>
+
+<h4>语句</h4>
+<p>
+    <br>1,if (a &lt; b) { bla1 } ; else { bla2 } ;
+    <br>2, do { bla } while ( a &lt; b )
+    <br>3, while( a &lt; b ) { bla }
+    <br>4, var x= 5; for( var i =0; i &lt; x; i++ ){ alert(i) }
+    <br> var i=0,count=10; for(;i &lt; count;) { alert(i);i++; }
+    <br>4.2,无限循环; for(;;) { blabla... }
+    <br>4.3，枚举对象：for (var item in list_a ){ bla... }
+    <br> break 和 continue的区别：前者会立刻跳出for(){}循环导致{}内最后一次不再计算， continue则会继续for(){}直到下一次停止。
+    <br>layer_outermost:
+    <br> for(var i=0;i &lt; 10;i++){
+    <br> &emsp;&emsp;for(var j=0;j &lt; 10;j++){
+    <br> &emsp;&emsp;&emsp;&emsp; if (i==5 && j==5){
+    <br> &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; break layer_outermost;
+    <br> &emsp;&emsp;&emsp;&emsp; } num++;
+    <br> &emsp;&emsp; } }
+    <br>在多个for(){} 之前定义layer_outermost，会帮助break直接跳到最外层的for循环。
+
+</p>
+<p>多种情况语句：
+    <br>switch (i) {
+    <br> &emsp;&emsp;case 25 : alert(i);
+    <br> &emsp;&emsp;case 20 : alert(i);
+    <br> &emsp;&emsp;case 35 : alert(i);
+    <br> &emsp;&emsp;default : alert("other");
+    <br> &emsp;&emsp;}
+    <br>等价于：
+    <br>if(i==25){
+    <br> &emsp;&emsp; alert( i ) ; }
+    <br>else if (i==30){
+    <br> &emsp;&emsp; alert( i ) ; }
+    <br>else if (i==35){
+    <br> &emsp;&emsp; alert( i ) ; }
+    <br>else {
+    <br> &emsp;&emsp; alert( "other" ) ; }
+
+</p>
+
+<h4>函数|圆括号中参数用逗号隔开</h4>
+<p>JavaScript的Function(){}可以没有任何参数，直接引用arguments对象，在后续实例例子中定义好就行。
+    <br> function sayHi(){
+    <br> &emsp;&emsp;alert("Hello" + arguments[0]+ arguments[1] ) ; }
+    <br>例子：sayHi("a") <br>例子：sayHi(["a","b"])
+
+</p>
+<p>arguments对象和参数变量一起用：
+    <br>
+    <br> function doAdd(num1,num2){
+    <br> &emsp;&emsp; if (arguments.length == 1 ){
+    <br>&emsp;&emsp;&emsp;&emsp; return(num1+10);
+    <br>&emsp;&emsp;} else if ( arguments.length == 2 ){
+    <br>&emsp;&emsp;&emsp;&emsp; return arguments[0] + num2 ;}
+    <br>&emsp;&emsp; }
+    <br>notes:doAdd(4,9) 情况下，arguments[0]==num1==4,arguments[1]==num2==9
+
+</p>
+
+<p>function sum(x,y){
+    <br>&emsp;&emsp; return x+y; }
+
+</p>
+<p>function diff(x,y){
+    <br>&emsp;&emsp;if (x &lt; y){
+    <br>&emsp;&emsp;&emsp;&emsp;return y-x;
+    <br>&emsp;&emsp; }else {
+    <br>&emsp;&emsp;&emsp;&emsp;return x-y; }
+
+</p>
+
+<h4>对象Object定义</h4>
+<p>var person = new Object() ;
+    <br> person.name = "Aaron" ;
+    <br> alert( person.name );
+
+</p>
+<p>var person = {
+    <br>"name" : "Nike", "age": 29, 5: true } ;
+
+</p>
+<p>var person = {} ; 定义Object,等于var person = new Object() ;
+    <br> person.name= "Nike" ; 也等于person["name"]= "Nike" ;
+    <br> person.age=29 ;
+</p>
+
+<h4>数组Array，就是python中的list</h4>
+<p>
+    Array的每一项都可以保存任何类型的数据。
+    <br>空数组 var code_list = new Array();var code_list = [];
+    <br>var code_list =["600036.SH","000001.SZ"];
+    <br>var code_list =new Array(20); 长度为20的list/Array
+    <br> var len_list = code_list.length ;返回Array的长度
+    <br>在Arrya末尾添加新项，code_list[ code_list.length ] ="688008.SH";
+    <br>code_list[ code_list.length ] ="688026.SH" ;
+    <br>
+    <br>判断变量list1是否是Array
+    <br>alert(code_list instanceof Array );
+    <br>或 if( Array.isArray(code_list) ){}
+
+    <br>判断变量list1是否是Object
+    <br>alert(code_list instanceof Object );
+    <br>alert(code_list instanceof RegExp );
+    <br> RegExp 是某种正则表达式，比如 var pattern1 = /[bc]at/i ;匹配第一个bat或者cat，不区分大小写。
+
+</p>
+<p>
+    <br> var portfolio_1 = new Array();
+    <br> portfolio_1[0] = new Object();
+    <br> portfolio_1[1] = new Object();
+</p>
+<p>
+
+    <br>栈方法：push和pop
+    <br>var code_list = new Array();
+    <br>var count = code_list.push(["600030.SH","000345.SZ"]) ;count=2;存入2项
+    <br>var code = code_list.pop(); 取得list最后一项
+    <br>排序：
+    <br> var list1=[1,3,2,4]
+    <br>list1.sort();升序排列
+    <br>list1.reverse();倒叙排列
+    <br>连接2个Arrya
+    <br> var list2= list1.concat( 12,[13,24]);
+    <br> list2=[1,3,2,4,12,13,24];
+    <br>var list3= list2.slice(1,4); 得到第一个和第四个值并组成新的Array
+    <br>
+    <br>splice(),删除、插入、替换
+    <br> var removed_list = code_list.splice(0,2) ;删除前2项
+    <br> var added_list = code_list.splice(3，0,"0700.HK","3968.HK") ;从第三项开始插入两项
+    <br> var replaced_list = code_list.splice(2，1,"0700.HK","3968.HK") ;删除第2项，从第2项开始插入两项
+</p>
+<p>
+    判断位置：
+    <br> code_listindexOf(4) ;返回第四个值。
+
+</p>
+<h4>数组Array的迭代方法</h4>
+<p>5种方法：every(),some(),filter(),forEach(),map()
+    <br>1,code_list_judge=false,判断code_list中每个值都大于2
+    <br>var code_list=[1,3,4,5,9]
+    <br>var code_list_judge = code_list.every(
+    <br>&emsp;&emsp; function(item,index,array) {
+    <br>&emsp;&emsp;&emsp;&emsp;return(item>2);
+    <br>&emsp;&emsp; } )
+    <br>2,code_list_judge=true,判断code_list中有部分值都大于2
+
+    <br>var code_list_judge = code_list.some(
+    <br>&emsp;&emsp; function(item,index,array) {
+    <br>&emsp;&emsp;&emsp;&emsp;return(item>2);
+    <br>&emsp;&emsp; } )
+    <br>3, 获取code_list中有部分值都大于2的项目
+    <br>var code_list_sub = code_list.filter(
+    <br>&emsp;&emsp; function(item,index,array) {
+    <br>&emsp;&emsp;&emsp;&emsp;return(item>2);
+    <br>&emsp;&emsp; } )
+    <br>4, 对code_list中每一项进行操作
+    <br>var code_list_sub = code_list.map(
+    <br>&emsp;&emsp; function(item,index,array) {
+    <br>&emsp;&emsp;&emsp;&emsp;return item+2 ;
+    <br>&emsp;&emsp; } )
+
+    <br>forEach() 和for(){}功能一样
+
+</p>
+<h4>日期Date类型</h4>
+<p>基础日期是19700101
+    <br> var now = new Date();
+    <br> var now = new Date( Date.parse("May 25,2004") );
+    <br>Date.UTC() 返回日期的毫秒数
+    <br>var y200001 = new Date( Date.UTC(2000,0)); 数字0表示2000年的第一个月，如果1表示2月；
+    <br>var y200004 = new Date( Date.UTC(2000,4，5，9，30，15)); 20200405，09：30：15；
+    <br>var y200004 = new Date( Date.UTC(2000,4，5，9 ));
+    <br> y200001 &lt; y200004 ; // true
+    <br>小时数0-23
+    <br>获取最新时间
+    <br>var date0 = Date.now();等于 var date0 = +new Date() ;
+    <br>日期格式化：y200001.toDateString();y200001.toTimeString();
+
+
+</p>
+<h4>正则表达式RegExp类型</h4>
+<p>
+    范式：varexpression = / pattern / flags;其中flags标志有三种：
+    <br> g,匹配所有满足条件的字符串 ;
+    <br> i,匹配第一个复合条件的并停止，不区分大小写 ;
+    <br> m,多行模式，匹配所有行的匹配项 ;
+    <br>例子：/ .ai / gi; 即以"ai"结尾，且同时满足g和i的条件
+    <br>例子: / \[aap\]54 / i ; 反斜杠用于输入特定非字母的符号等
+    <br>例子：/ \.ai / gi; 即以".ai"结尾，且同时满足g和i的条件,等价于 "\\.ai"
+    <br>字符串方法
+    <br>search() 方法 用于检索字符串中指定的子字符串，或检索与正则表达式相匹配的子字符串，并返回子串的起始位置。 replace() 方法 用于在字符串中用一些字符替换另一些字符，或替换一个与正则表达式匹配的子串。
+    <br>var str = "Visit Runoob!"; var n = str.search(/Runoob/i);<br>6
+    <br>var str = "Visit Runoob!"; var n = str.search("Runoob");<br>6
+    <p><a href="https://www.runoob.com/js/js-regexp.html"> 替换 "microsoft" 为 "Runoob" :</a></p>
+    <button onclick="myFunction()">点我</button>
+    <p id="demo">Visit Microsoft!</p>
+    <script>
+        function myFunction() {
+            var str = document.getElementById("demo").innerHTML;
+            var txt = str.replace(/microsoft/i, "Runoob");
+            document.getElementById("demo").innerHTML = txt;
+        }
+    </script>
+
+</p>
+<p>
+    test() 方法是一个正则表达式方法。
+    <br> test() 方法用于检测一个字符串是否匹配某个模式，如果字符串中含有匹配的文本，则返回 true，否则返回 false。
+    <p>例子："life" 是否在 "The best things in life are free" 里：</p>
+    <script>
+        var patt1 = new RegExp("life");
+        document.write("</p><p>var text = \" The best things in life are free\";");
+        var text = "The best things in life are free";
+        document.write(patt1.exec(text));
+        document.write("<p>var match1 = patt1.exec(text);");
+        var match1 = patt1.exec(text);
+        document.write("</p><p>match1.index;");
+        document.write(match1.index);
+        document.write("</p><p>match[0];");
+        document.write(match1[0]);
+        document.write("</p><p>patt1.lastIndex;");
+        document.write(patt1.lastIndex);
+    </script>
+
+</p>
+<p>匹配日期，如2019-08-03；
+    <br> var temp_date ="2019-08-13";
+    <br> var date_patt = / \d{4}-\d{2}-\d{2} / ;
+    <br> if ( date_patt.test( temp_date ) ) {
+    <br> &emsp;&emsp; document.write( temp_date ); }
+
+
+    <br>控制小数点数量：
+    <br>var num=356.231569; alert( num.toFixed(2));
+    <br>返回字符串长度； var str1="asdasdasd";str1.length ;
+    <br>返回字符串其中一部分字符char; str1.substring(2,5);
+
+</p>
+<p>对html不能直接显示的4个符号进行转换：
+    <br>function htmlEscape(text) {
+    <br> &emsp;&emsp;return text.replace( / [&lt;&gt; " & ] / g,function( match,pos,originalText){
+    <br> &emsp;&emsp; &emsp;&emsp;switch(match) {
+    <br> &emsp;&emsp; &emsp;&emsp;&emsp;&emsp;case "&lt;": return"\&\lt;";
+    <br> &emsp;&emsp; &emsp;&emsp;&emsp;&emsp;case "&gt;": return"\&\gt;";
+    <br> &emsp;&emsp; &emsp;&emsp;&emsp;&emsp;case "&amp;": return"\&\amp;";
+    <br> &emsp;&emsp; &emsp;&emsp;&emsp;&emsp;case "&quot;": return"\&\quot;";
+
+    <br> &emsp;&emsp; &emsp;&emsp; }
+    <br> &emsp;&emsp; } ) }
+
+</p>
+<p>数学计算：
+    <br>最大值，最小值；Math.max();Math.min();
+    <br>自然对数Math.LN10();Math.LN2();Math.LOG10E();Math.LOG2E();
+    <br>平方根Math.SQRT2();
+    <br>四舍五入：向上Math.ceil()，向下Math.floor();，标准Math.round();
+    <br>返回0~1的随机数，Math.random()
+
+
+</p>
+
+<hr>
+<h3><a name="vue">Vue</a></h3>
+<p>
+    当下主流框架中，React、Angular、Vue 三足鼎立，我们和本书的原作者一样，在经过对它们的了解和实践以后，最终都惊叹于 Vue 简单而不失优雅的开发风格。如果没有深厚的编程功底以及设计能力，想要优雅地使用 React 会存在一些障碍 ；而对于 Angular 来说，对于个人开发者和中小型的应用又略显得“重”了，学习曲线也比较陡峭。但 Vue 对于个人开发者和中小型应用更友好，学习曲线也是渐进性的，非常适合用来入门和学习 MVVM框架中所涉及的通用知识和开发理念。
+    <br>2019年初的三本书：深入浅出Vue.js；Vue.js快跑：构建触手可及的高性能Web应用；Vue.js从入门到项目实战；
+    <br>
+</p>
+<h4>Vue安装和环境准备</h4>
+<p>1，官网安装node.js；测试是否安装成功：CMD里输入 nodejs -v
+    <br>直接运行npm install等命令会报错的。增加环境变量NODE_PATH 内容是：D:\nodejs\node_global\node_modules [对应的安装文件夹]
+    <br>测试NPM安装vue.js ； 命令：npm install vue -g ；这里的-g是指安装到global全局目录去
+    <br>NPM安装vue-router ；命令：npm install vue-router -g
+    <br> npm: Nodejs下的包管理器。 webpack: 它主要的用途是通过CommonJS的语法把所有浏览器端需要发布的静态资源做相应的准备，比如资源的合并和打包。
+    <br> vue-cli: 用户生成Vue工程模板。（帮你快速开始一个vue的项目，也就是给你一套vue的结构，包含基础的依赖库，只需要 npm install就可以安装）
+    <br>测试vue是否安装好，CMD输入： vue -v
+</p>
+<p>2,新建VUE项目：选好文件夹，vue init webpack vue01
+    <br>3,打开vue项目：To get started: cd vue_test ； npm run dev
+    <br>输出： Your application is running here: http://localhost:8080
+    <br>vue项目的文件目录：C:\ciss_web\static\templates\ciss_exhi\test\vue_test
+    <br>vue项目组件的文件目录：..\vue_test\src\components
+    <br>打开的网页网址 ：http://localhost:8080
+</p>
+<p>3，新建内容的步骤：
+    <br>1，在文件 App.vue 中import组件，import compo_ciss from './component/compo_ciss.vue' vue教程：https://www.runoob.com/w3cnote/vue2-start-coding.html
+    <br> https://www.runoob.com/vue2/vue-template-syntax.html ；https://cn.vuejs.org/v2/guide/ ；
+
+</p>
+
+<hr>
+<h3><a name="postgresql">Postgresql</a></h3>
+<p></p>
 
 
 
 
-    </section> 
-    
-    <section id="s7">  
-    <h3><a name="update_coop_opensource" href="./docs/update_coop_opensource.html">更新，协作，和开源 |Update,Cooperation and Open source</a></h3>  
-    <hr>
-    <p></p>
-    
-   
-     
- 
-
-
-    </section>  
-
+<hr>
+<blockquote cite="www.bsstrde.top:8089\index.html">
+    <!--引用内容 -->
+</blockquote>
 
 
 

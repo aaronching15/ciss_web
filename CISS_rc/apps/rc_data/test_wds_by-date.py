@@ -4,7 +4,7 @@ __author__=" ruoyu.Cheng"
 '''
 # 中国A股日行情 || AShareEODPrices || 交易日期 TRADE_DT,20190805
 # 香港股票日行情|| HKshareEODPrices || TRADE_DT
-last 190830 | since 190730
+last 200106 | since 190730
 
 MENU :
 ### Given table name 
@@ -21,14 +21,19 @@ MENU :
 ### 按季度末日期 F_PRT_ENDDATE 下载 中国共同基金投资组合——资产配置[ChinaMutualFundAssetPortfolio]
 ### 按公告日 公告日期 ANN_DT 下载 中国共同基金资产负债表[CMFBalanceSheet]
 
-todo：
-1,数据管理
-
+日期数据文件和地址
+path_dates = "D:\\db_wind\\data_adj\\"
+file_dates = "date_list_quarter.csv"
+file_dates = "date_list_month.csv"
+file_dates = "date_list_tradingday.csv"
+注意：以上3个文件对应的都是交易日，不一定是月末或者季度末自然日。
 '''
+print("按季度末日期或交易日下载WDS的A股相关表格...... ")
 #################################################################################
 ### Initialization 
 import sys
-sys.path.append( "C:\\zd_zxjtzq\\ciss_web\\CISS_rc\\db\\db_assets\\" )
+import os 
+sys.path.append( os.getcwd()[:2] +"\\zd_zxjtzq\\ciss_web\\CISS_rc\\db\\db_assets\\" )
 from get_wind_wds import wind_wds
 wind_wds1 = wind_wds()
 ### Print all modules 
@@ -37,7 +42,80 @@ wind_wds1.print_info()
 import pandas as pd 
 import numpy as np 
 
+#################################################################################
+### 按季度末日期 F_PRT_ENDDATE 下载 中国共同基金投资组合——资产配置[ChinaMutualFundAssetPortfolio]
+### last 20200929
+print(" 中国共同基金投资组合——行业配置[ChinaMutualFundIndPortfolio] ")
+print(" 中国共同基金投资组合——持股明细[ChinaMutualFundStockPortfolio] ")
+print(" 中国共同基金投资组合——持券明细[ChinaMutualFundBondPortfolio] ")
+print(" 关键词keyword：F_PRT_ENDDATE ")
 
+# path_dates = "D:\\db_wind\\"
+# file_dates = "rc_WDS_indexdates_200501_20190831_quarter.csv"
+# date_list =pd.read_csv(path_dates+ file_dates  )
+# ### 第"9" 列是上市日期，A18087.SZ 这种未上市公司是空值
+# # dropna(): axis=0: 删除包含缺失值的行 | axis=1: 删除包含缺失值的列
+# # 	how: 与axis配合使用 how=‘any’ :只要有缺失值出现，就删除该行货列
+# # subset: Define in which columns to look for missing values.
+# date_list = date_list.dropna(subset=["2"],axis=0,how="any"  )
+# print("We have "+ str(len(date_list.index))+ " trading dates to fetch daily values"  )
+# date_list = date_list.rename(columns={'2':'date'} ) 
+
+path_dates = "D:\\db_wind\\data_adj\\"
+file_dates = "date_list_quarter.csv"
+date_list =pd.read_csv(path_dates+ file_dates  )  
+date_list= date_list[ date_list["date"]>=20040101 ]
+print(date_list.tail(3)  ) 
+
+i=0  
+### Notice:有三种选择：行业配置，持股明细，持券明细
+# table_name = "ChinaMutualFundBondPortfolio" 
+# prime_key  = "F_PRT_ENDDATE"
+table_name = "CFundPortfoliochanges" 
+prime_key  = "REPORT_PERIOD"
+
+print( table_name )
+
+for temp_year in range(2004,2020) : 
+	
+	print("Working on "+ str(i) +"th date "+ str(temp_year)+"0630" ) 
+	prime_key_value = str(temp_year)+"0630" 
+	# try :
+	data_obj = wind_wds1.get_table_primekey_input( table_name,prime_key ,prime_key_value   ) 
+	# except :
+		# pass 
+	i = i+1 
+
+	print("Working on "+ str(i) +"th date "+ str(temp_year)+"1231" ) 
+	prime_key_value = str(temp_year)+"1231" 
+	# try :
+	data_obj = wind_wds1.get_table_primekey_input( table_name,prime_key ,prime_key_value   ) 
+	
+	i = i+1 
+asd
+
+ 
+
+# for temp_i in date_list.index :
+# 	temp_date = date_list.loc[temp_i, "date" ]
+# 	print(temp_date) 
+# 	# SQL does not support numpy.int64 
+# 	temp_date = str(temp_date)
+
+# 	print("Working on "+ str(i) +"th date "+ str(temp_date) )
+# 	# 中国A股日行情[AShareEODPrices]
+# 	# 中国A股日行情估值指标[AShareEODDerivativeIndicator] 
+# 	# todo还要做一个每日更新维护的表；将字段改为 每个交易日保存一张表。
+
+# 	prime_key_value = temp_date
+# 	datetime_range = "ALL"
+# 	# try :
+# 	data_obj = wind_wds1.get_table_primekey_input( table_name,prime_key ,prime_key_value   ) 
+# 	# except :
+# 		# pass 
+# 	i = i+1 
+
+# asd
 
 #################################################################################
 ### Given table name 
@@ -603,59 +681,19 @@ import numpy as np
 ### 按单一基金代码下载 prime_key  = "S_INFO_WINDCODE"
 # 中国共同基金投资组合——持股明细[ChinaMutualFundStockPortfolio] | 基金Wind代码 S_INFO_WINDCODE
 
-table_name = "ChinaMutualFundStockPortfolio" 
-prime_key  = "S_INFO_WINDCODE"
-prime_key_value = input("Type in code such as 003096.OF..." )
-datetime_range = "ALL"
-(temp_df,df_log_table)= wind_wds1.get_table_primekey_input( table_name,prime_key ,prime_key_value ,datetime_range ) 
+# print(" 中国共同基金投资组合——持券明细[ChinaMutualFundBondPortfolio] ")
+# print(" 关键词keyword：S_INFO_WINDCODE ")
 
-asd
+# table_name = "ChinaMutualFundStockPortfolio" 
+# prime_key  = "S_INFO_WINDCODE"
+# prime_key_value = input("Type in code such as 003096.OF..." )
+# datetime_range = "ALL"
+# (temp_df,df_log_table)= wind_wds1.get_table_primekey_input( table_name,prime_key ,prime_key_value ,datetime_range ) 
 
-
-#################################################################################
-### 按季度末日期 F_PRT_ENDDATE 下载 中国共同基金投资组合——资产配置[ChinaMutualFundAssetPortfolio]
-# 中国共同基金投资组合——行业配置[ChinaMutualFundIndPortfolio]
-# 中国共同基金投资组合——持股明细[ChinaMutualFundStockPortfolio]
-# 中国共同基金投资组合——持券明细[ChinaMutualFundBondPortfolio]
+# asd
 
 
-path_dates = "D:\\db_wind\\"
-file_dates = "rc_WDS_indexdates_200501_20190831_quarter.csv"
-date_list =pd.read_csv(path_dates+ file_dates  )
-### 第"9" 列是上市日期，A18087.SZ 这种未上市公司是空值
-# dropna(): axis=0: 删除包含缺失值的行 | axis=1: 删除包含缺失值的列
-# 	how: 与axis配合使用 how=‘any’ :只要有缺失值出现，就删除该行货列
-# subset: Define in which columns to look for missing values.
-date_list = date_list.dropna(subset=["2"],axis=0,how="any"  )
-print("We have "+ str(len(date_list.index))+ " trading dates to fetch daily values"  )
-# print(date_list.head(3)  )
 
-i=0  
-### Notice:有三种选择：行业配置，持股明细，持券明细
-table_name = "ChinaMutualFundBondPortfolio" 
-prime_key  = "F_PRT_ENDDATE"
-
-print( table_name )
-for temp_i in date_list.index :
-	temp_date = date_list.loc[temp_i, "2" ]
-	print(temp_date) 
-	# SQL does not support numpy.int64 
-	temp_date = str(temp_date)
-
-	print("Working on "+ str(i) +"th date "+ str(temp_date) )
-	# 中国A股日行情[AShareEODPrices]
-	# 中国A股日行情估值指标[AShareEODDerivativeIndicator] 
-	# todo还要做一个每日更新维护的表；将字段改为 每个交易日保存一张表。
-
-	prime_key_value = temp_date
-	datetime_range = "ALL"
-	try :
-		(temp_df,df_log_table)= wind_wds1.get_table_primekey_input( table_name,prime_key ,prime_key_value ,datetime_range ) 
-	except :
-		pass 
-	i = i+1 
-
-asd
 
 #################################################################################
 ### 按公告日 公告日期 ANN_DT 下载 中国共同基金资产负债表[CMFBalanceSheet]

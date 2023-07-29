@@ -1,0 +1,33 @@
+<meta charset="UTF-8">
+<!-- for HTML5 -->
+<!-- The block items for this base html file is: {nav_sub, left_frame,menu,content } -->
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Vue 测试 </title>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <p>{{ message }}</p>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                message: 'Hello Vue.js!'
+            }
+        })
+    </script>
+
+    <div id="app">
+        <p>{{ message }}</p>
+    </div>
+
+</body>
+
+</html>

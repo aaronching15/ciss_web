@@ -1,16 +1,16 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Stict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
 strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang = "zh-CN">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
 
 <html>
 <!-- The block items for this base html file is: {nav_sub, left_frame,menu,content } -->
 
 
-    <head>
+<head>
     <!-- 头部，内容的介绍展示区域 -->
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdn.bootcss.com/echarts/4.2.0-rc.2/echarts.js"></script> 
+    <script src="https://cdn.bootcss.com/echarts/4.2.0-rc.2/echarts.js"></script>
 
     <title>Index of CISS module</title>
     <!--
@@ -21,90 +21,105 @@ strict.dtd">
     -->
     <style type="text/css">
         /* h3 {color:steelblue;}  */
-        #menu_float{color:steelblue;
-            position:fixed;
+        
+        #menu_float {
+            color: steelblue;
+            position: fixed;
             bottom: 10%;
-            right:40px;
-            margin-left: 70% ; /*为左侧留出70\%的空间*/
-            font-size:12px;  /*字体设置小点*/ 
-            border: 1px solid black; /*  实线，dotted */
-            /* text-align:center;文字居中*/ 
-            border-radius:5px; /*倒角  */ 
-            background: white; /* #dddddd */
-            padding:3px 3px 3px 3px;/*元素所有内边距的宽度，上右，下左  */ 
-        } 
-        #left_frame{float: left;width: 70%; }
-        #sub_left{
+            right: 40px;
+            margin-left: 70%;
+            /*为左侧留出70\%的空间*/
+            font-size: 12px;
+            /*字体设置小点*/
+            border: 1px solid black;
+            /*  实线，dotted */
+            /* text-align:center;文字居中*/
+            border-radius: 5px;
+            /*倒角  */
+            background: white;
+            /* #dddddd */
+            padding: 3px 3px 3px 3px;
+            /*元素所有内边距的宽度，上右，下左  */
+        }
+        
+        #left_frame {
+            float: left;
+            width: 70%;
+        }
+        
+        #sub_left {
             width: 50%;
             height: 350px;
             background-color: #C5E9F3;
             /*定义浮动，不定义的话，界面会乱*/
             float: left;
         }
-        #sub_right{
+        
+        #sub_right {
             width: 50%;
             height: 350px;
             background-color: #F7575d;
             float: right;
         }
-
-        #a_nav{color:#FFF}
-        nav{background:black; color:#FFF}
+        
+        #a_nav {
+            color: #FFF
+        }
+        
+        nav {
+            background: black;
+            color: #FFF
+        }
     </style>
 
-    </head>
+</head>
 
 <body>
-    
-<nav> 
-<!-- 导航链接 -->
-    <a id="a_nav" href="/ciss_exhi/index.html">首页|INDEX</a> |
-    <a id="a_nav" href="/ciss_exhi/strategy/index_stra.html">策略开发|Strategy Dev.</a> |
-    <a id="a_nav" href="/ciss_exhi/portfolio/index_port.html">组合管理|Portfolio Management </a> |
-    <a id="a_nav" href="/ciss_exhi/data/index_data.html">数据清单|Data List</a> |
-    <a id="a_nav" href="/ciss_exhi/docs/index_ciss.html">平台文档|CISS documents</a> | 
-    --- | <br><br>
+
+    <nav>
+        <!-- 导航链接 -->
+        <a id="a_nav" href="/ciss_exhi/index.html">首页|INDEX</a> |
+        <a id="a_nav" href="/ciss_exhi/strategy/index_stra.html">策略开发|Strategy Dev.</a> |
+        <a id="a_nav" href="/ciss_exhi/portfolio/index_port.html">组合管理|Portfolio Management </a> |
+        <a id="a_nav" href="/ciss_exhi/data/index_data.html">数据清单|Data List</a> |
+        <a id="a_nav" href="/ciss_exhi/docs/index_ciss.html">平台文档|CISS documents</a> |
+        <a id="a_nav" href="/ciss_exhi/docs/index_ciss.html">平台文档|CISS documents</a> | --- | <br><br>
 
 
-    <a id="a_nav" href="./5min_ciss.html">5分钟入手 |5 Minutes to CISS</a> >>
-    <a id="a_nav" href="./esse_func.html">核心功能 |Essential Functions</a> >> 
-    <a id="a_nav" href="./data_manage.html">数据管理 |Data Management</a> >> 
-    <a id="a_nav" href="./stra_ana.html">策略分析 |Strategy Analysis</a> >> 
-    <a id="a_nav" href="./port_simu.html">模拟组合 |Portfolio Simulation</a> >> 
-    <a id="a_nav" href="./multi_asset.html">多资产管理 |Multi-Asset Investment</a> >> 
-    <a id="a_nav" href="./stra_eval.html">策略评估及可视化 |Strategy Evaluation and Visualization</a> >> 
-    <a id="a_nav" href="./web_plat.html"><b>策略平台网站 |Strategy Platform as Website</b></a> >> 
-    <a id="a_nav" href="./update_coop_opensource.html">更新，协作，和开源 |Update,cooperation and open source</a> >> 
+        <a id="a_nav" href="./5min_ciss.html">5分钟入手 |5 Minutes to CISS</a> >>
+        <a id="a_nav" href="./esse_func.html">核心功能 |Essential Functions</a> >>
+        <a id="a_nav" href="./data_manage.html">数据管理 |Data Management</a> >>
+        <a id="a_nav" href="./stra_ana.html">策略分析 |Strategy Analysis</a> >>
+        <a id="a_nav" href="./port_simu.html">模拟组合 |Portfolio Simulation</a> >>
+        <a id="a_nav" href="./multi_asset.html">多资产管理 |Multi-Asset Investment</a> >>
+        <a id="a_nav" href="./stra_eval.html">策略评估及可视化 |Strategy Evaluation and Visualization</a> >>
+        <a id="a_nav" href="./web_plat.html"><b>策略平台网站 |Strategy Platform as Website</b></a> >>
+        <a id="a_nav" href="./update_coop_opensource.html">更新，协作，和开源 |Update,cooperation and open source</a> >> --- | <br>
 
-    --- | <br>
+    </nav>
 
-</nav> 
-
-<div id="left_frame"> 
+    <div id="left_frame">
 
 
-{% block left_frame %}
-{% endblock left_frame %}
+        {% block left_frame %} {% endblock left_frame %}
 
 
-<section id="menu"> 
+        <section id="menu">
 
 
-{% block menu %}
-{% endblock menu %}
+            {% block menu %} {% endblock menu %}
 
-</section> 
+        </section>
 
 
 
-<section id="s1"> 
-    
-{% block content %}
-{% endblock content %}
+        <section id="s1">
+
+            {% block content %} {% endblock content %}
 
 
 
-</section>
+        </section>
 
 
 
@@ -121,24 +136,24 @@ strict.dtd">
 
 
 
-    
 
 
 
 
-<hr> 
-<blockquote cite="www.bsstrde.top:8089\index.html">
-    <!--引用内容 -->
-</blockquote>
- 
 
-<footer> 
-    by rC
-    <!--尾部，页脚通常包含文档的作者，著作权信息，链接的使用条款，联系信息等 -->
-</footer> 
-<hr>
+        <hr>
+        <blockquote cite="www.bsstrde.top:8089\index.html">
+            <!--引用内容 -->
+        </blockquote>
 
-</div> 
+
+        <footer>
+            by rC
+            <!--尾部，页脚通常包含文档的作者，著作权信息，链接的使用条款，联系信息等 -->
+        </footer>
+        <hr>
+
+    </div>
 
 </body>
 

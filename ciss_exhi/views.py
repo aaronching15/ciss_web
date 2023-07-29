@@ -1,56 +1,99 @@
-###########################################################################
+# -*- encoding:"utf-8"-*-
+__author__ = " ruoyu.Cheng"
+
 '''
-list of def in this file 
-def index(request):
-def json_index(request):
+=============================================== 
 
-def data_index(request):
-def data_log(request):
+todo:简化views.py
+功能：
+last 20220209 | since 2018
+Notes: 
+refernce:  views_befo.py
+notes:202002，Django3下，render_to_response被取消，用render 代替render_to_response 
 
-def stra_index(request):
-def stra_single(request):
-def stra_abm_rc(request):
-def stra_bond_jny(request):
+===============================================
+''' 
 
-def etf_data(request):
-
-def port_index(request):
-def port_single(request):
-
-def docs_index(request):
-def docs_index(request):    
-'''
-###########################################################################
 ### Initialization
 from django.shortcuts import render
 from django.http import HttpResponse
 
-### Import haystack
-from haystack.views import SearchView
+### Import haystack 
 
-### to exhibit static html file 
-from django.shortcuts import render_to_response
+### 202002，Django3下，render_to_response被取消，用render 代替render_to_response 
+# from django.shortcuts import render_to_response
 ###  you must use csrf_protect on any views that use the csrf_token template tag, as well as those that accept the POST data.
 # source https://docs.djangoproject.com/en/2.1/ref/csrf/
 # source https://blog.csdn.net/weixin_40612082/article/details/80686472
 from django.views.decorators.csrf import csrf_protect,requires_csrf_token,csrf_exempt
 
 ###########################################################################
+### LEVEL 0 首页和核心功能
+###########################################################################
 ### Index and template page | 网站首页
 def index(request):
     ###  网站首页
-    return render_to_response("ciss_exhi/index_ciss.html")
+    return render(request,"ciss_exhi/index_ciss.html")
+
+
+def log_index(request):
+    ### 开发日志文件
+    return render(request,"ciss_exhi/index_log.html")
+
+# def quick(request):
+#     ### 快速功能
+#     return render(request,"ciss_exhi/quick.html")
 
 def json_index(request):
     # 直接引用static\ 目录下的json文件
-    return render_to_response("ciss_exhi/json/tree_stra_s.json")
+    return render(request,"ciss_exhi/json/tree_stra_s.json")
 
 ###########################################################################
-### Index of data list  | 数据主页，包括主要数据库链接
-def data_index(request):
-    #  
-    return render_to_response("ciss_exhi/data/index_data.html")
+### BEFORE 220209
 
+
+
+
+##################################################################
+### Level 1 
+
+
+###########################################################################
+### Index of AI,machine learning,deep learning,factors
+    ### 人工智能模型和相关研究
+def ai_index(request):
+    
+    context={}
+
+    return render(request, 'ciss_exhi/ai/ai_index.html', context) 
+
+###########################################################################
+### LEVEL 1 
+###########################################################################
+### Index of industry research list 
+### 行业产业链研究 
+def industry_index(request) :
+
+    context={}
+    return render(request, 'ciss_exhi/industry/industry_index.html', context)
+
+###########################################################################
+### Index of event list  | 事件主页，包括主要事件库链接
+def event_index(request):
+    #  
+    return render(request,"ciss_exhi/event/index_event.html")
+
+###########################################################################
+### Index of FUND,FOF list  | 基金和FOF研究，
+# notes:see file=views_ciss_db.py
+# def fund_fof_index(request):
+#     #  
+#     return render(request,"ciss_exhi/fund_fof/index_fund_fof.html")
+
+
+###########################################################################
+### LEVEL 2
+#     
 ### Index of data log  | 数据日志
 def data_log(request):
     '''
@@ -64,53 +107,387 @@ def data_log(request):
     '''
     path_data = 'D:\\data_Input_Wind\\'
     file_name = "rc_data_log.csv"
-
+    
     context = {}
     temp_df = pd.read_csv(path_data+"rc_data_log.csv",index_col="Unnamed: 0")
     context["data_log"] = temp_df.T()
     ### columns = "table_name","symbol","last_update","file_name","file_path"
-    return render_to_response("ciss_exhi/data/data_log.html",context )
+    return render(request,"ciss_exhi/data/data_log.html",context )
+
+### Index of wind data list  | 数据主页，包括主要数据库链接
+@csrf_protect
+@requires_csrf_token
+@csrf_exempt
+def data_wind(request):
+    ### todo，1，读取返回的数据；2，运行python脚本，3，返回结果到网页的框
+    '''
+    参考 aactive benchmark model，def stra_abm_rc(request)
+    '''
+    #################################################################################
+    ### Initialization 
+    import os 
+    # 获取当前目录 os.getcwd() =: G:\zd_zxjtzq\ciss_web
+    import sys
+    sys.path.append(os.getcwd()[:2] + "\\zd_zxjtzq\\ciss_web\\CISS_rc\\db\\db_assets\\" )
+    sys.path.append(os.getcwd()[:2] + "\\ciss_web\\CISS_rc\\db\\db_assets\\" )
+    ### 导入wds数据转换模块
+    from transform_wind_wds import transform_wds
+    transform_wds1 = transform_wds()
+    ### Print all modules  
+    
+    import pandas as pd 
+    
+    path_data_wds =  "C:\\db_wind\\data_wds\\"
+    path_data_adj = "C:\db_wind\data_adj\industries_class\\"
+    if not os.path.exists( path_data_wds  ) : 
+        path_data_wds =  "D:\\db_wind\\data_wds\\"
+        path_data_adj = "D:\db_wind\data_adj\industries_class\\"
+    
+    context={"info":"none"}
+    # notes: type of request.POST is  <QueryDict: {}>
+    # 若html页面商点击input按钮，则dict变量request.POST里会增加key为input:name,value为input:value
+    print("request.POST", type(request.POST),request.POST )
+    ### 判断POST中来自不同input的类型：如果是name值为input_check_table_anndates的，则执行此段代码
+    if "input_check_table_anndates" in request.POST.keys():    
+        #################################################################################
+        ### 1, 查询Wind-wds全部数据表的最近3个交易日更新情况
+        path_check_anndates = "C:\\ciss_web\\CISS_rc\\apps\\rc_data\\"
+        # path_check_anndates = "C:\\zd_zxjtzq\\ciss_web\\CISS_rc\\apps\\rc_data\\"
+        if not os.path.exists( path_check_anndates  ) : 
+            path_check_anndates = "C:\\zd_zxjtzq\\ciss_web\\CISS_rc\\apps\\rc_data\\"
+        
+        file_data_check_anndates = "data_check_anndates.csv"
+        df_check_anndates = pd.read_csv(path_check_anndates + file_data_check_anndates )
+        df_check_anndates = df_check_anndates.tail(3).reset_index().T
+        print("df_check_anndates",df_check_anndates)
+        context["df_check_anndates"] = df_check_anndates
+    
+    elif "input_check_single_table" in request.POST.keys():        
+        #################################################################################
+        ### 2,获取表格目录下最新5个文件名
+        ### Get data from html templates
+        context["search_wds_table_name"] = request.POST.get("search_wds_table_name","AShareEODPrices")
+        context["search_key_word"] = request.POST.get("search_key_word","S_INFO_WINDCODE")
+        context["search_key_value"] = request.POST.get("search_key_value","688389.SH")
+
+        path_dir= path_data_wds + context["search_wds_table_name"]
+        # 打印目录中最近修改的3个文件，需要对目录内文件进行排序计算，会花费一些时间
+        file_list = os.listdir(path_dir)
+        if not file_list:
+            return
+        else:
+            # sorted() 从小到大排列
+            search_file_list_sorted = sorted(file_list, key=lambda x: os.path.getmtime(os.path.join(path_dir, x)))
+            print("search_file_list_sorted")
+            print(search_file_list_sorted[-5:] )
+
+        context["search_file_list_latest5"] =  search_file_list_sorted[-5:]
+        
+        ### 3,查找关键词及数值对应的表格，返回最后三行
+        # WDS_S_INFO_WINDCODE_688389.SH_ALL.csv
+        # file_name = "WDS_"+"S_INFO_WINDCODE"+"_"+"688389.SH"+"_ALL.csv"
+        file_name = "WDS_"+ context["search_key_word"] +"_"+ context["search_key_value"] +"_ALL.csv"
+        
+        search_temp_df = pd.read_csv(path_dir +"\\" +file_name )
+        #默认 temp_df的数据在下载和保存之前已经是升序排列
+        search_temp_df= search_temp_df.tail(3).reset_index().T
+        print("search_temp_df", search_temp_df)
+        context["search_df_tail3"] = search_temp_df
+
+    elif "input_get_single_table" in request.POST.keys():    
+        #################################################################################
+        ### 4,下载单个表格或根据关键值下载
+        # 默认不要直接下载数据
+        context["get_wds_table_name"] = request.POST.get("get_wds_table_name","")
+        # if_whole_table = 1 means download the whole table and 0 means download for specific key value.
+        context["get_if_whole_table"] = request.POST.get("get_if_whole_table","0")
+        context["get_key_word"] = request.POST.get("get_key_word","S_INFO_WINDCODE")
+        context["get_key_value"] = request.POST.get("get_key_value","688389.SH")
+
+
+        path_dir= path_data_wds + context["get_wds_table_name"]
+        # 引入相关下载模块，notes:有可能存在无法连接数据库的风险，要避免整个网页无法显示。
+        try :
+            print("Debug = 1 ")
+            from get_wind_wds import wind_wds
+            wind_wds1 = wind_wds()
+            ### Print all modules 
+            print("Debug = 2 ")
+            table_name = context["get_wds_table_name"]
+
+            if context["get_if_whole_table"] == "0" :
+                print("Debug = 3 ")
+                prime_key =context["get_key_word"] 
+                prime_key_value = context["get_key_value"]
+                data_obj = wind_wds1.get_table_primekey_input(table_name,prime_key ,prime_key_value ) 
+                print("Debug = 4 ")
+
+            elif context["get_if_whole_table"] == "1" :
+                data_obj = wind_wds1.get_table_full_input(table_name ) 
+
+            context["get_error"] = "Success for connecting database or fetching data"
+            context["get_df_tail3"] = data_obj["wds_df"].tail(3).T
+            context["get_file_path"] = data_obj["file_path"]
+            context["get_file_name"] = data_obj["file_name"] 
+        except:
+            context["get_error"] = "Error during connecting database or fetching data"
+        
+        print("Debug = 5 ")
+    
+    elif "input_get_table_anndates" in request.POST.keys():    
+        #################################################################################
+        ### 5,运行每日数据下载程序
+        ### notes：由于这个部分下载时间比较久，应该打开CMD下载，不应该下载完再刷新页面
+
+        context["if_data_check_anndates"] = request.POST.get("if_data_check_anndates","0")
+        if context["if_data_check_anndates"] == "1" :
+            os.system( "cd C:\\zd_zxjtzq\\ciss_web\\CISS_rc\\apps\\rc_data" )
+            os.system( "python test_wds_manage.py" )
+        
+    elif "input_transform_stocks_ind_class" in request.POST.keys():    
+        #################################################################################
+        ### 5,每周/月：下载和维护个股行业分类
+        ### notes：由于这个部分下载时间比较久，应该打开CMD下载，不应该下载完再刷新页面
+
+        context["if_data_check_anndates"] = request.POST.get("if_data_check_anndates","0")
+        if context["if_data_check_anndates"] == "1" :
+            os.system( "cd C:\\zd_zxjtzq\\ciss_web\\CISS_rc\\apps\\rc_data" )
+            # 计算个股历史行业分类，result = transform_wds1.cal_stock_indclass()
+            os.system( "python test_wds_data_transform.py" )
+
+    elif "input_get_stock_indclass" in request.POST.keys():    
+        #################################################################################
+        ### 5,每周/月：下载和维护个股行业分类
+        ### notes：由于这个部分下载时间比较久，应该打开CMD下载，不应该下载完再刷新页面
+
+        context["get_stock_indclass_windcode"] = request.POST.get("get_stock_indclass_windcode","0")
+        windcode = context["get_stock_indclass_windcode"] 
+
+        df_stock_indclass = pd.read_csv(path_data_adj+"df_ind_code_stock_last.csv",encoding="gbk" )
+        df_stock_indclass_sub = df_stock_indclass[ df_stock_indclass["wind_code"]== windcode ]
+        if df_stock_indclass_sub.empty : 
+            context["df_stock_indclass_windcode"] = "no record for " + windcode
+        else :
+            context["df_stock_indclass_windcode"] = df_stock_indclass_sub.T 
+    
+    elif "submit_get_index_period_diff" in request.POST.keys():    
+        #################################################################################
+        ### 6,id="get_index_period_diff">查询指数区间涨跌幅：
+        ### notes： 
+        asset_type = request.POST.get("period_diff_asset_type","index") 
+        code_input = request.POST.get("get_index_period_diff_windcode","000001.SH")  
+        date_start = request.POST.get("get_index_period_diff_date_start","20200101")
+        date_end = request.POST.get("get_index_period_diff_date_end","20200323")
+
+        ### Index 
+        if asset_type == "index" :            
+            period_chg = transform_wds1.get_index_period_diff(code_input,date_start,date_end)
+            context["index_period_chg"] = round(period_chg,3 )
+
+        ### Stock
+        elif asset_type == "stock" :
+            object_code = transform_wds1.get_stock_period_diff("",code_input,date_start,date_end)
+            context["index_period_chg"] = object_code
+
+        ### Fund 
+        if asset_type == "fund" :            
+            period_chg = transform_wds1.get_fund_period_diff(code_input,date_start,date_end)
+            context["index_period_chg"] = round(period_chg,3 )
+
+        context["get_index_period_diff_windcode"] =code_input 
+
+    #################################################################################
+    ### 
+    return render(request,"ciss_exhi/data/data_wind.html",context)
+
+def data_ciss_web(request):
+    #################################################################################
+    ### 
+    context = {}
+
+
+    #################################################################################
+    ###
+    return render(request,"ciss_exhi/data/data_ciss_web.html",context)
+
+def data_ciss_db(request):
+    #################################################################################
+    ### 
+    context = {}
+
+
+    #################################################################################
+    ###
+    return render(request,"ciss_exhi/data/data_ciss_db.html",context)
+
+def data_rc_report(request):
+    #################################################################################
+    ### 
+    context = {}
+
+
+    #################################################################################
+    ###
+    return render(request,"ciss_exhi/data/data_rc_report.html",context)
+
+def data_touyan(request):
+    #################################################################################
+    ### 
+    context = {}
+
+
+    #################################################################################
+    ###
+    return render(request,"ciss_exhi/data/data_rc_touyan.html",context)
 
 ### Index of data list  | 数据清单
 def data_db_wind_wds(request):
     # last | since 191118  
-    return render_to_response("ciss_exhi/data/db_wind_wds/log_191118.html")
+    return render(request,"ciss_exhi/data/db_wind_wds/log_191118.html")
 
 ### 数据库学习的相关知识
 def data_study_postgresql(request):
     # last | since 191123 
-    return render_to_response("ciss_exhi/data/knowledge/data_study_postgresql.html")
+    return render(request,"ciss_exhi/data/knowledge/data_study_postgresql.html")
 
-###########################################################################
-### Index of event list  | 事件主页，包括主要事件库链接
-def event_index(request):
-    #  
-    return render_to_response("ciss_exhi/event/index_event.html")
 
-###########################################################################
-### Index of strategy list 
-### working on test strategy file
-from .models import Strategy,Portfolio
 
-import pandas as pd 
-
-def stra_index(request):
-    ### last 191119 | since 181101
-    ### define latest strategy list  
-    latest_stra_list = Strategy.objects.order_by('-stra_date_last')[:5]
-    ### todo define core strategy list 
-    core_stra_list_gy = Strategy.objects.filter(stra_supervisor='du')
-
-    ### todo define core strategy list 
-    core_stra_list_cs = Strategy.objects.filter(stra_client='cs')
+### 软件产业链 industry_software 
+def industry_software(request) :
     
-    # 上下文(context)。这个上下文是一个字典，它将模板内的变量映射为 Python 对象。
-    # type of context is  <class 'dict'>
-    context = {'latest_stra_list': latest_stra_list}
-    context["core_stra_list_gy"]= core_stra_list_gy
-    context["core_stra_list_cs"]= core_stra_list_cs
-    # render() 「载入模板，填充上下文，再返回由它生成的 HttpResponse 对象」
-    return render(request, 'ciss_exhi/strategy/index_stra.html', context)
+    context={} 
+    return render(request, 'ciss_exhi/industry/industry_software.html', context)
+### industry_media 传媒产业链
+def industry_media(request) :
+    
+    context={} 
+    return render(request, 'ciss_exhi/industry/industry_media.html', context)
+### industry_finance_new 新金融产业链
+def industry_finance_new(request) :
+    
+    context={} 
+    return render(request, 'ciss_exhi/industry/industry_finance_new.html', context)
+
+### industry_biopharmaceutical.html">生物科技和医药产业链
+def industry_biopharmaceutical(request) :
+    
+    context={} 
+    return render(request, 'ciss_exhi/industry/industry_biopharmaceutical.html', context)
+
+### industry_manufacturing.html">新材料和装备制造
+def industry_manufacturing(request) :
+    
+    context={} 
+    return render(request, 'ciss_exhi/industry/industry_manufacturing.html', context)
+
+
+### industry_comsumer_staples.html 必须消费，=日常消费
+def industry_comsumer_staples(request) :
+    
+    context={} 
+    return render(request, 'ciss_exhi/industry/industry_comsumer_staples.html', context)
+
+### industry_comsumer_discretionary.html 可选消费，=耐用消费
+def industry_comsumer_discretionary(request) :
+    
+    context={} 
+    return render(request, 'ciss_exhi/industry/industry_comsumer_discretionary.html', context)
+
+
+### industry_huawei.html">华为产业链
+def industry_huawei(request) :
+    
+    context={} 
+    return render(request, 'ciss_exhi/industry/industry_huawei.html', context)
+### industry_apple.html">苹果产业链
+def industry_apple(request) :
+    
+    context={} 
+    return render(request, 'ciss_exhi/industry/industry_apple.html', context)
+### industry_tesla.html">特斯拉产业链
+def industry_tesla(request) :
+    
+    context={} 
+    return render(request, 'ciss_exhi/industry/industry_tesla.html', context)
+
+### industry_semiconductor.html">半导体产业链
+def industry_semiconductor(request) :
+    
+    context={} 
+    return render(request, 'ciss_exhi/industry/industry_semiconductor.html', context)
+### industry_solar.html">光伏产业链
+def industry_solar(request) :
+    
+    context={} 
+    return render(request, 'ciss_exhi/industry/industry_solar.html', context) 
+
+### industry_alibaba.html">阿里巴巴产业链
+def industry_alibaba(request) :
+    
+    context={} 
+    return render(request, 'ciss_exhi/industry/industry_alibaba.html', context)
+### industry_alibaba_ecommerce_mcn.html">阿里-电商和MCN产业链
+def industry_alibaba_ecommerce_mcn(request) :
+    
+    context={} 
+    return render(request, 'ciss_exhi/industry/industry_alibaba_ecommerce_mcn.html', context)
+
+### industry_alibaba_internet_finance.html">阿里-互联网金融产业链
+def industry_alibaba_internet_finance(request) :
+    
+    context={} 
+    return render(request, 'ciss_exhi/industry/industry_alibaba_internet_finance.html', context)
+### industry_alibaba_cloud_computing.html">阿里-云计算产业链
+def industry_alibaba_cloud_computing(request) :
+    
+    context={} 
+    return render(request, 'ciss_exhi/industry/industry_alibaba_cloud_computing.html', context) 
+### industry_tencent.html">腾讯产业链
+def industry_tencent(request) :
+    
+    context={} 
+    return render(request, 'ciss_exhi/industry/industry_tencent.html', context)
+### industry_tencent_gaming.html">腾讯-游戏产业链
+def industry_tencent_gaming(request) :
+    
+    context={} 
+    return render(request, 'ciss_exhi/industry/industry_tencent_gaming.html', context)
+### industry_tencent_online_video.html">腾讯-影视传媒产业链
+def industry_tencent_online_video(request) :
+    
+    context={} 
+    return render(request, 'ciss_exhi/industry/industry_tencent_online_video.html', context)
+### industry_locallife_food_delivery.html">本地生活和外卖产业链
+def industry_locallife_food_delivery(request) :
+    
+    context={} 
+    return render(request, 'ciss_exhi/industry/industry_locallife_food_delivery.html', context) 
+
+
+
+
+ 
+
+
+### 临时行业研究信息
+def temp_ind(request) :
+    
+    context={}
+
+    return render(request, 'ciss_exhi/industry/temp.html', context)
+
+### 行业个股模型首页 model_stock_index
+def model_stock_index(request) :
+    
+    context={}
+
+    
+    return render(request, 'ciss_exhi/industry/model_stock_index.html', context)
+
+
+###########################################################################
+### 策略研究；Index of strategy list 
+### notes:20221014，def stra_index(request): 迁移至 views_strategy_dev.py
 
 #####################################################################
 ### Index of single strategy
@@ -120,10 +497,10 @@ def stra_index(request):
 def stra_single(request):
     # create page for single strategy 
     # last | since 190111
-    # todo 
+    
     context={"info":"none"} 
 
-    return render(request, 'ciss_exhi/strategy/stra_single.html', context)
+    return render(request,'ciss_exhi/strategy/stra_single.html',context)
 
 #####################################################################
 ### working on personal strategy
@@ -150,6 +527,17 @@ def stra_cs_institute_insurance_holdings(request):
     context={"info":"none"} 
 
     return render(request, 'ciss_exhi/strategy/stra_cs_institute_insurance_holdings_1911.html', context)
+
+@csrf_protect
+@requires_csrf_token
+@csrf_exempt
+def stra_ashare_bm_index_replicate(request):
+    ### 主动基准类策略：指数复制
+    # last | since 200329
+    # todo 
+    context={"info":"none"} 
+
+    return render(request, 'ciss_exhi/strategy/stra_ashare_bm_index_replicate.html', context)
 
 
 
@@ -510,8 +898,7 @@ def stra_bond_jny(request):
     context['cb_name_short'] = temp_df.T.to_dict() 
 
 
-
-
+    
     return render(request, 'ciss_exhi/strategy/stra_bond_jny.html', context)
 
 
@@ -1061,9 +1448,6 @@ def port_single(request):
 #####################################################################
 ### Index of single strategy
 
-###########################################################################
-### source codes
-
 
 
 
@@ -1075,46 +1459,46 @@ def port_single(request):
 def docs_index(request):
     # index of ciss module 
     # 190105
-    return render_to_response("ciss_exhi/docs/index_ciss.html")
+    return render(request,"ciss_exhi/docs/index_ciss.html")
 
 
 def docs_5min(request):
-    return render_to_response("ciss_exhi/docs/5min_ciss.html")
+    return render(request,"ciss_exhi/docs/5min_ciss.html")
 
 def docs_data(request):
-    return render_to_response("ciss_exhi/docs/data_manage.html")
+    return render(request,"ciss_exhi/docs/data_manage.html")
 
 def docs_esse(request):
-    return render_to_response("ciss_exhi/docs/esse_func.html")
+    return render(request,"ciss_exhi/docs/esse_func.html")
 
 def docs_multi(request):
-    return render_to_response("ciss_exhi/docs/multi_asset.html")
+    return render(request,"ciss_exhi/docs/multi_asset.html")
 
 def docs_port(request):
-    return render_to_response("ciss_exhi/docs/port_simu.html")
+    return render(request,"ciss_exhi/docs/port_simu.html")
 def docs_stra_ana(request):
-    return render_to_response("ciss_exhi/docs/stra_ana.html")
+    return render(request,"ciss_exhi/docs/stra_ana.html")
 def docs_stra_eval(request):
-    return render_to_response("ciss_exhi/docs/stra_eval.html")
+    return render(request,"ciss_exhi/docs/stra_eval.html")
 def docs_web_plat(request):
-    return render_to_response("ciss_exhi/docs/web_plat.html")
+    return render(request,"ciss_exhi/docs/web_plat.html")
 
 def docs_update(request):
-    return render_to_response("ciss_exhi/docs/update_coop_opensource.html")
+    return render(request,"ciss_exhi/docs/update_coop_opensource.html")
 
 ###########################################################################
 ### working on test files 
-def docs_index(request):
-    # Ouputting CSV with Django
-    # 190121
-    import csv
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="somefilename.csv"'
-    writer = csv.writer(response)
-    writer.writerow(['First row', 'Foo', 'Bar', 'Baz'])
-    writer.writerow(['Second row', 'A', 'B', 'C', '"Testing"', "Here's a quote"])
+# def docs_index(request):
+#     # Ouputting CSV with Django
+#     # 190121
+#     import csv
+#     response = HttpResponse(content_type='text/csv')
+#     response['Content-Disposition'] = 'attachment; filename="somefilename.csv"'
+#     writer = csv.writer(response)
+#     writer.writerow(['First row', 'Foo', 'Bar', 'Baz'])
+#     writer.writerow(['Second row', 'A', 'B', 'C', '"Testing"', "Here's a quote"])
 
 
 
-    return response 
+#     return response 
 

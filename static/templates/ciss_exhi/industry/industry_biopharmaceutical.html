@@ -1,0 +1,356 @@
+{% extends "base.html" %}
+<meta charset="UTF-8">
+<!-- for HTML5 -->
+<!-- The block items for this base html file is: {nav_sub, left_frame,menu,content } -->
+<!-- 产业链网页模板 -->
+
+{% block nav_sub %}
+
+<a id="a_nav" href="./core_industry.html">核心产业链 |Core industry chain</a> >>
+<a id="a_nav" href="./last_industry.html">最新产业链 |Lastest industry chain</a> >>
+
+<br>
+<a>细分产业链列表：</a>
+<a id="ciss_menu" href="#biopharm_material">制药原料 </a> >>
+<a id="ciss_menu" href="#biopharm_product">生物和化学制药 </a> >>
+<a id="ciss_menu" href="#biopharm_device">医疗器械 </a> >>
+<a id="ciss_menu" href="#biopharm_research_service">制药研究服务 </a> >>
+<a id="ciss_menu" href="#biopharm_hospital">医院 </a> >>
+<a id="ciss_menu" href="#biopharm_nursing">体检和养老 </a> >>
+<a id="ciss_menu" href="#biopharm_retailing">医药批发和零售 </a> >>
+
+<br><a>产业链模拟组合：</a>
+<br><a>细分领域锚个股：</a>
+<a id="ciss_menu" href="#ind_def_anchor_stock">细分领域锚个股</a> {% endblock nav_sub %} {% block right_frame %}
+<!-- Menu in right frame -->
+<!-- ---------------------------------------------------------- -->
+<h1><a id="ciss_menu" href="#title">生物科技和医药产业链</a> </h1>
+<h3>目录</h3>
+<ul>
+    <li><a href="#abstract">1，概要 </a></li>
+    <li><a href="#industry_methodology">2，行业分类方法和产业链分析方法 </a></li>
+    <li><a href="#sellside_reports">3，主要外部参考资料 </a></li>
+    <li><a href="#inside_reports">4，内部研究报告&产业链列表 </a></li>
+    <li><a href="#research_menu">5，产业链目录和研究计划 </a></li>
+    <li><a href="#industry_db">6，产业链数据和数据库 </a></li>
+    <li><a href="#industry_stra">7，产业链相关策略 </a></li>
+    <li><a href="#industry_port">8，产业链相关组合和指数 </a></li>
+    <li><a href="#industry_reference">9，参考信息和链接 </a></li>
+
+    <li><a href="#ind_definition">1，获取产业链定义  </a></li>
+    <li><a href="#ind_fundamental">2，产业链基本面数据   </a></li>
+    <li><a href="#ind_data_standarded">3，标准化定性和定量数据 </a></li>
+    <li><a href="#ind_table_columns">4，表格数据列设计  </a></li>
+    <li><a href="#ind_maintainence">5，分析方案和数据表的定期维护机制。 </a></li>
+</ul>
+<h3><a id="ind_definition">产业链分析 </a></h3>
+<ul>
+    <li><a href="#ind_def_abstract">2020行业概览：</a> </li>
+    <li><a href="#ind_def_sub_chain">景气度提升的细分领域（子产业链）：</a> </li>
+    <li><a href="#ind_def_anchor_list">行业市值龙头</a> </li>
+    <li><a href="#ind_def_anchor_stock">行业锚个股</a> </li>
+
+</ul>
+
+<h3>细分产业链目录</h3>
+<ul>
+    <li><a href="#biopharm_material">制药原料 </a></li>
+    <li><a href="#biopharm_product">生物和化学制药 </a></li>
+    <li><a href="#biopharm_device">医疗器械 </a></li>
+    <li><a href="#biopharm_research_service">制药研究服务 </a></li>
+    <li><a href="#biopharm_hospital">医院 </a></li>
+    <li><a href="#biopharm_nursing">体检和养老 </a></li>
+    <li><a href="#biopharm_retailing">医药批发和零售 </a></li>
+
+</ul>
+<h3><a href="#ind_def_anchor_stock">细分领域锚个股</a></h3>
+{% endblock right_frame %} {% block left_frame %}
+
+
+<!-- Menu in left frame -->
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h1 id="title">生物科技和医药产业链 </h1>
+<p>生物医药产业链对应中信一级行业医药，其中二级行业为化学制药{化学原料药、化学制剂}、中药生产、生物医药II、其他医药医疗{流通、器械、医疗服务}
+    <br>该分类对于日益增长的生物医药研究并不充分，需要从产业链的角度进行梳理。
+
+</p>
+<hr>
+<h3>目录</h3>
+<ul>
+    <li><a href="#abstract">1，概要 </a></li>
+    <li><a href="#industry_methodology">2，行业分类方法和产业链分析方法 </a></li>
+    <li><a href="#sellside_reports">3，主要外部参考资料 </a></li>
+    <li><a href="#inside_reports">4，内部研究报告&产业链列表 </a></li>
+    <li><a href="#research_menu">5，产业链目录和研究计划 </a></li>
+    <li><a href="#industry_db">6，产业链数据和数据库 </a></li>
+    <li><a href="#industry_stra">7，产业链相关策略 </a></li>
+    <li><a href="#industry_port">8，产业链相关组合和指数 </a></li>
+    <li><a href="#industry_reference">9，参考信息和链接 </a></li>
+
+    <li><a href="#ind_definition">1，获取产业链定义 </li>
+<li><a href="#ind_fundamental">2，产业链基本面数据  </li>
+<li><a href="#ind_data_standarded">3，标准化定性和定量数据</li>
+<li><a href="#ind_table_columns">4，表格数据列设计 </li>
+<li><a href="#ind_maintainence">5，分析方案和数据表的定期维护机制。 </li>
+</ul>  
+{% endblock left_frame %}
+
+{% block menu %} 
+
+<h3>细分产业链目录</h3>
+<ul>
+    <li><a href="#biopharm_material">制药原料 </a></li>
+    <li><a href="#biopharm_product">生物和化学制药 </a></li>
+    <li><a href="#biopharm_device">医疗器械 </a></li>
+    <li><a href="#biopharm_research_service">制药研究服务 </a></li>
+    <li><a href="#biopharm_hospital">医院 </a></li>
+    <li><a href="#biopharm_nursing">体检和养老 </a></li>
+    <li><a href="#biopharm_retailing">医药批发和零售 </a></li>
+
+</ul>
+{% endblock menu %} {% block content %}
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="abstract">1，概要</h3>
+<hr>
+<p>{......}
+    <br>对应文件：0跨行业的产业链组合_200213.xlsx
+    <br>对应文件目录：C:\zd_zxjtzq\rc_reports_cs\行业分类_产业链量化
+
+</p>
+<p>参考资料： 1，20191111-海通证券-医药与健康护理：大象起舞，中国传统医药巨头的历史路径、选择及未来.pdf 2，20190809-海通证券-海通证券2019年医药行业培训材料（2019-08-09）.pdf
+</p>
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="industry_definition">产业链定义</h3>
+<p>获取产业链定义：基于某个公司研究或行业研究报告、某个事件、Wind产业链分类等。
+</p>
+<h4 id="ind_def_abstract">生物科技和医药产业链概览：</h4>
+<p>
+
+</p>
+
+<h3 id="biopharm_material">制药原料 </h3>
+
+
+
+
+
+
+
+
+<h3 id="biopharm_product">生物和化学制药 </h3>
+
+
+
+
+
+
+
+
+
+
+
+<h3 id="biopharm_device">医疗器械 </h3>
+
+<p>
+    全球医疗器械公司100强（附细分领域排行）
+    <br> 第一名美敦力MDT.N（2018收入300亿美元，市值1400亿美元）主营心脏起搏器、Endeavor支架、胰岛素泵、脊柱植入物、大脑起搏器、心脏外科以及耳鼻喉器材。2008年，美敦力与山东威高集团合资成立美敦力威高骨科有限公司。
+    <br>强生-27bn usd,飞利浦21.4bn、...、迈瑞医疗2.3bn usd、新华医疗1.2bn、乐普医疗1.1bn、微创医疗0.75bn、鱼跃医疗0.66bn
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3 id="biopharm_research_service">制药研究服务 </h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h3 id="biopharm_hospital">医院 </h3>
+
+<p> 互联网预约和挂号应该属于医院服务的一部分。
+    <br>
+
+
+</p>
+
+<h4>互联网挂号和预约：平安好医生1833.HK </h4>
+<p>
+    私家医生是平安好医生在2019年8月发布的战略级产品，上线4个月以来人均问诊量是普通用户的2.7倍，私家医生会员处方支付转化率以及下单量分别是普通用户的2.3和2倍。预测20年私人医生服务有望贡献5.5亿元左右收入。
+    <br> 私人医生服务还不到盈利阶段，考虑到该项业务第一年需要40-50%的渠道成本，第二年开始渠道费降到30%以下，在正文部分基于不同续费率假设做了弹性测算，
+    <br> 核心变量是续费率，和渠道费用率，商业模式类SaaS。
+    <br>　　医保端看，福州项目落地可期，有望全国复制，但短期较难有显著收入贡献。
+    <br>　　福州市模式最重要的核心亮点在于平安好医生拿到了福州市平台运营权，未来平安好医生将作为平台运营方和医疗服务提供方，这跟目前市场上很多的IT公司模式有显著不同，从政府官网和招标文件看，该项目预计在今年4月份开始试运营，同时本次疫情认为极大的促进了国家和各地卫健委对于互联网医疗的重视，未来异地复制速度有望加快，但是从目前掌握资料看，20年不应对公司医保相关业务有太高收入变现预期，先帮忙搭建平台是上策。
+    <br>　　盈利预测与估值：预计2020-2022年公司收入是68.60亿元、95.95亿元、137.63亿元，净利润分别为-7.04、0.02、4.35亿元，预计2021年公司开始盈利
+    <br>股权：中国平安20190507增持2%平安好医生股份，持股比例由约39.27%增加至41.27%。
+    <br>主营业务：平安好医生的核心业务家庭医生服务板块增势强劲，实现营业收入4.11亿元，同比增长69.6%。同时，期末月付费用户数(MPU)达236万，同比增长86.2%。截至2018年12月31日，平安好医生的注册用户数达2.65亿，同比增加7240万；期末月活跃用户数(MAU)达5470万，同比增长85.4%。
+</p>
+
+
+
+
+
+
+
+
+<h3 id="biopharm_nursing">体检和养老 </h3>
+
+
+
+
+
+
+
+
+
+
+<h3 id="biopharm_retailing">医药批发和零售 </h3>
+
+<h4>互联网药品零售：阿里健康0241.HK </h4>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% load static %}
+<h5>图：计算机行业S型增长曲线</h5>
+<img src="{% static 'templates\ciss_exhi\industry\static\soft_s_growth_curve.png' %}" alt="" />
+<p>source:广发证券-计算机-刘雪峰-策略-计算机行业-2020年投资策略：新产业周期落地加速,中等市值龙头群体崛起 </p>
+<br>
+
+
+<h4>重要个股梳理：A股，港股，美股 </h4>
+<ul>
+    <li>互联网诊疗-港股：平安好医生； </li>
+    <li>互联网医药-港股：阿里健康； </li>
+    <li>创新药研发-A股：恒瑞医药； </li>
+
+</ul>
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="ind_fundamental">2，产业链基本面数据</h3>
+<p>梳理产业链基本面数据：根据产业链定义梳理产品和服务、个股、行业分类、财务指标。识别高风险和不重要股票。
+</p>
+
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="ind_data_standarded">3，标准化定性和定量数据</h3>
+<p>构建标准化定性和定量数据：考虑时间维度和多产业链维度。 </p>
+
+<h4>标准化定性信息</h4>
+<p>
+
+</p>
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="ind_table_columns">4，表格数据列设计</h3>
+<p>4，表格数据列设计： 日期,股票名称,代码,中信行业1,中信行业2,中信行业3,概念1,概念2,产业链1,产业链2,notes,...
+</p>
+
+
+
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="ind_maintainence">5，分析方案和数据表的定期维护机制</h3>
+<p>分析方案和数据表的定期维护机制。
+</p>
+
+
+
+
+
+
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="industry_specific">特定行业软件</h3>
+<p>
+
+</p>
+
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="replacement">国产替代软件</h3>
+<p>
+
+</p>
+
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="fundamental">基础软件：系统和办公等</h3>
+<p>
+
+</p>
+
+
+{% load static %}
+<img src="{% static 'templates\ciss_exhi\industry\static\online_office.png' %}" alt="在线办公产业链.png" height="60%" width="60%" />
+<p>source:Wind.</p>
+<!-- height=100 width=100  -->
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="security">信息安全</h3>
+<p>
+
+</p>
+
+
+
+
+
+
+
+{% endblock content %}

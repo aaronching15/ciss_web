@@ -16,7 +16,7 @@ last update   | since  190821
 import sys
 # 添加祖父目录
 sys.path.append("../..")
-sys.path.append("C:\\zd_zxjtzq\\RC_trashes\\temp\\ciss_web\\CISS_rc\\db\\")
+sys.path.append("C:\\zd_zxjtzq\\ciss_web\\CISS_rc\\db\\")
 
 from db.db_assets.get_wind import wind_api
 wind_api_1 = wind_api()

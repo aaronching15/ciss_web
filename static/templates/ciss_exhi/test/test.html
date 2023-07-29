@@ -1,29 +1,323 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-<title></title>
-</head>
-<body>
-<div id="app">
-改编不是乱编，{% verbatim %}{{ words_from_api }}{% endverbatim %}
-</div>
-<script src="https://cdn.jsdelivr.net/npm/vue@latest/dist/vue.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/axios@0.18.0/dist/axios.min.js"></script>
-<script>
-var app = new Vue({
-    el: '#app', 
-    data () {
-        return {
-            string_from_api: '要向全国人民谢罪的！'
-        }
-    },
-mounted () {
-    axios
-    .get('api/666')
-    .then(response => (this.string_from_api = response.data))
-    }           
-})
-</script>
+{% extends "base.html" %}
+<meta charset="UTF-8">
+<!-- for HTML5 -->
+<!-- The block items for this base html file is: {nav_sub, left_frame,menu,content } -->
+
+{% block nav_sub %}
+<a id="a_nav" href="./monitor_market_data.html">市场数据监控 |Monitor_market_data</a> >>
+
+
+<br> {% endblock nav_sub %} {% block right_frame %}
+<h1><a href="#location_title">CISS首页</a> </h1>
+<h3>目录</h3>
+<ul>
+    <li><a href="#abstract">1，CISS介绍和理念 </a></li>
+    <li><a href="#ciss_web">2，CISS_web的网站功能 </a></li>
+    <li><a href="#ciss_research">3，CISS的策略研究 </a></li>
+    <li><a href="#ciss_invest">3，CISS的投资管理 </a></li>
+    <li><a href="#ciss_tutorial">5，CISS教程和帮助 tutorial   </a></li>
+
+</ul>
+
+{% endblock right_frame %} {% block left_frame %}
+<h1><a id="location_title">CISS首页</a> </h1>
+<h3>目录</h3>
+<ul>
+    <li><a href="#abstract">1，CISS介绍和理念 </a></li>
+    <li><a href="#ciss_web">2，CISS_web的网站功能 </a></li>
+    <li><a href="#ciss_research">3，CISS的策略研究 </a></li>
+    <li><a href="#ciss_invest">3，CISS的投资管理 </a></li>
+    <li><a href="#ciss_tutorial">5，CISS教程和帮助 tutorial   </a></li>
+
+</ul>
+{% endblock left_frame %} {% block menu %} {% endblock menu %} {% block content %}
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="abstract">1，CISS介绍和理念</h3>
+<p>
+
+</p>
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="ciss_web">2，CISS_web的网站功能</h3>
+<ol>
+</ol>
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="ciss_research">3，CISS的策略研究</h3>
+<ol>
+</ol>
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="ciss_invest">3，CISS的投资管理 </h3>
+<ol>
+</ol>
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="ciss_tutorial">4，CISS tutorial </h3>
+
+<ol>
+    <li><a id="a_nav" href="./docs/5min_ciss.html">5分钟入手 |5 Minutes to CISS</a> </li>
+    <li><a id="a_nav" href="./docs/esse_func.html">核心功能 |Essential Functions</a> </li>
+    <li><a id="a_nav" href="./docs/data_manage.html">数据管理 |Data Management</a></li>
+    <li><a id="a_nav" href="./docs/stra_ana.html">策略分析 |Strategy Analysis</a></li>
+    <li><a id="a_nav" href="./docs/port_simu.html">模拟组合 |Portfolio Simulation</a></li>
+    <li><a id="a_nav" href="./docs/multi_asset.html">多资产管理 |Multi-Asset Investment</a></li>
+    <li><a id="a_nav" href="./docs/stra_eval.html">策略评估及可视化 |Strategy Evaluation and Visualization</a></li>
+    <li><a id="a_nav" href="./docs/web_plat.html"><b>策略平台网站 |Strategy Platform as Website</a></li>
+    <li><a id="a_nav" href="./docs/update_coop_opensource.html">更新，协作，和开源 |update,cooperation and open source</a></li>
+
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3>主要文档目录|main directory files：</h3>
+<ol>
+    <li>system: .\ciss_web\ </li>
+    <li>strategy files: .\rc_reports_cs\ </li>
+    <li>3rd party reposts: .\TOUYAN\, </li>
+    <li>data4ciss : .\CISS_db\ </li>
+    <li>data_wind : .\db_wind\ </li>
+    <li>data_others : .\db_dzh_dfw\, </li>
+    <li>python modules : .\py_modules\, </li>
+    <li>sci. papers: .\paper\, </li>
+</ol>
+<ol>GYRX：
+    <li>gyrx相关知识： file_path=D:\TOUYAN\行业分类_产业链量化\研究框架_research_framework\ </li>
+    <li> </li>
+</ol>
+
+
+
+<hr>
+<!-- ########################################################################################### -->
+<!-- ########################################################################################### -->
+
+
+
+
+
+
+<!-- ########################################################################################### -->
+<!-- ########################################################################################### -->
+
+    <div id="main4" style="width: 800px;height:500px;"></div>
+    {% csrf_token %}
+    <script type="text/javascript" >
+    // source https://www.cnblogs.com/labc/articles/5954438.html
+    // reference: stra_bond_jny2.html
+
+    //JSON.stringify 返回的是双引号 {"testArray":[1,2,3,4,5],"name":"CSS3"}
+    // 尝试替换双引号 ||  data_rc = data_rc.replace(/'/, '"') 好像替换第一个单引号
+    // data_rc = data_rc.replace(/\'/g, '"')
+    // obj = JSON.parse(data_rc);
+    var myChart4 = echarts.init(document.getElementById('main4')); 
+
+    //$.getJSON('./rc_sys/Sys_rC1703_1703Port/Port_CSI800_000300.SH_170101_20_0.95/Account_Sum_2018-08-09.json').done(function (data) {
+    // var temp_unit = $.getJSON( str_path ) 
+    // type of temp_unit is object 
+    //Query.parseJSON(jsonstr),可以将json字符串转换成json对象
+    // $.getJSON( str_path ).done(function (data) {
+    
+    var dates =["a","b","c","d" ] ;
+    var units = [1.0,0.99,1.01,1.03 ]; 
+    var benchs =  [1.0,1.001,1.015,1.025 ]; 
+
+    // window.alert( units[10] );
+    
+    var name1 = '基金净值';
+    var name2 = '基准'; 
+    var values1 = units  ;
+    var values2 = bench ; 
+    // $.each(data, function (index, item) {
+    //     // alert( item.name ) 弹窗是 601398.SH,600036.SH,997200,865500
+    //     // alert( index ) 弹窗是 index,MV
+    //     // item[0] 依次是 601398. 93w，似乎反了
+    //     // Ans:先在python-pandas中transpose转置。
+    //     // 奇怪，jQuery的中文是可以正常显示的，幸福 | python导入csv时选择了 GBK，导出json时没有特别的。 
+    //         dates.push(  item.date );    //挨个取出类别并填入类别数组 
+    //         values1.push( item.port_unit );
+    //         values2.push( item.port_unit );
+    //     });
+
+    // set options 
+    option4 = {
+        title : {
+            text: '净值和最大回撤 Unit MDD',
+            subtext: 'CISS\\bond\\momentum ',
+            x: 'center',
+            align: 'right'
+        },
+        grid: {
+            bottom: 80
+        },
+        toolbox: {
+            feature: {
+                dataZoom: {
+                    yAxisIndex: 'none'
+                },
+                restore: {},
+                saveAsImage: {}
+            }
+        },
+        tooltip : {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'cross',
+                animation: false,
+                label: {
+                    backgroundColor: '#99CCCC'
+                }
+            }
+        },
+        legend: {
+            data:[name1,name2],
+            x: 'left'
+        },
+        //设置初始显示的总图表的百分比。
+        dataZoom: [
+            {
+                show: true,
+                realtime: true,
+                start: 0,
+                end: 100
+            },
+            {
+                type: 'inside',
+                realtime: true,
+                start: 0,
+                end: 100
+            }
+        ],
+        xAxis : [
+            {
+                type : 'category',
+                boundaryGap : false,
+                axisLine: {onZero: false},
+                data : dates
+             }
+        ],
+        yAxis: [
+            {
+                name: 'Unit(1.000)',
+                type: 'value', 
+                max:   'dataMax',
+                //Math.ceil( Math.max( values1 )*100+10 )/100   ,
+                // min: Math.floor( Math.min( values1 )*100-10 )/100 
+                min: 'dataMin' 
+
+            },       
+            {
+                name: 'MDD(%)',
+                nameLocation: 'start',
+                max: 0.0 ,
+                min:  'dataMin' ,
+                // Math.floor( Math.min( values2 )*100-10 )/100 , 
+                //Math.min( values2 ) *1.1*100 ,
+                type: 'value',
+                inverse: false //true
+            }
+        ],
+        series: [
+            {
+                name: name1,
+                type:'line',
+                animation: false,
+                areaStyle: {
+                    normal: {}
+                },
+                lineStyle: {
+                    normal: {
+                        width: 1
+                    }
+                },
+                markArea: {
+                    silent: true,
+                    data: [[{
+                        xAxis: dates[0]
+                    }, {
+                        xAxis: dates[dates.length-1]
+                    }]]
+                },
+                data: values1
+            },
+            {
+                name: name2,
+                type:'line',
+                yAxisIndex:1,
+                animation: false,
+                areaStyle: {
+                    normal: {}
+                },
+                lineStyle: {
+                    normal: {
+                        width: 1
+                    }
+                },
+                markArea: {
+                    silent: true,
+                    data: [[{
+                        xAxis: dates[0]
+                    }, {
+                        xAxis: dates[dates.length-1]
+                    }]]
+                },
+                data: values2
+            }]
+        };  // end of option 
+    
+    myChart4.setOption(option4)
+
+    //鼠标响应事件：params.name 对应日期，params.data 净值数字
+    //idea 未来可以跳转到个股，组合，系统的页面。
+    myChart4.on('click', function (params) {
+    window.open('https://www.baidu.com/s?wd=' + encodeURIComponent(params.name)); 
+        });
+
+    // })
+    
+
+    </script>
+
+<!-- ########################################################################################### -->
+<!-- ########################################################################################### -->
+
+
+
+
+
+
+
+
+{% endblock content %}
+
+
+    
+
+
+
+
+
+
+
+
+
+
 </body>
 </html>

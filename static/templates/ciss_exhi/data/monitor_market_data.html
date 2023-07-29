@@ -1,0 +1,361 @@
+{% extends "base.html" %}
+<meta charset="UTF-8">
+<!-- for HTML5 -->
+<!-- The block items for this base html file is: {nav_sub, left_frame,menu,content } -->
+
+<!-- 设置标题 -->
+{% block title0 %} 
+    市场数据监控|wind-api
+{% endblock title0 %}
+
+{% block nav_sub %}
+<!-- layui定义左侧工具栏：第一部分目录 -->
+<li style="text-align: center;">市场数据监控</li>
+<!-- notes:class="layui-nav-item"默认是收起的， 加上" layui-nav-itemed"后内容是展开的;  -->
+<li class="layui-nav-item">
+    <a class="" href="#market_data_funda">股票基本面数据</a>
+    <dl class="layui-nav-child">
+        <dd><a href="#indicator_ashares_key">A股港股核心指标</a> </dd>
+        <dd><a href="#indicator_ashares_portfolio">A股指数、个股财务和估值指标数据</a> </dd>
+        <dd><a href="#estimate_ashares_hkus">A股、港股、美股盈利预测指标</a> </dd> 
+    </dl>
+</li>
+
+
+<li class="layui-nav-item">
+    <a class="" href="#market_data_quote">行情数据|QUOTE</a>
+    <dl class="layui-nav-child"> 
+        <dd><a href="#quote_sqlite_stock_fund_index">查询sqlite行情数据表完整性</a> </dd> 
+        <dd><a href="#quote_choice_data_get">Choice数据-下载和保存</a> </dd>
+    </dl>
+</li> 
+
+<li class="layui-nav-item">
+    <a class="" href="#market_data_fund">基金和FOF数据 TODO</a>
+    <dl class="layui-nav-child">
+        <dd><a href="#fund_basic_manager_code_name">基本资料：基金经理、代码、名称</a> </dd> 
+        <dd><a href="#fund_performance_ret_mdd_rank">绩效指标：收益率、回撤、排名</a> </dd>
+        <dd><a href="#fund_ashares_portfoddo">投资组合、股票十大重仓、股票全部持仓</a> </dd>
+        <dd><a href="#fund_nav_shares_dividen">规模、份额、分红</a> </dd>
+    </dl>
+</li>
+
+
+{% endblock nav_sub %} 
+
+<!--- ################################################################## --->
+<!--- ################################################################## --->
+{% block left_frame %}
+
+
+<!-- Menu in left frame -->
+<!-- <hr> 
+<h1 id="title">市场数据监控 </h1>
+<p>跟踪股票指数、股票、股票基金、衍生品、债券、资金、外汇等数据。
+    <br>主要跟踪权益类数据
+</p>
+<hr>
+<h3>目录</h3>
+<h3><a href="#market_data_quote">行情数据|QUOTE </a></h3>
+<ul> 
+    <li><a href="#quote_ashares_stock_fund_index">A股指数、个股、场内基金行情数据</a> </li>
+    <li><a href="#quote_ashares_portfolio">基础组合、策略组合、产品组合行情数据</a> </li>
+    <li><a href="#quote_hkus_stock_fund_index">港股、美股、海外基金行情数据</a> </li>
+    <li><a href="#quote_bond_bond_fund_index">债券、债券指数、国债期货行情数据</a> </li>
+    <li><a href="#quote_ashares_derivatives">股指期权和期货行情数据</a> </li>
+    <li><a href="#quote_others_stock_fund_index">其他行情数据</a> </li>
+</ul>
+
+<h3><a href="#market_data_fund">基金和FOF数据| </a></h3>
+<ul>
+    <li><a href="#fund_basic_manager_code_name">基本资料：基金经理、代码、名称</a> </li> 
+    <li><a href="#fund_performance_ret_mdd_rank">绩效指标：收益率、回撤、排名</a> </li>
+    <li><a href="#fund_ashares_portfolio">投资组合、股票十大重仓、股票全部持仓</a> </li>
+    <li><a href="#fund_nav_shares_dividen">规模、份额、分红</a> </li>
+</ul>
+
+<h3><a href="#market_data_funda">股票基本面数据 </a></h3>
+<ul>
+    <li><a href="#funda_fa_ashares_stock_index">A股指数、个股财务数据</a> </li>
+    <li><a href="#indicator_ashares_portfolio">A股指数、个股财务和估值指标数据</a> </li>
+    <li><a href="#estimate_ashares_hkus">A股、港股、美股盈利预测指标</a> </li> 
+</ul>  -->
+
+{% endblock left_frame %}
+
+{% block menu %} 
+
+{% endblock menu %}
+
+<hr>{% block content %}
+
+
+<!--- ###url 与 views_xxx.py 文件中的 def monitor_market_data(request) 对应。#### --->
+<form action="{% url 'monitor_market_data' %}" method="post" accept-charset="utf-8"> 
+<!--- ################################################################## --->
+<h3 id="market_data_funda">股票基本面数据</h3> 
+<p> views_data_windapi.py </p>
+<!--- ################################################################## --->
+<!--- ################################################################## --->
+<h4 id="indicator_ashares_key">A股港股核心指标变动 </h4>
+<p>输入上一期日期，比较核心指标变动；
+    <br>上一期日期数据文件目录，path=C:\rc_2023\rc_202X\data_pms\data_adj\
+</p>
+{% csrf_token %}
+<table border="1">
+    <!-- step1：输入代码，选择是否查询基金信息；step2：根据获取的数据，填入定性信息，保存到sqlite数据库  -->
+    <tr><tr>上一期日期<input type="text" name="date_begin_key_change" value="{{ time_now_str }}"></tr> 
+        <tr>最新日期|可不填<input type="text" name="date_end_key_change" value="{{ time_now_str }}"></tr> 
+        <br>
+        <input type="submit" name="input_indicator_ashares_key_change" value="提交"> 
+    </tr>
+
+</table>
+
+<table id="ciss_table_chg">
+    <tr class="hover">
+        <td>代码</td>
+        <td>名称</td>
+        <td>月均成交额</td>
+        <td>总市值</td>
+        <td>短期趋势</td>
+        <td>中期趋势</td>
+        <td>基金持股比例</td>
+        <td>净资产收益率</td>
+        <td>归母净利润同比增长率</td>
+        <td>市盈率</td> 
+    </tr>
+    {% for temp_i,temp_v in df_shares_diff.items %}
+    <tr>
+        <td>{{ temp_v.代码 }}</td>
+        <td>{{ temp_v.名称 }}</td>
+        <td id="table_td_right">{{ temp_v.月均成交额 }}</td>
+        <td id="table_td_right">{{ temp_v.总市值 }}</td>
+        <td id="table_td_right">{{ temp_v.短期趋势 }}</td>
+        <td id="table_td_right">{{ temp_v.中期趋势 }}</td>
+        <td id="table_td_right">{{ temp_v.基金持股比例 }}</td>
+        <td id="table_td_right">{{ temp_v.净资产收益率 }}</td>
+        <td id="table_td_right">{{ temp_v.归母净利润同比增长率 }}</td>
+        <td id="table_td_right">{{ temp_v.市盈率 }}</td> 
+    </tr>
+    {% endfor %}
+    
+</table> 
+<hr>
+<table id="ciss_table_chg">
+    <tr class="hover">
+        <td>一级行业</td> 
+        <td>月均成交额</td>
+        <td>总市值</td>
+        <td>短期趋势</td>
+        <td>中期趋势</td>
+        <td>基金持股比例</td>
+        <td>净资产收益率</td>
+        <td>归母净利润同比增长率</td>
+        <td>市盈率</td> 
+    </tr>
+    {% for temp_i,temp_v in df_shares_ind1_diff.items %}
+    <tr>
+        <td>{{ temp_v.中信一级行业 }}</td> 
+        <td id="table_td_right">{{ temp_v.月均成交额 }}</td>
+        <td id="table_td_right">{{ temp_v.总市值 }}</td>
+        <td id="table_td_right">{{ temp_v.短期趋势 }}</td>
+        <td id="table_td_right">{{ temp_v.中期趋势 }}</td>
+        <td id="table_td_right">{{ temp_v.基金持股比例 }}</td>
+        <td id="table_td_right">{{ temp_v.净资产收益率 }}</td>
+        <td id="table_td_right">{{ temp_v.归母净利润同比增长率 }}</td>
+        <td id="table_td_right">{{ temp_v.市盈率 }}</td> 
+    </tr>
+    {% endfor %}
+    
+</table>
+<hr>
+<table id="ciss_table_chg">
+    <tr class="hover">
+        <td>三级行业</td> 
+        <td>月均成交额</td>
+        <td>总市值</td>
+        <td>短期趋势</td>
+        <td>中期趋势</td>
+        <td>基金持股比例</td>
+        <td>净资产收益率</td>
+        <td>归母净利润同比增长率</td>
+        <td>市盈率</td> 
+    </tr>
+    {% for temp_i,temp_v in df_shares_ind3_diff.items %}
+    <tr>
+        <td>{{ temp_v.中信三级行业 }}</td> 
+        <td id="table_td_right">{{ temp_v.月均成交额 }}</td>
+        <td id="table_td_right">{{ temp_v.总市值 }}</td>
+        <td id="table_td_right">{{ temp_v.短期趋势 }}</td>
+        <td id="table_td_right">{{ temp_v.中期趋势 }}</td>
+        <td id="table_td_right">{{ temp_v.基金持股比例 }}</td>
+        <td id="table_td_right">{{ temp_v.净资产收益率 }}</td>
+        <td id="table_td_right">{{ temp_v.归母净利润同比增长率 }}</td>
+        <td id="table_td_right">{{ temp_v.市盈率 }}</td> 
+    </tr>
+    {% endfor %}
+    
+</table>
+
+
+
+
+<hr>
+<!--- ################################################################## ---> 
+<h3 id="market_data_quote">行情数据|QUOTE</h3> 
+
+
+<!--- ################################################################## --->
+<!--- ################################################################## --->
+<h4 id="quote_sqlite_stock_fund_index">查询sqlite行情数据表完整性：日|月、股票|基金、 </h4>
+{% csrf_token %}
+<table border="1">
+    <!-- step1：输入代码，选择是否查询基金信息；step2：根据获取的数据，填入定性信息，保存到sqlite数据库  -->
+    <tr>选择表格：<br>
+        <tr>资产-市场-数据<select name="table_name" value="">
+        <option value ="quote_ashares_stock_fund_index_month">月末股票、指数和场内基金行情、估值、预期数据</option>
+        <option value ="quote_fund_month">月末基金净值、排名数据</option>
+        <option value ="quote_ashares_stock_fund_index">交易日股票、指数和场内基金收盘价和涨跌</option>
+        </select></tr>
+        <br>
+        <tr>证券类型：<select name="type_asset" value="">
+        <option value ="">ALL</option>
+        <option value ="ashares">A股</option><option value ="hk">港股</option>
+        <option value ="index">指数</option><option value ="fund">基金</option>
+        <option value ="us">美股</option>
+        </select></tr>
+        <br>
+        <tr>开始日期<input type="text" name="date_begin" value=""></tr> 
+        <tr>结束日期<input type="text" name="date_end" value="{{ time_now_str }}"></tr> 
+        <br>
+        <input type="submit" name="input_select_quote" value="提交"> 
+    </tr>
+
+</table>
+<p>num_col={{ num_col }}；num_index={{ num_index }}</p> 
+
+
+
+<!--- ################################################################## --->
+<!--- ################################################################## --->
+<hr>
+<h4 id="quote_choice_data_get">Choice数据-下载和保存：日|月日期区间、股票|指数|基金| </h4>
+<p>Notes:部分指数只有Wind数据有，Choice没有wind相关的指数 </p>
+<p>关于代码的筛选
+<br>1,A股：根据最新日期精确匹配的股票列表"a_shares_2022xxxx.xlsx"，或根据220922之前全部A股的上市日期；2种情况均需要满足市值大于90亿；
+<br>2,港股：根据最新日期精确匹配的股票列表"h_shares_2022xxxx.xlsx"，或根据220922之前全部港股的上市日期；2种情况均需要满足市值大于90亿；
+<br>3,美股：根据最新日期精确匹配的股票列表"SP500成分_2022xxxx.xlsx"，或根据220922当期SP500成分股的上市日期。
+<br>4,指数：根据"db_manage.xlsx"里的choice对应指数。
+<br>5,基金：获取2016至今每年末"主动股票","偏债混合"分类合并后的sheet=基础池的数据，例如 【基金池rc_主动股票_20161231.xlsx】
+<br>
+<br>Choice数据接口常见问题：1，Qs:choice报错=WinError 87. Ana：需要下载能向下兼容的插件vcredist_x64，vcredist_x86. url=http://choiceclub.eastmoney.com/#/articleDetail/8769
+<br>安装一下Microsoft Visual C++ 2010 可再发行组件包，86和64都要安装下，安装完再重新运行installEmQuantapi.py之后再试下
+<br>2,choice报错=KeyError: 'setserverlistdir'
+
+</p>
+{% csrf_token %}
+<table border="1">
+    <tr>选择表格：<br>    
+        <tr>资产-市场-数据<select name="table_name_get_quote" value="">
+        <option value ="quote_ashares_stock_fund_index_month">月末股票、指数和场内基金行情、估值、预期数据</option>
+        <option value ="quote_fund_month">月末基金净值、排名数据</option>
+        <option value ="quote_ashares_stock_fund_index">交易日股票、指数和场内基金收盘价和涨跌</option>
+        </select></tr>
+    <br>
+    <tr>证券类型：<select name="type_asset_get_quote" value="">
+    <option value ="">ALL</option>
+    <option value ="ashares">A股</option><option value ="hk">港股</option>
+    <option value ="index">指数</option><option value ="fund">基金</option>
+    <option value ="us">美股</option>
+    </select></tr>
+    <br>
+    <tr>开始日期<input type="text" name="date_begin_get_quote" value=""></tr> 
+    <tr>结束日期<input type="text" name="date_end_get_quote" value="{{ time_now_str }}"></tr>    
+    <br>
+    <tr>数据来源：<select name="data_source_get_quote" value="">
+    <option value ="wind_api">wind_api</option><option value ="choice_api">choice_api</option>
+    <option value ="wind_wds">wind_wds</option>
+    </select></tr>
+    <input type="submit" name="input_get_quote" value="提交"> 
+    </tr>
+
+</table>
+<p>num_col={{ num_col }}；num_index={{ num_index }} </p> 
+
+
+
+<hr>
+<h4>Choice-api数据和sql数据转换 </h4>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="quote_ashares_portfolio">基础组合、策略组合、产品组合行情数据</h3>
+
+
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="quote_hkus_stock_fund_index">港股、美股、海外基金行情数据</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="quote_bond_bond_fund_index">债券、债券指数、国债期货行情数据</h3>
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="quote_ashares_derivatives">股指期权和期货行情数据</h3>
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="quote_others_stock_fund_index">其他行情数据</h3>
+ 
+
+ 
+
+
+</form>
+{% endblock content %}

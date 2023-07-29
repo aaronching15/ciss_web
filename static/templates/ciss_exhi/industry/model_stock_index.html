@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+<meta charset="UTF-8"> <!-- for HTML5 -->
+<!-- The block items for this base html file is: {nav_sub, left_frame,menu,content } -->
+
+
+{% block nav_sub %}
+
+<a id="a_nav" href="./core_model_stock.html">核心个股模型 |Core model of stock</a> >>
+<a id="a_nav" href="./last_model_stock.html">最新个股模型 |Lastest model of stock</a> >>
+
+<br>
+<a>核心股票模型列表：</a>
+<a id="ciss_menu" href="./temp.html">招商银行</a> >>
+<a id="ciss_menu" href="./temp.html">中国平安</a> >>
+<a id="ciss_menu" href="./temp.html">xx行业</a> >> 
+
+
+
+
+{% endblock nav_sub %} 
+
+
+{% block left_frame %}
+
+
+<!-- Menu in left frame -->
+<hr><!-- ---------------------------------------------------------- -->
+<h1>个股模型目录 </h1>
+<p>基于A股公司的行业研究，构建个股模型，确定个股相关基本面定量和定性信息，为下一步
+    策略研究和组合构建做准备。
+参考文件1：C:\zd_zxjtzq\rc_reports_cs\rc模板\行研信息模型_个股.xlsx
+参考文件2：C:\zd_zxjtzq\rC_Data\singal_Stock\rC_Menu.xlsx
+</p>
+<hr>       
+<h3>目录</h3>
+<ul>
+<li><a href="#abstract_admin">1，个股模型概要和管理 </a></li> 
+<li><a href="#model_list_admin">2，个股模型列表维护 </a></li> 
+<li><a href="#fundamental_data">3，基础数据：行业分类，指标等 </a></li>  
+</ul>  
+{% endblock left_frame %}
+
+{% block menu %} 
+
+{% endblock menu %}
+
+
+
+{% block content %}
+
+
+
+<hr><!-- ---------------------------------------------------------- -->
+<h3 id="abstract_admin">1，个股模型概要和管理</h3>
+<hr>
+<p>主要sheet：
+    待办事项，研究模型管理，目录。
+    0，研究方法；1，股票360度信息；2，行业或个股模型；3，市场和竞争对手；4,股票跟踪目录
+    ；说明和注意。</p>
+
+<p>维护个股模型相关工作计划和流程： 
+    序号	日期	主题	关键词	事件	备注
+1	20200107	新增	新建	创建行研基本面模型	对应文件 基本面量化组合模板_新能源_v200107.xlsx
+2	20200110	管理	规则	改进数据信息分工	所有信息的原始数据和处理过程应该放在"行研信息模型_个股"里，"基本面量化组合模板_新能源"里放置已经完成计算的信息
+<br>
+参考文件：行研信息模型_个股.xlsx
+path:C:\zd_zxjtzq\rc_reports_cs\rc模板
+</p>
+
+<p>
+    
+
+<br>主题	时间，项目	描述		开始时间	计划完成时间	进度	困难			状态	备注
+
+</p>
+
+<hr><!-- ---------------------------------------------------------- -->
+<h3 id="model_list_admin">2，个股模型列表维护</h3> 
+<p>跟踪个股模型，是否建模、是否取消跟踪等。
+<br>
+    序号	status	view	code	start_date	last_date	nextUpdate_date	name_CN	comment	code_nextBest 	source	format Check	wind_ind_4	成分个数	累计覆盖个数	短期不跟踪股票	status
+    1	done	招商银行	600036.SH	170830	170913	180301	行业	银行			171120	882493.WI	13	13	短期不跟踪股票	done
+    2	done	通威股份	600438.SH	170914	171007	180301	行业	光伏，饲料			171121	882480.WI	34	47	短期不跟踪股票	 
+    3	done	延江股份	300658.SZ	170901	171008	180301	行业	消费品			171121	882455.WI	44	91	短期不跟踪股票	 
+    4	done	牧原股份	002714.SZ	170831	171015	180315	行业	养猪			171121	882481.WI	94	185	短期不跟踪股票	 
+    
+</p>
+
+<hr><!-- ---------------------------------------------------------- -->
+<h3 id="fundamental_data">3，基础数据：行业分类，指标等</h3> 
+<p>列出个股模型涉及到的相关指标，如中信行业分类，行业内锚定股票等。
+
+</p>
+
+
+
+
+
+ 
+<hr><!-- ---------------------------------------------------------- -->
+<h4>核心or某某主题个股模型列表 </h4>
+<ul> 
+<li><a  href="./temp.html">股票A</a></li>
+<li><a  href="./temp.html">苹果</a></li>
+<li><a  href="./temp.html">特斯拉</a></li>
+ 
+</ul>
+
+
+
+
+
+
+
+
+
+
+{% endblock content %}

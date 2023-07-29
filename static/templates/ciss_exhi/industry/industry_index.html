@@ -1,0 +1,275 @@
+{% extends "base.html" %}
+<meta charset="UTF-8">
+<!-- for HTML5 -->
+<!-- The block items for this base html file is: {nav_sub, left_frame,menu,content } -->
+
+
+{% block nav_sub %}
+<a id="a_nav" href="./temp.html">临时行业研究信息 |Temp industry event</a> >>
+<br>
+<a id="a_nav" href="./model_stock_index.html">行业个股模型 |model of stocks </a> >>
+<a id="a_nav" href="./core_industry.html">核心产业链 |Core industry chain</a> >>
+<a id="a_nav" href="./last_industry.html">最新产业链 |Lastest industry chain</a> >>
+<br>
+<a>产业链列表：</a>
+<a id="ciss_menu" href="./industry_software.html">软件产业链</a> >>
+<a id="ciss_menu" href="./industry_media.html">传媒产业链</a> >>
+<a id="ciss_menu" href="./industry_finance_new.html">新金融产业链</a> >>
+<a id="ciss_menu" href="./industry_biopharmaceutical.html">生物科技和医药产业链</a> >>
+<a id="ciss_menu" href="./industry_manufacturing.html">新材料和装备制造 </a> >>
+<a id="ciss_menu" href="./industry_comsumer_staples.html">日常消费</a> >>
+<a id="ciss_menu" href="./industry_comsumer_discretionary.html">耐用消费</a> >>
+<a id="ciss_menu" href="./industry_huawei.html">华为产业链</a> >>
+<a id="ciss_menu" href="./industry_apple.html">苹果产业链</a> >>
+<a id="ciss_menu" href="./industry_tesla.html">特斯拉产业链</a> >>
+<!-- 
+<a id="ciss_menu" href="./industry_semiconductor.html">半导体产业链</a> >>
+<a id="ciss_menu" href="./industry_solar.html">光伏产业链</a> >>
+<a id="ciss_menu" href="./industry_alibaba.html">阿里巴巴产业链</a> >>
+<a id="ciss_menu" href="./industry_alibaba_ecommerce_mcn.html">阿里-电商和MCN产业链</a> >>
+<a id="ciss_menu" href="./industry_alibaba_internet_finance.html">阿里-互联网金融产业链</a> >>
+<a id="ciss_menu" href="./industry_alibaba_cloud_computing.html">阿里-云计算产业链</a> >>
+<a id="ciss_menu" href="./industry_tencent.html">腾讯产业链</a> >>
+<a id="ciss_menu" href="./industry_tencent_gaming.html">腾讯-游戏产业链</a> >>
+<a id="ciss_menu" href="./industry_tencent_online_video.html">腾讯-影视传媒产业链</a> >>
+<a id="ciss_menu" href="./industry_locallife_food_delivery.html">本地生活和外卖产业链</a> >> -->
+{% endblock nav_sub %} {% block right_frame %}
+<h1><a href="#location_title">产业链研究目录</a> </h1>
+<h3>目录</h3>
+<ul>
+    <li><a href="#abstract">1，概要 </a></li>
+    <li><a href="#industry_methodology">2，行业分类方法和产业链分析方法 </a></li>
+    <li><a href="#sellside_reports">3，主要外部参考资料 </a></li>
+    <li><a href="#inside_reports">4，内部研究报告&产业链列表 </a></li>
+    <li><a href="#research_menu">5，产业链目录和研究计划 </a></li>
+    <li><a href="#industry_db">6，产业链数据和数据库 </a></li>
+    <li><a href="#industry_stra">7，产业链相关策略 </a></li>
+    <li><a href="#industry_port">8，产业链相关组合和指数 </a></li>
+    <li><a href="#industry_reference">9，参考信息和链接 </a></li>
+
+    <li><a href="#ind_definition">1，获取产业链定义  </a></li>
+    <li><a href="#ind_fundamental">2，产业链基本面数据   </a></li>
+    <li><a href="#ind_data_standarded">3，标准化定性和定量数据 </a></li>
+    <li><a href="#ind_table_columns">4，表格数据列设计  </a></li>
+    <li><a href="#ind_maintainence">5，分析方案和数据表的定期维护机制。 </a></li>
+</ul>
+
+<h3>细分产业链目录</h3>
+<ul>
+    <li><a href="./industry_software.html">软件产业链</a></li>
+    <li><a href="./industry_media.html">传媒产业链</a></li>
+    <li><a href="./industry_finance_new.html">新金融产业链</a></li>
+    <li><a href="./industry_biopharmaceutical.html">生物科技和医药产业链</a></li>
+    <li><a href="./industry_manufacturing.html">新材料和装备制造 </a></li>
+    <li><a href="./industry_comsumer_staples.html">日常消费</a></li>
+    <li><a href="./industry_comsumer_discretionary.html">耐用消费</a></li>
+    <br>
+    <li><a href="./industry_huawei.html">华为产业链</a></li>
+    <li><a href="./industry_apple.html">苹果产业链</a></li>
+    <li><a href="./industry_tesla.html">特斯拉产业链</a></li>
+
+    <li><a href="./industry_semiconductor.html">半导体产业链</a></li>
+    <li><a href="./industry_solar.html">光伏产业链</a></li>
+    <li><a href="./industry_alibaba.html">阿里巴巴产业链</a></li>
+    <li><a href="./industry_alibaba_ecommerce_mcn.html">阿里-电商和MCN产业链</a></li>
+    <li><a href="./industry_alibaba_internet_finance.html">阿里-互联网金融产业链</a></li>
+    <li><a href="./industry_alibaba_cloud_computing.html">阿里-云计算产业链</a></li>
+    <li><a href="./industry_tencent.html">腾讯产业链</a></li>
+    <li><a href="./industry_tencent_gaming.html">腾讯-游戏产业链</a></li>
+    <li><a href="./industry_tencent_online_video.html">腾讯-影视传媒产业链</a></li>
+    <li><a href="./industry_locallife_food_delivery.html">本地生活和外卖产业链</a></li>
+
+
+</ul>
+
+
+
+{% endblock right_frame %} {% block left_frame %}
+
+
+<!-- Menu in left frame -->
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h1 id="location_title">产业链研究目录 </h1>
+<p>基于A股市场投资主线，梳理不同产品或服务的产业链，按照“产品或服务生产过程相关产品、服务、设备” 搜集基本面定性信息、梳理相关细分行业、对应细分零配件或工序等，筛选上市公司， 为下一步公司研究和产业链组合构建做准备。
+</p>
+<hr>
+<h3>目录</h3>
+<ul>
+    <li><a href="#abstract">1，概要 </a></li>
+    <li><a href="#industry_methodology">2，行业分类方法和产业链分析方法 </a></li>
+    <li><a href="#sellside_reports">3，主要外部参考资料 </a></li>
+    <li><a href="#inside_reports">4，内部研究报告&产业链列表 </a></li>
+    <li><a href="#research_menu">5，产业链目录和研究计划 </a></li>
+    <li><a href="#industry_db">6，产业链数据和数据库 </a></li>
+    <li><a href="#industry_stra">7，产业链相关策略 </a></li>
+    <li><a href="#industry_port">8，产业链相关组合和指数 </a></li>
+    <li><a href="#industry_reference">9，参考信息和链接 </a></li>
+
+</ul>
+{% endblock left_frame %} {% block menu %} {% endblock menu %} {% block content %}
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="abstract">1，概要</h3>
+<hr>
+<p>{......}
+    <br>对应文件：0跨行业的产业链组合_200213.xlsx
+    <br>对应文件目录：C:\zd_zxjtzq\rc_reports_cs\行业分类_产业链量化
+</p>
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="industry_methodology">2，行业分类方法和产业链分析方法</h3>
+<p>学术角度，行业分类和产业链研究主要属于产业经济学的范畴。 直观来看，A股开始重视产业链的研究是由于许多产业在信息技术进步的背景下发生变革，用传统 的单一行业分类难以对有相似基本面变动的企业进行划分。
+
+</p>
+
+<h4>股票行业分类、所属产业链、概念数据的比较分析</h4>
+<p>一个股票可能有多种不同级别的行业分类，也会属于多个产业链和多个概念。其中概念约等于 产业的初期版本，这时要么产业还处于雏形要么还未正式被分类。
+    <br> 以2020年版的中信一级行业分类：计算机为例，会发现行业分类只能作为股票一个非常基础的划分 方案，同一细分行业内股票往往基本面显著不同。也许行业分类更适合传统行业如银行、煤炭等。 对于银行、煤炭这些行业，公司产品和服务的供需变化稳定、幅度不大、财务指标的可预测性较高， 更适合采用固定的定量分析方法。
+</p>
+
+<h5>中信行业分类\一级:计算机</h5>
+<p>
+    <br> 中信行业分类：计算机\产业互联网\产业互联网信息服务， 该分类下只有同花顺和大智慧2家企业，都属于提供证券投资行业信息。
+    <br>中信行业分类：计算机\产业互联网\产业互联网平台服务， 该分类下只有上海钢联，属于与钢铁行业高度相关的企业。
+    <br> 中信行业分类：计算机\产业互联网\产业互联网综合服务， 该分类下东方财富、360、二三四五三家公司。从主营利润和收入上看，都属于单一行业净利润占比超80% ，达不到腾讯和里巴巴类似的多元业务均衡水平。3家企业分别属于互联网内的金融、信息安全、app推广 {通过鼓励用户下载app、点击新闻等行为返现}。其中二三四五研报覆盖较低，可能不是买卖方机构认可的 股票。
+    <br> 中信行业分类：计算机\云服务\云基础设施服务， 该分类下市值第一的优刻得是国内最大的中立第三方云计算服务商；8家企业总市值8.7~519亿；流通市值 8.3~401亿。奥飞数据300738是201801上市的新股，基本面良好且总市值仅仅49亿，为阿里巴巴建设IDC机房。 中信行业分类：计算机\云服务\云平台服务，该分类下无股票 中信行业分类：计算机\云服务\云软件服务，该分类下用友网络、广联达、普元信息总市值1100，480，55
+
+
+</p>
+<p>Idea：数据分析 1，从上市公司中分拆出多个产品和服务，例如IDC、
+
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="sellside_reports">3，主要外部参考资料</h3>
+<p>主要通过Wind资讯终端内产业链PC界面获取不同机构维护的产业链股票图，以及卖方相关的 产业链或主题深度报告。
+</p>
+<h4>中信行业分类202001版</h4>
+<p>
+    <br>对应文件：中信行业分类标准v2.0.xlsx
+    <br>对应文件目录：C:\zd_zxjtzq\rc_reports_cs\行业分类_产业链量化
+</p>
+<p> </p>
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="inside_reports">4，内部研究报告&产业链列表 </h3>
+<p>
+
+</p>
+<h4>产业链列表 </h4>
+<ul>
+    <li><a href="./industry_.html">华为产业链</a></li>
+    <li><a href="./industry_.html">苹果产业链</a></li>
+    <li><a href="./industry_.html">特斯拉产业链</a></li>
+    <li><a href="./industry_manufacturing.html">新材料和装备制造</a></li>
+    <li><a href="./industry_comsumer_staples.html">日常消费</a></li>
+    <li><a href="./industry_comsumer_discretionary.html">耐用消费</a></li>
+
+    <li><a href="./industry_software.html">软件产业链</a></li>
+    <li><a href="./industry_semiconductor.html">半导体产业链</a></li>
+    <li><a href="./industry_solar.html">光伏产业链</a></li>
+    <li><a href="./industry_.html">阿里巴巴产业链</a></li>
+    <li><a href="./industry_.html">阿里-电商和MCN产业链</a></li>
+    <li><a href="./industry_.html">阿里-互联网金融产业链</a></li>
+    <li><a href="./industry_.html">阿里-云计算产业链</a></li>
+    <li><a href="./industry_.html">腾讯产业链</a></li>
+    <li><a href="./industry_.html">腾讯-游戏产业链</a></li>
+    <li><a href="./industry_.html">腾讯-影视产业链</a></li>
+    <li><a href="./industry_.html">本地生活和外卖产业链</a></li>
+</ul>
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="research_menu">5，产业链目录和研究计划</h3>
+<p>跨行业的产业链组合投资：科技成长组合 | 关键词：新兴产业，科创50，5G，华为苹果，新能源，特斯拉，科创板 file:0跨行业的产业链组合_200213.xlsx path:行业分类数据：C:\zd_zxjtzq\rc_reports_cs\行业分类_产业链量化
+
+</p>
+<h4>梳理跨行业的产业链组合投资：科技成长组合 | 关键词：新兴产业，科创50，5G，华为苹果，新能源，特斯拉，科创板</h4>
+<p>
+    2.8，光伏产业链：要从新能源指数中区分出来 2.2，计算机：梳理出对应各个行业的交叉股票，应该把这些公司计入对应产业链；设计软件增强组合。 2.6，国产替代软件产业链：基础和办公、行业软件、仿制、自主可控、安全。 2.6.1,行业软件 2.6.2,仿制 2.6.3,自主可控 2.6.4，信息安全
+    <br> 2.3，输入股票或中信行业，获取持仓基金列表和基金净值变动。
+    <br>2.4，阿里巴巴产业链及细分大产业链：电商、MCN；云计算；互联网金融。
+
+    <br>2.5，腾讯产业链及细分大产业链：社交、互联网传媒和游戏组合；互联网金融。 2.5.1,社交； 2.5.2，视频平台和电影等； 2.5.3，游戏； 2.5.3.1,event: 宝通科技（300031）周四发布最新投资者关系活动记录表显示，目前来说，国内VR游戏公司，还存在的差不多10多家，哈视奇一直属于第一梯队，是国内为数不多的可以开发3A级VR大作的公司。
+    <br>2.9，完善华为、苹果、特斯拉产业链 2.7，小米硬件产业链：{和华为的区别时华为偏通信和手机笔记本电脑，小米偏手机笔记本和家用电器 }
+    <br>2.1，研究新兴产业龙头组合，基于创业板50。|| 从19Q4基金持仓信息中提取科创板龙头和各个行业龙头。
+</p>
+
+<h4>特定产业链分析过程</h4>
+<p>对于某个特定产业链，需要设计一个规范的流程将其转化为定量信息，并入投资研究过程。</p>
+<ul>
+    <li>1，获取产业链定义：基于某个公司研究或行业研究报告、某个事件、Wind产业链分类等。 </li>
+    <li>2，梳理产业链基本面数据：根据产业链定义梳理产品和服务、个股、行业分类、财务指标。识别高风险和不重要股票。 </li>
+    <li>3，构建标准化定性和定量数据：考虑时间维度和多产业链维度；</li>
+    <li>4，表格数据列设计： 日期,股票名称,代码,中信行业1,中信行业2,中信行业3,概念1,概念2,产业链1,产业链2,notes,... </li>
+    <li>5，分析方案和数据表的定期维护机制。 </li>
+</ul>
+
+
+
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="industry_db">6，产业链数据和数据库</h3>
+<p>规划是20200331前构建起四个产业链的标准化数据表格（可用于策略计算的csv），并且在0531前设计 高效读写方式保存进sqlite3.db
+
+</p>
+
+<h4>行业分类数据</h4>
+<p>A股常用的行业分类方法有三种：中信、申万、Wind行业分类。 行业分类数据： 文件 文件位置 股票历史行业分类数据： 文件 文件位置
+</p>
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="industry_stra">7，产业链相关策略</h3>
+<p>产业链分析主要优势是将跨行业但同属于某一产业链的股票筛选出来，并且提供基于产业链的定性 和定量信息，可用于生产产业链组合和指数、用于对产业链而不是行业进行配置、进一步筛选产业链龙头和 对股票的产业链依赖程度进行打分。
+
+</p>
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="industry_port">8，产业链相关组合和指数</h3>
+<p>
+
+</p>
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="industry_reference">9，参考信息和链接</h3>
+<p>
+
+</p>
+
+
+
+
+
+
+
+
+
+{% endblock content %}

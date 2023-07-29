@@ -1,0 +1,317 @@
+<!DOCTYPE html PUBLIC"-//W3C//DTD XHTML 1.0 Stict//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
+
+<html>
+<!-- The block items for this base html file is: {nav_sub, left_frame,menu,content } -->
+
+
+<head>
+    <!-- SCRIPT:基本的js方程 -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <!-- url= https://www.bootcdn.cn/echarts/-->
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.3.0/echarts.common.min.js"></script>
+    <!--引用表格工具 url= cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js-->
+    <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+    <!-- 存放单个网页需要的script 等 -->
+    {% block head_content %} {% endblock head_content %}
+    <!--  -->
+    <!-- sub 自建的script -->
+    <script>
+        function startTime() {
+            var today = new Date(); //定义日期对象   
+            var yyyy = today.getFullYear(); //通过日期对象的getFullYear()方法返回年    
+            var MM = today.getMonth() + 1; //通过日期对象的getMonth()方法返回年    
+            var dd = today.getDate(); //通过日期对象的getDate()方法返回年     
+            var hh = today.getHours(); //通过日期对象的getHours方法返回小时   
+            var mm = today.getMinutes(); //通过日期对象的getMinutes方法返回分钟   
+            var ss = today.getSeconds(); //通过日期对象的getSeconds方法返回秒   
+            // 如果分钟或小时的值小于10，则在其值前加0，比如如果时间是下午3点20分9秒的话，则显示15：20：09   
+            MM = checkTime(MM);
+            dd = checkTime(dd);
+            mm = checkTime(mm);
+            ss = checkTime(ss);
+            var day; //用于保存星期（getDay()方法得到星期编号）
+            if (today.getDay() == 0) day = "星期日"
+            if (today.getDay() == 1) day = "星期一"
+            if (today.getDay() == 2) day = "星期二"
+            if (today.getDay() == 3) day = "星期三"
+            if (today.getDay() == 4) day = "星期四"
+            if (today.getDay() == 5) day = "星期五"
+            if (today.getDay() == 6) day = "星期六"
+                // document.getElementById('nowDateTimeSpan').innerHTML = yyyy +"-" + MM +"-" + dd +"" + hh +":" + mm +":" + ss +"  " + day;
+            document.getElementById('nowDateTimeSpan').innerHTML = yyyy + MM + dd + " " + hh + ":" + mm + ":" + ss + " " + day;
+            document.getElementById('nowDate').innerHTML = yyyy + MM + dd
+            setTimeout('startTime()', 1000); //每一秒中重新加载startTime()方法 
+        }
+        // 如果分钟或小时的值小于10，则在其值前加0，比如如果时间是下午3点20分9秒的话，则显示15：20：09   
+        function checkTime(i) {
+            if (i < 10) {
+                i = "0" + i;
+            }
+            return i;
+        }
+        // 显示当前时间;用法 <span id="getTime"> </span> | 显示：2022/2/22
+        // setInterval("getTime.innerHTML=new Date().toLocaleString()", 1000);
+    </script>
+    <script language="JavaScript" type="text/javascript">
+        // data协议可以将网页中的table转化为excel下载
+        //编码后的html内容增加前缀 data:application/vnd.ms-excel; ，即可使浏览器将其中的数据当做excel来处理，浏览器将提示下载或打开excel文件
+        // match：1，table id="ciss_table；2，function tableToExcel,base64；3，button，tableToExcel 
+        function base64(content) {
+            return window.btoa(unescape(encodeURIComponent(content)));
+        }
+
+        function tableToExcel(tableID) {
+            // var type = 'doc';
+            var type = 'excel';
+            var table = document.getElementById(tableID);
+            var excelContent = table.innerHTML;
+
+            var excelFile = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:x='urn:schemas-microsoft-com:office:" + type + "' xmlns='http://www.w3.org/TR/REC-html40'>";
+            excelFile += "<head>";
+            excelFile += "<!--[if gte mso 9]>";
+            excelFile += "<xml>";
+            excelFile += "<x:ExcelWorkbook>";
+            excelFile += "<x:ExcelWorksheets>";
+            excelFile += "<x:ExcelWorksheet>";
+            excelFile += "<x:Name>";
+            excelFile += "{worksheet}";
+            excelFile += "</x:Name>";
+            excelFile += "<x:WorksheetOptions>";
+            excelFile += "<x:DisplayGridlines/>";
+            excelFile += "</x:WorksheetOptions>";
+            excelFile += "</x:ExcelWorksheet>";
+            excelFile += "</x:ExcelWorksheets>";
+            excelFile += "</x:ExcelWorkbook>";
+            excelFile += "</xml>";
+            excelFile += "<![endif]-->";
+            excelFile += "</head>";
+            excelFile += "<body><table>";
+            excelFile += excelContent;
+            excelFile += "</table></body>";
+            excelFile += "</html>";
+            var base64data = "base64," + base64(excelFile);
+            switch (type) {
+                case 'excel':
+                    window.open('data:application/vnd.ms-' + type + ';' + base64data);
+                    break;
+                case 'powerpoint':
+                    window.open('data:application/vnd.ms-' + type + ';' + base64data);
+                    break;
+            }
+        }
+    </script>
+
+
+    <!-- title:设置网页标签 -->
+    <div>
+        <title>{% block title0 %} {% endblock title0 %}</title>
+        
+    </div>
+    <!-- <title>Index of CISS module</title> -->
+
+
+    <style type="text/css">
+        /* div_up 上边导航区域 */
+        
+        #div_up {
+            position: relative;
+            top: 0%;
+            bottom: 85%;
+        }
+        /* div_down 下边内容区域 */
+        
+        #div_down {
+            background: rgb(4, 25, 32);
+            position: relative;
+            top: 15%;
+            bottom: 0%;
+        }
+        
+        nav {
+            background: rgb(4, 25, 32);
+            color: #FFF;
+            float: left;
+            width: 100%;
+        }
+        
+        #down_left {
+            color: white;
+            background-color: rgb(4, 25, 32);
+            float: left;
+            width: 75%;
+        }
+        /* 子目录左右部分设置 */
+        
+        #down_right {
+            color: white;
+            /* rgb(255, 170, 0) */
+            background: rgb(200, 128, 0);
+            float: right;
+            width: 25%;
+            position: fixed;
+            top: 12.5%;
+            bottom: 0%;
+            right: 0%;
+            font-size: 12px;
+            /*字体设置小点*/
+            border: 1px solid black;
+            /*  实线，dotted */
+            /* text-align:center;文字居中*/
+            border-radius: 3px;
+            /*倒角  */
+            padding: 1px 1px 1px 1px;
+            /*元素所有内边距的宽度，上右，下左  */
+            overflow: scroll;
+        }
+        /* 子目录左右部分设置 */
+        
+        #sub_left {
+            color: white;
+            width: 50%;
+            height: 350px;
+            background-color: #C5E9F3;
+            /*定义浮动，不定义的话，界面会乱*/
+            float: left;
+        }
+        
+        #sub_right {
+            color: white;
+            width: 50%;
+            height: 350px;
+            background-color: #F7575d;
+            float: right;
+        }
+        /* 小组件设置 */
+        
+        a {
+            color: white;
+        }
+        
+        #a_nav {
+            color: #FFF
+        }
+        /*目录类型*/
+        
+        #ciss_menu {
+            color: #FFF
+        }
+        /*表格类型设置：表格整体、表头列信息tr、 */
+        /* text-align: left 列标题的文字左对齐 */
+        /* 单元格内换行：word-break: break-all; word-wrap似乎没啥用 word-wrap: break-word;*/
+        
+        #ciss_table {
+            background-color: rgb(0, 0, 0);
+            color: white;
+            border: 1px;
+            max-width: 800;
+            text-align: left;
+            word-break: break-all;
+        }
+
+        /* table_tr_text：文字类的格式 */        
+        #table_tr_text {
+            background-color: rgb(0, 0, 0);
+            color: white;
+            text-align: left;
+            border:1px solid #ffffff;
+        }
+
+
+        /* table_td_number：数字一般需要靠右对齐。 |text-align: right , */
+        #table_td_number {
+            text-align: right;
+            border:1px solid #ffffff;
+        }
+
+        /* div_table ;设置表格的格式，例如总大小 */
+        #div_table { 
+            overflow-x: auto; 
+            overflow-y: auto; 
+            height: 800px; 
+            width:1200px;
+        }
+
+        /* div_chart ;设置图表背景为白色*/
+        #div_chart {
+            background-color: rgb(255, 255, 255);
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="div_up">
+        <nav>
+        <!-- 导航链接 -->
+        <a id="a_nav" href="/ciss_exhi/index.html">首页|INDEX</a> | 
+        <a id="a_nav" href="/ciss_exhi/event/index_event_view.html">基本面事件、观点和股票池基金池|Fundamental Events&Views&StockPool </a> |
+        <a id="a_nav" href="/ciss_exhi/index_fund_fof.html">基金和FOF研究|Fund and FOF </a> |
+        <a id="a_nav" href="/ciss_exhi/ai/ai_index.html">人工智能模型和相关研究|AI model </a> | 
+        <a id="a_nav" href="/ciss_exhi/industry/industry_index.html">产业链研究| Industry Research</a> |
+        <a id="a_nav" href="/ciss_exhi/index_log.html">日志|rc_log</a> |{% now "Ymd" %}
+
+        <button type="button" onclick="startTime('nowDateTimeSpan')">time</button> <span id="nowDateTimeSpan"></span>|<span id="nowDate"></span>
+        <a id="a_nav" href="/ciss_exhi/ppt.html">展示PPT</a> | -- |
+        <br>
+        <a id="a_nav" href="/ciss_exhi/data/index_data.html">数据管理|Data Manage</a> |
+        <a id="a_nav" href="/ciss_exhi/strategy/">策略开发|Strategy Dev.</a> |
+        <a id="a_nav" href="/ciss_exhi/portfolio/index_port.html">组合管理|Portfolio Management </a> |
+        <a id="a_nav" href="/ciss_exhi/docs/index_ciss.html">平台文档|CISS documents</a> | --- |
+        <br> 
+        <a id="a_nav" href="/ciss_exhi/monitor_market_data.html">市场数据监控 |Monitor_market_data</a> |
+        <a id="a_nav" href="/ciss_exhi/quick.html">快速功能|Quick</a> |
+        <a id="a_nav" href="/ciss_exhi/pms_manage.html">PMS组合管理|pms manage</a> |
+        <br>
+
+        {% block nav_sub %}
+        
+            {% endblock nav_sub %} 
+
+        </nav>
+    </div>
+    <div id="div_down">
+
+        <div id="down_right">
+            {% block right_frame %} {% endblock right_frame %}
+        </div>
+
+        <div id="down_left">
+
+
+            {% block left_frame %} {% endblock left_frame %}
+
+
+            <section id="ciss_menu">
+
+
+                {% block menu %} {% endblock menu %}
+
+            </section>
+
+
+
+            <section id="content">
+
+                {% block content %} {% endblock content %}
+
+
+                <hr>
+                <blockquote cite="www.bsstrde.top:8089\index.html">
+                   
+                </blockquote>
+                <footer>
+                    by rC
+
+                    <!--尾部，页脚通常包含文档的作者，著作权信息，链接的使用条款，联系信息等 -->
+                </footer>
+                <hr>
+            </section>
+
+        </div>
+    </div>
+</body>
+
+</html>

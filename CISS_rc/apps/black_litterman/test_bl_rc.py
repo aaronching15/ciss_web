@@ -45,7 +45,9 @@ file_name ="in_stockbm_ind_ret_m.csv
 市场组合月收益率
 file_name ="in_stockbm_ret_m.csv"
 
+
 '''
+
 ind_list=["能源","材料","工业","可选消费","日常消费","医疗保健","金融","信息技术","电信服务","公用事业","房地产"]
 record = 0 
 from bl_rc import bl_rc 

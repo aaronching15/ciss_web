@@ -3,12 +3,15 @@ __author__ = " ruoyu.Cheng"
 
 '''
 ===============================================
-todo: replace rC_Data_Initial.py with get-Wind.py gradually. | 190718file_name
+todo: 
 
-功能：初始化需要的股票价格，回报等数据
+功能：用WindPy模块获取API数据;
+    1,class wind_api : 获取wsq,wss,wset,wsd等数据
+    2,class wind_api_pms :获取wpf等数据
+
 数据来源： Wind-API 万得量化数据接口
-last update 190718 | since  160121
-/ 
+last update 220106 | since  160121
+derived from  rC_Data_Initial.py with get-Wind.py gradually. | 190718file_name
 ===============================================
 '''
 import pandas as pd
@@ -16,6 +19,7 @@ import numpy as np
 import json
 import time
 import datetime as dt
+import os 
 
 class wind_api():
     # 类的初始化操作
@@ -157,6 +161,9 @@ class wind_api():
         4,银行间市场 "TradingCalendar=NIB"
         w.tdays("2019-07-17", "2019-07-30", "TradingCalendar=NIB") 银行间市场
         '''
+        from WindPy import w
+        w.start()
+        
         import WindPy as WP 
         WP.w.start()
         if mkt == "" :
@@ -1131,3 +1138,107 @@ class wind_api():
         #         writer.writerow( temp_list ) # date
 
         return df0
+
+class wind_api_pms():
+    ### 获取Wind的PMS相关数据:wpf,wps,wpd,wupf
+    def __init__(self):
+        ### 获取wpf相关数据
+        ### 
+        self.nan = np.nan 
+
+    def print_info(self):
+        ### print all modules for current class
+
+        print("get_wpf | 获取PMS组合持仓数据。")
+        print("get_wps |  ")
+        print("get_wpd |  ")
+        print("get_wupf |  ")
+
+    
+    def get_wpf(self, dict_in ):
+        ### 获取PMS组合持仓数据
+        from WindPy import w
+        w.start()
+        '''期初持仓市值	BeginHoldingValue
+        持仓市值	NetHoldingValue
+        期初持仓成本	BeginTotalCost
+        持仓成本	TotalCost
+        期初持仓数量	BeginPosition
+        持仓数量	Position
+        浮动盈亏	EUnrealizedPL
+        '''
+        ####################################################################
+        ### 
+        pms_name = dict_in["pms_name"] # "FOF期权9901" 
+        date_start = dict_in["date_start"].replace("-","")
+        date_end = dict_in["date_end"].replace("-","")
+        
+        ### 统一格式 
+        # "BeginHoldingValue,NetHoldingValue,BeginTotalCost,TotalCost,BeginPosition,Position,EUnrealizedPL",
+        # "startDate=20211231;endDate=20220105;Currency=BSY;sectorcode=108;displaymode=1" 
+        para_str_col = "BeginHoldingValue,NetHoldingValue,BeginTotalCost,TotalCost,BeginPosition,Position,EUnrealizedPL"
+        ### para_str_date = "startDate="+"20211231"+";"+"endDate="+"20220105"
+        para_str_date = "startDate="+ date_start +";"+"endDate="+ date_end +";"
+        
+        ### Currency=BSY，各类资产本币；Currency=CNY,人民币
+        if dict_in["col_type"] in[1,"1","stock","股票"] :
+            ### sectorcode=108,中信一级行业分类，
+            type_num = "108" 
+        if dict_in["col_type"] in[2,"2","fund","基金"] :
+            ### 244;Wind基金二级分类
+            type_num = "244"
+        if dict_in["col_type"] in[3,"3","bond","债券"] :
+            ### 218,债券久期;200，债券分类；
+            type_num = "218" 
+        # if dict_in["col_type"] in["4","future","期货","option","期权"] : 
+            ### 期权暂时没找到匹配的，尝试期货的233和多资产的302，但是没有结果。
+        ###
+        para_str_end = "view=PMS;Currency=CNY;sectorcode="+ type_num + ";displaymode=1;"
+
+        ####################################################################
+        ### 提取数据
+        
+        obj1 = w.wpf( pms_name , para_str_col, para_str_end+para_str_date )
+
+        ### 判断返回数据是否出错
+        if obj1.Codes[0] == "ErrorReport" :
+            print("obj1",obj1)
+            print("check=",  para_str_col+ para_str_date + para_str_end  )
+            df_data = dict_in
+        else :
+            ### 赋值columns
+            df1=pd.DataFrame(obj1.Data, index=obj1.Fields)
+            # 转置
+            df_data =df1.T
+
+            ####################################################################
+            ### 保存到目录
+            if dict_in["if_excel"] in [1,"1"] :
+                path = dict_in["path"] 
+                path_data = path+ "wpf" + "\\"
+                if not os.path.exists( path_data ) :
+                    os.makedirs( path_data )
+
+                ### 
+                file_name = "wpf_" + pms_name + "_" + dict_in["date_end"] + ".xlsx"
+                df_data.to_excel(path_data+file_name,index=False ) 
+                file_name = "wpf_" + pms_name +  ".xlsx"
+                df_data.to_excel(path_data+file_name,index=False ) 
+
+        ####################################################################
+        ### 暂时无用的：
+        # len_1 = len( wind_data.Fields)
+        # import pandas as pd 
+        # # notes input items might be the same as wind_data.Fields
+        # # wind_df = pd.dataframe(columns= wind_data.Fields)
+        # wind_df = pd.DataFrame(columns= wind_head['items']  )
+        # for i in range( len_1 ):
+        #     wind_df[wind_head['items'][i]] = wind_data.Data[i]
+
+        # # assign dates to wind_df 
+        # wind_df['date'] = wind_data.Times
+        # # print( wind_df )
+        # self.wind_df = wind_df
+
+        
+        return df_data

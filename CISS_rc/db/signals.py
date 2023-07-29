@@ -3,17 +3,15 @@ __author__ = " ruoyu.Cheng"
 
 '''
 ===============================================
-Function:
-功能：
 last update 190712 | since  181106
 
-Menu :
-THREE COMPONENTS:
-1,class A:
-    {INPUT,ALGO,OUTPUT  }
-1,function a:
-    {INPUT,ALGO,OUTPUT  }
-    
+
+功能：Function:
+1,class signals_ashare():
+    1.1,get_signal_filter_level_para |根据给定指标列表和筛选标准生成买卖信号列
+
+2,class signals():
+
 分析：
 1，策略信号管理 
 1.1, 经典策略信号单点包含{-1,0.1} 三个值，分别代表 卖出，持有，买入三种交易信号
@@ -34,9 +32,106 @@ Notes:
 refernce: rC_Portfolio_17Q1.py 
 ===============================================
 '''
-import pandas as pd 
-import sys
-sys.path.append("..")
+import sys,os
+# 当前目录 C:\zd_zxjtzq\ciss_web\CISS_rc\db
+path_ciss_web = os.getcwd().split("CISS_rc")[0]
+path_ciss_rc = path_ciss_web +"CISS_rc\\"
+import pandas as pd
+import numpy as np
+
+###################################################
+class signals_ashare():
+    def __init__(self ):
+        ### 导入配置文件
+        #######################################################################
+        ### 导入配置文件对象，例如path_db_wind等
+        sys.path.append(path_ciss_rc+ "config\\")
+        from config_data import config_data_factor_model
+        config_data_1 = config_data_factor_model()
+        self.obj_config = config_data_1.obj_config
+
+        #######################################################################
+    
+    def print_info(self):
+        ### print(  )
+        print("get_signal_filter_level_para |根据给定指标列表和筛选标准生成买卖信号列")
+        print("  ")
+
+        return 1
+
+    def get_signal_filter_level_para(self,obj_signal):
+        ### 根据给定指标列表和筛选标准生成买卖信号列
+        '''
+        现在是把具体指标都罗列出来，未来改进成统一的规范
+        todo:
+        1,df_ashare_ana:df表
+        2,col_list:需要计算信号的列
+        3,direction_list:需要计算信号的列的比较方向，如<,>=,或其他def function()
+        4,para_list：需要计算信号的列的数值比较参数
+        
+        '''
+        
+        leverage_para = obj_signal["dict"]["leverage_para"] #=1 
+        df_ashare_ana = obj_signal["df_ashare_ana"]
+
+        print("Initial number of stocks ", len(df_ashare_ana.index ) )
+        ### 1,季度平均roe不低于 2.5%;季度roe同比改善1个点
+        # df_ashare_ana["S_FA_ROE" +"_signal"] = df_ashare_ana[ df_ashare_ana [ "S_FA_ROE" +"_q_ave" ]>= 0.025*leverage_para ]
+        # df_ashare_ana = df_ashare_ana[ df_ashare_ana [ "S_FA_ROE" +"_diff" ]>= 0.003*leverage_para ]
+        df_ashare_ana["S_FA_ROE" +"_q_ave" +"_signal"] = df_ashare_ana[ "S_FA_ROE" +"_q_ave" ].apply(lambda x : 1 if x >= 0.025*leverage_para else 0  )  
+        df_ashare_ana["S_FA_ROE" +"_diff" +"_signal"] = df_ashare_ana[ "S_FA_ROE" +"_diff" ].apply(lambda x : 1 if x >= 0.003*leverage_para else 0  )  
+        df_ashare_ana["all" +"_signal"] = df_ashare_ana["S_FA_ROE" +"_q_ave" +"_signal"] *df_ashare_ana["S_FA_ROE" +"_diff" +"_signal"]
+        print("Update:filter=roe ", df_ashare_ana["all" +"_signal"].sum() )
+
+        ### 2,单季度.营业总收入环比增长率(%)>0.05;单季度.营业总收入同比增长率(%) >0.05
+        df_ashare_ana["S_QFA_CGRGR" +"_diff"  +"_signal"] = df_ashare_ana[ "S_QFA_CGRGR" +"_diff" ].apply(lambda x : 1 if x >= 0.03*leverage_para else 0  )  
+        df_ashare_ana["S_QFA_CGRPROFIT" +"_diff"  +"_signal"] = df_ashare_ana[ "S_QFA_CGRPROFIT" +"_diff"  ].apply(lambda x : 1 if x >= 0.03*leverage_para else 0  )  
+        df_ashare_ana["all" +"_signal"] = df_ashare_ana["all" +"_signal"] *df_ashare_ana["S_QFA_CGRGR" +"_diff"  +"_signal"] 
+        df_ashare_ana["all" +"_signal"] = df_ashare_ana["all" +"_signal"] *df_ashare_ana["S_QFA_CGRPROFIT" +"_diff"  +"_signal"] 
+        print("Update:filter=revenue_growth ", df_ashare_ana["all" +"_signal"].sum() )
+
+
+        ### 3,单季度.净利润同比增长率(%) >0.05;单季度.净利润环比增长率(%)  >0.05
+        # df_ashare_ana = df_ashare_ana[df_ashare_ana[ "S_QFA_YOYPROFIT" ] >= 0.05*leverage_para   ]
+        # df_ashare_ana = df_ashare_ana[df_ashare_ana[ "S_QFA_CGRPROFIT" ]>= 0.05*leverage_para ]
+        # df_ashare_ana = df_ashare_ana[df_ashare_ana[ "S_QFA_CGRPROFIT" +"_q_pre" ] >= 0.05*leverage_para  ]
+        # print("Update:filter=earning_growth ", len(df_ashare_ana.index ) )
+
+        ### 4，盈利持续性: 季度平均ROIC >=0.018, 季度平均总资产净利率ROA >=0.015
+        df_ashare_ana = df_ashare_ana[df_ashare_ana[ "S_FA_ROIC" +"_q_ave" ] >= 0.01*leverage_para   ]
+        df_ashare_ana = df_ashare_ana[df_ashare_ana[ "S_FA_ROIC" +"_diff" ] >= 0.003*leverage_para   ]
+        df_ashare_ana = df_ashare_ana[df_ashare_ana[ "S_FA_ROA" +"_q_ave" ] >= 0.01*leverage_para   ]
+        df_ashare_ana = df_ashare_ana[df_ashare_ana[ "S_FA_ROA" +"_diff" ] >= 0.003*leverage_para   ]
+
+        df_ashare_ana["S_FA_ROIC" +"_q_ave"+"_signal"] = df_ashare_ana["S_FA_ROIC" +"_q_ave" ].apply(lambda x : 1 if x >= 0.01*leverage_para else 0  )  
+        df_ashare_ana["S_FA_ROIC" +"_diff" +"_signal"] = df_ashare_ana["S_FA_ROIC" +"_diff"].apply(lambda x : 1 if x >= 0.003*leverage_para else 0  )  
+        df_ashare_ana["all" +"_signal"] = df_ashare_ana["all" +"_signal"] *df_ashare_ana["S_FA_ROIC" +"_q_ave"+"_signal"] 
+        df_ashare_ana["all" +"_signal"] = df_ashare_ana["all" +"_signal"] *df_ashare_ana["S_FA_ROIC" +"_diff" +"_signal"]
+
+        df_ashare_ana[ "S_FA_ROA" +"_q_ave"+"_signal"] = df_ashare_ana[ "S_FA_ROA" +"_q_ave"].apply(lambda x : 1 if x >= 0.01*leverage_para else 0  )  
+        df_ashare_ana[ "S_FA_ROA" +"_diff"  +"_signal"] = df_ashare_ana[ "S_FA_ROA" +"_diff" ].apply(lambda x : 1 if x >= 0.003*leverage_para else 0  )  
+        df_ashare_ana["all" +"_signal"] = df_ashare_ana["all" +"_signal"] *df_ashare_ana["S_FA_ROA" +"_q_ave"+"_signal"] 
+        df_ashare_ana["all" +"_signal"] = df_ashare_ana["all" +"_signal"] *df_ashare_ana["S_FA_ROA" +"_diff" +"_signal"]
+
+        print("Update:filter=earning_consistant ", df_ashare_ana["all" +"_signal"].sum() )
+
+        ### 5，季度资产质量：经营活动产生的现金流量净额/营业收入,S_FA_OCFTOOR >= 0.05,数值主要参考某一期观察的平均值
+            # 经营活动产生的现金流量净额/经营活动净收益,S_FA_OCFTOOPERATEINCOME >= 0.35 
+        # df_ashare_ana = df_ashare_ana[df_ashare_ana[ "S_FA_OCFTOOR" ] >= 0.05*leverage_para   ]
+        # df_ashare_ana = df_ashare_ana[df_ashare_ana[ "S_FA_OCFTOOPERATEINCOME" ] >= 0.35*leverage_para  ]
+        # df_ashare_ana = df_ashare_ana[df_ashare_ana[ "S_FA_OCFTOOR" +"_diff"] >= 0.01*leverage_para   ]
+        # df_ashare_ana = df_ashare_ana[df_ashare_ana[ "S_FA_OCFTOOPERATEINCOME" +"_diff"] >= 0.03*leverage_para  ]
+
+        df_ashare_ana[ "S_FA_OCFTOOR"  +"_diff"  +"_signal"] = df_ashare_ana[ "S_FA_OCFTOOR" +"_diff" ].apply(lambda x : 1 if x >= 0.01*leverage_para else 0  )  
+        df_ashare_ana["all" +"_signal"] = df_ashare_ana["all" +"_signal"] *df_ashare_ana["S_FA_OCFTOOR" +"_diff"+"_signal"] 
+
+        print("Update:filter=earning_quality ",  df_ashare_ana["all" +"_signal"].sum() )
+
+        ###Save to output
+        obj_signal["df_ashare_ana"] = df_ashare_ana
+        
+        return obj_signal
+
 ###################################################
 class signals():
     def __init__(self,id_time_stamp,signals_name=''):

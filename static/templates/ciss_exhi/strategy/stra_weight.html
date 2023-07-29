@@ -1,0 +1,688 @@
+{% extends "base.html" %}
+<meta charset="UTF-8">
+<!-- for HTML5 -->
+<!-- The block items for this base html file is: {nav_sub, left_frame,menu,content } -->
+<!-- 设置标题 -->
+{% block head_content %}
+    <!-- 引入layui，也可以本地导入：C:\rc_202X\rc_202X\ciss_web\static\layui  | 20221014 -->
+    <link rel="stylesheet" type="text/css" href="https://www.layuicdn.com/layui/css/layui.css" />
+    <script src="https://www.layuicdn.com/layui/layui.js"></script>
+    
+    <!-- <style type="text/css">
+        .header span{background: #009688;color: #fff;padding: 10px;margin-left: 30px;line-height: 32px}
+        .header{border-bottom: 2px #009688 solid;}
+        p{
+            color: black;
+            font-family: "Arial Black";
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center}
+        h4{
+            text-align: center;
+        }
+        table,th,td{
+            border-collapse: collapse;
+
+           }
+         button{
+             background-color: #337ab7;
+             font-size: 14px;
+             color: #fff;
+             font-weight: 400;
+             line-height: 1.42857143;
+             text-align: center;
+             font-family: "Songti TC";
+            margin: auto;}
+
+        .modal .container{
+            height: 512px;
+            width: 404px;
+            background-color: #fff;
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            margin: auto;
+            box-sizing: border-box;
+            border-radius: 6px;
+            padding: 1em;
+
+        }
+       input{
+           border-style: solid;
+           border-width: 1px;
+           border-color: darkgray;
+           margin: 10px 10px 8px;
+           padding: 6px;
+           float: initial;
+       }
+
+        #cancel{
+            margin-left: 10px;
+            margin-right: 40px;
+            width: 30%;
+            background-color: #337ab7;
+            font-weight: bolder;
+            border-color: white;
+            color: white;
+
+
+        }
+        #submit{
+            width: 30%;
+            background-color: #337ab7;
+            font-weight: bolder;
+            border-color: white;
+            color: white;
+        }
+    </style> -->
+
+{% endblock head_content %}
+
+{% block title0 %} 
+    策略开发管理|Strategy Develop
+{% endblock title0 %}
+
+
+{% block nav_sub %} 
+<!-- layui定义左侧工具栏：第一部分目录 -->
+<li style="text-align: center;">策略权重管理</li>
+<!-- notes:class="layui-nav-item"默认是收起的， 加上" layui-nav-itemed"后内容是展开的;  -->
+
+<li class="layui-nav-item layui-nav-itemed">
+    <a class="" href="">stra_weight</a>
+    <dl class="layui-nav-child"> 
+    </dl>
+</li>
+
+
+<li>当前日期:{{ time_now_str }}</li>
+
+{% endblock nav_sub %} 
+
+<!--- ################################################################## --->
+<!--- ################################################################## --->
+{% block left_frame %}
+<!-- Menu in left frame -->
+<h1><a id="title">策略权重管理 stra_weight  </a></h1> 
+<p>notes:目前策略权重数据是记录每一条权重变化，而非最新时间节点的值。例如，一个策略下，一个证券可能会有多条记录。</p>
+{% endblock left_frame %} 
+
+{% block content %}
+<!--- ################################################################## --->
+<form action="{% url 'stra_weight' %}" method="post" accept-charset="utf-8"> 
+
+<div class="header">
+    <span>策略股票池管理</span>
+        <div id="add_button" style="float: right">
+        <!-- add() 对应的是弹窗表格的id=add |notes:如果没有 type="button"，弹窗会闪现自动关闭 -->
+            <button class="layui-btn layui-btn-sm" type="button" id="reload_add" onclick="add()">新增</button>
+    </div>
+</div>
+
+
+<!--- ################################################################## --->
+<!--按条件查询数据-->
+<div>
+    搜索ID： 
+    <input type="text" id="id_search" placeholder="ID" class="layui-input-inline" value="">
+    <input type="text" id="date_search" placeholder="日期" class="layui-input-inline" value="">
+    <input type="text" id="strategy_CN_search" placeholder="策略名称" class="layui-input-inline" value=""> 
+    <input type="text" id="code_search" placeholder="代码" class="layui-input-inline" value="">
+    <input type="text" id="name_search" placeholder="名称" class="layui-input-inline" value="">
+    <input type="text" id="weight_search" placeholder="权重" class="layui-input-inline" value="">
+    <input type="text" id="note_search" placeholder="备注" class="layui-input-inline" value="">
+
+    <!--button方法 layui-btn 是自己改写的，用来代替class="layui-icon layui-icon-search  -->
+    <button class="layui-btn layui-inline" type="button" id="reload_search" data-type="reload">搜索</button>
+    <!--icon图标方法 layui-icon-search 是 layui的一个特定的搜索图标，用来激活表格的重新载入 -->
+    <!-- <i class="layui-icon layui-icon-search" style="display:inline-block; top: 15px; margin-right: 10px;width:30px;height:30px;" data-type="reload"></i> -->
+
+</div>
+ 
+
+<!--- ################################################################## --->
+<!--弹窗输入要新增的记录-->
+<div id="add_data" style="display: none">
+    <form class="layui-form" action="" method="POST" id="add">
+        {% csrf_token %}
+        <div class="layui-form-item"> 
+            <label class="layui-form-label" style="color:black">date|必须</label>
+            <div class="layui-input-inline">
+                <input type="text" id="date_add" name="date"  placeholder="请输入date"  class="layui-input" value="">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="color:black">策略名称|必须</label>
+            <div class="layui-input-inline">
+                <input type="text" id="strategy_CN_add" name="strategy_CN"  placeholder="请输入strategy_CN"  class="layui-input" value="股票行业研究">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="color:black">code代码|必须</label>
+            <div class="layui-input-inline">
+                <input type="text" id="code_add" name="code"  placeholder="请输入code"  class="layui-input" value="">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="color:black">weight权重|必须</label>
+            <div class="layui-input-inline">
+                <input type="text" id="weight_add" name="weight"  placeholder="请输入weight权重"  class="layui-input" value="">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="color:black">note备注</label>
+            <div class="layui-input-inline">
+                <input type="text" id="note_add" name="note"  placeholder="请输入备注"  class="layui-input" value="">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="color:black">name </label>
+            <div class="layui-input-inline">
+                <input type="text" id="name_add" name="name"  placeholder="请输入"  class="layui-input" value="">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="color:black">code_fund </label>
+            <div class="layui-input-inline">
+                <input type="text" id="code_fund_add" name="code_fund"  placeholder="请输入"  class="layui-input" value="">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="color:black">code_stock </label>
+            <div class="layui-input-inline">
+                <input type="text" id="code_stock_add" name="code_stock"  placeholder="请输入"  class="layui-input" value="">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="color:black">strategy </label>
+            <div class="layui-input-inline">
+                <input type="text" id="strategy_add" name="strategy"  placeholder="请输入"  class="layui-input" value="">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="color:black">pool_name </label>
+            <div class="layui-input-inline">
+                <input type="text" id="pool_name_add" name="pool_name"  placeholder="请输入"  class="layui-input" value="">
+            </div>
+        </div>
+            <div class="layui-form-item">
+            <label class="layui-form-label" style="color:black">pool_level </label>
+            <div class="layui-input-inline">
+                <input type="text" id="pool_level_add" name="pool_level"  placeholder="请输入"  class="layui-input" value="">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="color:black;width:max-content;">type_asset_indstyle_stock</label>
+            <div class="layui-input-inline">
+                <input type="text" id="type_asset_indstyle_stock_add" name="type_asset_indstyle_stock"  placeholder="请输入"  class="layui-input" value="">
+            </div>
+        </div>
+
+        <!-- 提交或取消按钮 -->
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button id="cancel" class="layui-btn-sm" onclick="window.close()">取消</button>
+                <button id="submit" type="button" class="layui-btn-sm" lay-submit lay-filter="adddata" >添加</button> 
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<!--- ################################################################## --->
+<!--弹窗输入要编辑的行信息-->
+<div id="edit_data" style="display: none">
+    <form class="layui-form" action="" method="POST" id="edit">
+        {% csrf_token %}
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="color:black">ID</label>
+            <div class="layui-input-inline">
+                <input id="edit_id" type="text" class="layui-input" value="" readonly>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="color:black">date</label>
+            <div class="layui-input-inline">
+                <input type="text" id="edit_date" name="date"  placeholder="请输入date"  class="layui-input" value="">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="color:black">策略名称</label>
+            <div class="layui-input-inline">
+                <input type="text" id="edit_strategy_CN" name="strategy_CN"  placeholder="请输入strategy_CN"  class="layui-input" value="">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="color:black">code代码</label>
+            <div class="layui-input-inline">
+                <input type="text" id="edit_code" name="code"  placeholder="请输入code"  class="layui-input" value="">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="color:black">name证券名称</label>
+            <div class="layui-input-inline">
+                <input type="text" id="edit_name" name="name"  placeholder="请输入name"  class="layui-input" value="">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="color:black">weight权重</label>
+            <div class="layui-input-inline">
+                <input type="text" id="edit_weight" name="weight"  placeholder="请输入weight权重"  class="layui-input" value="">
+            </div>
+        </div>
+            <div class="layui-form-item">
+            <label class="layui-form-label" style="color:black">note备注</label>
+            <div class="layui-input-inline">
+                <input type="text" id="edit_note" name="note"  placeholder="请输入备注"  class="layui-input" value="">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button id="cancel" class="layui-btn-sm" onclick="window.close()">取消</button>
+                <button id="submit" type="button" class="layui-btn-sm" lay-submit lay-filter="updatedata">更新</button>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<hr>
+<!--- ################################################################## --->
+<!--展示table数据列表-->
+<!-- lay-data="{initSort:{field:'id', type:'desc'}}" 功能是一开始按id降序排列，没有用 -->
+<table class="layui-table" id="table_01" lay-filter="table-data" ></table>
+
+
+<!-- toolbar 对应的模板，它可以存放在页面的任意位置 || 每一行末尾，编辑行数据或删除-->
+<script type="text/html" id="operation">
+    <button style="margin-left: 5px" class="layui-btn layui-btn-sm layui-btn-warm" lay-event="edit">编辑</button>
+    <button style="margin-left: 5px" class="layui-btn layui-btn-sm layui-btn-danger" id="del" lay-event="del">删除</button>
+</script>
+
+<!--- ################################################################## --->
+<!-- 渲染表格数据,从 getdata页面获取数据  -->  
+{% csrf_token %}
+<script type="text/javascript">
+    
+    // Begin of layui.use
+    layui.use(['layer','table'],function () { 
+        var table = layui.table;
+        var form = layui.form;
+        var element = layui.element;
+        var layer = layui.layer;
+        var $ = layui.jquery;
+
+        // <!--- ################################################################## --->
+        // layui里表格数据获取，以及格式和列名定义
+        table.render({
+            elem: '#table_01', //赋值表格 
+            // notes:url前边默认的地址是ip地址或者www之前的；url: '/ciss_exhi/strategy/stra_weight/getdata';
+            url: '/ciss_exhi/strategy/stra_weight/getdata',   
+            //
+            parseData: function (res) {  
+                //res是请求返回的数据，可以在parseData中对数据进行一些处理，返回layui要求的格式
+                return {
+                    "code": res.code, //解析接口状态
+                    "msg": res.msg , //解析提示文本
+                    "count": res.count, //解析数据长度
+                    "data": res.data //解析数据列表,原始是res.data.item，改成res.data后json数据刷出来了， 
+                };
+            },
+            //
+            id:'alltable',
+            height:'full-125', // 默认是125，对应浏览器高度的125%自适应
+            cellMinWidth:15, 
+            // 设置导出功能,title对应导出文件的名称 
+            toolbar: true,
+            totalrow:true, 
+            title:"strategy_weight",
+            // cols 定义表格列名称，表头；对应res数组的每一条对象中，如果属性名和field相同，就自动填充。
+            cols:[[  
+                // {field:'id',title:'ID',Width:5,align:"center"}, // 等价于 <th lay-data="{field:'id', width:80}">ID</th>
+                
+                {field:'id',title:'ID',Width:5,sort:true,align:"center"},
+                {field:'date',minWidth:10,title:'日期',sort:true,align: "center"},
+                {field:'strategy_CN',title:'策略名称',align:"center"},
+                {field:'code',title:'代码',align:"center"},
+                {field:'name',minWidth:10,title:'证券名称',align:"center"},
+                {field:'weight',minWidth:5,title:'权重',sort:true,align:"center"},
+                {field:'note',minWidth:10,title:'备注',align:"center"},
+                // 操作栏，可以删除和修改
+                // toolbar绑定工具条模板：operation对应 编辑/删除 2个操作，以及tool()对应的脚本 'tool(table-data)'
+                {fixed: 'right', title:'操作', toolbar: '#operation', width:150,align:"center"}
+                
+                // 其他列 
+                // {field:'code_fund',minWidth:10,title:'基金代码',sort:true,align:"center"},
+                // {field:'code_stock',minWidth:10,title:'股票代码',sort:true,align:"center"}, 
+                // {field:'pool_name',minWidth:10,title:'pool_name',sort:true,align:"center"},
+                // {field:'pool_level',minWidth:10,title:'pool_level',sort:true,align:"center"},
+                // {field:'type_asset_indstyle_stock',minWidth:10,title:'资产类别',sort:true,align:"center"},
+            ]],
+            page: true, // false, //不开启分页//表格添加分页的，如果不需要分页，可以不添加page属性
+            //initSort 设置初始排序，并没有成功，会导致排序很慢
+            // initSort: {
+            //     field: 'id', // 需要排序的字段
+            //     type: 'desc' // 排序方式
+            // },
+            
+        });
+        
+        ///////////////////////////////////////////////////////////////////////////////////////////
+        //TEST 测试部分功能， 未成功 ；url=https://www.ilayuis.com/doc/modules/table.html#methodRender
+
+        //触发排序事件 
+        // table.on('sort( table-data )', function(obj){ //注：sort 是工具条事件名，table_01 是 table 原始容器的属性 lay-filter="对应的值"
+        //     console.log(obj.field); //当前排序的字段名
+        //     console.log(obj.type); //当前排序类型：desc（降序）、asc（升序）、null（空对象，默认排序）
+        //     console.log(this); //当前排序的 th 对象
+            
+        //     //尽管我们的 table 自带排序功能，但并没有请求服务端。
+        //     //有些时候，你可能需要根据当前排序的字段，重新向服务端发送请求，从而实现服务端排序，如：
+        //     table.reload('alltable', {
+        //         initSort: obj //记录初始排序，如果不设的话，将无法标记表头的排序状态。
+        //         ,where: { //请求参数（注意：这里面的参数可任意定义，并非下面固定的格式）
+        //         field: obj.field //排序字段
+        //         ,order: obj.type //排序方式
+        //         }
+        //     });
+            
+        // });
+
+
+
+        //END TEST 
+        ///////////////////////////////////////////////////////////////////////////////////////////
+        
+
+        // <!--- ################################################################## --->
+        //如果点击了搜素按钮图标, 通过上面的表格载入，重新载入表格数据table
+        //button方法： function内 后边2行的写法是一样的。
+        $('#reload_search').on('click', function () { 
+            // icon方法
+            // $('.layui-icon-search').on('click',function () {
+            //目前为止没搞明白啥意思
+            var type = $(this).data('type');
+            active_table[type] ? active_table[type].call(this) : '';
+        }); 
+
+        // 点击搜索按钮或图标后，就跳转到这里刷新表格 active_table; 
+        // active_table好像是对于已有的数据，匹配符合条件的记录，载入表格table
+        // 表格重载 table.reload(ID, options, deep)；官方url=https://layui.winxapp.cn/doc/modules/table.html#reload
+        var active_table = {
+            reload:function () {    
+                var id = $('#id_search').val();   
+                var date = $('#date_search').val();
+                var strategy_CN = $('#strategy_CN_search').val(); 
+                var code = $('#code_search').val();
+                var name = $('#name_search').val();
+                var weight = $('#weight_search').val();
+                var note = $('#note_search').val();
+
+                // 动态赋值 where对象，对应python的字典 
+                //通过if实现对有输入的列值匹配
+                var obj_where = {}
+                if( id.length > 0){  
+                    obj_where[ "id"] =id ;
+                    } 
+                if( date.length > 0){  
+                    obj_where[ "date"]=date ;
+                    }    
+                if( strategy_CN.length > 0){  
+                    obj_where[ "strategy_CN"]= strategy_CN ;
+                    }
+                if( code.length > 0){  
+                    obj_where[ "code"]= code ;
+                    }    
+                if( name.length > 0){  
+                    obj_where[ "name"]=name ;
+                    }    
+                if( weight.length > 0){  
+                    obj_where[ "weight"]= weight ;
+                    }
+                if( note.length > 0){  
+                    obj_where[ "note"] = note ;
+                    }    
+                
+                // Debug date,变量要用加号，不能用逗号相连 layer.confirm('Debug|| date ='+ date + weight1 + weight2  );
+                // Debug layer.confirm('Debug|| obj_where ='+ obj_where.id  );
+                
+                //执行重载。alltable 是当前 layui里table变量的id。where，是需要携带的检索条件, page 参数是重新检索时需要携带的检索第几页，
+                //notes:截至221021，还是没能在网页里实现table.reload表格数据的筛选，是通过view里判断输入的keys筛选
+                //table.reload 是向后台的Django服务端发送请求，从而实现服务端排序
+                table.reload('alltable',{
+                    where: obj_where 
+                });
+                // table.reload('alltable',{
+                //     where:{
+                //         id:id,
+                //         date:date,
+                //         strategy_CN:strategy_CN,
+                //         code:code,
+                //         name,name,
+                //         weight:weight,
+                //         note:note,
+                //     }
+                // });
+            }
+        };
+
+        // <!--- ################################################################## ---> 
+        // 表格重载 || 在新增或修改表格后，按照代码搜索返回的数据，再次显示
+        var active_table_after_add = {
+            reload:function ( ) {    
+                var code = $('#code_add').val(); 
+                // 动态赋值 where对象，对应python的字典 
+                //通过if实现对有输入的列值匹配
+                var obj_where = {} 
+                if( code.length > 0){  
+                    obj_where[ "code"]= code ;
+                    }     
+                
+                //执行重载。alltable 是当前 layui里table变量的id。where，是需要携带的检索条件, page 参数是重新检索时需要携带的检索第几页，
+                //notes:截至221021，还是没能在网页里实现table.reload表格数据的筛选，是通过view里判断输入的keys筛选
+                table.reload('alltable',{
+                    where: obj_where 
+                }); 
+            }
+        };       
+
+        // <!--- ################################################################## --->
+        // form.on监听表单的提交；新增的弹窗内点击提交button后，form.on('submit(adddata)',) 获取提交的变量，发送给views.py
+        // $('#date_add').val()=20221017,是可以正常获取到表单填写的信息
+        form.on('submit(adddata)',function () {
+            
+            var formData = new FormData();
+            //$('#date_add') 对应的是html里id=date_add,将date_add对应的值赋值给formData
+            formData.append('date',$('#date_add').val());                
+            formData.append('strategy_CN',$('#strategy_CN_add').val());
+            formData.append('code',$('#code_add').val());
+            formData.append('weight',$('#weight_add').val());
+            // 非必须项
+            formData.append('note',$('#note_add').val());
+            formData.append('name',$('#name_add').val());
+            formData.append('code_fund',$('#code_fund_add').val());
+            formData.append('code_stock',$('#code_stock_add').val());            
+            formData.append('strategy',$('#strategy_add').val());
+            formData.append('pool_name',$('#pool_name_add').val());
+            formData.append('pool_level',$('#pool_level_add').val());
+            formData.append('type_asset_indstyle_stock',$('#type_asset_indstyle_stock_add').val()); 
+            
+            //用于Debug  layer.confirm('Debug|| formData.='+ formData.get("date")  );
+            // formData是object；formData.date=undefined
+
+            //网页局部刷新，而且需要数据传递的情况，通常用$.ajax() ,$.post(),$.get() 这三种方式。 
+            //notes: 这里的数据请求需要在点击弹窗的提交按钮后才会发送给后台views
+            $.ajax({
+                //请求方式post,/data 传送数据类型
+                type:'POST', 
+                // url请求接口地址 ||  
+                url:'/ciss_exhi/strategy/stra_weight/adddata',  
+                // 这里不用设置parseData没用 
+
+                contentType:false, // jQuery不处理Content-Type的请求
+                processData : false, // 告诉jQuery不处理发送的数据
+                //把输入的数据formdata 传送到 /adddata
+                data:formData, 
+                success:function (result) { //针对请求结果进行处理
+                    if(result.code === 0){
+                        // alert("提交成功");
+                        layer.msg("添加成功！",{time:50000}); 
+                        // 重新回到策略页面
+                        window.location.href = '/ciss_exhi/strategy/stra_weight/' 
+
+                    }else {
+                        layer.msg("添加失败！", result.code  );
+                    }
+                }
+            });
+            return false;
+            });
+
+
+        // <!--- ################################################################## --->
+        // 对数据表的某一列进行 删除或修改编辑
+        // 表格操作列 tool 是工具条事件名，table-data是 table 原始容器的属性中，lay-filter="对应的值"
+        table.on('tool(table-data)',function (obj) {
+            // var data对应当前行数据
+            var data = obj.data; 
+            //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            var layEvent = obj.event;
+            //获得当前行 tr 的 DOM 对象（如果有的话）
+            var tr = obj.tr;
+            // formData 是发送给后台view_stra 的数据，将data.id 存入formdata
+            var formData = new FormData();
+            formData.append('id',data.id);
+            // <!--- ################################################################## --->
+            //删除数据
+            if (obj.event === 'del'){
+                layer.confirm('确认删除该条数据？id='+data.id ,function (index) {
+                    console.log(data.device_id);
+                    $.ajax({
+                        type:'POST',
+                        url:'/ciss_exhi/strategy/stra_weight/deldata',
+                        contentType:false,
+                        processData : false,
+                        data:formData,
+                        success:function (result) {
+                            if (result.code === 0){
+                                layer.msg("删除成功",{icon: 1});
+                                // 若删除成功，返回给定页面
+                                window.location.href = '/ciss_exhi/strategy/stra_weight/'
+                            } else {
+                                layer.msg("数据删除失败，id="+ data.id )
+                            }
+                        }
+                    });
+
+                });                
+            }
+            // <!--- ################################################################## --->
+            //编辑数据
+            else if (obj.event === 'edit'){
+                layer.open({ //打开编辑页弹层
+                type:1,
+                // notes:之前shade设置0.5的时候，弹窗是灰色的无法编辑,
+                shade:0,
+                shadeClose:true,
+                title:'编辑数据表记录',
+                area: ['500px','600px'],
+                content: $('#edit_data'),
+                    success:function () {
+                        console.log(data.id);
+                        //编辑页弹层显示原始数据
+                        // ('#edit_id').attr(key,value);设置edit_id节点key="value"属性的值value=data.id 
+                        $('#edit_id').attr("value",data.id);
+                        $('#edit_date').attr("value",data.date );
+                        $('#edit_strategy_CN').attr("value",data.strategy_CN );
+                        $('#edit_code').attr("value",data.code);
+                        $('#edit_name').attr("value",data.name);
+                        $('#edit_weight').attr("value",data.weight ); 
+                        $('#edit_note').attr("value",data.note ); 
+
+                        //提交修改后的数据,传给后台view的变量是formData1.append("id")里的 id，不是edit_id
+                        //$('#edit_id') 对应的是html里id=edit_id
+                        form.on('submit(updatedata)',function () {
+                            var formData1 = new FormData();
+                            formData1.append('id',$('#edit_id').val());
+                            formData1.append('date',$('#edit_date').val());
+                            formData1.append('strategy_CN',$('#edit_strategy_CN').val());
+                            formData1.append('code',$('#edit_code').val());
+                            formData1.append('name',$('#edit_name').val());
+                            formData1.append('weight',$('#edit_weight').val());
+                            formData1.append('note',$('#edit_note').val());
+                            
+                            console.log(formData1.id);
+                            $.ajax({
+                                type:'POST', //请求方式
+                                url:'/ciss_exhi/strategy/stra_weight/editdata', //请求接口地址
+                                contentType:false,
+                                processData : false,
+                                data:formData1, //传送数据
+                                success:function (result) { //针对请求结果进行处理
+                                    if(result.code === 0){ 
+                                        layer.msg("修改成功！",{time:50000});
+                                            window.location.href = '/ciss_exhi/strategy/stra_weight/'
+                                    }else {
+                                        layer.msg("修改失败！");
+                                        }
+                                    }
+                            });
+                        });
+                    }
+                });
+                }
+
+
+            });
+
+
+
+    });
+    // End of layui.use
+
+    // <!--- ################################################################## --->
+    //添加单挑策略记录的弹层，如果点击新增按钮，弹出窗口对应 add_data 的div弹窗。
+    $('#add_button').click(function () { 
+        layer.open({
+            type:1,
+            // notes:之前shade设置0.5的时候，弹窗是灰色的无法编辑, 
+            shade:0 , 
+            shadeClose:true,
+            title:'新增策略明细',
+            area: ['600px','800px'],
+            content: $('#add_data') 
+
+            });
+    });
+    // End of $('#add_button').click
+
+</script>
+
+
+</form>
+
+
+{% endblock content %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 

@@ -5,7 +5,7 @@ __author__=" ruoyu.Cheng"
 ===============================================
 todo: replace rC_Data_Initial.py with get-Wind.py gradually. | 190718file_name
 
-功能：初始化需要的股票价格，回报等数据
+功能：用Wind-API获取需要的股票价格，回报等数据
 数据来源： Wind
 last update 170509 | since  160121
 /

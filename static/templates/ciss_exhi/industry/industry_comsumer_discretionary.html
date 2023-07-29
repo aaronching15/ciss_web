@@ -1,0 +1,241 @@
+{% extends "base.html" %}
+<meta charset="UTF-8">
+<!-- for HTML5 -->
+<!-- The block items for this base html file is: {nav_sub, left_frame,menu,content } -->
+<!-- 产业链网页模板 -->
+
+{% block nav_sub %}
+
+<a id="a_nav" href="./core_industry.html">核心产业链 |Core industry chain</a> >>
+<a id="a_nav" href="./last_industry.html">最新产业链 |Lastest industry chain</a> >>
+
+<br>
+<a>细分产业链列表：</a>
+<a id="ciss_menu" href="#auto">汽车 </a> >>
+<a id="ciss_menu" href="#videos">家电 </a> >>
+<a id="ciss_menu" href="#marketing">旅游 </a> >>
+<a id="ciss_menu" href="#classic_media_gov"> </a> >>
+<br><a>产业链模拟组合：</a>
+<a id="port_pms" href="#port_simu_media_top40">传媒产业链top40v200218</a> >>
+<br><a>细分领域锚个股：</a>
+<a href="#ind_def_anchor_stock">细分领域锚个股</a> {% endblock nav_sub %} {% block right_frame %}
+<!-- Menu in right frame -->
+<!-- ---------------------------------------------------------- -->
+<h1>可选消费产业链 </h1>
+<h3>目录</h3>
+<ul>
+    <li><a href="#abstract">1，概要 </a></li>
+    <li><a href="#industry_methodology">2，行业分类方法和产业链分析方法 </a></li>
+    <li><a href="#sellside_reports">3，主要外部参考资料 </a></li>
+    <li><a href="#inside_reports">4，内部研究报告&产业链列表 </a></li>
+    <li><a href="#research_menu">5，产业链目录和研究计划 </a></li>
+    <li><a href="#industry_db">6，产业链数据和数据库 </a></li>
+    <li><a href="#industry_stra">7，产业链相关策略 </a></li>
+    <li><a href="#industry_port">8，产业链相关组合和指数 </a></li>
+    <li><a href="#industry_reference">9，参考信息和链接 </a></li>
+
+    <li><a href="#ind_definition">1，获取产业链定义  </a></li>
+    <li><a href="#ind_fundamental">2，产业链基本面数据   </a></li>
+    <li><a href="#ind_data_standarded">3，标准化定性和定量数据 </a></li>
+    <li><a href="#ind_table_columns">4，表格数据列设计  </a></li>
+    <li><a href="#ind_maintainence">5，分析方案和数据表的定期维护机制。 </a></li>
+</ul>
+<h3><a id="ind_definition">传媒产业链分析 </a></h3>
+<ul>
+    <li><a href="#ind_def_abstract">行业概览：</a> </li>
+    <li><a href="#ind_def_sub_chain">景气度提升的细分领域（子产业链）：</a> </li>
+    <li><a href="#ind_def_anchor_list">行业市值龙头</a> </li>
+    <li><a href="#ind_def_anchor_stock">行业锚个股</a> </li>
+</ul>
+
+<h3>细分产业链目录</h3>
+<ul>
+    <li><a href="#auto">汽车 </a></li>
+    <li><a href="#videos">家电 </a></li>
+    <li><a href="#marketing">旅游 </a></li>
+    <li>
+        <a href="#classic_media_gov"> </a>
+    </li>
+</ul>
+
+<h3><a href="#ind_def_anchor_stock">细分领域锚个股</a></h3>
+
+{% endblock right_frame %} {% block left_frame %}
+
+
+<!-- Menu in left frame -->
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h1>可选消费产业链 </h1>
+<p>耐用消费：家电、汽车、电子
+</p>
+<hr>
+<h3>目录</h3>
+<ul>
+    <li><a href="#abstract">1，概要 </a></li>
+    <li><a href="#industry_methodology">2，行业分类方法和产业链分析方法 </a></li>
+    <li><a href="#sellside_reports">3，主要外部参考资料 </a></li>
+    <li><a href="#inside_reports">4，内部研究报告&产业链列表 </a></li>
+    <li><a href="#research_menu">5，产业链目录和研究计划 </a></li>
+    <li><a href="#industry_db">6，产业链数据和数据库 </a></li>
+    <li><a href="#industry_stra">7，产业链相关策略 </a></li>
+    <li><a href="#industry_port">8，产业链相关组合和指数 </a></li>
+    <li><a href="#industry_reference">9，参考信息和链接 </a></li>
+
+    <li><a href="#ind_definition">1，获取产业链定义 </li>
+<li><a href="#ind_fundamental">2，产业链基本面数据  </li>
+<li><a href="#ind_data_standarded">3，标准化定性和定量数据</li>
+<li><a href="#ind_table_columns">4，表格数据列设计 </li>
+<li><a href="#ind_maintainence">5，分析方案和数据表的定期维护机制。 </li>
+</ul>  
+{% endblock left_frame %}
+
+{% block menu %} 
+
+<h3>细分产业链目录</h3>
+<ul> 
+    <li><a href="#auto">汽车 </a></li>
+    <li><a href="#videos">家电 </a></li>
+    <li><a href="#marketing">旅游 </a></li>
+</ul>
+
+<h3><a href="#ind_def_anchor_stock">细分领域锚个股</a></h3>
+{% endblock menu %} {% block content %}
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="abstract">1，概要</h3>
+<hr>
+<p>经过2016至2019年的下跌、财务报表集体资产减值损失、2018-2019政策监管趋严倒逼 行业改革、5G等技术的发展促进传媒行业创新。
+    <br>对应文件：0跨行业的产业链组合_200213.xlsx
+    <br>对应文件目录：C:\zd_zxjtzq\rc_reports_cs\产业链_传媒
+</p>
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="industry_definition">产业链定义</h3>
+
+
+<hr>
+<h4 id="auto">汽车 </h4>
+<p>603129.SH，春风动力，休闲摩托车和游艇龙头 date:20200331,price:31.25,市值42亿元。
+    <br> 摩托车作为运输工具的时代逐渐远去，休闲娱乐型产品消费时代已经来临，2019年，国内250cc以上的两轮摩托车销量达24.1万辆，同比增长47.3%。公司作为国内优秀的休娱摩托制造商，有望更准确的把握此轮摩托车消费升级的春风，预计公司2019-2021年EPS分别为1.41/1.95/2.70元，对应PE为28.0/20.3/14.6倍
+    <br>研报：20200302-财通证券-春风动力（603129.SH）：250SR发布价格，产品线进一步完善.pdf
+
+</p>
+
+
+<hr>
+<h4 id="videos">家电</h4>
+
+
+<h5>小家电：</h5>
+<p>20200319，看支付宝--基金--老牌牛基{成立8年，历史年化大于10%，近5年收益1/3}--鹏华新兴产业混合基金
+    <br> 第一大重仓股新宝股份002705.SZ：国内最大的小家电产品ODM/OBM制造商之一，主营业务为设计研发、生产、销售电热水壶、电热咖啡机等小家电产品。
+
+
+
+</p>
+
+
+<hr>
+<h4 id="marketing">旅游 </h4>
+<p>
+    <br>旅游-景区：宋城演艺 300144.SZ
+
+</p>
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="ind_fundamental ">2，产业链基本面数据</h3>
+<p>梳理产业链基本面数据：根据产业链定义梳理产品和服务、个股、行业分类、财务指标。识别高风险和不重要股票。
+</p>
+
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="ind_data_standarded ">3，标准化定性和定量数据</h3>
+<p>构建标准化定性和定量数据：考虑时间维度和多产业链维度。 </p>
+
+<h4>标准化定性信息</h4>
+<p>
+
+</p>
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="ind_table_columns ">4，表格数据列设计</h3>
+<p>4，表格数据列设计： 日期,股票名称,代码,中信行业1,中信行业2,中信行业3,概念1,概念2,产业链1,产业链2,notes,...
+</p>
+
+
+
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="ind_maintainence ">5，分析方案和数据表的定期维护机制</h3>
+<p>分析方案和数据表的定期维护机制。
+</p>
+
+
+
+
+
+
+
+
+
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h3 id="port_simu_media_top40 ">传媒产业链top40v200218</h3>
+<p>PMS组合“传媒产业链top40v200218”主要构建步骤为：
+    <br>1，获取Wind终端传媒行业169只股票地财务预测数据，进行打分；
+    <br>2，获取2019年初之前1年市场价格、成交额、换手率等数据，进行打分；
+    <br>3，对基金重仓持股指标打分
+    <br>4，对以上分数加总，剔除2019年以后上市股票，打分权重向预期净利润较高和基金持股梳理较多地股票倾斜。
+    <br> 业绩：190101-200217收益+68.09%；200101-200217收益+18.38%；
+
+</p>
+<p>市场同类产品对标：工银瑞信文体产业001714 基金经理：袁芳，基金公司：工银瑞信基金管理有限公司； 基金规模 29.65亿 投资类型 股票型基金 中证文体指数收益率*80%+中债综合财富(总值)指数收益率*20%
+    <br> 2020年YTD收益：+11.15%；2019年收益率：57.6%
+
+</p>
+
+
+<hr>
+<!-- ---------------------------------------------------------- -->
+<h4 id="ind_def_anchor_stock ">行业锚个股：传媒</h4>
+<ul>
+    <li>游戏-HKUS：腾讯-0700.HK、网易-NTES.O </li>
+    <li>游戏-A股:三七互娱-002555.SZ、完美世界-002624.SZ、{世纪华通-002602.SZ} </li>
+    <li>影视：芒果超媒-300413.SZ、光线传媒-300251.SZ、万达电影-002739.SZ </li>
+    <li>金融信息服务：东方财富-300059.SZ、 </li>
+    <li>传媒行业信息服务：视觉中国 </li>
+    <li>电商MCN：阿里巴巴-BABA.N、壹网壹创-300792.SZ </li>
+    <li>VRAR：恒信东方?-300081.SZ </li>
+    <li>营销：分众传媒-002027.SZ、蓝色光标-300058.SZ </li>
+    <li>政府媒体：人民网-603000.SH、新华网-603888.SH</li>
+
+</ul>
+
+
+
+
+
+
+
+
+
+{% endblock content %}

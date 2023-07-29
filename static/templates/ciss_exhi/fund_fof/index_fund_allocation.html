@@ -1,0 +1,289 @@
+{% extends "base.html" %}
+<meta charset="UTF-8">
+<!-- for HTML5 -->
+<!-- The block items for this base html file is: {nav_sub, left_frame,menu,content } -->
+<!-- 设置标题 -->
+{% block title0 %} 
+    基金股债配置测算
+{% endblock title0 %}
+
+{% block nav_sub %}
+<!-- layui定义左侧工具栏：第一部分目录 -->
+<li class="layui-nav-item layui-nav-itemed">
+    <a class="" href="#fund_allocation">基金股债配置测算</a>
+    <dl class="layui-nav-child">
+        <dd><a href="#fund_allo_check_data">1,检查数据完整性</a></dd>
+        <dd><a href="#fund_allo_weight_raw">2,股债比例初算</a></dd> 
+        <dd><a href="#fund_allo_simu_stock">3,股票资产拟合</a></dd>
+        <dd><a href="#fund_allo_simu_bond">4,债券资产拟合</a></dd> 
+        <dd><a href="#fund_allo_weight_opt">5,股债比例优化</a></dd> 
+    </dl>
+</li>
+<li class="layui-nav-item layui-nav-itemed">
+    <a class="" href="#fund_pool">基金池筛选</a>
+    
+        <dd></dd>
+        <dd></dd>
+        <dd></dd>
+    </dl>
+</li>
+
+
+
+<br>
+{% endblock nav_sub %} 
+<!--- ################################################################## --->
+<!--- ################################################################## --->
+{% block left_frame %} 
+<h1>基金股债配置测算</h1> 
+ 
+{% endblock left_frame %}
+
+{% block menu %} {% endblock menu %} 
+{% block content %}
+
+<!--- ###url 与 views_xxx.py 文件中的 def fund_analysis(request) 对应。#### --->
+<form action="{% url 'fund_allocation' %}" method="post" accept-charset="utf-8"> 
+<!--- ################################################################## --->
+<!--- ################################################################## --->
+
+<h4 id="fund_allo_check_data">1,检查数据完整性</h4>
+{% csrf_token %}
+<table border="1">
+    <!-- step1：输入代码，选择是否查询基金信息；step2：根据获取的数据，填入定性信息，保存到sqlite数据库  -->
+    <tr>
+        <tr>输入截至时间<input type="text" name="date_fund_allo_check_data" value="{{ time_now_str }}"></tr> 
+  
+    <tr>基金代码<input type="text" name="code_fund_allo_check_data" value=""></tr>
+    <tr>或自建组合代码，如“普通股票基金” <input type="text" name="port_name_fund_allo_check_data" value=""></tr>
+    <br>
+    <input type="submit" name="input_fund_allo_check_data" value="提交"> 
+    </tr>
+
+</table>
+<p>OUPUT: {{ output_fund_allo_check_data }}</p>
+
+
+<!--- ################################################################## --->
+<hr>
+<h4 id="fund_allo_weight_raw">2,股债比例初算 </h4>
+<p>用2个主流股票和2个债券指数，初步计算股票、债、现金配置比例w_s,w_b,1-w_s-w_b；
+    <br>ret=pct*stock+(1-pct)*bond; pct= (ret-bond)/(stock-bond)
+    <br>计算近5、20周相对于基准指数的差异，如果指标差异不大用近20周，差异大用近5周
+    <br>核心指标：近5、20周区间收益率、回撤、波动绿、指标；回归系数；
+</p>
+{% csrf_token %}
+<table border="1">
+    <!-- step1：输入代码，选择是否查询基金信息；step2：根据获取的数据，填入定性信息，保存到sqlite数据库  -->
+    <tr>
+        <tr>输入截至时间，如20221104<input type="text" name="date_fund_allo_weight_raw" value="{{ time_now_str }}"></tr> 
+  
+    <tr>基金代码<input type="text" name="code_fund_allo_weight_raw" value=""></tr>
+    <tr>或组合名称或代码，如“普通股票基金、富国天惠” <input type="text" name="port_name_fund_allo_weight_raw" value=""></tr>
+    <br>
+    <input type="submit" name="input_fund_allo_weight_raw" value="提交"> 
+    </tr>
+
+</table>
+
+<!--给table添加滚动条，table放到一个div里去,然后再设置div显示滚动条即可 div比table大小要小才会显示-->  
+<div class="div_table" style="overflow-x: auto; overflow-y: auto;">
+    <table id="ciss_table">
+        <tr class="hover">
+            <td>基础资产名称</td>
+            <td>相关性corr</td>
+            <td>拟合权重weight_simu</td>
+        </tr>    
+        {% for temp_i,temp_v in df_stat_weight_raw.items %}
+        <tr>
+            <td id="table_td_right" style='text-align:left;' width="140">{{ temp_i }}</td>
+            <td id="table_td_right">{{ temp_v.corr }}</td>
+            <td id="table_td_right">{{ temp_v.weight_simu }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <button type="button" onclick="tableToExcel('ciss_table')">导出Excel</button> <br>
+</div>
+
+
+
+
+<!--- ################################################################## --->
+<hr>
+<h4 id="fund_allo_simu_stock">3,股票资产拟合</h4>
+<p>寻找近5周综合差异最小的3个拟合组合。假定w_s前后5个档差异5%（如25，30，35，40，45），用股票市场、风格、行业组合拟合股票部分收益率，
+   <br>细化计算：不只以相关性作为判定依据，还要以平均和累计收益率、最大回测算
+</p>
+{% csrf_token %}
+<table border="1">
+    <!-- step1：输入代码，选择是否查询基金信息；step2：根据获取的数据，填入定性信息，保存到sqlite数据库  -->
+    <tr>
+    <tr>输入截至时间<input type="text" name="date_weight_stock" value="20221104"></tr> 
+    <tr>组合名称或代码，如“富国天惠或普通股票基金” <input type="text" name="port_name_weight_stock" value=""></tr>
+    <tr>Note:债券基准组合1权重+组合2+...权重合计不超过100：【weight_stock = 1 - weight_bond1 - weight_bond2】</tr>
+    <br>
+    <tr>债券基准组合1名称 <input type="text" name="name_bond1_weight_stock" value="企业债总财富3-5y"></tr>
+    <tr>债券基准组合1权重：0~100 <input type="text" name="weight_bond1_weight_stock" value=""></tr>
+    <br>
+    <tr>债券基准组合2名称 <input type="text" name="name_bond2_weight_stock" value="新中票总财富3-5y"></tr>
+    <tr>债券基准组合2权重：0~100 <input type="text" name="weight_bond2_weight_stock" value=""></tr>
+    
+    <br>
+    <input type="submit" name="input_fund_allo_weight_stock" value="提交"> 
+    </tr>
+
+</table>
+
+<!--给table添加滚动条，table放到一个div里去,然后再设置div显示滚动条即可 div比table大小要小才会显示-->  
+<div class="div_table" style="overflow-x: auto; overflow-y: auto;">
+    <table id="ciss_table">
+        <tr class="hover">
+            <td>基础资产名称</td>
+            <td>配置权重%</td>
+            <td>加权得分score</td>
+            <td>相关性corr</td>
+            <td>平均收益率</td>
+            <td>累计收益率</td>
+            <td>周最大回撤</td>
+            <td>平均收益率差值</td>
+            <td>累计收益率差值</td>
+        </tr>    
+        {% for temp_i,temp_v in df_stat_ind.items %}
+        <tr>
+            <td id="table_td_right" style='text-align:left;' width="140">{{ temp_i }}</td>
+            <td id="table_td_right">{{ temp_v.weight_simu }}</td>
+            <td id="table_td_right">{{ temp_v.score }}</td>
+            <td id="table_td_right">{{ temp_v.corr }}</td>
+            <td id="table_td_right">{{ temp_v.ret_ave }}</td>
+            <td id="table_td_right">{{ temp_v.ret_accu }}</td>
+            <td id="table_td_right">{{ temp_v.mdd }}</td>
+            <td id="table_td_right">{{ temp_v.diff_ret_ave }}</td>
+            <td id="table_td_right">{{ temp_v.diff_ret_accu }}</td>
+            						
+
+        </tr>
+        {% endfor %}
+    </table>
+    <button type="button" onclick="tableToExcel('ciss_table')">导出Excel</button> <br>
+</div>
+
+
+<!--- ################################################################## --->
+<hr>
+<h4 id="fund_allo_simu_bond">4,债券资产拟合</h4>
+<p>假定w_b前后5个档差异5%，用债券市场、债券基金指数、不同久期指数拟合股票部分收益率，寻找综合差异最小的3个拟合组合
+</p>
+
+{% csrf_token %}
+<table border="1">
+    <!-- step1：输入代码，选择是否查询基金信息；step2：根据获取的数据，填入定性信息，保存到sqlite数据库  -->
+    <tr>
+    <tr>输入截至时间<input type="text" name="date_weight_bond" value="20221104"></tr> 
+    <tr>组合名称或代码，如“富国天惠或普通股票基金” <input type="text" name="port_name_weight_bond" value=""></tr>
+    <tr>Note:股票组合1,组合2必须，组合3、组合4非必须；权重合计不超过100：【weight_stock = 1 - weight_stock1 - weight_stock2】</tr>
+    <tr>股票资产总权重<input type="text" name="weight_stock_sum_weight_bond" value="0.8"></tr>
+    <br>
+    <tr>股票基准组合1名称 <input type="text" name="name_stock1_weight_bond" value="医药流通"></tr>
+    <tr>股票基准组合1权重：0~100 <input type="text" name="weight_stock1_weight_bond" value="0.35"></tr>
+    <br>
+    <tr>股票基准组合2名称 <input type="text" name="name_stock2_weight_bond" value="消费者服务"></tr>
+    <tr>股票基准组合2权重：0~100 <input type="text" name="weight_stock2_weight_bond" value="0.3"></tr>
+    <br>
+    <tr>股票基准组合3名称 <input type="text" name="name_stock3_weight_bond" value="中成药"></tr>
+    <tr>股票基准组合3权重：0~100 <input type="text" name="weight_stock3_weight_bond" value="0.25"></tr>
+    <br>
+    <tr>股票基准组合4名称 <input type="text" name="name_stock4_weight_bond" value="化学制剂"></tr>
+    <tr>股票基准组合4权重：0~100 <input type="text" name="weight_stock4_weight_bond" value="0.1"></tr>
+    <br>
+    <input type="submit" name="input_fund_allo_weight_bond" value="提交"> 
+    </tr>
+
+</table>
+
+<!--给table添加滚动条，table放到一个div里去,然后再设置div显示滚动条即可 div比table大小要小才会显示-->  
+<div class="div_table" style="overflow-x: auto; overflow-y: auto;">
+    <table id="ciss_table">
+        <tr class="hover">
+            <td>基础资产名称</td>
+            <td>配置权重%</td>
+            <td>加权得分score</td>
+            <td>相关性corr</td>
+            <td>平均收益率</td>
+            <td>累计收益率</td>
+            <td>周最大回撤</td>
+            <td>平均收益率差值</td>
+            <td>累计收益率差值</td>
+        </tr>    
+        {% for temp_i,temp_v in df_stat_bondind.items %}
+        <tr>
+            <td id="table_td_right" style='text-align:left;' width="140">{{ temp_i }}</td>
+            <td id="table_td_right">{{ temp_v.weight_simu }}</td>
+            <td id="table_td_right">{{ temp_v.score }}</td>
+            <td id="table_td_right">{{ temp_v.corr }}</td>
+            <td id="table_td_right">{{ temp_v.ret_ave }}</td>
+            <td id="table_td_right">{{ temp_v.ret_accu }}</td>
+            <td id="table_td_right">{{ temp_v.mdd }}</td>
+            <td id="table_td_right">{{ temp_v.diff_ret_ave }}</td>
+            <td id="table_td_right">{{ temp_v.diff_ret_accu }}</td>
+            						
+
+        </tr>
+        {% endfor %}
+    </table>
+    <button type="button" onclick="tableToExcel('ciss_table')">导出Excel</button> <br>
+</div>
+
+
+
+
+<!--- ################################################################## --->
+<hr>
+<h4 id="fund_allo_weight_opt">5,股债比例优化</h4>
+<p>用拟合的股票、债券资产组合，重新计算配置比例w_s,w_b;计算最新的指标差异
+</p>
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h3>TODO </h3>
+<hr>
+<p> </p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</form>
+
+{% endblock content %}

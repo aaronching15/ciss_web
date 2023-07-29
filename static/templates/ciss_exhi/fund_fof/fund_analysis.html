@@ -1,0 +1,1153 @@
+{% extends "base.html" %}
+<meta charset="UTF-8">
+<!-- for HTML5 -->
+<!-- The block items for this base html file is: {nav_sub, left_frame,menu,content } -->
+<!-- 设置标题 -->
+{% block head_content %}
+    <!-- 引入layui，也可以本地导入：C:\rc_202X\rc_202X\ciss_web\static\layui  | 20221014 -->
+    <link rel="stylesheet" type="text/css" href="https://www.layuicdn.com/layui/css/layui.css" />
+    <script src="https://www.layuicdn.com/layui/layui.js"></script>
+    
+    <!-- <style type="text/css">
+        .header span{background: #009688;color: #fff;padding: 10px;margin-left: 30px;line-height: 32px}
+        .header{border-bottom: 2px #009688 solid;}
+        p{
+            color: black;
+            font-family: "Arial Black";
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center}
+        h4{
+            text-align: center;
+        }
+        table,th,td{
+            border-collapse: collapse;
+
+           }
+         button{
+             background-color: #337ab7;
+             font-size: 14px;
+             color: #fff;
+             font-weight: 400;
+             line-height: 1.42857143;
+             text-align: center;
+             font-family: "Songti TC";
+            margin: auto;}
+
+        .modal .container{
+            height: 512px;
+            width: 404px;
+            background-color: #fff;
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            margin: auto;
+            box-sizing: border-box;
+            border-radius: 6px;
+            padding: 1em;
+
+        }
+       input{
+           border-style: solid;
+           border-width: 1px;
+           border-color: darkgray;
+           margin: 10px 10px 8px;
+           padding: 6px;
+           float: initial;
+       }
+
+        #cancel{
+            margin-left: 10px;
+            margin-right: 40px;
+            width: 30%;
+            background-color: #337ab7;
+            font-weight: bolder;
+            border-color: white;
+            color: white;
+
+
+        }
+        #submit{
+            width: 30%;
+            background-color: #337ab7;
+            font-weight: bolder;
+            border-color: white;
+            color: white;
+        }
+    </style> -->
+
+{% endblock head_content %}
+
+{% block title0 %} 
+    基金开发管理|Strategy Develop
+{% endblock title0 %}
+
+
+{% block nav_sub %} 
+<!-- layui定义左侧工具栏：第一部分目录 -->
+<li style="text-align: center;">基金开发|Stra Dev.</li>
+<!-- notes:class="layui-nav-item"默认是收起的， 加上" layui-nav-itemed"后内容是展开的;  -->
+<li class="layui-nav-item">
+    <a class="" href="#stra_test">TEST测试功能</a>
+    <!-- <dl class="layui-nav-child">
+        <dd><a href="#stra_test">TEST测试 </a></dd>
+    </dl> -->
+</li>
+
+<li class="layui-nav-item">
+    <a class="" href="#notes">表格备注信息</a> 
+</li>
+
+
+<li>当前日期:{{ time_now_str }}</li>
+
+{% endblock nav_sub %} 
+
+<!--- ################################################################## --->
+<!--- ################################################################## --->
+{% block left_frame %}
+<!-- Menu in left frame -->
+<h1><a id="title">基金权重管理 stra_weight  </a></h1> 
+
+{% endblock left_frame %} 
+
+{% block content %}
+<!--- ################################################################## --->
+<form action="{% url 'fund_analysis' %}" method="post" accept-charset="utf-8"> 
+
+
+<!--- ################################################################## --->
+<!--按条件查询数据-->
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+    <legend>表单-搜索基金定性分析记录</legend>
+  </fieldset>
+<!---BEGIN form -------------------------------------------------------->
+<form class="layui-form" action="">
+    <!---Line 1  -------------------------------------------------------->
+    <div class="layui-form-item">
+        <div class="layui-inline">
+        <label class="layui-form-label">ID</label>
+        <div class="layui-input-inline">
+        <input type="text" id="id_search" autocomplete="off" class="layui-input">
+        </div>
+        </div>
+
+        <div class="layui-inline">
+        <label class="layui-form-label">基金名称</label>
+        <div class="layui-input-inline">
+            <input type="text" id="name_search" placeholder="基金名称" autocomplete="off" class="layui-input">
+        </div>
+        </div> 
+
+        <div class="layui-inline">
+        <label class="layui-form-label">基金代码</label>
+        <div class="layui-input-inline">
+            <input type="text" id="code_search" placeholder=".OF结尾" autocomplete="off" class="layui-input">
+        </div>
+        </div> 
+
+        <div class="layui-inline">
+        <label class="layui-form-label">日期</label>
+        <div class="layui-input-inline">
+            <input type="tel" id="date_search" placeholder="例如20221031"  autocomplete="off" class="layui-input">
+        </div>
+        </div>
+    </div>
+    <!---Line 2  -------------------------------------------------------->
+    <div class="layui-form-item">
+
+        <div class="layui-inline">
+        <label class="layui-form-label">基金风格</label>
+        <div class="layui-input-inline">
+            <input type="tel" id="style_fund_search" placeholder="" autocomplete="off" class="layui-input">
+        </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">基金风格</label>
+            <div class="layui-input-block">
+            <select id="style_fund_search2" lay-filter="aihao">
+                <!-- notes:默认是空值，否则会被纳入查询条件 -->
+                <option value=""></option>
+                <option value="价值">价值</option>
+                <option value="成长">成长</option>
+                <option value="均衡">均衡</option>
+                <option value="稳健">稳健</option>
+                <option value="债券">债券</option>
+                <option value="纯债">纯债</option>
+                <option value="红利">红利</option>
+                <option value="小市值">小市值</option>
+                <option value="20%股">15%股</option>
+                <option value="20%股">20%股</option>
+                <option value="20%股">25%股</option>
+                <option value="">指数增强</option>
+                <option value="">股票FOF</option>
+                <option value="">债券FOF</option>
+                <option value="">混合FOF</option>
+            </select>
+            </div>
+        </div>
+
+        <div class="layui-inline">
+        <label class="layui-form-label">基金主题</label>
+        <div class="layui-input-inline">
+            <input type="tel" id="theme_fund_search" placeholder=""  autocomplete="off" class="layui-input">
+        </div>
+        </div>
+
+        <div class="layui-inline">
+            <label class="layui-form-label">基金主题</label>
+            <div class="layui-input-block">
+            <select id="theme_fund_search2" lay-filter="aihao">
+                <!-- notes:默认是空值，否则会被纳入查询条件 -->
+                <option value=""></option>
+                <option value="">周期</option>
+                <option value="">港股美股</option>
+                <option value="">行业轮动</option>
+                <option value="">制造</option>
+                <option value="">消费</option>
+                <option value="">科技</option>
+                <option value="">量化</option>
+                <option value="">债券</option>
+                <option value="">新能源</option>
+                <option value="">分散</option>
+                <option value="">保本</option>
+                <option value="">偏债混</option>
+                <option value="">可转债</option> 
+            </select>
+            </div>
+        </div>
+
+        <br>
+        <div class="layui-inline">
+        <label class="layui-form-label">重仓行业1</label>
+        <div class="layui-input-inline">
+            <input type="tel" id="ind_1_search" placeholder=""   autocomplete="off" class="layui-input">
+        </div>
+        </div>
+        <div class="layui-inline">
+        <label class="layui-form-label">重仓行业2</label>
+        <div class="layui-input-inline">
+            <input type="tel" id="ind_2_search" placeholder=""  autocomplete="off" class="layui-input">
+        </div>
+        </div>
+        
+        <div class="layui-inline">
+        <label class="layui-form-label">重仓行业3</label>
+        <div class="layui-input-inline">
+            <input type="tel" id="ind_3_search" placeholder=""   autocomplete="off" class="layui-input">
+        </div>
+        </div>
+        
+        <div class="layui-inline">
+        <label class="layui-form-label">行业数量</label>
+        <div class="layui-input-inline">
+            <input type="tel" id="ind_num_search" placeholder=""   autocomplete="off" class="layui-input">
+        </div>
+        </div>
+    </div>
+    <!---Line 3  -------------------------------------------------------->
+    <div class="layui-form-item">
+        <div class="layui-inline">
+        <label class="layui-form-label">综合能力分数</label>
+        <div class="layui-input-inline">
+            <input type="tel" id="score_performance_search" placeholder="百分制0~100"   autocomplete="off" class="layui-input">
+        </div>
+        </div>
+
+        <div class="layui-inline">
+        <label class="layui-form-label">熊市防御能力</label>
+        <div class="layui-input-inline">
+            <input type="tel" id="s_down_market_search" placeholder="整数0~10"   autocomplete="off" class="layui-input">
+        </div>
+        </div>
+        <div class="layui-inline">
+        <label class="layui-form-label">震荡市能力</label>
+        <div class="layui-input-inline">
+            <input type="tel" id="s_flat_market_search" placeholder="整数0~10"   autocomplete="off" class="layui-input">
+        </div>
+        </div>
+        
+        <div class="layui-inline">
+        <label class="layui-form-label">牛市进攻能力</label>
+        <div class="layui-input-inline">
+            <input type="tel" id="s_up_market_search" placeholder="整数0~10"   autocomplete="off" class="layui-input">
+        </div>
+        </div>
+
+    </div> 
+    <!---Line 4 --------------------------------------------------------> 
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">分析概要</label>
+        <div class="layui-input-block">
+            <textarea id="abstract_analysis_search" placeholder="" class="layui-textarea"></textarea>
+        </div>
+        
+    </div> 
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">基金经理</label>
+            <div class="layui-input-block">
+            <input type="text" id="fund_manager_search" placeholder=""  autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">参数：是否提取定量指标|Qs格式不对</label>
+            <div class="layui-input-block">
+                <input type="checkbox" name="like[fund_performance_search]" title="基金绩效">
+                <input type="checkbox" name="like[fund_basic_search]" title="规模年限基本信息" >
+                <input type="checkbox" name="like[fund_holding_search]" title="持仓">
+            </div>
+        </div>
+
+    </div>
+    <!---Line 5 -------------------------------------------------------->  
+    
+    <!--button方法 layui-btn 是自己改写的，用来代替class="layui-icon layui-icon-search  -->
+    <button class="layui-btn layui-inline" type="button" id="reload_search" data-type="reload">搜索</button>
+    <!--icon图标方法 layui-icon-search 是 layui的一个特定的搜索图标，用来激活表格的重新载入 -->
+    <!-- <i class="layui-icon layui-icon-search" style="display:inline-block; top: 15px; margin-right: 10px;width:30px;height:30px;" data-type="reload"></i> -->
+
+<!---END form -------------------------------------------------------->
+</form>
+
+<!--- ################################################################## --->
+<!--弹窗：新增记录-->
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+    <legend>表单-新增记录</legend>
+</fieldset>
+<!---BEGIN form -------------------------------------------------------->
+<form class="layui-form" action="">
+    <!---Line 1  -------------------------------------------------------->
+    <div class="layui-form-item">
+        <div class="layui-inline">
+        <label class="layui-form-label">基金名称</label>
+        <div class="layui-input-inline">
+            <input type="text" id="name_add" placeholder="基金名称" autocomplete="off" class="layui-input">
+        </div>
+        </div> 
+
+        <div class="layui-inline">
+        <label class="layui-form-label">基金代码</label>
+        <div class="layui-input-inline">
+            <input type="text" id="code_add" placeholder=".OF结尾" autocomplete="off" class="layui-input">
+        </div>
+        </div> 
+
+        <div class="layui-inline">
+        <label class="layui-form-label">日期|注意格式20221223否则table显示不出来</label>
+        <div class="layui-input-inline">
+            <input type="tel" id="date_add" placeholder="例如20221031"  autocomplete="off" class="layui-input">
+        </div>
+        </div>
+    </div>
+    <!---Line 2  -------------------------------------------------------->
+    <div class="layui-form-item">
+
+        <div class="layui-inline">
+        <label class="layui-form-label">基金风格</label>
+        <div class="layui-input-inline">
+            <input type="tel" id="style_fund_add" placeholder="" autocomplete="off" class="layui-input">
+        </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">基金风格</label>
+            <div class="layui-input-block">
+            <select id="style_fund_add2" lay-filter="aihao">
+                <!-- notes:默认是空值，否则会被纳入查询条件 -->
+                <option value=""></option>
+                <option value="价值">价值</option>
+                <option value="成长">成长</option>
+                <option value="均衡">均衡</option>
+                <option value="稳健">稳健</option>
+                <option value="债券">债券</option>
+                <option value="纯债">纯债</option>
+                <option value="红利">红利</option>
+                <option value="小市值">小市值</option>
+                <option value="20%股">15%股</option>
+                <option value="20%股">20%股</option>
+                <option value="20%股">25%股</option>
+                <option value="">指数增强</option>
+                <option value="">股票FOF</option>
+                <option value="">债券FOF</option>
+                <option value="">混合FOF</option>
+            </select>
+            </div>
+        </div>
+
+        <div class="layui-inline">
+        <label class="layui-form-label">基金主题</label>
+        <div class="layui-input-inline">
+            <input type="tel" id="theme_fund_add" placeholder=""  autocomplete="off" class="layui-input">
+        </div>
+        </div>
+
+        <div class="layui-inline">
+            <label class="layui-form-label">基金主题</label>
+            <div class="layui-input-block">
+            <select id="theme_fund_add2" lay-filter="aihao">
+                <!-- notes:默认是空值，否则会被纳入查询条件 -->
+                <option value=""></option>
+                <option value="">周期</option>
+                <option value="">港股美股</option>
+                <option value="">行业轮动</option>
+                <option value="">制造</option>
+                <option value="">消费</option>
+                <option value="">科技</option>
+                <option value="">量化</option>
+                <option value="">债券</option>
+                <option value="">新能源</option>
+                <option value="">分散</option>
+                <option value="">保本</option>
+                <option value="">偏债混</option>
+                <option value="">可转债</option> 
+            </select>
+            </div>
+        </div>
+
+        <br>
+        <div class="layui-inline">
+        <label class="layui-form-label">重仓行业1</label>
+        <div class="layui-input-inline">
+            <input type="tel" id="ind_1_add" placeholder=""   autocomplete="off" class="layui-input">
+        </div>
+        </div>
+        <div class="layui-inline">
+        <label class="layui-form-label">重仓行业2</label>
+        <div class="layui-input-inline">
+            <input type="tel" id="ind_2_add" placeholder=""  autocomplete="off" class="layui-input">
+        </div>
+        </div>
+        
+        <div class="layui-inline">
+        <label class="layui-form-label">重仓行业3</label>
+        <div class="layui-input-inline">
+            <input type="tel" id="ind_3_add" placeholder=""   autocomplete="off" class="layui-input">
+        </div>
+        </div>
+        
+        <div class="layui-inline">
+        <label class="layui-form-label">行业数量</label>
+        <div class="layui-input-inline">
+            <input type="tel" id="ind_num_add" placeholder=""   autocomplete="off" class="layui-input">
+        </div>
+        </div>
+    </div>
+    <!---Line 3  -------------------------------------------------------->
+    <div class="layui-form-item">
+        <div class="layui-inline">
+        <label class="layui-form-label">综合能力分数</label>
+        <div class="layui-input-inline">
+            <input type="tel" id="score_performance_add" placeholder="百分制0~100"   autocomplete="off" class="layui-input">
+        </div>
+        </div>
+
+        <div class="layui-inline">
+        <label class="layui-form-label">熊市防御能力</label>
+        <div class="layui-input-inline">
+            <input type="tel" id="s_down_market_add" placeholder="整数0~10"   autocomplete="off" class="layui-input">
+        </div>
+        </div>
+        <div class="layui-inline">
+        <label class="layui-form-label">震荡市能力</label>
+        <div class="layui-input-inline">
+            <input type="tel" id="s_flat_market_add" placeholder="整数0~10"   autocomplete="off" class="layui-input">
+        </div>
+        </div>
+        
+        <div class="layui-inline">
+        <label class="layui-form-label">牛市进攻能力</label>
+        <div class="layui-input-inline">
+            <input type="tel" id="s_up_market_add" placeholder="整数0~10"   autocomplete="off" class="layui-input">
+        </div>
+        </div>
+
+    </div> 
+    <!---Line 4 --------------------------------------------------------> 
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">分析概要</label>
+        <div class="layui-input-block">
+            <textarea id="abstract_analysis_add" placeholder="" class="layui-textarea"></textarea>
+        </div>
+        
+    </div> 
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">基金经理</label>
+            <div class="layui-input-block">
+            <input type="text" id="fund_manager_add" placeholder=""  autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">参数：是否提取定量指标|Qs格式不对</label>
+            <div class="layui-input-block">
+                <input type="checkbox" name="like[fund_performance_add]" title="基金绩效">
+                <input type="checkbox" name="like[fund_basic_add]" title="规模年限基本信息" >
+                <input type="checkbox" name="like[fund_holding_add]" title="持仓">
+            </div>
+        </div>
+
+    </div>
+    <!---Line 5 -------------------------------------------------------->  
+    
+    <!--button方法 layui-btn 是自己改写的，用来代替class="layui-icon layui-icon-search  -->
+    <button class="layui-btn layui-inline" type="button" id="submit_add"  lay-submit lay-filter="adddata2">提交增加</button>
+    <!--icon图标方法 layui-icon-search 是 layui的一个特定的搜索图标，用来激活表格的重新载入 -->
+    <!-- <i class="layui-icon layui-icon-search" style="display:inline-block; top: 15px; margin-right: 10px;width:30px;height:30px;" data-type="reload"></i> -->
+
+<!---END form -------------------------------------------------------->
+</form>
+
+
+<!--- ################################################################## --->
+<!--弹窗输入要编辑的行信息-->
+<div id="data_edit" style="display: none">
+    <form class="layui-form" action="" method="POST" id="edit">
+        {% csrf_token %}
+        <!---Line 1  -------------------------------------------------------->
+        <div class="layui-form-item">
+            <div class="layui-inline">
+            <label class="layui-form-label" style="color:black">ID</label>
+            <div class="layui-input-inline">
+            <input type="text" id="id_edit" autocomplete="off" class="layui-input">
+            </div>
+            </div>
+
+            <div class="layui-inline">
+            <label class="layui-form-label" style="color:black">基金名称</label>
+            <div class="layui-input-inline">
+                <input type="text" id="name_edit" placeholder="基金名称" autocomplete="off" class="layui-input">
+            </div>
+            </div> 
+
+            <div class="layui-inline">
+            <label class="layui-form-label" style="color:black">基金代码</label>
+            <div class="layui-input-inline">
+                <input type="text" id="code_edit" placeholder=".OF结尾" autocomplete="off" class="layui-input">
+            </div>
+            </div> 
+
+            <div class="layui-inline">
+            <label class="layui-form-label" style="color:black">日期</label>
+            <div class="layui-input-inline">
+                <input type="tel" id="date_edit" placeholder="例如20221031"  autocomplete="off" class="layui-input">
+            </div>
+            </div>
+        </div>
+        <!---Line 2  -------------------------------------------------------->
+        <div class="layui-form-item">
+
+            <div class="layui-inline">
+            <label class="layui-form-label" style="color:black">基金风格</label>
+            <div class="layui-input-inline">
+                <input type="tel" id="style_fund_edit" placeholder="" autocomplete="off" class="layui-input">
+            </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label" style="color:black">基金风格</label>
+                <div class="layui-input-block">
+                <select id="style_fund_edit2" lay-filter="aihao">
+                    <!-- notes:默认是空值，否则会被纳入查询条件 -->
+                    <option value=""></option>
+                    <option value="价值">价值</option>
+                    <option value="成长">成长</option>
+                    <option value="均衡">均衡</option>
+                    <option value="稳健">稳健</option>
+                    <option value="债券">债券</option>
+                    <option value="纯债">纯债</option>
+                    <option value="红利">红利</option>
+                    <option value="小市值">小市值</option>
+                    <option value="20%股">15%股</option>
+                    <option value="20%股">20%股</option>
+                    <option value="20%股">25%股</option>
+                    <option value="">指数增强</option>
+                    <option value="">股票FOF</option>
+                    <option value="">债券FOF</option>
+                    <option value="">混合FOF</option>
+                </select>
+                </div>
+            </div>
+
+            <div class="layui-inline">
+            <label class="layui-form-label" style="color:black">基金主题</label>
+            <div class="layui-input-inline">
+                <input type="tel" id="theme_fund_edit" placeholder=""  autocomplete="off" class="layui-input">
+            </div>
+            </div>
+
+            <div class="layui-inline">
+                <label class="layui-form-label" style="color:black">基金主题</label>
+                <div class="layui-input-block">
+                <select id="theme_fund_edit2" lay-filter="aihao">
+                    <!-- notes:默认是空值，否则会被纳入查询条件 -->
+                    <option value=""></option>
+                    <option value="">周期</option>
+                    <option value="">港股美股</option>
+                    <option value="">行业轮动</option>
+                    <option value="">制造</option>
+                    <option value="">消费</option>
+                    <option value="">科技</option>
+                    <option value="">量化</option>
+                    <option value="">债券</option>
+                    <option value="">新能源</option>
+                    <option value="">分散</option>
+                    <option value="">保本</option>
+                    <option value="">偏债混</option>
+                    <option value="">可转债</option> 
+                </select>
+                </div>
+            </div>
+
+            <br>
+            <div class="layui-inline">
+            <label class="layui-form-label" style="color:black">重仓行业1</label>
+            <div class="layui-input-inline">
+                <input type="tel" id="ind_1_edit" placeholder=""   autocomplete="off" class="layui-input">
+            </div>
+            </div>
+            <div class="layui-inline">
+            <label class="layui-form-label" style="color:black">重仓行业2</label>
+            <div class="layui-input-inline">
+                <input type="tel" id="ind_2_edit" placeholder=""  autocomplete="off" class="layui-input">
+            </div>
+            </div>
+            
+            <div class="layui-inline">
+            <label class="layui-form-label" style="color:black">重仓行业3</label>
+            <div class="layui-input-inline">
+                <input type="tel" id="ind_3_edit" placeholder=""   autocomplete="off" class="layui-input">
+            </div>
+            </div>
+
+            <div class="layui-inline">
+            <label class="layui-form-label" style="color:black">行业数量</label>
+            <div class="layui-input-inline">
+                <input type="tel" id="ind_num_edit" placeholder=""   autocomplete="off" class="layui-input">
+            </div>
+            </div>
+        </div>
+        <!---Line 3  -------------------------------------------------------->
+        <div class="layui-form-item">
+            <div class="layui-inline">
+            <label class="layui-form-label" style="color:black">综合能力分数</label>
+            <div class="layui-input-inline">
+                <input type="tel" id="score_performance_edit" placeholder="百分制0~100"   autocomplete="off" class="layui-input">
+            </div>
+            </div>
+
+            <div class="layui-inline">
+            <label class="layui-form-label" style="color:black">熊市防御能力</label>
+            <div class="layui-input-inline">
+                <input type="tel" id="s_down_market_edit" placeholder="整数0~10"   autocomplete="off" class="layui-input">
+            </div>
+            </div>
+            <div class="layui-inline">
+            <label class="layui-form-label" style="color:black">震荡市能力</label>
+            <div class="layui-input-inline">
+                <input type="tel" id="s_flat_market_edit" placeholder="整数0~10"   autocomplete="off" class="layui-input">
+            </div>
+            </div>
+            
+            <div class="layui-inline">
+            <label class="layui-form-label" style="color:black">牛市进攻能力</label>
+            <div class="layui-input-inline">
+                <input type="tel" id="s_up_market_edit" placeholder="整数0~10"   autocomplete="off" class="layui-input">
+            </div>
+            </div>
+
+        </div> 
+        <!---Line 4 --------------------------------------------------------> 
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label" style="color:black">分析概要</label>
+            <!-- note:layui下textarea 无法显示数据，只能先用input了 -->
+            <!-- <div class="layui-input-block">
+                <textarea type="text" id="abstract_analysis_edit" autocomplete="off" lay-verify="abstract_analysis_edit" class="layui-textarea"></textarea>
+            </div> -->
+            <div class="layui-input-block">
+                <input type="text" id="abstract_analysis_edit" placeholder=""  autocomplete="off" class="layui-input">
+            </div>    
+        </div> 
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label" style="color:black">基金经理</label>
+                <div class="layui-input-block">
+                <input type="text" id="fund_manager_edit" placeholder=""  autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label" style="color:black">备注</label>
+                <div class="layui-input-block">
+                <input type="text" id="note_edit" placeholder=""  autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label" style="color:black">date_lastmodify</label>
+                <div class="layui-input-block">
+                <input type="text" id="date_lastmodify_edit" placeholder=""  autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label" style="color:black">if_fundmanager_fault</label>
+                <div class="layui-input-block">
+                <input type="text" id="if_fundmanager_fault_edit" placeholder=""  autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+
+            <div class="layui-inline">
+                <label class="layui-form-label" style="color:black">参数：是否提取定量指标|Qs格式不对</label>
+                <div class="layui-input-block">
+                    <input type="checkbox" name="like[fund_performance_edit]" title="基金绩效">
+                    <input type="checkbox" name="like[fund_basic_edit]" title="规模年限基本信息" >
+                    <input type="checkbox" name="like[fund_holding_edit]" title="持仓">
+                </div>
+            </div>
+        </div>
+        <!---Line 5 --------------------------------------------------------> 
+
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button id="cancel" class="layui-btn-sm" onclick="window.close()">取消</button>
+                <button id="submit" type="submit" class="layui-btn-sm" lay-submit lay-filter="updatedata">更新</button>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<hr>
+<!--- ################################################################## --->
+<!--展示table数据列表-->
+<table class="layui-table" id="table_01" lay-filter="table-data" ></table>
+
+
+<!-- toolbar 对应的模板，它可以存放在页面的任意位置 || 每一行末尾，编辑行数据或删除-->
+<script type="text/html" id="operation">
+    <button style="margin-left: 5px" class="layui-btn layui-btn-sm layui-btn-warm" lay-event="edit">编辑</button>
+    <button style="margin-left: 5px" class="layui-btn layui-btn-sm layui-btn-danger" id="del" lay-event="del">删除</button>
+</script>
+
+<!--- ################################################################## --->
+<!-- 渲染表格数据,从 getdata页面获取数据  -->  
+{% csrf_token %}
+<script type="text/javascript">
+    
+    // Begin of layui.use
+    layui.use(['layer','table'],function () { 
+        var table = layui.table;
+        var form = layui.form;
+        var element = layui.element;
+        var layer = layui.layer;
+        var $ = layui.jquery;
+        
+        // <!--- ################################################################## --->
+        // layui里表格数据获取，以及格式和列名定义
+        table.render({
+            elem: '#table_01', //赋值表格
+            // notes:url前边默认的地址是ip地址或者www之前的；url: '/ciss_exhi/strategy/stra_weight/getdata';
+            url: '/ciss_exhi/fund_analysis/getdata',   
+            //
+            parseData: function (res) {  
+                //res是请求返回的数据，可以在parseData中对数据进行一些处理，返回layui要求的格式
+                return {
+                    "code": res.code, //解析接口状态
+                    "msg": res.msg , //解析提示文本
+                    "count": res.count, //解析数据长度
+                    "data": res.data //解析数据列表,原始是res.data.item，改成res.data后json数据刷出来了， 
+                };
+            },
+            //
+            id:'alltable',
+            height:'full-125', // 默认是125，对应浏览器高度的125%自适应
+            cellMinWidth:15, 
+            // 设置导出功能,title对应导出文件的名称
+            toolbar: true,
+            totalrow:true, 
+            title:"fund_analysis",
+            //
+            // initSort: {
+            //     field: 'id',//排序字段，对应 cols 设定的各字段名        
+            //     type: 'desc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
+            //     },
+            sort: true,//重点1：这里的sort表示对页面渲染后的table数据进行排序。这里的true 会影响页面sort 上下小箭头的显示效果
+            // cols 定义表格列名称，表头；对应res数组的每一条对象中，如果属性名和field相同，就自动填充。
+            cols:[[  
+            {field:'id',title:'ID',Width:2,sort:true,align:"center"},
+                {field:'name',title:'基金名称',minWidth:12,align:"center"},
+                {field:'style_fund',Width:5,title:'风格',align:"center"},
+                {field:'theme_fund',Width:5,title:'主题',align:"center"},
+                {field:'ind_1',Width:5,title:'重仓行业1',sort:true,align:"center"},
+                {field:'ind_2',Width:5,title:'行业2',sort:true,align:"center"},
+                {field:'ind_3',Width:5,title:'行业3',sort:true,align:"center"},
+                {field:'ind_num',minWidth:5,title:'行业数量',sort:true,align:"center"},
+                {field:'score_performance',minWidth:5,title:'综合能力分数',sort:true,align:"center"},
+                {field:'s_down_market',minWidth:5,title:'熊市防御',sort:true,align:"center"},
+                {field:'s_flat_market',minWidth:5,title:'震荡市',sort:true,align:"center"},
+                {field:'s_up_market',minWidth:5,title:'牛市进攻',sort:true,align:"center"},
+                // 次重要展示项目 
+                {field:'abstract_analysis',minWidth:5,title:'分析概要',align:"center"},
+                {field:'fund_manager',minWidth:5,title:'基金经理',align:"center"}, 
+                {field:'code',title:'代码',align:"center"},
+                {field:'date',minWidth:9,title:'日期',sort:true,align: "center"},
+                // 操作栏，可以删除和修改
+                // toolbar绑定工具条模板：operation对应 编辑/删除 2个操作，以及tool()对应的脚本 'tool(table-data)'
+                {fixed: 'right', title:'操作', toolbar: '#operation', width:150,align:"center"}
+                
+                // 其他列 
+
+            ]],
+            page:true, //不开启分页//表格添加分页的，如果不需要分页，可以不添加page属性
+            
+        });
+        
+        
+
+        // <!--- ################################################################## --->
+        //如果点击了搜素按钮图标, 通过上面的表格载入，重新载入表格数据table
+        //button方法： function内 后边2行的写法是一样的。
+        $('#reload_search').on('click', function () { 
+            // icon方法
+            // $('.layui-icon-search').on('click',function () {
+            //目前为止没搞明白啥意思
+            var type = $(this).data('type');
+            active_table[type] ? active_table[type].call(this) : '';
+        }); 
+
+        // 点击搜索按钮或图标后，就跳转到这里刷新表格 active_table; 
+        // active_table好像是对于已有的数据，匹配符合条件的记录，载入表格table
+        // 表格重载 table.reload(ID, options, deep)；官方url=https://layui.winxapp.cn/doc/modules/table.html#reload
+        var active_table = {
+            reload:function () {    
+                var id =   $('#id_search').val();  
+                var date = $('#date_search').val();
+                var name = $('#name_search').val(); 
+                var code = $('#code_search').val();
+                var name = $('#name_search').val();
+                var style_fund = $('#style_fund_search').val();
+                var theme_fund = $('#theme_fund_search').val();
+                var ind_1 = $('#ind_1_search').val();  
+                var ind_2 = $('#ind_2_search').val();  
+                var ind_3 = $('#ind_3_search').val();  
+                var ind_num = $('#ind_num_search').val(); 
+                
+                var score_performance = $('#score_performance_search').val();
+                var s_down_market = $('#s_down_market_search').val(); 
+                var s_flat_market = $('#s_flat_market_search').val();
+                var s_up_market = $('#s_up_market_search').val();
+                var abstract_analysis = $('#abstract_analysis_search').val();
+                var fund_manager = $('#fund_manager_search').val();
+                
+                // 动态赋值 where对象，对应python的字典 
+                //通过if实现对有输入的列值匹配
+                var obj_where = {};
+                if( id.length > 0){  
+                    obj_where[ "id"] =id ;
+                    };
+                if( date.length > 0){  
+                    obj_where[ "date"]=date ;
+                    }    ;
+                if( code.length > 0){  
+                    obj_where[ "code"]= code ;
+                    }    ;
+                if( name.length > 0){  
+                    obj_where[ "name"]=name ;
+                    }    ;
+                if( style_fund.length > 0){  
+                    obj_where[ "style_fund"] =style_fund ;
+                    };
+                if( theme_fund.length > 0){  
+                    obj_where[ "theme_fund"]=theme_fund ;
+                    }    ;
+                if( ind_1.length > 0){  
+                    obj_where[ "ind_1"]= ind_1 ;
+                    }    ;
+                if( ind_2.length > 0){  
+                    obj_where[ "ind_2"]= ind_2 ;
+                    }   ; 
+                if( ind_3.length > 0){  
+                    obj_where[ "ind_3"] = ind_3 ;
+                    };
+                if( ind_num.length > 0){  
+                    obj_where[ "ind_num"] = ind_num ;
+                    };
+                if( score_performance.length > 0){  
+                    obj_where[ "score_performance"]=score_performance ;
+                    };    
+                if( s_down_market.length > 0){  
+                    obj_where[ "s_down_market"]= s_down_market ;
+                    };    
+                if( s_flat_market.length > 0){  
+                    obj_where[ "s_flat_market"]=s_flat_market ;
+                    };    
+                if( s_up_market.length > 0){  
+                    obj_where[ "s_up_market"]= s_up_market ;
+                    };    
+                if( abstract_analysis.length > 0){  
+                    obj_where[ "abstract_analysis"]= abstract_analysis ;
+                    }    ;
+                if( fund_manager.length > 0){  
+                    obj_where[ "fund_manager"] = fund_manager ;
+                    };
+                
+                //执行重载。alltable 是当前 layui里table变量的id。where，是需要携带的检索条件, page 参数是重新检索时需要携带的检索第几页，
+                //notes:截至221021，还是没能在网页里实现table.reload表格数据的筛选，是通过view里判断输入的keys筛选
+                table.reload('alltable',{
+                    where: obj_where 
+                });
+                // table.reload('alltable',{
+                //     where:{
+                //         id:id,
+                //         date:date,
+                //         strategy_CN:strategy_CN,
+                //         code:code,
+                //         name,name,
+                //         weight:weight,
+                //         note:note,
+                //     }
+                // });
+            }
+        };
+
+        // <!--- ################################################################## --->        
+        // <!--- ################################################################## --->
+        // BEGIN 2022-12尝试别的方式提交新增的基金调研记录
+        // $('#date_add').val()=20221017,是可以正常获取到表单填写的信息
+        form.on('submit(adddata2)',function () {
+            
+            var formData_add = new FormData();
+            // formData_add.append('id',$('#id_add').val());
+            formData_add.append('date',$('#date_add').val());
+            formData_add.append('name',$('#name_add').val());
+            formData_add.append('code',$('#code_add').val());
+            formData_add.append('style_fund',$('#style_fund_add').val());
+            formData_add.append('theme_fund',$('#theme_fund_add').val());
+            formData_add.append('ind_1',$('#ind_1_add').val());
+            formData_add.append('ind_2',$('#ind_2_add').val());
+            formData_add.append('ind_3',$('#ind_3_add').val());
+            formData_add.append('ind_num',$('#ind_num_add').val());
+            formData_add.append('score_performance',$('#score_performance_add').val());
+            formData_add.append('s_down_market',$('#s_down_market_add').val());
+            formData_add.append('s_flat_market',$('#s_flat_market_add').val());
+            formData_add.append('s_up_market',$('#s_up_market_add').val());
+            formData_add.append('abstract_analysis',$('#abstract_analysis_add').val());
+            formData_add.append('fund_manager',$('#fund_manager_add').val());
+            // 非必须项
+            formData_add.append('note',$('#note_add').val());
+            formData_add.append('date_lastmodify',$('#date_lastmodify_add').val());
+            formData_add.append('if_fundmanager_fault',$('#if_fundmanager_fault_add').val());  
+            formData_add.append('note',$('#note_add').val());  
+
+            console.log(formData_add.id);
+            
+            // Qs:不知道为什么，更新数据和新增数据都会提交2次
+            // formData是object；formData.date=undefined
+
+            //网页局部刷新，而且需要数据传递的情况，通常用$.ajax() ,$.post(),$.get() 这三种方式。 
+            //notes: 这里的数据请求需要在点击弹窗的提交按钮后才会发送给后台views
+            $.ajax({
+                //请求方式post,/data 传送数据类型
+                type:'POST', 
+                // url请求接口地址 ||  
+                url:'/ciss_exhi/fund_analysis/adddata',  
+                // 这里不用设置parseData没用 
+
+                contentType:false, // jQuery不处理Content-Type的请求
+                processData : false, // 告诉jQuery不处理发送的数据
+                //把输入的数据formdata 传送到 /adddata
+                data:formData_add, 
+                success:function (result) { //针对请求结果进行处理
+                    if(result.code === 0){
+                        // alert("提交成功");
+                        layer.msg("添加成功！",{time:50000}); 
+                        // 重新回到基金页面
+                        window.location.href = '/ciss_exhi/fund_analysis/'
+                    }else {
+                        layer.msg("添加失败！", result.code  );
+                    }
+                }
+            });
+            // return false 可阻止submit，避免提交2次数据
+            return false;
+            });
+        // END 2022-12尝试别的方式提交新增的基金调研记录
+
+        // <!--- ################################################################## --->
+        
+
+
+        // <!--- ################################################################## --->
+        // 对数据表的某一列进行 删除或修改编辑
+        // 表格操作列 tool 是工具条事件名，table-data是 table 原始容器的属性中，lay-filter="对应的值"
+        table.on('tool(table-data)',function (obj) {
+            // var data对应当前行数据
+            var data = obj.data; 
+            //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            var layEvent = obj.event;
+            //获得当前行 tr 的 DOM 对象（如果有的话）
+            var tr = obj.tr;
+            // formData 是发送给后台view_stra 的数据，将data.id 存入formdata
+            var formData = new FormData();
+            formData.append('id',data.id);
+            // <!--- ################################################################## --->
+            //删除数据
+            if (obj.event === 'del'){
+                layer.confirm('确认删除该条数据？id='+data.id ,function (index) {
+                    console.log(data.device_id);
+                    $.ajax({
+                        type:'POST',
+                        url:'/ciss_exhi/fund_analysis/deldata',
+                        contentType:false,
+                        processData : false,
+                        data:formData,
+                        success:function (result) {
+                            if (result.code === 0){
+                                layer.msg("删除成功",{icon: 1});
+                                // 若删除成功，返回给定页面
+                                window.location.href = '/ciss_exhi/fund_analysis/'
+                            } else {
+                                layer.msg("数据删除失败，id="+ data.id )
+                            }
+                        }
+                    });
+                    // return false 可阻止submit，避免$.ajax提交2次数据
+                    return false;
+
+                });                
+            }
+            // <!--- ################################################################## --->
+            //编辑数据
+            else if (obj.event === 'edit'){
+                layer.open({ //打开编辑页弹层
+                type:1,
+                // notes:之前shade设置0.5的时候，弹窗是灰色的无法编辑,
+                shade:0,
+                shadeClose:true,
+                title:['编辑数据表记录','font-size:18px;'],
+                area: ['600px','800px'],
+                content: $('#data_edit'),
+                    success:function () {
+                        console.log(data.id);
+                        //编辑页弹层显示原始数据
+                        // ('#id_edit').attr(key,value);设置 id_edit 节点key="value"属性的值value=data.id 
+                        $('#id_edit').attr("value",data.id);
+                        $('#date_edit').attr("value",data.date );
+                        $('#name_edit').attr("value",data.name );
+                        $('#code_edit').attr("value",data.code );
+                        $('#style_fund_edit').attr("value",data.style_fund );
+                        $('#theme_fund_edit').attr("value",data.theme_fund );
+                        $('#ind_1_edit').attr("value",data.ind_1 );
+                        $('#ind_2_edit').attr("value",data.ind_2 );
+                        $('#ind_3_edit').attr("value",data.ind_3 );
+                        $('#ind_num_edit').attr("value",data.ind_num );
+                        $('#score_performance_edit').attr("value",data.score_performance );
+                        $('#s_down_market_edit').attr("value",data.s_down_market );
+                        $('#s_flat_market_edit').attr("value",data.s_flat_market );
+                        $('#s_up_market_edit').attr("value",data.s_up_market );
+                        $('#abstract_analysis_edit').attr("value",data.abstract_analysis );
+                        $('#fund_manager_edit').attr("value",data.fund_manager );
+                        // 非必须项
+                        $('#note_edit').attr("value",data.note );
+                        $('#date_lastmodify_edit').attr("value",data.date_lastmodify );
+                        $('#if_fundmanager_fault_edit').attr("value",data.if_fundmanager_fault ); 
+                        $('#note_edit').attr("value",data.note ); 
+
+                        
+                        //提交修改后的数据,传给后台view的变量是formData1.append("id")里的 id，不是id_edit
+                        //$('#id_edit') 对应的是html里id= id_edit 
+                        form.on('submit(updatedata)',function () {
+                            var formData1 = new FormData();
+                            formData1.append('id',$('#id_edit').val());
+                            formData1.append('date',$('#date_edit').val());
+                            formData1.append('name',$('#name_edit').val());
+                            formData1.append('code',$('#code_edit').val());
+                            formData1.append('style_fund',$('#style_fund_edit').val());
+                            formData1.append('theme_fund',$('#theme_fund_edit').val());
+                            formData1.append('ind_1',$('#ind_1_edit').val());
+                            formData1.append('ind_2',$('#ind_2_edit').val());
+                            formData1.append('ind_3',$('#ind_3_edit').val());
+                            formData1.append('ind_num',$('#ind_num_edit').val());
+                            formData1.append('score_performance',$('#score_performance_edit').val());
+                            formData1.append('s_down_market',$('#s_down_market_edit').val());
+                            formData1.append('s_flat_market',$('#s_flat_market_edit').val());
+                            formData1.append('s_up_market',$('#s_up_market_edit').val());
+                            formData1.append('abstract_analysis',$('#abstract_analysis_edit').val());
+                            formData1.append('fund_manager',$('#fund_manager_edit').val());
+                            // 非必须项
+                            formData1.append('note',$('#note_edit').val());
+                            formData1.append('date_lastmodify',$('#date_lastmodify_edit').val());
+                            formData1.append('if_fundmanager_fault',$('#if_fundmanager_fault_edit').val());  
+                            
+                            console.log(formData1.id);
+                            $.ajax({
+                                type:'POST', //请求方式
+                                url:'/ciss_exhi/fund_analysis/editdata', //请求接口地址
+                                contentType:false,
+                                processData : false,
+                                data:formData1, //传送数据
+                                success:function (result) { //针对请求结果进行处理
+                                    if(result.code === 0){
+                                        // alert("修改成功");
+                                        layer.msg("修改成功！",{time:50000});
+                                            window.location.href = '/ciss_exhi/fund_analysis/'
+                                    }else {
+                                        layer.msg("修改失败！",{time:50000});
+                                        }
+                                    }
+                            });
+                            // return false 可阻止submit，避免$.ajax提交2次数据
+                            return false;
+                        });
+                    }
+                });
+                }
+                // END 编辑数据
+
+
+            });
+            
+        // <!--- ################################################################## --->
+
+
+
+    });
+    // End of layui.use
+
+    // <!--- ################################################################## --->
+
+
+</script>
+
+
+</form>
+
+<h4 id="notes">表格备注信息</h4>
+<p>1，"风格"列取值：10%股,15%股,20%股,25%股,35%股,纯债...... ||notes:以前存在 0.15,0.2,0.25,0.35,20% 等数值
+    <br>todo：table-column= style_fund,需要把值为 nan 的逐步替换和更新
+    <br>2，传统表格修改模式在 /fund_data_manage/ ;  fund_data_manage.html
+<br>......
+
+</p>
+
+{% endblock content %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 

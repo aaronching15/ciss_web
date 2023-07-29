@@ -25,6 +25,29 @@
 
 
 {% block content %}
+<h4>postgresql基本操作 </h4>
+<p>
+windows下进入pgsql交互界面：C:\Program Files\PostgreSQL\12\bin>psql -U ciss_rc -d ciss_db
+
+source：https://blog.csdn.net/soul_programmer_swh/article/details/88575303
+linux进去psql交互式界面：
+$ psql -U username dbame
+
+查询数据库所有连接
+select * from pg_stat_activity
+1
+利用函数断开连接
+pg_terminate_backend(procpid/pid)
+切断数据库（database1）所有的连接，示例：
+————————————————
+版权声明：本文为CSDN博主「Walter Sun」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。
+原文链接：https://blog.csdn.net/soul_programmer_swh/article/details/88575303
+
+
+
+
+
+</p>
 
 <h4>postgresql数据库入门 </h4>
 <p>
@@ -41,11 +64,12 @@ CMD:cd C:\Program Files\PostgreSQL\12\bin
 CMD:initdb -D G:\CISS_db\ciss_db
 "属于此数据库系统的文件宿主为用户 "chengry".
 此用户也必须为服务器进程的宿主."
-
+<br>
 2,开启数据库服务器：注意：CMD中提示的命令是基于Linux的，windows不能用。
 pg_ctl start -w -D "G:\CISS_db\ciss_db"
 3,创建用户ciss_rc,密码同样是ciss_rc:
 net user ciss_rc ciss_rc  /add
+<br>
 Qs:
 Ans:1，说是permission denied 创建data文件权限不够。于是对我们下载
 postgresql的目录点击右键属性里，设置user的权限为完全控制
@@ -89,6 +113,137 @@ if_exists : {‘fail’, ‘replace’, ‘append’}, default ‘fail’
 • fail: If table exists, do nothing.
 • replace: If table exists, drop it, recreate it, and insert data.
 • append: If table exists, insert data. Create if does not exist.
+
+<h4>postgresql数据库入门\sql基本语句 </h4>
+<p>
+1，PostgreSQL WHERE 子句：
+source : https://www.runoob.com/postgresql/postgresql-where-clause.html  ;
+runoobdb=# SELECT * FROM COMPANY WHERE AGE >= 25 AND SALARY >= 65000
+<br>
+找出 AGE(年龄) 字段大于等于 25，或者 SALARY(薪资) 字段大于等于 65000 的数据：
+runoobdb=# SELECT * FROM COMPANY WHERE AGE >= 25 OR SALARY >= 65000;
+<br>
+在公司表中找出 AGE(年龄) 字段不为空的记录：
+runoobdb=#  SELECT * FROM COMPANY WHERE AGE IS NOT NULL;
+<br>
+在 COMPANY 表中找出 NAME(名字) 字段中以 Pa 开头的的数据：
+runoobdb=# SELECT * FROM COMPANY WHERE NAME LIKE 'Pa%';
+<br>
+以下 SELECT 语句列出了 AGE(年龄) 字段为 25 或 27 的数据：
+runoobdb=# SELECT * FROM COMPANY WHERE AGE IN ( 25, 27 );
+<br>以下 SELECT 语句列出了 AGE(年龄) 字段不为 25 或 27 的数据：
+runoobdb=# SELECT * FROM COMPANY WHERE AGE NOT IN ( 25, 27 );
+<br>以下 SELECT 语句列出了 AGE(年龄) 字段在 25 到 27 的数据：
+runoobdb=# SELECT * FROM COMPANY WHERE AGE BETWEEN 25 AND 27;
+<br>子查询
+以下的 SELECT 语句使用了 SQL 的子查询，子查询语句中读取 SALARY(薪资) 字段大于 65000 的数据，然后通过 EXISTS 运算符判断它是否返回行，如果有返回行则读取所有的 AGE(年龄) 字段。
+
+runoobdb=# SELECT AGE FROM COMPANY
+        WHERE EXISTS (SELECT AGE FROM COMPANY WHERE SALARY > 65000);
+<br>
+UPDATE 语句,如果我们要更新在 PostgreSQL 数据库中的数据
+更新 COMPANY 表中 id 为 3 的 salary 字段值：
+
+runoobdb=# UPDATE COMPANY SET SALARY = 15000 WHERE ID = 3;
+同时更新 salary 字段和 address 字段的值：
+
+runoobdb=# UPDATE COMPANY SET ADDRESS = 'Texas', SALARY=20000;
+<br>
+下面实例将找出限定的数量的数据，即读取 4 条数据：
+runoobdb=# SELECT * FROM COMPANY LIMIT 4;
+<br>
+下面实例将对结果根据 AGE 字段值进行升序排列：
+
+runoobdb=# SELECT * FROM COMPANY ORDER BY AGE ASC;
+对结果根据NAME字段值进行降序排列：
+
+runoobdb=# SELECT * FROM COMPANY ORDER BY NAME DESC;
+下面实例将对结果根据 NAME 字段值和 SALARY 字段值进行升序排序：
+
+runoobdb=# SELECT * FROM COMPANY ORDER BY NAME, SALARY ASC;
+下面实例将根据 NAME 字段值进行分组，找出每个人的工资总额：
+
+runoobdb=# SELECT NAME, SUM(SALARY) FROM COMPANY GROUP BY NAME;
+
+</p>
+<p>
+使用 WITH 子句在上表中查询数据：
+
+With CTE AS
+(Select
+ ID
+, NAME
+, AGE
+, ADDRESS
+, SALARY
+FROM COMPANY )
+Select * From CTE
+</p>
+<p>往表里添加几条数据：
+INSERT INTO COMPANY VALUES (8, 'Paul', 24, 'Houston', 20000.00);
+</p>
+
+<h4>postgresql数据库入门\sql基本语句:数学运算：Max,Min.AVG,SUM； </h4>
+<p>
+        PostgreSQL 常用函数；
+source：https://www.runoob.com/postgresql/postgresql-functions.html ；
+PostgreSQL 时间/日期函数和操作符；
+source ：https://www.runoob.com/postgresql/postgresql-datetime.html  ；
+
+    </p>
+
+
+<h4>PostgreSQL完整备份与还原过程 </h4>
+<p>
+source:https://www.cnblogs.com/hmwh/p/11015439.html
+用的pgsql操作系统，超级用户本地登录，省略了-h 主机IP 以及-U 用户名
+
+1、备份test 数据库
+pg_dump test >testdb.sql 跟MySQL一样，生成的是sql文件
+
+比如我把test数据库恢复成testbak数据库
+create database testbak encoding UTF8;
+[pgsql@node2 ~]$ psql testbak < /home/pgsql/test.sql
+<br>
+也可以指定格式的备份成*.dmp文件
+
+[pgsql@node2 ~]$ pg_dump -Fc -Upgsql test > testpgsql.dmp
+
+恢复
+
+create database test encoding UTF8;
+
+[pgsql@node2 ~]$ pg_restore -d test testpgsql.dmp
+</p>
+<p>source：https://www.cnblogs.com/ylq1990/p/10283136.html
+<br>
+1. 备份10.12.2.100PC机(服务器)上的数据库(仅备份数据库和对应的数据库里面各表的结构)：
+    pg_dump -h 10.12.2.100 -U postgres -p 8101 -d tianrun -s -f /data/tianrun0115.backup
+    <br>Our version:
+    pg_dump -h 127.0.0.1 -U ciss_rc -p 5432 -d ciss_db -s -f "D:\db_wind\backup_ciss_db_191125.backup"
+2. 备份10.12.2.100PC机(服务器)上的数据库：
+    nohup pg_dump -h 10.12.2.100 -U postgres -p 8101 -d tianrun -w -F c -b -v -f /data/tianrun0115.backup &
+    <br>Our version:
+    nohup pg_dump -h 127.0.0.1 -U ciss_rc -p 5432 -d ciss_db -w -F c -b -v -f "D:\db_wind\backup_ciss_db_191125_full.backup"
+3.在备份好的数据库文件所在的PC机(服务器1)传输备份数据库至目标PC机(服务器2)：
+   scp -r /opt/goldwind/pgdata/tianrun0114.backup goldwind@10.12.2.135:/data/
+4.在目标PC机(服务器2)执行恢复数据库命令：(执行时，需要有一存在的命名为tianrun0115的空库)
+   nohup pg_restore -h 10.12.2.135 -p 8101 -U postgres -W -d tianrun -v "/data/tianrun0115.backup"
+
+5. 查看日志是否正常输出：tail -f nohup.out
+
+6.进入tianrun0115数据库：
+   [goldwind@TR-OS-DB ~]$ psql -h 10.12.2.135 -p 8101 -U postgres -W -d tianrun0115
+
+7. 命令修改数据库名称：
+   UPDATE pg_database SET datname = 'newDBname' where datname = 'oldDBname';
+
+8. 立即停止PostgreSQL数据库服务：
+    pg_ctl stop -m fast
+9. 启动PostgreSQL数据库服务：
+    pg_ctl start -D /data/pgdata/9.4/
+
+</p>
 
 
 <h3>数据接口 | Data API</h3>
